@@ -1,17 +1,16 @@
-# app.py
-
 import streamlit as st
-import pandas as pd
 import json
+import os
 
-st.set_page_config(page_title="📡 APEC-RISE Media Monitor", layout="wide")
-st.title("📡 APEC-RISE Media Monitor")
-
-# === Load data ===
 @st.cache_data
 def load_articles():
-    with open("data/processed_articles.json", "r", encoding="utf-8") as f:
+    filepath = os.path.join("media-monitor", "data", "processed_articles.json")
+    if not os.path.exists(filepath):
+        st.warning("No articles found. Using empty dataset.")
+        return []
+    with open(filepath, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 articles = load_articles()
 if not articles:
