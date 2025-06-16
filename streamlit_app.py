@@ -3,7 +3,8 @@ import os
 import importlib.util
 
 # ── Page config must be first ──
-st.set_page_config(page_title="APEC-RISE Monitoring Suite", layout="wide")
+st.set_page_config(page_title="APEC-RISE Risk Monitoring Suite", layout="wide")
+
 
 def load_app_module(name, filepath):
     """Helper to dynamically load a sub-app module."""
@@ -38,7 +39,7 @@ selected = params.get("app", [None])[0]
 
 if selected not in APPS:
     # --- Landing page ---
-    st.title("🧠 APEC-RISE Monitoring Suite")
+    st.title("🚨 APEC-RISE Risk Monitoring Suite")
     st.write("Welcome! Choose one of the tools below to launch it in this tab.")
 
     cols = st.columns(len(APPS))
