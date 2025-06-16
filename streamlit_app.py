@@ -12,7 +12,7 @@ import app as scenario_simulator_app
 import app as institutional_map_app
 
 # === Page config ===
-st.set_page_config(page_title="USAPEC-RISE Risk Monitoring Suite", layout="wide")
+st.set_page_config(page_title="US APEC-RISE Risk Monitoring Suite", layout="wide")
 
 # === Tabs for each app ===
 st.title("🧠 US APEC-RISE Risk Monitoring Suite")
