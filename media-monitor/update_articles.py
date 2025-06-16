@@ -1,5 +1,7 @@
 import feedparser
 import json
+import re
+import os
 from datetime import datetime
 from textblob import TextBlob
 import spacy
