@@ -40,11 +40,11 @@ SOURCE_TYPES = {
 # === RSS Feeds to Monitor ===
 FEEDS = [
     "https://thediplomat.com/feed/",
-    "https://www.reuters.com/rssFeed/topNews",
-    "https://www.apec.org/News/news-rss"
+    "https://www.apec.org/News/news-rss",
+    "https://www.channelnewsasia.com/rssfeeds/8395986",
+    "https://www.bangkokpost.com/rss/data/topstories.xml"
 ]
 
-# === Tagging Functions ===
 def detect_economy(text):
     for econ in APEC_ECONOMIES:
         if econ.lower() in text.lower():
@@ -83,17 +83,19 @@ else:
 # === Fetch new articles ===
 articles = []
 
+print("🛰 Fetching articles from RSS feeds...")
 for url in FEEDS:
     parsed = feedparser.parse(url)
+    feed_count = 0
     for entry in parsed.entries[:15]:  # limit per feed
-        title = entry.get("title", "")
-        summary = entry.get("summary", "")
-        link = entry.get("link", "")
+        title = entry.get("title", "").strip()
+        summary = entry.get("summary", "").strip() or entry.get("description", "").strip()
+        link = entry.get("link", "").strip()
         pub = entry.get("published", "")
         source = urlparse(link).netloc
 
-        if link in existing_links:
-            continue  # skip duplicates
+        if not link or link in existing_links:
+            continue  # skip blank or duplicate
 
         combined_text = f"{title} {summary}"
 
@@ -110,6 +112,9 @@ for url in FEEDS:
             "aligned_with_us": "Unclear",
             "timestamp": datetime.utcnow().isoformat()
         })
+        feed_count += 1
+
+    print(f"📡 {url} → {feed_count} new articles")
 
 # === Save merged output ===
 all_articles = articles + existing_data
@@ -117,4 +122,5 @@ all_articles = sorted(all_articles, key=lambda x: x["timestamp"], reverse=True)
 
 with open(processed_path, "w", encoding="utf-8") as f:
     json.dump(all_articles, f, indent=2, ensure_ascii=False)
-print(f"✅ Added {len(articles)} new articles. Total: {len(all_articles)}")
+
+print(f"\n✅ Added {len(articles)} new articles. Total in file: {len(all_articles)}")
