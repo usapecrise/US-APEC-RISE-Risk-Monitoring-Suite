@@ -5,8 +5,8 @@ import importlib.util
 # ── Page config must be first ──
 st.set_page_config(page_title="APEC-RISE Monitoring Suite", layout="wide")
 
-# Helper to dynamically load a sub-app module
- def load_app_module(name, filepath):
+def load_app_module(name, filepath):
+    """Helper to dynamically load a sub-app module."""
     spec = importlib.util.spec_from_file_location(name, filepath)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -39,16 +39,13 @@ selected = params.get("app", [None])[0]
 if selected not in APPS:
     # --- Landing page ---
     st.title("🧠 APEC-RISE Monitoring Suite")
-    st.write(
-        "Welcome! Choose one of the tools below to launch it in this tab."
-    )
+    st.write("Welcome! Choose one of the tools below to launch it in this tab.")
 
     cols = st.columns(len(APPS))
     for (slug, (title, desc, _)), col in zip(APPS.items(), cols):
         with col:
             st.subheader(title)
             st.write(desc)
-            # Launch button sets query param to load the app
             if st.button("Open", key=slug):
                 st.experimental_set_query_params(app=slug)
 
@@ -56,7 +53,6 @@ else:
     # --- Sub-app view ---
     title, desc, path = APPS[selected]
     st.header(title)
-    # Back button resets query params
     if st.button("← Back to Suite"):
         st.experimental_set_query_params()
     try:
