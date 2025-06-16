@@ -27,7 +27,7 @@ links = {
         "desc": "Simulate shifts from baseline to optimistic/pessimistic scenarios based on risk triggers.",
         "url": "https://us-apec-rise-risk-monitoring-suite-scenario-simulator.streamlit.app/"
     },
-    "🏛 Institutional Mapping": {
+    "🏛 Institutional Map": {
         "desc": "Visualize networks of influence and institutional coordination.",
         "url": "https://us-apec-rise-risk-monitoring-suite-institutional-map.streamlit.app/"
     }
@@ -61,7 +61,7 @@ st.markdown(
     """
     <hr>
     <p style="text-align:center; font-size:12px; color:#888; margin-top:10px;">
-        © 2025 APEC-RISE Program Monitoring Suite
+        © 2025 APEC-RISE Risk Monitoring Suite
     </p>
     """,
     unsafe_allow_html=True
