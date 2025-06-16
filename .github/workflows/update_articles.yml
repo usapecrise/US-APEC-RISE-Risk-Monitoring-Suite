@@ -22,7 +22,7 @@ jobs:
           python -m textblob.download_corpora
 
       - name: Run media update script
-        run: python update_articles.py
+        run: python media-monitor/update_articles.py
 
       - name: Commit updated data
         run: |
