@@ -5,7 +5,6 @@ import importlib.util
 # ── Page config must be first ──
 st.set_page_config(page_title="APEC-RISE Risk Monitoring Suite", layout="wide")
 
-
 def load_app_module(name, filepath):
     """Helper to dynamically load a sub-app module."""
     spec = importlib.util.spec_from_file_location(name, filepath)
@@ -30,7 +29,7 @@ APPS = {
         "🏛 Institutional Map",
         "Visualize networks of influence and institutional coordination across stakeholders.",
         os.path.join(BASE, "institutional-map", "app.py")
-    )
+    ),
 }
 
 # Read query params
@@ -40,22 +39,25 @@ selected = params.get("app", [None])[0]
 if selected not in APPS:
     # --- Landing page ---
     st.title("🚨 APEC-RISE Risk Monitoring Suite")
-    st.write("Welcome! Choose one of the tools below to launch it in this tab.")
+    st.write("Select a tool below to launch it in this tab:")
 
+    # Display each app as a markdown link in its own column
     cols = st.columns(len(APPS))
     for (slug, (title, desc, _)), col in zip(APPS.items(), cols):
         with col:
-            st.subheader(title)
-            st.write(desc)
-            if st.button("Open", key=slug):
-                st.experimental_set_query_params(app=slug)
+            st.markdown(f"**[{title}](?app={slug})**")
+            st.caption(desc)
 
 else:
     # --- Sub-app view ---
     title, desc, path = APPS[selected]
     st.header(title)
-    if st.button("← Back to Suite"):
-        st.experimental_set_query_params()
+    st.write(desc)
+    st.markdown("---")
+    # Back link
+    st.markdown("[← Back to Suite](?app=)")
+
+    # Load and run the selected sub-app
     try:
         app = load_app_module(selected, path)
         app.main()
