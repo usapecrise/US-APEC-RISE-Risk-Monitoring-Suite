@@ -117,5 +117,4 @@ all_articles = sorted(all_articles, key=lambda x: x["timestamp"], reverse=True)
 
 with open(processed_path, "w", encoding="utf-8") as f:
     json.dump(all_articles, f, indent=2, ensure_ascii=False)
-
-print(f"✅ Added {len(articles)} new articles. Total:
+print(f"✅ Added {len(articles)} new articles. Total: {len(all_articles)}")
