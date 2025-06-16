@@ -1,22 +1,68 @@
 import streamlit as st
 
-# ── Page config ──
+# ── Page configuration ──
 st.set_page_config(page_title="APEC-RISE Risk Monitoring Suite", layout="wide")
 
-# ── Landing page ──
-st.title("🚨 APEC-RISE Risk Monitoring Suite")
-st.write("Select a tool below to open it in a new tab:")
+# ── Header ──
+st.markdown(
+    """
+    <div style="text-align: center; padding: 20px 0;">
+        <h1 style="margin:0;">APEC-RISE Risk Monitoring Suite</h1>
+        <p style="font-size:18px; color: #555; margin-top:10px;">
+            Integrated tools for monitoring risk triggers, running scenario simulations,
+            and mapping institutional networks across APEC economies.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-# Full URLs for each deployed sub-app
+# ── Tool cards ──
 links = {
-    "📡 Media Monitor": "https://us-apec-rise-media-monitor.streamlit.app/",
-    "🧭 Scenario Simulator": "https://us-apec-rise-risk-monitoring-suite-scenario-simulator.streamlit.app/",
-    "🏛 Institutional Mapping Tool": "https://us-apec-rise-risk-monitoring-suite-institutional-map.streamlit.app/"
+    "📡 Media Monitor": {
+        "desc": "Track leadership changes, media sentiment, and alignment with U.S. objectives.",
+        "url": "https://us-apec-rise-media-monitor.streamlit.app/"
+    },
+    "🧭 Scenario Simulator": {
+        "desc": "Simulate shifts from baseline to optimistic/pessimistic scenarios based on risk triggers.",
+        "url": "https://us-apec-rise-risk-monitoring-suite-scenario-simulator.streamlit.app/"
+    },
+    "🏛 Institutional Mapping": {
+        "desc": "Visualize networks of influence and institutional coordination.",
+        "url": "https://us-apec-rise-risk-monitoring-suite-institutional-map.streamlit.app/"
+    }
 }
 
-# Render links as clickable headings
-for title, url in links.items():
-    st.markdown(
-        f'<a href="{url}" target="_blank" style="font-size:24px; text-decoration:none;">{title}</a>',
-        unsafe_allow_html=True
-    )
+# Display cards in responsive layout
+cols = st.columns(len(links))
+for (title, info), col in zip(links.items(), cols):
+    with col:
+        st.markdown(
+            f"""
+            <div style=
+                "padding:16px; border:1px solid #eee; border-radius:8px;
+                 box-shadow:0 2px 4px rgba(0,0,0,0.1); background-color:#fff; margin-bottom:20px; text-align:center;"
+            >
+                <h3 style="margin-bottom:8px;">{title}</h3>
+                <p style="color:#666; font-size:14px; margin-bottom:12px;">{info['desc']}</p>
+                <a href="{info['url']}" target="_blank" style="text-decoration:none;">
+                    <button style=
+                        "padding:10px 24px; background-color:#005A9C; color:#fff;
+                         border:none; border-radius:4px; font-size:14px; cursor:pointer;"
+                    >Launch</button>
+                </a>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+# ── Footer ──
+st.markdown(
+    """
+    <hr>
+    <p style="text-align:center; font-size:12px; color:#888; margin-top:10px;">
+        © 2025 APEC-RISE Program Monitoring Suite
+    </p>
+    """,
+    unsafe_allow_html=True
+)
