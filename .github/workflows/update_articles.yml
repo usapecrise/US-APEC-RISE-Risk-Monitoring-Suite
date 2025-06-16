@@ -16,10 +16,11 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
-        run: |
-          pip install feedparser textblob
-          python -m textblob.download_corpora
+- name: Install dependencies
+  run: |
+    pip install feedparser textblob spacy
+    python -m textblob.download_corpora
+    python -m spacy download en_core_web_sm
 
       - name: Run media update script
         run: python media-monitor/update_articles.py
