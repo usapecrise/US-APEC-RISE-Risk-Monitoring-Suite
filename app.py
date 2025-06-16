@@ -1,8 +1,8 @@
 import streamlit as st
 
-st.set_page_config(page_title="APEC-RISE Monitoring Suite", layout="centered")
+st.set_page_config(page_title="US APEC-RISE Risk Monitoring Suite", layout="centered")
 
-st.title("🌐 APEC-RISE Monitoring Suite")
+st.title("🌐 US APEC-RISE Risk Monitoring Suite")
 st.markdown("""
 Welcome to the integrated monitoring dashboard for the APEC-RISE initiative.
 
