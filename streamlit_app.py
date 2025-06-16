@@ -2,43 +2,50 @@ import streamlit as st
 import os
 import importlib.util
 
-def load_and_run(name, filepath):
-    """Dynamically load a sub-app and run its main(), isolating errors."""
+# Helper to load a module by filepath
+def load_app(name, filepath):
     spec = importlib.util.spec_from_file_location(name, filepath)
     module = importlib.util.module_from_spec(spec)
-    try:
-        spec.loader.exec_module(module)
-    except FileNotFoundError as e:
-        st.error(f"⚠️ Couldn’t load {name}: {e}")
-        return
-    except Exception as e:
-        st.error(f"❌ Error importing {name}: {e}")
-        return
+    spec.loader.exec_module(module)
+    return module
 
-    if hasattr(module, "main"):
-        try:
-            module.main()
-        except Exception as e:
-            st.error(f"❌ Runtime error in {name}: {e}")
-    else:
-        st.error(f"⚠️ {name} has no main() function")
-
-# Map tab titles to their app.py paths
+# Map slugs to (tab title, path to app.py)
 BASE = os.path.dirname(__file__)
 APPS = {
-    "📡 Media Monitor":      os.path.join(BASE, "media-monitor",     "app.py"),
-    "🧭 Scenario Simulator": os.path.join(BASE, "scenario-simulator","app.py"),
-    "🏛 Institutional Map":   os.path.join(BASE, "institutional-map", "app.py"),
+    "media":   ("📡 Media Monitor",       os.path.join(BASE, "media-monitor",    "app.py")),
+    "scenario":("🧭 Scenario Simulator", os.path.join(BASE, "scenario-simulator","app.py")),
+    "map":     ("🏛 Institutional Map",   os.path.join(BASE, "institutional-map","app.py")),
 }
 
-# Page config and header
-st.set_page_config(page_title="APEC-RISE Monitoring Suite", layout="wide")
-st.title("🧠 APEC-RISE Monitoring Suite")
-st.markdown("Use the tabs below to switch between your integrated tools.")
+# Read query param
+params = st.experimental_get_query_params()
+selected = params.get("app", [None])[0]
 
-# Create tabs and load each app
-tabs = st.tabs(list(APPS.keys()))
-for tab, name in zip(tabs, APPS):
-    with tab:
-        st.subheader(name)
-        load_and_run(name, APPS[name])
+# Page config
+st.set_page_config(page_title="APEC-RISE Monitoring Suite", layout="wide")
+
+if selected not in APPS:
+    # --- Landing page ---
+    st.title("🧠 APEC-RISE Monitoring Suite")
+    st.markdown("""
+    Welcome! Select one of the tools below to open it in this browser tab.
+    """)
+    for slug, (title, _) in APPS.items():
+        st.markdown(f"- [{title}](?app={slug})")
+    st.markdown("---")
+    st.markdown("*Apps will open here. Use your browser’s back button or the ‘Back’ link inside each tool to return.*")
+
+else:
+    # --- Sub-app page ---
+    title, path = APPS[selected]
+    st.header(title)
+    # Back link
+    st.markdown("[← Back to suite](?app=)")
+    # Dynamically load & run
+    try:
+        app = load_app(selected, path)
+        app.main()
+    except FileNotFoundError as e:
+        st.error(f"⚠️ Couldn’t load {title}: {e}")
+    except Exception as e:
+        st.error(f"❌ Error running {title}: {e}")
