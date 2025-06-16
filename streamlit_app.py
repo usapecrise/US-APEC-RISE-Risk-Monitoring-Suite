@@ -1,22 +1,29 @@
 import streamlit as st
+import os
+import sys
 
-st.set_page_config(page_title="APEC-RISE Monitoring Suite", layout="centered")
+# === Setup paths to sub-apps ===
+sys.path.append(os.path.join(os.path.dirname(__file__), 'media-monitor'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'scenario-simulator'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'institutional-map'))
 
-st.title("🌐 APEC-RISE Monitoring Suite")
-st.markdown("""
-Welcome to the integrated monitoring dashboard for the APEC-RISE initiative.
+import app as media_monitor_app
+import app as scenario_simulator_app
+import app as institutional_map_app
 
-Use the tools below to track political and economic signals, assess scenario states, and explore institutional engagement across APEC economies.
-""")
+# === Page config ===
+st.set_page_config(page_title="USAPEC-RISE Risk Monitoring Suite", layout="wide")
 
-st.markdown("### 🧭 Scenario Simulator")
-st.markdown("[➡️ Open in new tab](apps/scenario_simulator/app.py)", unsafe_allow_html=True)
+# === Tabs for each app ===
+st.title("🧠 US APEC-RISE Risk Monitoring Suite")
 
-st.markdown("### 📡 Media Monitor")
-st.markdown("[➡️ Open in new tab](apps/media_monitor/app.py)", unsafe_allow_html=True)
+tab1, tab2, tab3 = st.tabs(["📡 Media Monitor", "🧭 Scenario Simulator", "🏛 Institutional Map"])
 
-st.markdown("### 🏛️ Institutional Mapping Tool")
-st.markdown("[➡️ Open in new tab](apps/institutional_mapping_tool/app.py)", unsafe_allow_html=True)
+with tab1:
+    media_monitor_app.main()
 
-st.markdown("---")
-st.caption("All tools share a common data folder and update automatically via GitHub Actions.")
+with tab2:
+    scenario_simulator_app.main()
+
+with tab3:
+    institutional_map_app.main()
