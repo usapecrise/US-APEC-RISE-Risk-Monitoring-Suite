@@ -15,9 +15,9 @@ import app as institutional_map_app
 st.set_page_config(page_title="APEC-RISE Monitoring Suite", layout="wide")
 
 # Top-level title and intro
-st.title("🧠 APEC-RISE Monitoring Suite")
+st.title("🧠 US APEC-RISE Risk Monitoring Suite")
 st.markdown("""
-Welcome to the **U.S. APEC-RISE Monitoring Suite**, a set of integrated tools for tracking risks, assessing reform alignment, and visualizing institutional dynamics across APEC economies.
+Welcome to the **US APEC-RISE Risk Monitoring Suite**, a set of integrated tools for tracking risks, assessing reform alignment, and visualizing institutional dynamics across APEC economies.
 """)
 
 # Tabs for tools
