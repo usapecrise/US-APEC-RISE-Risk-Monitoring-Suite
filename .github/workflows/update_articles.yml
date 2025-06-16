@@ -2,33 +2,38 @@ name: 📰 Daily Media Update
 
 on:
   schedule:
-    - cron: "0 3 * * *"  # Daily at 3 AM UTC
-  workflow_dispatch:
+    - cron: "0 3 * * *"  # Runs daily at 3 AM UTC
+  workflow_dispatch:     # Allows manual runs from the GitHub Actions tab
 
 jobs:
   update-media:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Set up Python
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set Up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-- name: Install dependencies
-  run: |
-    pip install feedparser textblob spacy
-    python -m textblob.download_corpora
-    python -m spacy download en_core_web_sm
+      - name: 📦 Install Dependencies
+        run: |
+          pip install feedparser textblob spacy pandas
+          python -m textblob.download_corpora
+          python -m spacy download en_core_web_sm
 
-      - name: Run media update script
+      - name: 📁 Ensure data folder exists
+        run: mkdir -p data
+
+      - name: 📰 Run media update script
         run: python media-monitor/update_articles.py
 
-      - name: Commit updated data
+      - name: 💾 Commit updated articles
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "actions@github.com"
           git add data/processed_articles.json
-          git commit -m "🤖 Daily media update" || echo "No changes"
+          git commit -m "🤖 Daily media update" || echo "No changes to commit"
           git push
