@@ -12,7 +12,7 @@ def load_and_run(name, filepath):
         st.error(f"⚠️ Couldn’t load {name}: {e}")
         return
     except Exception as e:
-        st.error(f"❌ Error in {name}: {e}")
+        st.error(f"❌ Error importing {name}: {e}")
         return
 
     if hasattr(module, "main"):
@@ -23,15 +23,22 @@ def load_and_run(name, filepath):
     else:
         st.error(f"⚠️ {name} has no main() function")
 
-# Paths to each sub-app
+# Map tab titles to their app.py paths
 BASE = os.path.dirname(__file__)
 APPS = {
-    "📡 Media Monitor":     os.path.join(BASE, "media-monitor",    "app.py"),
+    "📡 Media Monitor":      os.path.join(BASE, "media-monitor",     "app.py"),
     "🧭 Scenario Simulator": os.path.join(BASE, "scenario-simulator","app.py"),
     "🏛 Institutional Map":   os.path.join(BASE, "institutional-map", "app.py"),
 }
 
-# Page setup
-st.set_page_config(page_title="US APEC-RISE Risk Monitoring Suite", layout="wide")
-st.title("🧠 US APEC-RISE Risk Monitoring Suite")
-st.markdown("Use the tabs below to switch between your inte
+# Page config and header
+st.set_page_config(page_title="APEC-RISE Monitoring Suite", layout="wide")
+st.title("🧠 APEC-RISE Monitoring Suite")
+st.markdown("Use the tabs below to switch between your integrated tools.")
+
+# Create tabs and load each app
+tabs = st.tabs(list(APPS.keys()))
+for tab, name in zip(tabs, APPS):
+    with tab:
+        st.subheader(name)
+        load_and_run(name, APPS[name])
