@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "title": "Thailand advances digital customs policy",
+    "link": "https://example.com/article1",
+    "published": "2025-06-15",
+    "summary": "The Thai government launched a new digital trade facilitation policy.",
+    "economy": "Thailand",
+    "workstreams": "Digital Trade",
+    "aligned_with_us": "Yes",
+    "sentiment": "Positive"
+  },
+  {
+    "title": "Vietnam stabilizes logistics sector",
+    "link": "https://example.com/article2",
+    "published": "2025-06-14",
+    "summary": "No major changes observed in Vietnam's logistics environment.",
+    "economy": "Vietnam",
+    "workstreams": "Supply Chains",
+    "aligned_with_us": "Unclear",
+    "sentiment": "Neutral"
+  }
+]
