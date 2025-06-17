@@ -23,8 +23,9 @@ except Exception as e:
 
 # Load scenario matrix
 try:
-    matrix_df = pd.read_csv("scenario-shift-monitor/data/full_apec_rise_scenario_matrix.csv")
+    matrix_df = pd.read_csv("data/full_apec_rise_scenario_matrix.csv")
     matrix_df.columns = matrix_df.columns.str.strip()
+p()
 except:
     matrix_df = pd.DataFrame()
 
