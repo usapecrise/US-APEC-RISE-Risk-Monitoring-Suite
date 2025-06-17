@@ -20,7 +20,8 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          pip install pandas feedparser
+          pip install pandas
+          pip install feedparser
 
       - name: 📡 Step 1: Run RSS feed parser
         run: python media-monitor/update_articles.py
