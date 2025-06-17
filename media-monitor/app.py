@@ -3,26 +3,25 @@ import pandas as pd
 import json
 from datetime import datetime
 
-# === App Setup ===
 st.set_page_config(page_title="📡 US APEC-RISE Media Monitor", layout="wide")
 st.title("📡 US APEC-RISE Media Monitor")
 st.markdown("Use this tool to track leadership changes, policy alignment, and reform risks across APEC economies based on media sentiment and tagging.")
 
-# === Load Articles ===
+# === Load cached articles ===
 @st.cache_data
 def load_articles():
     with open("data/processed_articles.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
-# ✅ Refresh cache on button click
-def refresh_data():
+# === Refresh button ===
+refresh = st.sidebar.button("🔄 Refresh Data")
+
+if refresh:
     load_articles.clear()
-    st.experimental_rerun()
+    st.success("Cache cleared. Please rerun the app manually to reload fresh data.")
+    st.stop()  # 🔁 Safely stop execution to avoid further crashes
 
-if st.sidebar.button("🔄 Refresh Data"):
-    refresh_data()
-
-# === Load + Process Data ===
+# === Load and process ===
 articles = load_articles()
 df = pd.DataFrame(articles)
 
