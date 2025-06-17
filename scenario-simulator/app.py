@@ -55,6 +55,9 @@ with st.sidebar:
         selected_confidence = "All"
         st.warning("⚠️ 'Confidence' column not found.")
 
+# Clear rogue debug output
+st.empty()
+
 # Apply filters
 filtered = signal_df.copy()
 
