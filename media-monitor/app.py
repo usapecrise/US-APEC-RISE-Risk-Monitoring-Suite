@@ -6,7 +6,7 @@ from datetime import datetime
 # === App Setup ===
 st.set_page_config(page_title="📡 US APEC-RISE Media Monitor", layout="wide")
 st.title("📡 US APEC-RISE Media Monitor")
-st.markdown("This tool tracks leadership changes, policy alignment, and reform risks across APEC economies based on media sentiment and tagging.")
+st.markdown("Use this tool to track leadership changes, policy alignment, and reform risks across APEC economies based on media sentiment and tagging.")
 
 # === Load Articles ===
 @st.cache_data
