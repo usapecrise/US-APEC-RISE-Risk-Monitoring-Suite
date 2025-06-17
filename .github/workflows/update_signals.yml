@@ -43,4 +43,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/processed_articles.json data/risk_signals.csv
           git diff --cached --quiet && echo "No changes to commit." || git commit -m "Auto-update media + signals [skip ci]"
+          git pull --rebase
           git push
