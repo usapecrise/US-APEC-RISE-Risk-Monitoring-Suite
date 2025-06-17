@@ -1,31 +1,53 @@
 import streamlit as st
 import pandas as pd
-import os
 
-@st.cache_data
-def load_scenario_matrix():
-    base_dir = os.path.dirname(__file__)
-    filepath = os.path.join(base_dir, "data", "full_apec_rise_scenario_matrix.csv")
-    
-    if not os.path.exists(filepath):
-        st.warning("⚠️ Scenario matrix CSV not found. Please upload it to `scenario-simulator/data/full_apec_rise_scenario_matrix.csv`")
-        return pd.DataFrame()
-    
-    return pd.read_csv(filepath)
+# Page config
+st.set_page_config(page_title="🧭 Scenario Simulator", layout="wide")
+st.title("🧭 APEC-RISE Scenario Planning Simulator")
+st.markdown("Explore risk triggers and adaptation strategies across 21 APEC economies.")
 
-def main():
-    st.header("🧭 APEC-RISE Scenario Simulator")
-    df = load_scenario_matrix()
-    
-    if df.empty:
-        st.info("No scenario data available.")
-    else:
-        st.dataframe(df)
+# Load signal data
+try:
+    signal_df = pd.read_csv("data/risk_signals.csv")
+except Exception as e:
+    st.error(f"Error loading signal data: {e}")
+    st.stop()
 
-if __name__ == "__main__":
-    main()
+# Sidebar filters
+with st.sidebar:
+    st.header("🔍 Filter Signals")
+    economies = sorted(signal_df["Economy"].dropna().unique())
+    selected_economy = st.selectbox("Select Economy", ["All"] + economies)
 
+    workstreams = sorted(signal_df["Workstream"].dropna().unique())
+    selected_workstream = st.selectbox("Select Workstream", ["All"] + workstreams)
 
-st.divider()
-st.caption("U.S. APEC-RISE M&E Scenario Simulator")
+    scenarios = sorted(signal_df["Scenario"].dropna().unique())
+    selected_scenario = st.selectbox("Select Scenario", ["All"] + scenarios)
 
+    strengths = sorted(signal_df["Signal Strength"].dropna().unique())
+    selected_strength = st.selectbox("Select Signal Strength", ["All"] + strengths)
+
+# Apply filters
+filtered = signal_df.copy()
+
+if selected_economy != "All":
+    filtered = filtered[filtered["Economy"] == selected_economy]
+if selected_workstream != "All":
+    filtered = filtered[filtered["Workstream"] == selected_workstream]
+if selected_scenario != "All":
+    filtered = filtered[filtered["Scenario"] == selected_scenario]
+if selected_strength != "All":
+    filtered = filtered[filtered["Signal Strength"] == selected_strength]
+
+# Show filtered results
+st.subheader("📊 Scenario Signals")
+if filtered.empty:
+    st.info("No matching signals found.")
+else:
+    st.dataframe(filtered, use_container_width=True)
+
+# Summary stats
+st.markdown("### 🔢 Scenario Counts")
+summary = filtered.groupby(["Economy", "Workstream", "Scenario"]).size().reset_index(name="Count")
+st.dataframe(summary, use_container_width=True)
