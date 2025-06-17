@@ -23,7 +23,7 @@ links = {
         "url": "https://us-apec-rise-media-monitor.streamlit.app/"
     },
     "🧭 Scenario Watch": {
-        "desc": "Simulate shifts from baseline to optimistic/pessimistic scenarios based on risk triggers.",
+        "desc": "Tracks critical assumptions, detects early risk signals, and translates them into scenario shifts—supporting real-time adaptation and strategic decision-making across APEC economies.",
         "url": "https://us-apec-rise-risk-monitoring-suite-scenario-simulator.streamlit.app/"
     },
     "🏛 Institutional Map": {
