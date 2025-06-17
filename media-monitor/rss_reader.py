@@ -58,7 +58,7 @@ rss_urls = [
 known_economies = [
     "Australia", "Brunei Darussalam", "Canada", "Chile", "China", "Hong Kong, China", "Indonesia",
     "Japan", "Republic of Korea", "Malaysia", "Mexico", "New Zealand", "Papua New Guinea", "Peru",
-    "The Philippines", "Russia", "Singapore", "Chinese Taipei", "Thailand", "United States", "Viet Nam"
+    "The Philippines", "Russia", "Singapore", "Chinese Taipei", "Thailand", "United States", "Vietnam"
 ]
 
 def tag_economies(text):
