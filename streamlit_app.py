@@ -23,7 +23,7 @@ links = {
         "url": "https://us-apec-rise-media-monitor.streamlit.app/"
     },
     "🧭 Scenario Watch": {
-        "desc": "Tracks critical assumptions, detects early risk signals, and translates them into scenario shifts—supporting real-time adaptation and strategic decision-making across APEC economies.",
+        "desc": "Tracks risks to critical assumptions and translates them into scenario shifts for timely adaptation.",
         "url": "https://us-apec-rise-risk-monitoring-suite-scenario-simulator.streamlit.app/"
     },
     "🏛 Institutional Map": {
