@@ -1,4 +1,2 @@
-Economy,Workstream,Scenario,Justification,Confidence
-Thailand,Digital Trade,Pessimistic,Delays in implementing digital customs systems.,High
-Australia,Trade Policy,Optimistic,Strong alignment with U.S. policy direction.,Medium
-Vietnam,Supply Chains,Baseline,Stable trade facilitation environment with moderate risks.,Low
+Economy,Workstream,Scenario,Justification,Confidence,Assumption
+Thailand,Emerging Technology Standards,Baseline,No strong leadership or political trend,Medium,Political and Institutional Continuity
