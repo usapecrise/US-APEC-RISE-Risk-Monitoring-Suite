@@ -59,7 +59,6 @@ for (economy, workstream), group in grouped:
         "Assumption": "Political and Institutional Continuity"
     })
 
-# === Export signal file ===
-output_path = "data/risk_signals.csv"
-pd.DataFrame(signal_data).to_csv(output_path, index=False)
-print(f"✅ Scenario signals saved to {output_path}")
+import os
+os.makedirs("../data", exist_ok=True)
+signal_df.to_csv("../data/risk_signals.csv", index=False)
