@@ -14,10 +14,15 @@ def load_articles():
     with open("data/processed_articles.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
-if st.sidebar.button("🔄 Refresh Data"):
-    st.cache_data.clear()
+# ✅ Refresh cache on button click
+def refresh_data():
+    load_articles.clear()
     st.experimental_rerun()
 
+if st.sidebar.button("🔄 Refresh Data"):
+    refresh_data()
+
+# === Load + Process Data ===
 articles = load_articles()
 df = pd.DataFrame(articles)
 
