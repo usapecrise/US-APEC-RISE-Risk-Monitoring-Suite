@@ -1,7 +1,7 @@
 import pandas as pd
 import json
-from collections import Counter
 from datetime import datetime
+import os
 
 # === Load processed articles ===
 with open("data/processed_articles.json", "r", encoding="utf-8") as f:
@@ -15,7 +15,7 @@ df = df[df["workstreams"] != "Uncategorized"]
 df["timestamp"] = pd.to_datetime(df["timestamp"])
 df = df.sort_values("timestamp", ascending=False)
 
-# === Leadership-related keywords (tuned for risk) ===
+# === Leadership-related keywords ===
 leadership_keywords = [
     "resign", "cabinet", "minister", "leadership change", "instability", "election",
     "step down", "shakeup", "transition", "political crisis", "appointment", "replaced",
@@ -36,14 +36,13 @@ for (economy, workstream), group in grouped:
     aligned = sum(1 for x in recent["aligned_with_us"] if x.lower() == "yes")
     leadership_mentions = sum(any(k in blob for k in leadership_keywords) for blob in text_blobs)
 
-    # === Scenario Logic ===
     if neg_count >= 3 and misaligned >= 2 and leadership_mentions >= 2:
         scenario = "Pessimistic"
-        justification = f"{neg_count} negative articles, {misaligned} misaligned, {leadership_mentions} mention leadership changes"
+        justification = f"{neg_count} negative, {misaligned} misaligned, {leadership_mentions} leadership changes"
         strength = "High"
     elif pos_count >= 3 and aligned >= 2 and leadership_mentions >= 2:
         scenario = "Optimistic"
-        justification = f"{pos_count} positive articles, {aligned} aligned, {leadership_mentions} leadership cooperation signals"
+        justification = f"{pos_count} positive, {aligned} aligned, {leadership_mentions} leadership cooperation"
         strength = "High"
     else:
         scenario = "Baseline"
@@ -55,10 +54,11 @@ for (economy, workstream), group in grouped:
         "Workstream": workstream,
         "Scenario": scenario,
         "Justification": justification,
-        "Signal Strength": strength,
+        "Confidence": strength,
         "Assumption": "Political and Institutional Continuity"
     })
 
-import os
-os.makedirs("../data", exist_ok=True)
-signal_df.to_csv("../data/risk_signals.csv", index=False)
+# === Save to CSV ===
+signal_df = pd.DataFrame(signal_data)
+os.makedirs("data", exist_ok=True)
+signal_df.to_csv("data/risk_signals.csv", index=False)
