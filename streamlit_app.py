@@ -22,7 +22,7 @@ links = {
         "desc": "Track leadership changes, media sentiment, and alignment with U.S. objectives.",
         "url": "https://us-apec-rise-media-monitor.streamlit.app/"
     },
-    "🧭 Scenario Simulator": {
+    "🧭 Scenario Shift Monitor": {
         "desc": "Simulate shifts from baseline to optimistic/pessimistic scenarios based on risk triggers.",
         "url": "https://us-apec-rise-risk-monitoring-suite-scenario-simulator.streamlit.app/"
     },
