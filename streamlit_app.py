@@ -9,7 +9,7 @@ st.markdown(
     <div style="text-align: center; padding: 20px 0;">
         <h1 style="margin:0;">US APEC-RISE Risk Monitoring Suite</h1>
         <p style="font-size:18px; color: #555; margin-top:10px;">
-            Integrated tools for monitoring risks to critical assumptions, simulate scenario shifts, and inform adaptive strategies across APEC economies."
+            Integrated tools for monitoring risks to critical assumptions, simulate scenario shifts, and inform adaptive strategies across APEC economies.
         </p>
     </div>
     """,
