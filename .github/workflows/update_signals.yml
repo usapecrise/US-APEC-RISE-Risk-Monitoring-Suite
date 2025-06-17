@@ -22,6 +22,9 @@ jobs:
         run: |
           pip install pandas
           pip install feedparser
+          pip install textblob
+          python -m textblob.download_corpora
+  
 
       - name: Run RSS parser
         run: python media-monitor/update_articles.py
