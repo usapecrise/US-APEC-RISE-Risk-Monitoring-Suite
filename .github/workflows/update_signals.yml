@@ -3,7 +3,7 @@ name: 🤖 Update Media & Scenario Signals
 on:
   schedule:
     - cron: "0 6 * * *"  # Every day at 6:00 UTC
-  workflow_dispatch:      # Allows manual trigger from GitHub
+  workflow_dispatch:
 
 jobs:
   update:
@@ -19,12 +19,13 @@ jobs:
           python-version: "3.10"
 
       - name: 📦 Install dependencies
-        run: pip install pandas feedparser
+        run: |
+          pip install pandas feedparser
 
-      - name: 📡 Step 1: Run RSS feed parser (update_articles.py)
+      - name: 📡 Step 1: Run RSS feed parser
         run: python media-monitor/update_articles.py
 
-      - name: 🧠 Step 2: Generate scenario signals (generate_signals.py)
+      - name: 🧠 Step 2: Generate scenario signals
         run: python media-monitor/generate_signals.py
 
       - name: 🕵️ Git diff
