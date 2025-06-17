@@ -16,6 +16,7 @@ It integrates automatically generated risk signals informed by recent media cove
 try:
     signal_df = pd.read_csv("data/risk_signals.csv")
     signal_df.columns = signal_df.columns.str.strip()
+    st.sidebar.write("🛠 Debug Columns:", signal_df.columns.tolist())
 except Exception as e:
     st.error(f"❌ Could not load risk_signals.csv: {e}")
     st.stop()
