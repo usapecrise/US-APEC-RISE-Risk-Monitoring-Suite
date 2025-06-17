@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 
 # === APEC & Workstream Setup ===
 APEC_ECONOMIES = [
-    "Australia", "Brunei", "Canada", "Chile", "China", "Hong Kong",
+    "Australia", "Brunei Darussalam", "Canada", "Chile", "China", "Hong Kong",
     "Indonesia", "Japan", "Korea", "Malaysia", "Mexico", "New Zealand",
     "Papua New Guinea", "Peru", "Philippines", "Russia", "Singapore",
     "Chinese Taipei", "Thailand", "United States", "Vietnam"
