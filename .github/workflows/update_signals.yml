@@ -1,16 +1,16 @@
-name: 🤖 Update Articles & Generate Scenario Signals
+name: 🤖 Update Media & Scenario Signals
 
 on:
   schedule:
     - cron: "0 6 * * *"  # Every day at 6:00 UTC
-  workflow_dispatch:
+  workflow_dispatch:      # Allows manual trigger from GitHub
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 Checkout repo
+      - name: 📦 Checkout repository
         uses: actions/checkout@v3
 
       - name: 🐍 Set up Python
@@ -21,10 +21,10 @@ jobs:
       - name: 📦 Install dependencies
         run: pip install pandas feedparser
 
-      - name: 📡 Parse RSS and create processed_articles.json
+      - name: 📡 Step 1: Run RSS feed parser (update_articles.py)
         run: python media-monitor/update_articles.py
 
-      - name: 🧠 Generate risk_signals.csv
+      - name: 🧠 Step 2: Generate scenario signals (generate_signals.py)
         run: python media-monitor/generate_signals.py
 
       - name: 🕵️ Git diff
@@ -32,7 +32,7 @@ jobs:
           git status
           git diff --stat
 
-      - name: 💾 Commit and push changes
+      - name: 💾 Commit & push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
