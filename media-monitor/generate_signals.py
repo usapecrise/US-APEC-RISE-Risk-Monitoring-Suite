@@ -61,5 +61,6 @@ for (economy, workstream), group in grouped:
 # === Save to CSV ===
 signal_df = pd.DataFrame(signal_data)
 os.makedirs("data", exist_ok=True)
+print(f"✅ Writing {len(signal_df)} scenario signals to data/risk_signals.csv")
 signal_df.to_csv("data/risk_signals.csv", index=False)
 
