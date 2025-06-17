@@ -25,8 +25,13 @@ with st.sidebar:
     scenarios = sorted(signal_df["Scenario"].dropna().unique())
     selected_scenario = st.selectbox("Select Scenario", ["All"] + scenarios)
 
+if "Signal Strength" in signal_df.columns:
     strengths = sorted(signal_df["Signal Strength"].dropna().unique())
-    selected_strength = st.selectbox("Select Signal Strength", ["All"] + strengths)
+    selected_strength = st.sidebar.selectbox("Select Signal Strength", ["All"] + list(strengths))
+    filtered = filtered[filtered["Signal Strength"] == selected_strength] if selected_strength != "All" else filtered
+else:
+    st.warning("⚠️ 'Signal Strength' column missing in risk_signals.csv")
+    selected_strength = "All
 
 # Apply filters
 filtered = signal_df.copy()
