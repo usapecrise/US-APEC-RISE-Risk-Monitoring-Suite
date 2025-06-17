@@ -3,10 +3,10 @@ import streamlit as st
 import pandas as pd
 
 # Page config
-st.set_page_config(page_title="🧭 APEC-RISE Scenario Shift Monitor", layout="wide")
+st.set_page_config(page_title="🧭 US APEC-RISE Scenario Shift Monitor", layout="wide")
 
 # Title block
-st.title("🧭 APEC-RISE Scenario Shift Monitor")
+st.title("🧭 US APEC-RISE Scenario Shift Monitor")
 st.markdown("Use this tool to detect and explore scenario shifts based on media sentiment and risk signals from across APEC economies.")
 
 # Summary intro
