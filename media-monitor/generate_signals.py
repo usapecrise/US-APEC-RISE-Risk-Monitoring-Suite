@@ -62,3 +62,4 @@ for (economy, workstream), group in grouped:
 signal_df = pd.DataFrame(signal_data)
 os.makedirs("data", exist_ok=True)
 signal_df.to_csv("data/risk_signals.csv", index=False)
+
