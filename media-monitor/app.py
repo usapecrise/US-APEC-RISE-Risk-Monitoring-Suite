@@ -13,11 +13,14 @@ def load_articles():
     with open("data/processed_articles.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
-# === Refresh button ===
-if st.sidebar.button("🔄 Refresh Data"):
-    # Clear your cached loader
+# === Sidebar: Refresh Data ===
+refresh = st.sidebar.button("🔄 Refresh Data")
+if refresh:
+    # clear whatever cache decorator you’re using
     load_articles.clear()
-    # Trigger an immediate rerun so new data is fetched in this session
+    # optionally show a message
+    st.sidebar.success("Cache cleared, reloading fresh data…")
+    # immediately rerun the script end-to-end
     st.experimental_rerun()
 
 # === Load and process ===
