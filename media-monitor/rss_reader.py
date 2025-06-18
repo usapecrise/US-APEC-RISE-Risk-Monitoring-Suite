@@ -25,7 +25,6 @@ rss_sources = [
     {"url": "https://thediplomat.com/feed/", "source_type": "Media"},
     
     # 🏛 Government
-    {"url": "https://www.apec.org/feeds/rss", "source_type": "Government"},
     {"url": "https://www.state.gov/rss-feed/east-asia-and-the-pacific/feed/", "source_type": "Government"},
     {"url": "https://au.usembassy.gov/feed/", "source_type": "Government"},
     {"url": "https://bn.usembassy.gov/feed/", "source_type": "Government"},
@@ -56,6 +55,7 @@ rss_sources = [
     {"url": "https://asiafoundation.org/feed/", "source_type": "Think Tank"},
 
     # 🌍 Multilateral
+     {"url": "https://www.apec.org/feeds/rss", "source_type": "Multilateral"},
     {"url": "https://news.un.org/feed/subscribe/en/news/region/asia-pacific/feed/rss.xml", "source_type": "Multilateral"},
     {"url": "https://www.aseanbriefing.com/news/feed/", "source_type": "Multilateral"},
     {"url": "https://www.wto.org/english/news_e/news_e.rss", "source_type": "Multilateral"},
