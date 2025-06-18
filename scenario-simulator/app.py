@@ -1,8 +1,11 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="🧭 APEC-RISE Scenario Simulator", layout="wide")
-st.title("🧭 APEC-RISE Scenario Simulator")
+st.set_page_config(
+    page_title="🧭 US APEC-RISE Scenario Simulator",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
 # === Load data ===
 try:
