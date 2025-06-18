@@ -8,6 +8,7 @@ st.set_page_config(
 )
 
 st.title("🧭 US APEC-RISE Scenario Watch")
+st.markdown("Use this tool to flag risks to critical assumptions and trigger scenario alerts for adaptive management across APEC economies.")
 
 # === Load data ===
 try:
