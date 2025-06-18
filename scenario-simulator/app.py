@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.title("🧭 APEC-RISE Scenario Simulator")
+st.title("🧭 US APEC-RISE Scenario Simulator")
 
 # === Load data ===
 try:
