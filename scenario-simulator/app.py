@@ -21,6 +21,26 @@ except Exception as e:
 df_signals.columns = df_signals.columns.str.strip()
 strat_df.columns = strat_df.columns.str.strip()
 
+# === Define fixed dropdown options ===
+workstreams_list = [
+    "Digital Trade",
+    "Supply Chain Connectivity",
+    "Emerging Technology Standards",
+    "Cloud Computing",
+    "Cybersecurity",
+    "Water Quality",
+    "Good Regulatory Practices",
+    "Technical Barriers to Trade",
+    "Free Trade Area of the Asia-Pacific"
+]
+assumptions_list = [
+    "Political and Institutional Continuity",
+    "Stakeholder Alignment with U.S. Focus Areas",
+    "Policy and Regulatory Openness",
+    "Responsible Local Ownership",
+    # add other assumptions here
+]
+
 # === All economies list & missing warning ===
 all_economies = sorted([
     "Australia", "Brunei", "Canada", "Chile", "China", "Hong Kong", "Indonesia", "Japan", "Korea", "Malaysia",
