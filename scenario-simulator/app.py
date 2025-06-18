@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 
@@ -8,14 +7,14 @@ st.title("🧭 APEC-RISE Scenario Simulator")
 # === Load data ===
 try:
     df_signals = pd.read_csv("data/risk_signals.csv")
-    df_matrix = pd.read_csv("data/full_apec_rise_scenario_matrix.csv")
+    strat_df = pd.read_csv("data/scenario_strategies.csv")
 except Exception as e:
     st.error(f"❌ Error loading data files: {e}")
     st.stop()
 
-# Strip column names just in case
+# Strip column names to avoid whitespace issues
 df_signals.columns = df_signals.columns.str.strip()
-df_matrix.columns = df_matrix.columns.str.strip()
+strat_df.columns = strat_df.columns.str.strip()
 
 # === Ensure all expected economies are present ===
 all_economies = sorted([
@@ -46,15 +45,20 @@ filtered = df_signals[
 if selected_strength != "All":
     filtered = filtered[filtered["Signal Strength"] == selected_strength]
 
-# === Merge with Scenario Matrix ===
+# === Merge with universal strategy lookup ===
 merged = pd.merge(
     filtered,
-    df_matrix,
+    strat_df,
     how="left",
-    on=["Economy", "Assumption", "Scenario"]
+    on=["Assumption", "Scenario"]
 )
 
-# === Add Icons AFTER Merge ===
+# Check that strategies were attached
+if merged["Recommended Adaptation Strategy"].isnull().all():
+    st.error("❌ No adaptation strategies found: please check scenario_strategies.csv for matching Assumption & Scenario values.")
+    st.stop()
+
+# === Add Icons ===
 def add_scenario_icon(scenario):
     icons = {
         "Optimistic": "🟢 Optimistic",
@@ -71,14 +75,29 @@ def add_strength_icon(strength):
     }
     return icons.get(strength, strength)
 
+# Apply icons
 merged["Scenario"] = merged["Scenario"].apply(add_scenario_icon)
 merged["Signal Strength"] = merged["Signal Strength"].apply(add_strength_icon)
 
+# Rename strategy column for display
+merged = merged.rename(columns={
+    "Recommended Adaptation Strategy": "Adaptation Strategy"
+})
+
 # === Display Table ===
 st.markdown("### 📊 Filtered Scenario Signals with Adaptation Strategies")
-display_cols = ["Economy", "Workstream", "Assumption", "Scenario", "Justification", "Signal Strength", "Adaptation Strategy", "Timeline"]
+display_cols = [
+    "Economy", "Workstream", "Assumption", "Scenario",
+    "Justification", "Signal Strength", "Adaptation Strategy"
+]
 st.dataframe(merged[display_cols], use_container_width=True)
 
 # === Export Button ===
 csv = merged[display_cols].to_csv(index=False).encode('utf-8')
-st.download_button("⬇️ Download Filtered Results as CSV", csv, "scenario_signals.csv", "text/csv")
+st.download_button(
+    label="⬇️ Download Filtered Results as CSV",
+    data=csv,
+    file_name="scenario_signals.csv",
+    mime="text/csv"
+)
+
