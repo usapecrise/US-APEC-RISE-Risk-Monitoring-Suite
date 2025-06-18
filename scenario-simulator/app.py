@@ -7,6 +7,8 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+st.title("🧭 APEC-RISE Scenario Simulator")
+
 # === Load data ===
 try:
     df_signals = pd.read_csv("data/risk_signals.csv")
