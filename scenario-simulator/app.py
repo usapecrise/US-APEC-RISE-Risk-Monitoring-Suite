@@ -2,12 +2,12 @@ import streamlit as st
 import pandas as pd
 
 st.set_page_config(
-    page_title="🧭 US APEC-RISE Scenario Simulator",
+    page_title="🧭 US APEC-RISE Scenario Watch",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-st.title("🧭 US APEC-RISE Scenario Simulator")
+st.title("🧭 US APEC-RISE Scenario Watch")
 
 # === Load data ===
 try:
