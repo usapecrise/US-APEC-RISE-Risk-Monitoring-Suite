@@ -58,7 +58,6 @@ rss_sources = [
     {"url": "https://www.oecd.org/newsroom/rss.xml", "source_type": "Multilateral"},
 
     # 💼 Private Sector
-    {"url": "https://www.devex.com/news/asia-pacific/rss", "source_type": "Private Sector"},
     {"url": "https://www.supplychaindive.com/rss/", "source_type": "Private Sector"},
     {"url": "https://www.zdnet.com/news/rss.xml", "source_type": "Private Sector"},
     {"url": "https://www.itnews.com.au/rss", "source_type": "Private Sector"},
@@ -69,7 +68,7 @@ rss_sources = [
 
 # ✅ APEC economy names for tagging
 known_economies = [
-    "Australia", "Brunei Darussalam", "Canada", "Chile", "China", "Hong Kong, China", "Indonesia",
+    "Australia", "Brunei", "Canada", "Chile", "China", "Hong Kong, China", "Indonesia",
     "Japan", "Republic of Korea", "Malaysia", "Mexico", "New Zealand", "Papua New Guinea", "Peru",
     "The Philippines", "Russia", "Singapore", "Chinese Taipei", "Thailand", "United States", "Vietnam"
 ]
