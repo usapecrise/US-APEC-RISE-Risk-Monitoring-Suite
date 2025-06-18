@@ -1,27 +1,33 @@
 import streamlit as st
 import pandas as pd
 import json
-from datetime import datetime
+from streamlit.runtime.scriptrunner import get_script_run_ctx
 
-st.set_page_config(page_title="📡 US APEC-RISE Media Monitor", layout="wide")
+# === Page config ===
+st.set_page_config(
+    page_title="📡 US APEC-RISE Media Monitor",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 st.title("📡 US APEC-RISE Media Monitor")
-st.markdown("Use this tool to track leadership changes, policy alignment, and reform risks across APEC economies based on media sentiment and tagging.")
+st.markdown(
+    "Use this tool to track leadership changes, policy alignment, and reform risks across APEC economies based on media sentiment, tagging, and other M&E inputs."
+)
 
-# === Load cached articles ===
-@st.cache_data
+# === Loader with 24h TTL ===
+@st.cache_data(ttl=24 * 3600)
 def load_articles():
     with open("data/processed_articles.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
-# === Sidebar: Refresh Data ===
-refresh = st.sidebar.button("🔄 Refresh Data")
-if refresh:
-    # clear whatever cache decorator you’re using
+# === Sidebar: Manual Refresh ===
+if st.sidebar.button("🔄 Refresh Data"):
     load_articles.clear()
-    # optionally show a message
     st.sidebar.success("Cache cleared, reloading fresh data…")
-    # immediately rerun the script end-to-end
-    st.experimental_rerun()
+    ctx = get_script_run_ctx()
+    if ctx:
+        ctx.request_rerun()
 
 # === Load and process ===
 articles = load_articles()
@@ -60,7 +66,11 @@ st.markdown(f"### 📰 Showing {len(filtered)} Article(s)")
 for _, row in filtered.iterrows():
     with st.container():
         st.markdown(f"**[{row['title']}]({row['link']})**")
-        st.markdown(f"_{row['published']} • {row['economy']} • {row['source_type']} • Sentiment: `{row['sentiment']}`_")
+        st.markdown(
+            f"_{row['published']} • {row['economy']} • {row['source_type']} • Sentiment: `{row['sentiment']}`_"
+        )
         st.markdown(row['summary'][:400] + "...")
-        st.markdown(f"`Workstreams:` {row['workstreams']} | `Aligned with U.S.:` {row['aligned_with_us']}")
+        st.markdown(
+            f"`Workstreams:` {row['workstreams']} | `Aligned with U.S.:` {row['aligned_with_us']}"
+        )
         st.divider()
