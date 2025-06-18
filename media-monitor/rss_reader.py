@@ -8,6 +8,7 @@ os.makedirs("data", exist_ok=True)
 
 rss_sources = [
     # 🌐 Media
+    {"url": "https://www.smh.com.au/rss/world.xml", "source_type": "Media"}
     {"url": "https://www.straitstimes.com/news/asia/rss.xml", "source_type": "Media"},
     {"url": "https://www.channelnewsasia.com/rssfeeds/8395986", "source_type": "Media"},
     {"url": "https://www.bangkokpost.com/rss/data/topstories.xml", "source_type": "Media"},
@@ -16,11 +17,13 @@ rss_sources = [
     {"url": "https://www.philstar.com/rss", "source_type": "Media"},
     {"url": "https://malaysiakini.com/rss", "source_type": "Media"},
     {"url": "https://nzherald.co.nz/rss/", "source_type": "Media"},
+    {"url": "https://www.rnz.co.nz/rss/pacific.xml", "source_type": "Media"}
+    {"url": "https://www.rnz.co.nz/rss/world.xml", "source_type": "Media"}
     {"url": "https://thediplomat.com/feed/", "source_type": "Media"},
     
     # 🏛 Government
-    {"url": "https://www.apec.org/rss/newsroom.xml", "source_type": "Government"},
-    {"url": "https://www.state.gov/rss-feed/eap/feed.xml", "source_type": "Government"},
+    {"url": "https://www.apec.org/feeds/rss", "source_type": "Government"},
+    {"url": "https://www.state.gov/rss-feed/east-asia-and-the-pacific/feed/", "source_type": "Government"},
     {"url": "https://au.usembassy.gov/feed/", "source_type": "Government"},
     {"url": "https://bn.usembassy.gov/feed/", "source_type": "Government"},
     {"url": "https://ca.usembassy.gov/feed/", "source_type": "Government"},
@@ -42,7 +45,6 @@ rss_sources = [
     {"url": "https://hk.usconsulate.gov/feed/", "source_type": "Government"},
 
     # 🧠 Think Tanks
-    {"url": "https://www.csis.org/rss/feeds/publications", "source_type": "Think Tank"},
     {"url": "https://www.brookings.edu/topic/asia/feed/", "source_type": "Think Tank"},
     {"url": "https://carnegieendowment.org/rss/topic/3001", "source_type": "Think Tank"},
     {"url": "https://www.lowyinstitute.org/the-interpreter/feed", "source_type": "Think Tank"},
@@ -66,11 +68,42 @@ rss_sources = [
     {"url": "https://www.reutersagency.com/feed/?best-topics=trade&post_type=best", "source_type": "Private Sector"}
 ]
 
-# ✅ APEC economy names for tagging
-known_economies = [
-    "Australia", "Brunei", "Canada", "Chile", "China", "Hong Kong, China", "Indonesia",
-    "Japan", "Republic of Korea", "Malaysia", "Mexico", "New Zealand", "Papua New Guinea", "Peru",
-    "The Philippines", "Russia", "Singapore", "Chinese Taipei", "Thailand", "United States", "Vietnam"
+# APEC economies + synonyms + capital cities
+economy_keywords = {
+    "Australia":             ["Australia", "Canberra"],
+    "Brunei":                ["Brunei", "Brunei Darussalam", "Bandar Seri Begawan"],
+    "Canada":                ["Canada", "Ottawa"],
+    "Chile":                 ["Chile", "Santiago"],
+    "China":                 ["China", "PRC", "People's Republic of China", "Mainland China", "Beijing"],
+    "Hong Kong, China":      ["Hong Kong", "HK"],
+    "Indonesia":             ["Indonesia", "Republic of Indonesia", "Jakarta"],
+    "Japan":                 ["Japan", "Tokyo"],
+    "Republic of Korea":     ["Republic of Korea", "South Korea", "ROK", "Korea", "Seoul"],
+    "Malaysia":              ["Malaysia", "Malaysian", "Kuala Lumpur"],
+    "Mexico":                ["Mexico", "Mexican", "Mexico City"],
+    "New Zealand":           ["New Zealand", "NZ", "Wellington"],
+    "Papua New Guinea":      ["Papua New Guinea", "PNG", "Port Moresby"],
+    "Peru":                  ["Peru", "Peruvian", "Lima"],
+    "The Philippines":       ["The Philippines", "Philippines", "PHL", "Manila"],
+    "Russia":                ["Russia", "Russian Federation", "Russian", "Moscow"],
+    "Singapore":             ["Singapore"],  # city-state, so repeats
+    "Chinese Taipei":        ["Chinese Taipei", "Taipei", "Taiwan"],
+    "Thailand":              ["Thailand", "Thai", "Bangkok"],
+    "United States":         ["United States", "USA", "US", "Washington", "Washington D.C.", "DC"],
+    "Vietnam":               ["Vietnam", "Viet Nam", "Hanoi"]
+}
+
+def tag_economy(text):
+    """Return list of economies whose keywords (including capitals) appear in text."""
+    found = []
+    lower = text.lower()
+    for econ, patterns in economy_keywords.items():
+        for pat in patterns:
+            if pat.lower() in lower:
+                found.append(econ)
+                break
+    return found or ["Uncategorized"]
+
 ]
 
 def tag_economies(text):
