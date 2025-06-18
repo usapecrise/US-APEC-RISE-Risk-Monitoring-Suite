@@ -52,10 +52,6 @@ missing_economies = sorted(set(all_economies) - set(present_economies))
 if missing_economies:
     st.warning(f"⚠️ Missing economies in signals: {', '.join(missing_economies)}")
 
-# === Sidebar Debug: Strategy Lookup Preview ===
-st.sidebar.subheader("🔧 Strategy Lookup Preview")
-st.sidebar.dataframe(strat_df)
-
 # === Sidebar Filters ===
 st.sidebar.header("🔍 Filter Scenario Signals")
 selected_economy = st.sidebar.selectbox("Economy", all_economies)
