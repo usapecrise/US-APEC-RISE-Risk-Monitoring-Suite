@@ -72,11 +72,15 @@ if selected_confidence != "All" and "Confidence" in signal_df.columns:
     filtered = filtered[filtered["Confidence"] == selected_confidence]
 
 # Optional: create link column if 'link' exists
+# Define default display columns
+base_cols = ["Economy", "Workstream", "Assumption", "Scenario", "Justification", "Signal Strength"]
+available_cols = [col for col in base_cols if col in filtered.columns]
+display_cols = available_cols
+
+# Add Link column if possible
 if "link" in filtered.columns:
     filtered["Link"] = filtered["link"].apply(lambda x: f"[Source]({x})" if pd.notnull(x) else "")
-    display_cols = ["Economy", "Workstream", "Assumption", "Scenario", "Justification", "Signal Strength", "Link"]
-else:
-    display_cols = ["Economy", "Workstream", "Assumption", "Scenario", "Justification", "Signal Strength"]
+    display_cols.append("Link")
 
 # Color-code by scenario
 def highlight_scenario(row):
