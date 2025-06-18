@@ -14,12 +14,11 @@ def load_articles():
         return json.load(f)
 
 # === Refresh button ===
-refresh = st.sidebar.button("🔄 Refresh Data")
-
-if refresh:
+if st.sidebar.button("🔄 Refresh Data"):
+    # Clear your cached loader
     load_articles.clear()
-    st.success("Cache cleared. Please rerun the app manually to reload fresh data.")
-    st.stop()  # 🔁 Safely stop execution to avoid further crashes
+    # Trigger an immediate rerun so new data is fetched in this session
+    st.experimental_rerun()
 
 # === Load and process ===
 articles = load_articles()
