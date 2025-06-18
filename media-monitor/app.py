@@ -24,10 +24,7 @@ def load_articles():
 # === Sidebar: Manual Refresh ===
 if st.sidebar.button("🔄 Refresh Data"):
     load_articles.clear()
-    st.sidebar.success("Cache cleared, reloading fresh data…")
-    ctx = get_script_run_ctx()
-    if ctx:
-        ctx.request_rerun()
+    st.sidebar.success("Cache cleared, loading fresh data…")
 
 # === Load and process ===
 articles = load_articles()
