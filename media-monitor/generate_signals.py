@@ -66,25 +66,29 @@ for _, row in df.iterrows():
         matched_pessimistic = [kw for kw in patterns["pessimistic"] if kw in text]
 
         if matched_pessimistic:
-            signals.append({
-                "Economy": economy,
-                "Workstream": workstream,
-                "Assumption": assumption,
-                "Scenario": "Pessimistic",
-                "Justification": ", ".join(matched_pessimistic),
-                "Signal Strength": "High"
-            })
+            scenario = "Pessimistic"
+            justification = ", ".join(matched_pessimistic)
+            strength = "High"
         elif matched_optimistic:
-            signals.append({
-                "Economy": economy,
-                "Workstream": workstream,
-                "Assumption": assumption,
-                "Scenario": "Optimistic",
-                "Justification": ", ".join(matched_optimistic),
-                "Signal Strength": "Medium"
-            })
+            scenario = "Optimistic"
+            justification = ", ".join(matched_optimistic)
+            strength = "Medium"
+        else:
+            scenario = "Baseline"
+            justification = "No signal keywords detected."
+            strength = "Low"
+
+        signals.append({
+            "Economy": economy,
+            "Workstream": workstream,
+            "Assumption": assumption,
+            "Scenario": scenario,
+            "Justification": justification,
+            "Signal Strength": strength
+        })
 
 # === Save to CSV ===
 output_path = Path("data/risk_signals.csv")
 pd.DataFrame(signals).to_csv(output_path, index=False)
 print(f"✅ Signals saved to {output_path}")
+
