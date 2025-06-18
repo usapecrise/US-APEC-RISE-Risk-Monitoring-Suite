@@ -24,7 +24,15 @@ def load_articles():
 # === Sidebar: Manual Refresh ===
 if st.sidebar.button("🔄 Refresh Data"):
     load_articles.clear()
-    st.sidebar.success("Cache cleared, loading fresh data…")
+    st.sidebar.success("Cache cleared, reloading fresh data…")
+    try:
+        from streamlit.runtime.scriptrunner import get_script_run_ctx
+        ctx = get_script_run_ctx()
+        if ctx:
+            ctx.request_rerun()
+    except Exception:
+        # fallback: do nothing, next run will load fresh data
+        pass
 
 # === Load and process ===
 articles = load_articles()
