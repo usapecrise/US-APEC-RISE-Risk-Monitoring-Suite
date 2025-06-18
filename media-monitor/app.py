@@ -28,17 +28,37 @@ if df.empty:
     st.warning("No articles found. Please check the update script or data file.")
     st.stop()
 
+# === Fixed lists for filtering ===
+all_workstreams = [
+    "Digital Trade",
+    "Services",
+    "Supply Chain Connectivity",
+    "Emerging Technology Standards",
+    "Cloud Computing",
+    "Cybersecurity",
+    "Water Quality",
+    "Good Regulatory Practices",
+    "Technical Barriers to Trade",
+    "Free Trade Area of the Asia-Pacific"
+]
+all_source_types = [
+    "Media",
+    "Government",
+    "Think Tank",
+    "Multilateral",
+    "Private Sector"
+]
+
 # === Sidebar Filters ===
 st.sidebar.header("🔍 Filter Articles")
+
 economies = sorted(df["economy"].dropna().unique())
-workstreams = sorted({w.strip() for ws in df["workstreams"].dropna() for w in ws.split(",")})
 sentiments = sorted(df["sentiment"].dropna().unique())
-source_types = sorted(df["source_type"].dropna().unique())
 
 selected_economy = st.sidebar.selectbox("🌐 Economy", ["All"] + economies)
-selected_workstream = st.sidebar.selectbox("🧩 Workstream", ["All"] + workstreams)
+selected_workstream = st.sidebar.selectbox("🧩 Workstream", ["All"] + all_workstreams)
 selected_sentiment = st.sidebar.selectbox("📈 Sentiment", ["All"] + sentiments)
-selected_source = st.sidebar.selectbox("🏛 Source Type", ["All"] + source_types)
+selected_source = st.sidebar.selectbox("🏛 Source Type", ["All"] + all_source_types)
 
 # === Apply Filters ===
 filtered = df.copy()
@@ -65,3 +85,4 @@ for _, row in filtered.iterrows():
             f"`Workstreams:` {row['workstreams']} | `Aligned with U.S.:` {row['aligned_with_us']}"
         )
         st.divider()
+
