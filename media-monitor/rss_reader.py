@@ -9,13 +9,16 @@ os.makedirs("data", exist_ok=True)
 rss_sources = [
     # 🌐 Media
     {"url": "https://www.smh.com.au/rss/world.xml", "source_type": "Media"}
+    {"url": "https://www.straitstimes.com/news/world/rss.xml", "source_type": "Media"},
     {"url": "https://www.straitstimes.com/news/asia/rss.xml", "source_type": "Media"},
+    {"url": "https://feeds.bbci.co.uk/news/rss.xml", "source_type": "Media"},
+    {"url": "https://feeds.content.dowjones.io/public/rss/RSSWorldNews", "source_type": "Media"},
+    {"url": "https://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml", "source_type": "Media"},
     {"url": "https://www.channelnewsasia.com/rssfeeds/8395986", "source_type": "Media"},
     {"url": "https://www.bangkokpost.com/rss/data/topstories.xml", "source_type": "Media"},
     {"url": "https://asia.nikkei.com/rss", "source_type": "Media"},
-    {"url": "https://vietnamnews.vn/rss", "source_type": "Media"},
-    {"url": "https://www.philstar.com/rss", "source_type": "Media"},
-    {"url": "https://malaysiakini.com/rss", "source_type": "Media"},
+    {"url": "https://vietnamnews.vn/rss/world.rss", "source_type": "Media"},
+    {"url": "https://www.philstar.com/rss/world", "source_type": "Media"},
     {"url": "https://nzherald.co.nz/rss/", "source_type": "Media"},
     {"url": "https://www.rnz.co.nz/rss/pacific.xml", "source_type": "Media"}
     {"url": "https://www.rnz.co.nz/rss/world.xml", "source_type": "Media"}
