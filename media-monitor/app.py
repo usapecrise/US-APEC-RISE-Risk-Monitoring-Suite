@@ -14,23 +14,14 @@ st.markdown(
     "Use this tool to track leadership changes, policy alignment, and reform risks across APEC economies based on media sentiment, tagging, and other M&E inputs."
 )
 
-# === Session state for manual refresh ===
-if 'refresh_counter' not in st.session_state:
-    st.session_state['refresh_counter'] = 0
-
-# === Sidebar: Manual Refresh ===
-if st.sidebar.button("🔄 Refresh Data"):
-    st.session_state['refresh_counter'] += 1
-    st.sidebar.success("Cache cleared, loading fresh data…")
-
-# === Load cached articles, keyed on refresh_counter ===
+# === Loader with 24h TTL ===
 @st.cache_data(ttl=24 * 3600)
-def load_articles(refresh_counter):
+def load_articles():
     with open("data/processed_articles.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
 # === Load and process ===
-articles = load_articles(st.session_state['refresh_counter'])
+articles = load_articles()
 df = pd.DataFrame(articles)
 
 if df.empty:
