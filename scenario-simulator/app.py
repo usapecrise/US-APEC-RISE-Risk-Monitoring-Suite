@@ -59,14 +59,9 @@ st.sidebar.dataframe(strat_df)
 # === Sidebar Filters ===
 st.sidebar.header("🔍 Filter Scenario Signals")
 selected_economy = st.sidebar.selectbox("Economy", all_economies)
-selected_workstream = st.sidebar.selectbox(
-    "Workstream",
-    sorted(df_signals["Workstream"].dropna().unique())
-)
-selected_assumption = st.sidebar.selectbox(
-    "Assumption",
-    sorted(df_signals["Assumption"].dropna().unique())
-)
+# Use fixed lists for workstream and assumption
+selected_workstream = st.sidebar.selectbox("Workstream", workstreams_list)
+selected_assumption = st.sidebar.selectbox("Assumption", assumptions_list)
 signal_strengths = ["All"] + sorted(df_signals["Signal Strength"].dropna().unique().tolist())
 selected_strength = st.sidebar.selectbox("Signal Strength", signal_strengths)
 
@@ -124,4 +119,3 @@ st.download_button(
     file_name="scenario_signals.csv",
     mime="text/csv"
 )
-
