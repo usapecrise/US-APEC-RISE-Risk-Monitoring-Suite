@@ -1,73 +1,90 @@
 import pandas as pd
 import json
+from pathlib import Path
 
-# Load articles
+# === Load articles ===
 with open("data/processed_articles.json", "r", encoding="utf-8") as f:
     articles = json.load(f)
 
 df = pd.DataFrame(articles)
 
-# Leadership keywords categorized by scenario tag
-leadership_keywords = {
-    "pessimistic": [
-        "resign", "step down", "shakeup", "instability", "political crisis",
-        "snap election", "contested election", "loss of majority", "vote of no confidence",
-        "dismissed", "removed from office", "parliamentary reshuffle",
-        "coup", "military takeover", "protest", "dissolution", "crackdown", "emergency powers"
-    ],
-    "optimistic": [
-        "inauguration", "assumed office", "appointed", "incoming administration"
-    ],
-    "neutral": [
-        "cabinet", "minister", "leadership change", "transition", "appointment", 
-        "acting minister", "new minister", "succession", "power shift", "handover",
-        "change in leadership", "transfer of power", "exit", "runoff", "campaign",
-        "president", "prime minister", "governor", "secretary", "chairperson",
-        "director-general", "named as interim", "installed"
-    ]
+# === Define keyword sets for each assumption ===
+assumption_keywords = {
+    "Stakeholder alignment with U.S. focus areas": {
+        "optimistic": [
+            "endorsed", "cooperation", "joint statement", "technical assistance",
+            "bilateral agreement", "mou signed", "aligned with", "expressed support"
+        ],
+        "pessimistic": [
+            "rejected", "boycott", "refused", "pushback", "disagreement",
+            "divergence", "mistrust", "withdrew support", "non-alignment", "opposed"
+        ],
+    },
+    "Political and institutional continuity": {
+        "optimistic": [
+            "inauguration", "assumed office", "appointed", "incoming administration"
+        ],
+        "pessimistic": [
+            "resign", "step down", "shakeup", "instability", "political crisis",
+            "snap election", "contested election", "loss of majority", "vote of no confidence",
+            "dismissed", "removed from office", "parliamentary reshuffle",
+            "coup", "military takeover", "protest", "dissolution", "crackdown", "emergency powers"
+        ]
+    },
+    "Supply chain and trade flow resilience": {
+        "optimistic": [
+            "logistics agreement", "new trade route", "port expansion", "customs reform",
+            "reduced tariffs", "supply chain optimization"
+        ],
+        "pessimistic": [
+            "bottleneck", "port closure", "tariff increase", "logistics delay",
+            "disruption", "supply chain risk", "shortages", "blockade"
+        ]
+    },
+    "Private sector and stakeholder engagement": {
+        "optimistic": [
+            "ppp", "public-private partnership", "investment", "industry roundtable",
+            "business forum", "innovation hub", "private sector interest"
+        ],
+        "pessimistic": [
+            "lack of buy-in", "investment withdrawal", "low turnout",
+            "stakeholder concern", "resistance", "disengagement", "protest"
+        ]
+    }
 }
 
-# Detect scenario signals
+# === Detect scenario signals ===
 signals = []
+
 for _, row in df.iterrows():
     text = f"{row.get('title', '')} {row.get('summary', '')}".lower()
     economy = row.get("economy", "Unknown")
     workstream = row.get("workstreams", "Uncategorized")
-    justification = []
-    signal_strength = "Low"
-    scenario = "Baseline"
 
-    matched_keywords = {
-        tag: [kw for kw in keywords if kw in text]
-        for tag, keywords in leadership_keywords.items()
-    }
+    for assumption, patterns in assumption_keywords.items():
+        matched_optimistic = [kw for kw in patterns["optimistic"] if kw in text]
+        matched_pessimistic = [kw for kw in patterns["pessimistic"] if kw in text]
 
-    # Determine scenario
-    if matched_keywords["pessimistic"]:
-        scenario = "Pessimistic"
-        justification.extend(matched_keywords["pessimistic"])
-        signal_strength = "High"
-    elif matched_keywords["optimistic"]:
-        scenario = "Optimistic"
-        justification.extend(matched_keywords["optimistic"])
-        signal_strength = "Medium"
-    elif matched_keywords["neutral"]:
-        scenario = "Baseline"
-        justification.extend(matched_keywords["neutral"])
-        signal_strength = "Low"
+        if matched_pessimistic:
+            signals.append({
+                "Economy": economy,
+                "Workstream": workstream,
+                "Assumption": assumption,
+                "Scenario": "Pessimistic",
+                "Justification": ", ".join(matched_pessimistic),
+                "Signal Strength": "High"
+            })
+        elif matched_optimistic:
+            signals.append({
+                "Economy": economy,
+                "Workstream": workstream,
+                "Assumption": assumption,
+                "Scenario": "Optimistic",
+                "Justification": ", ".join(matched_optimistic),
+                "Signal Strength": "Medium"
+            })
 
-    if justification:
-        signals.append({
-            "Economy": economy,
-            "Workstream": workstream,
-            "Scenario": scenario,
-            "Justification": ", ".join(justification),
-            "Signal Strength": signal_strength,
-            "Assumption": "Political and institutional continuity"
-        })
-
-# Save output
-signals_df = pd.DataFrame(signals)
-signals_df.to_csv("data/risk_signals.csv", index=False)
-print("✅ Signals saved to data/risk_signals.csv")
-
+# === Save to CSV ===
+output_path = Path("data/risk_signals.csv")
+pd.DataFrame(signals).to_csv(output_path, index=False)
+print(f"✅ Signals saved to {output_path}")
