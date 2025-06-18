@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import json
-from streamlit.runtime.scriptrunner import get_script_run_ctx
 
 # === Page config ===
 st.set_page_config(
@@ -15,27 +14,23 @@ st.markdown(
     "Use this tool to track leadership changes, policy alignment, and reform risks across APEC economies based on media sentiment, tagging, and other M&E inputs."
 )
 
-# === Loader with 24h TTL ===
-@st.cache_data(ttl=24 * 3600)
-def load_articles():
-    with open("data/processed_articles.json", "r", encoding="utf-8") as f:
-        return json.load(f)
+# === Session state for manual refresh ===
+if 'refresh_counter' not in st.session_state:
+    st.session_state['refresh_counter'] = 0
 
 # === Sidebar: Manual Refresh ===
 if st.sidebar.button("🔄 Refresh Data"):
-    load_articles.clear()
-    st.sidebar.success("Cache cleared, reloading fresh data…")
-    try:
-        from streamlit.runtime.scriptrunner import get_script_run_ctx
-        ctx = get_script_run_ctx()
-        if ctx:
-            ctx.request_rerun()
-    except Exception:
-        # fallback: do nothing, next run will load fresh data
-        pass
+    st.session_state['refresh_counter'] += 1
+    st.sidebar.success("Cache cleared, loading fresh data…")
+
+# === Load cached articles, keyed on refresh_counter ===
+@st.cache_data(ttl=24 * 3600)
+def load_articles(refresh_counter):
+    with open("data/processed_articles.json", "r", encoding="utf-8") as f:
+        return json.load(f)
 
 # === Load and process ===
-articles = load_articles()
+articles = load_articles(st.session_state['refresh_counter'])
 df = pd.DataFrame(articles)
 
 if df.empty:
