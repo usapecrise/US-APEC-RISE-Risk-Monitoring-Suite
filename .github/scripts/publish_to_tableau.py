@@ -1,7 +1,7 @@
 import os
 import requests
 import pandas as pd
-from io import StringIO  # ✅ Fix for CSV download
+from io import StringIO
 
 from tableauhyperapi import (
     HyperProcess,
@@ -10,12 +10,13 @@ from tableauhyperapi import (
     SqlType,
     Telemetry,
     CreateMode,
+    Inserter  # ✅ Used for inserting data
 )
 
 import tableauserverclient as TSC
 
 # === CONFIGURATION ===
-CSV_URL = "https://github.com/usapecrise/US-APEC-RISE-Risk-Monitoring-Suite/blob/main/data/risk_signals.csv"
+CSV_URL = "https://raw.githubusercontent.com/usapecrise/US-APEC-RISE-Risk-Monitoring-Suite/main/data/risk_signals.csv"
 HYPER_NAME = "risk_signals.hyper"
 DATASOURCE_NAME = "APEC Risk Signals"
 PROJECT_NAME = "Default"
@@ -31,11 +32,11 @@ def download_csv():
     response = requests.get(CSV_URL)
     response.raise_for_status()
     df = pd.read_csv(
-    StringIO(response.text),
-    quotechar='"',
-    skip_blank_lines=True,
-    on_bad_lines='skip'
-)
+        StringIO(response.text),
+        quotechar='"',
+        skip_blank_lines=True,
+        on_bad_lines='skip'
+    )
     return df
 
 # === STEP 2: Convert CSV to .hyper ===
@@ -51,7 +52,10 @@ def create_hyper(df):
                 columns=[TableDefinition.Column(col, SqlType.text()) for col in df.columns]
             )
             connection.catalog.create_table(table_def)
-            connection.execute_insert(table_def.table_name, df.itertuples(index=False, name=None))
+
+            with Inserter(connection, table_def) as inserter:
+                inserter.add_rows(rows=df.itertuples(index=False, name=None))
+                inserter.execute()
 
 # === STEP 3: Publish to Tableau Cloud ===
 def publish_to_tableau():
@@ -86,3 +90,4 @@ if __name__ == "__main__":
     df = download_csv()
     create_hyper(df)
     publish_to_tableau()
+
