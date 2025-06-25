@@ -7,7 +7,7 @@ from tableauhyperapi import (
 
 # Step 1: Load and clean the CSV
 print("📥 Downloading CSV...")
-df = pd.read_csv("risk_signals.csv")
+df = pd.read_csv("data/risk_signals.csv")
 print(f"📊 Rows loaded: {len(df)}")
 
 # Step 2: Clean numeric column
