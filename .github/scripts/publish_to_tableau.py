@@ -1,93 +1,47 @@
-import os
-import requests
 import pandas as pd
-from io import StringIO
+from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Inserter, Telemetry, CreateMode
+import os
 
-from tableauhyperapi import (
-    HyperProcess,
-    Connection,
-    TableDefinition,
-    SqlType,
-    Telemetry,
-    CreateMode,
-    Inserter  # ✅ Used for inserting data
-)
-
-import tableauserverclient as TSC
-
-# === CONFIGURATION ===
-CSV_URL = "https://raw.githubusercontent.com/usapecrise/US-APEC-RISE-Risk-Monitoring-Suite/main/data/risk_signals.csv"
-HYPER_NAME = "risk_signals.hyper"
-DATASOURCE_NAME = "APEC Risk Signals"
-PROJECT_NAME = "US APEC-RISE"
-
-# === SECRETS (from GitHub Actions environment) ===
-TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
-TABLEAU_TOKEN_NAME = os.environ["TABLEAU_TOKEN_NAME"]
-TABLEAU_TOKEN_SECRET = os.environ["TABLEAU_TOKEN_SECRET"]
-
-# === STEP 1: Download the CSV ===
-def download_csv():
-    print("📥 Downloading CSV...")
-    response = requests.get(CSV_URL)
-    response.raise_for_status()
-    df = pd.read_csv(
-        StringIO(response.text),
-        quotechar='"',
-        skip_blank_lines=True,
-        on_bad_lines='skip'
-    )
-    return df
-
-# === STEP 2: Convert CSV to .hyper ===
 def create_hyper(df):
-    print("🧪 Converting CSV to .hyper...")
-    if os.path.exists(HYPER_NAME):
-        os.remove(HYPER_NAME)
+    # Ensure correct data types
+    df["Signal Strength (Numeric)"] = df["Signal Strength (Numeric)"].astype(int)
 
+    # Define output path
+    hyper_name = "risk_signals.hyper"
+    if os.path.exists(hyper_name):
+        os.remove(hyper_name)
+
+    # Start the Hyper process
     with HyperProcess(telemetry=Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-        with Connection(endpoint=hyper.endpoint, database=HYPER_NAME, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
-            table_def = TableDefinition(
-                table_name="Extract.RiskSignals",
-                columns=[TableDefinition.Column(col, SqlType.text()) for col in df.columns]
-            )
-            connection.catalog.create_table(table_def)
+        with Connection(endpoint=hyper.endpoint, database=hyper_name, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
 
-            with Inserter(connection, table_def) as inserter:
+            # Define table name and schema
+            table_name = "Extract"
+            table_definition = TableDefinition(
+                table_name=table_name,
+                columns=[
+                    TableDefinition.Column("Signal", SqlType.text()),
+                    TableDefinition.Column("Economy", SqlType.text()),
+                    TableDefinition.Column("Risk Category", SqlType.text()),
+                    TableDefinition.Column("Scenario Implication", SqlType.text()),
+                    TableDefinition.Column("Signal Strength (Numeric)", SqlType.int()),  # ✅ now an integer
+                    TableDefinition.Column("Date", SqlType.text())
+                ]
+            )
+
+            connection.catalog.create_table(table_definition)
+
+            # Insert data
+            with Inserter(connection, table_definition) as inserter:
                 inserter.add_rows(rows=df.itertuples(index=False, name=None))
                 inserter.execute()
 
-# === STEP 3: Publish to Tableau Cloud ===
-def publish_to_tableau():
-    print("🚀 Publishing to Tableau Cloud...")
-    auth = TSC.PersonalAccessTokenAuth(
-        token_name=TABLEAU_TOKEN_NAME,
-        personal_access_token=TABLEAU_TOKEN_SECRET,
-        site_id=TABLEAU_SITE_ID
-    )
-    server = TSC.Server("https://prod-useast-a.online.tableau.com", use_server_version=True)
+    print(f"✅ .hyper file created: {hyper_name}")
 
-    with server.auth.sign_in(auth):
-        all_projects = list(TSC.Pager(server.projects))
-        project = next((p for p in all_projects if p.name == PROJECT_NAME), None)
+# Load CSV data
+print("📥 Downloading CSV...")
+df = pd.read_csv("risk_signals.csv")
 
-        if not project:
-            raise RuntimeError(f"Project '{PROJECT_NAME}' not found")
-
-        all_datasources = list(TSC.Pager(server.datasources))
-        existing = next((ds for ds in all_datasources if ds.name == DATASOURCE_NAME), None)
-
-        if existing:
-            print("🔁 Replacing existing data source...")
-            server.datasources.delete(existing.id)
-
-        new_ds = TSC.DatasourceItem(project_id=project.id, name=DATASOURCE_NAME)
-        server.datasources.publish(new_ds, HYPER_NAME, mode=TSC.Server.PublishMode.CreateNew)
-        print(f"✅ Published '{DATASOURCE_NAME}' to Tableau Cloud")
-
-# === MAIN ===
-if __name__ == "__main__":
-    df = download_csv()
-    create_hyper(df)
-    publish_to_tableau()
-
+# Convert and export to Hyper
+print("🧪 Converting CSV to .hyper...")
+create_hyper(df)
