@@ -19,7 +19,7 @@ import tableauserverclient as TSC
 CSV_URL = "https://raw.githubusercontent.com/usapecrise/US-APEC-RISE-Risk-Monitoring-Suite/main/data/risk_signals.csv"
 HYPER_NAME = "risk_signals.hyper"
 DATASOURCE_NAME = "APEC Risk Signals"
-PROJECT_NAME = "Default"
+PROJECT_NAME = "US APEC-RISE"
 
 # === SECRETS (from GitHub Actions environment) ===
 TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
