@@ -24,7 +24,7 @@ def create_hyper(df):
                     TableDefinition.Column("Economy", SqlType.text()),
                     TableDefinition.Column("Risk Category", SqlType.text()),
                     TableDefinition.Column("Scenario Implication", SqlType.text()),
-                    TableDefinition.Column("Signal Strength (Numeric)", SqlType.int()),  # ✅ now an integer
+                    TableDefinition.Column("Signal Strength (Numeric)", SqlType.int()),
                     TableDefinition.Column("Date", SqlType.text())
                 ]
             )
@@ -40,7 +40,7 @@ def create_hyper(df):
 
 # Load CSV data
 print("📥 Downloading CSV...")
-df = pd.read_csv("risk_signals.csv")
+df = pd.read_csv("data/risk_signals.csv")
 
 # Convert and export to Hyper
 print("🧪 Converting CSV to .hyper...")
