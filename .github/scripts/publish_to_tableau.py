@@ -1,40 +1,41 @@
 import pandas as pd
 from tableauhyperapi import (
-    HyperProcess, Connection, Telemetry, TableDefinition, SqlType, Inserter,
-    CreateMode, TableName, HyperException
+    HyperProcess, Connection, Telemetry,
+    TableDefinition, TableColumn, SqlType,
+    Inserter, CreateMode, TableName
 )
 
-# Step 1: Load CSV
+# Step 1: Load and clean the CSV
 print("📥 Downloading CSV...")
 df = pd.read_csv("data/risk_signals.csv")
 print(f"📊 Rows loaded: {len(df)}")
 
-# Step 2: Clean numeric fields
-# Specifically fix Signal Strength (Numeric)
+# Step 2: Clean numeric column
 df["Signal Strength (Numeric)"] = pd.to_numeric(
     df["Signal Strength (Numeric)"], errors="coerce"
 ).fillna(0).astype(int)
 
-# Step 3: Create the .hyper file
+# Step 3: Create .hyper file
 print("🧪 Converting CSV to .hyper...")
 
 def create_hyper(df):
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-        with Connection(endpoint=hyper.endpoint,
-                        database="risk_signals.hyper",
-                        create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
+        with Connection(
+            endpoint=hyper.endpoint,
+            database="risk_signals.hyper",
+            create_mode=CreateMode.CREATE_AND_REPLACE
+        ) as connection:
 
             table_def = TableDefinition(
                 table_name=TableName("Extract", "risk_signals"),
                 columns=[
-                    # You may need to update these column definitions to match your actual schema
-                    ("Date", SqlType.text()),
-                    ("Economy", SqlType.text()),
-                    ("Headline", SqlType.text()),
-                    ("Signal Strength", SqlType.text()),
-                    ("Signal Strength (Numeric)", SqlType.int()),
-                    ("Scenario", SqlType.text()),
-                    ("Source", SqlType.text()),
+                    TableColumn("Date", SqlType.text()),
+                    TableColumn("Economy", SqlType.text()),
+                    TableColumn("Headline", SqlType.text()),
+                    TableColumn("Signal Strength", SqlType.text()),
+                    TableColumn("Signal Strength (Numeric)", SqlType.int()),
+                    TableColumn("Scenario", SqlType.text()),
+                    TableColumn("Source", SqlType.text())
                 ]
             )
 
