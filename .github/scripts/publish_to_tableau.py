@@ -39,7 +39,7 @@ def create_hyper(df):
 
 # Load and clean CSV
 print("📥 Downloading CSV...")
-df = pd.read_csv("risk_signals.csv")
+df = pd.read_csv("data/risk_signals.csv")
 
 # Keep only rows with valid numeric signal strengths (1, 3, 5)
 df = df[df["Signal Strength (Numeric)"].isin([1, 3, 5])]
