@@ -1,7 +1,17 @@
 import os
 import requests
 import pandas as pd
-from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Telemetry, CreateMode
+from io import StringIO  # ✅ Fix for CSV download
+
+from tableauhyperapi import (
+    HyperProcess,
+    Connection,
+    TableDefinition,
+    SqlType,
+    Telemetry,
+    CreateMode,
+)
+
 import tableauserverclient as TSC
 
 # === CONFIGURATION ===
@@ -10,20 +20,22 @@ HYPER_NAME = "risk_signals.hyper"
 DATASOURCE_NAME = "APEC Risk Signals"
 PROJECT_NAME = "Default"
 
-# === SECRETS (injected via GitHub Actions) ===
+# === SECRETS (from GitHub Actions environment) ===
 TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
 TABLEAU_TOKEN_NAME = os.environ["TABLEAU_TOKEN_NAME"]
 TABLEAU_TOKEN_SECRET = os.environ["TABLEAU_TOKEN_SECRET"]
 
 # === STEP 1: Download the CSV ===
 def download_csv():
+    print("📥 Downloading CSV...")
     response = requests.get(CSV_URL)
     response.raise_for_status()
-    df = pd.read_csv(pd.compat.StringIO(response.text))
+    df = pd.read_csv(StringIO(response.text))  # ✅ Correct use of StringIO
     return df
 
 # === STEP 2: Convert CSV to .hyper ===
 def create_hyper(df):
+    print("🧪 Converting CSV to .hyper...")
     if os.path.exists(HYPER_NAME):
         os.remove(HYPER_NAME)
 
@@ -38,6 +50,7 @@ def create_hyper(df):
 
 # === STEP 3: Publish to Tableau Cloud ===
 def publish_to_tableau():
+    print("🚀 Publishing to Tableau Cloud...")
     auth = TSC.PersonalAccessTokenAuth(
         token_name=TABLEAU_TOKEN_NAME,
         personal_access_token=TABLEAU_TOKEN_SECRET,
@@ -49,10 +62,14 @@ def publish_to_tableau():
         all_projects = list(TSC.Pager(server.projects))
         project = next((p for p in all_projects if p.name == PROJECT_NAME), None)
 
+        if not project:
+            raise RuntimeError(f"Project '{PROJECT_NAME}' not found")
+
         all_datasources = list(TSC.Pager(server.datasources))
         existing = next((ds for ds in all_datasources if ds.name == DATASOURCE_NAME), None)
 
         if existing:
+            print("🔁 Replacing existing data source...")
             server.datasources.delete(existing.id)
 
         new_ds = TSC.DatasourceItem(project_id=project.id, name=DATASOURCE_NAME)
@@ -61,9 +78,6 @@ def publish_to_tableau():
 
 # === MAIN ===
 if __name__ == "__main__":
-    print("📥 Downloading CSV...")
     df = download_csv()
-    print("🧪 Converting to .hyper...")
     create_hyper(df)
-    print("🚀 Publishing to Tableau...")
     publish_to_tableau()
