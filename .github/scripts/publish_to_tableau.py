@@ -5,7 +5,7 @@ from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, 
 import tableauserverclient as TSC
 
 # === CONFIGURATION ===
-CSV_URL = "https://raw.githubusercontent.com/jessicacross09/scenario_simulator/main/data/risk_signals.csv"
+CSV_URL = "https://github.com/usapecrise/US-APEC-RISE-Risk-Monitoring-Suite/blob/main/data/risk_signals.csv"
 HYPER_NAME = "risk_signals.hyper"
 DATASOURCE_NAME = "APEC Risk Signals"
 PROJECT_NAME = "Default"
