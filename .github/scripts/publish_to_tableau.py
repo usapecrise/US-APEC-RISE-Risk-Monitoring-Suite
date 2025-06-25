@@ -48,3 +48,39 @@ with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
             inserter.execute()
 
 print("✅ Hyper file created and populated successfully: risk_signals.hyper")
+
+import tableauserverclient as TSC
+import os
+
+# Step 5: Publish to Tableau Cloud using environment variables
+token_name = os.environ["ScenarioPush"]
+token_value = os.environ["LwLRC1TQQQa6Xo73kvgQ7g==:HmKlfJ18jBJoJoUMlifI9jwHTGAT8P0Q"]
+site_id = os.environ.get("thecadmusgrouponline", "")  # Empty string for default site
+
+tableau_auth = TSC.PersonalAccessTokenAuth(
+    token_name=token_name,
+    personal_access_token=token_value,
+    site_id=site_id
+)
+
+server = TSC.Server("https://us-east-1a.online.tableau.com", use_server_version=True)
+
+with server.auth.sign_in(tableau_auth):
+    all_projects, _ = server.projects.get()
+    project = next((p for p in all_projects if p.name == "US APEC-RISE"), None)
+    if not project:
+        raise RuntimeError("❌ Tableau project 'US APEC-RISE' not found.")
+
+    datasource = TSC.HyperDatasourceItem(
+        name="APEC Risk Signals",
+        project_id=project.id
+    )
+
+    published_ds = server.datasources.publish(
+        datasource,
+        "risk_signals.hyper",
+        mode=TSC.Server.PublishMode.Overwrite
+    )
+
+    print(f"✅ Published to Tableau Cloud: {published_ds.name} in project 'US APEC-RISE'")
+
