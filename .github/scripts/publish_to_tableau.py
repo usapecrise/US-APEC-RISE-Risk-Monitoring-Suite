@@ -5,12 +5,12 @@ from tableauhyperapi import (
     Inserter, CreateMode, TableName
 )
 
-# Step 1: Load and clean the CSV
+# Step 1: Load CSV
 print("📥 Downloading CSV...")
 df = pd.read_csv("data/risk_signals.csv")
 print(f"📊 Rows loaded: {len(df)}")
 
-# Step 2: Clean Signal Strength (Numeric) column
+# Step 2: Ensure Signal Strength is numeric
 df["Signal Strength (Numeric)"] = pd.to_numeric(
     df["Signal Strength (Numeric)"], errors="coerce"
 ).fillna(0).astype(int)
@@ -26,18 +26,14 @@ def create_hyper(df):
             create_mode=CreateMode.CREATE_AND_REPLACE
         ) as connection:
 
-            table_def = TableDefinition(
-                table_name=TableName("Extract", "risk_signals"),
-                columns=[
-                    ("Date", SqlType.text()),
-                    ("Economy", SqlType.text()),
-                    ("Headline", SqlType.text()),
-                    ("Signal Strength", SqlType.text()),
-                    ("Signal Strength (Numeric)", SqlType.int()),
-                    ("Scenario", SqlType.text()),
-                    ("Source", SqlType.text())
-                ]
-            )
+            table_def = TableDefinition(table_name=TableName("Extract", "risk_signals"))
+            table_def.add_column("Date", SqlType.text())
+            table_def.add_column("Economy", SqlType.text())
+            table_def.add_column("Headline", SqlType.text())
+            table_def.add_column("Signal Strength", SqlType.text())
+            table_def.add_column("Signal Strength (Numeric)", SqlType.int())
+            table_def.add_column("Scenario", SqlType.text())
+            table_def.add_column("Source", SqlType.text())
 
             connection.catalog.create_table(table_def)
 
@@ -48,3 +44,4 @@ def create_hyper(df):
 create_hyper(df)
 
 print("✅ Done publishing to Tableau.")
+
