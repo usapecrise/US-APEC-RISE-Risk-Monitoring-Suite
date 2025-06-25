@@ -1,55 +1,49 @@
 import pandas as pd
-from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Inserter, Telemetry, CreateMode
-import os
+from tableauhyperapi import (
+    HyperProcess, Connection, Telemetry, TableDefinition, SqlType, Inserter,
+    CreateMode, TableName, HyperException
+)
+
+# Step 1: Load CSV
+print("📥 Downloading CSV...")
+df = pd.read_csv("data/risk_signals.csv")
+print(f"📊 Rows loaded: {len(df)}")
+
+# Step 2: Clean numeric fields
+# Specifically fix Signal Strength (Numeric)
+df["Signal Strength (Numeric)"] = pd.to_numeric(
+    df["Signal Strength (Numeric)"], errors="coerce"
+).fillna(0).astype(int)
+
+# Step 3: Create the .hyper file
+print("🧪 Converting CSV to .hyper...")
 
 def create_hyper(df):
-    # Output file name
-    hyper_name = "risk_signals.hyper"
-    
-    # Remove existing file if present
-    if os.path.exists(hyper_name):
-        os.remove(hyper_name)
+    with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
+        with Connection(endpoint=hyper.endpoint,
+                        database="risk_signals.hyper",
+                        create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
 
-    # Start Hyper API process
-    with HyperProcess(telemetry=Telemetry.DO_NOT_SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-        with Connection(endpoint=hyper.endpoint, database=hyper_name, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
-            table_name = "Extract"
-
-            # Define schema
-            table_definition = TableDefinition(
-                table_name=table_name,
+            table_def = TableDefinition(
+                table_name=TableName("Extract", "risk_signals"),
                 columns=[
-                    TableDefinition.Column("Signal", SqlType.text()),
-                    TableDefinition.Column("Economy", SqlType.text()),
-                    TableDefinition.Column("Risk Category", SqlType.text()),
-                    TableDefinition.Column("Scenario Implication", SqlType.text()),
-                    TableDefinition.Column("Signal Strength (Numeric)", SqlType.int()),  # ← int for sizing/averages
-                    TableDefinition.Column("Date", SqlType.text())
+                    # You may need to update these column definitions to match your actual schema
+                    ("Date", SqlType.text()),
+                    ("Economy", SqlType.text()),
+                    ("Headline", SqlType.text()),
+                    ("Signal Strength", SqlType.text()),
+                    ("Signal Strength (Numeric)", SqlType.int()),
+                    ("Scenario", SqlType.text()),
+                    ("Source", SqlType.text()),
                 ]
             )
 
-            connection.catalog.create_table(table_definition)
+            connection.catalog.create_table(table_def)
 
-            # Insert rows
-            with Inserter(connection, table_definition) as inserter:
+            with Inserter(connection, table_def) as inserter:
                 inserter.add_rows(rows=df.itertuples(index=False, name=None))
                 inserter.execute()
 
-    print("✅ .hyper file created: risk_signals.hyper")
-
-# Load and clean CSV
-print("📥 Downloading CSV...")
-df = pd.read_csv("data/risk_signals.csv")
-
-# Keep only rows with valid numeric signal strengths (1, 3, 5)
-df = df[df["Signal Strength (Numeric)"].isin([1, 3, 5])]
-
-# Ensure the column is integer type
-df["Signal Strength (Numeric)"] = df["Signal Strength (Numeric)"].astype(int)
-
-# Optional: Print row count
-print(f"📊 Rows loaded: {len(df)}")
-
-# Convert to .hyper
-print("🧪 Converting CSV to .hyper...")
 create_hyper(df)
+
+print("✅ Done publishing to Tableau.")
