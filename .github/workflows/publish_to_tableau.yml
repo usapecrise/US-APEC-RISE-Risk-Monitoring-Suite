@@ -1,0 +1,31 @@
+name: Publish risk_signals to Tableau Cloud
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs daily at 6 AM UTC
+  workflow_dispatch:      # Allows you to run manually from GitHub
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: |
+        pip install pandas tableauhyperapi tableauserverclient requests
+
+    - name: Run Tableau publishing script
+      env:
+        TABLEAU_TOKEN_SECRET: ${{ secrets.TABLEAU_TOKEN_SECRET }}
+        TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
+        TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
+      run: |
+        python .github/scripts/publish_to_tableau.py
