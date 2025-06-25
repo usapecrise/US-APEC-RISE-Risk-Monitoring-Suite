@@ -1,7 +1,7 @@
 import pandas as pd
 from tableauhyperapi import (
     HyperProcess, Connection, Telemetry,
-    TableDefinition, TableColumn, SqlType,
+    TableDefinition, SqlType,
     Inserter, CreateMode, TableName
 )
 
@@ -10,7 +10,7 @@ print("📥 Downloading CSV...")
 df = pd.read_csv("data/risk_signals.csv")
 print(f"📊 Rows loaded: {len(df)}")
 
-# Step 2: Clean numeric column
+# Step 2: Clean Signal Strength (Numeric) column
 df["Signal Strength (Numeric)"] = pd.to_numeric(
     df["Signal Strength (Numeric)"], errors="coerce"
 ).fillna(0).astype(int)
@@ -29,13 +29,13 @@ def create_hyper(df):
             table_def = TableDefinition(
                 table_name=TableName("Extract", "risk_signals"),
                 columns=[
-                    TableColumn("Date", SqlType.text()),
-                    TableColumn("Economy", SqlType.text()),
-                    TableColumn("Headline", SqlType.text()),
-                    TableColumn("Signal Strength", SqlType.text()),
-                    TableColumn("Signal Strength (Numeric)", SqlType.int()),
-                    TableColumn("Scenario", SqlType.text()),
-                    TableColumn("Source", SqlType.text())
+                    ("Date", SqlType.text()),
+                    ("Economy", SqlType.text()),
+                    ("Headline", SqlType.text()),
+                    ("Signal Strength", SqlType.text()),
+                    ("Signal Strength (Numeric)", SqlType.int()),
+                    ("Scenario", SqlType.text()),
+                    ("Source", SqlType.text())
                 ]
             )
 
