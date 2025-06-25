@@ -5,12 +5,12 @@ from tableauhyperapi import (
     Inserter, CreateMode, TableName
 )
 
-# Step 1: Load CSV
+# Step 1: Load and clean the CSV
 print("📥 Downloading CSV...")
-df = pd.read_csv("data/risk_signals.csv")
+df = pd.read_csv("risk_signals.csv")
 print(f"📊 Rows loaded: {len(df)}")
 
-# Step 2: Ensure Signal Strength is numeric
+# Step 2: Clean numeric column
 df["Signal Strength (Numeric)"] = pd.to_numeric(
     df["Signal Strength (Numeric)"], errors="coerce"
 ).fillna(0).astype(int)
@@ -25,6 +25,9 @@ def create_hyper(df):
             database="risk_signals.hyper",
             create_mode=CreateMode.CREATE_AND_REPLACE
         ) as connection:
+
+            # 🔧 Create "Extract" schema first
+            connection.catalog.create_schema("Extract")
 
             table_def = TableDefinition(table_name=TableName("Extract", "risk_signals"))
             table_def.add_column("Date", SqlType.text())
