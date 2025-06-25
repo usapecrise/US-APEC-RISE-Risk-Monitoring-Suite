@@ -30,7 +30,12 @@ def download_csv():
     print("📥 Downloading CSV...")
     response = requests.get(CSV_URL)
     response.raise_for_status()
-    df = pd.read_csv(StringIO(response.text))  # ✅ Correct use of StringIO
+    df = pd.read_csv(
+    StringIO(response.text),
+    quotechar='"',
+    skip_blank_lines=True,
+    on_bad_lines='skip'
+)
     return df
 
 # === STEP 2: Convert CSV to .hyper ===
