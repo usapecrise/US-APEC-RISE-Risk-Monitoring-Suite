@@ -1,31 +1,34 @@
-name: Publish risk_signals to Tableau Cloud
+name: Publish Risk Signals to Tableau Cloud
 
 on:
+  push:
+    paths:
+      - 'data/risk_signals.csv'
+      - '.github/scripts/publish_to_tableau.py'
   schedule:
-    - cron: '0 6 * * *'  # Runs every day at 6AM UTC
-  workflow_dispatch:      # Allows you to trigger manually
+    - cron: '0 6 * * *'  # Runs daily at 6:00 AM UTC
 
 jobs:
-  publish:
+  publish-to-tableau:
     runs-on: ubuntu-latest
 
+    env:
+      TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
+      TABLEAU_TOKEN_VALUE: ${{ secrets.TABLEAU_TOKEN_VALUE }}
+      TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
+
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
 
-    - name: Install dependencies
-      run: |
-        pip install pandas tableauhyperapi tableauserverclient requests
+      - name: Install dependencies
+        run: |
+          pip install pandas requests tableauhyperapi tableauserverclient
 
-    - name: Run Tableau publishing script
-      env:
-        TABLEAU_TOKEN_SECRET: ${{ secrets.TABLEAU_TOKEN_VALUE }}
-        TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
-        TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
-      run: |
-        python .github/scripts/publish_to_tableau.py
+      - name: Run Tableau publishing script
+        run: python .github/scripts/publish_to_tableau.py
