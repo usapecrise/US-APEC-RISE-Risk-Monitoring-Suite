@@ -24,7 +24,7 @@ jobs:
 
     - name: Run Tableau publishing script
       env:
-        TABLEAU_TOKEN_SECRET: ${{ secrets.TABLEAU_TOKEN_SECRET }}
+        TABLEAU_TOKEN_SECRET: ${{ secrets.TABLEAU_TOKEN_VALUE }}
         TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
         TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
       run: |
