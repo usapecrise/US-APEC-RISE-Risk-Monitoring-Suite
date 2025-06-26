@@ -21,9 +21,9 @@ jobs:
     runs-on: ubuntu-latest
 
    env:
-  TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
-  TABLEAU_TOKEN_VALUE: ${{ secrets.TABLEAU_TOKEN_VALUE }}
-  TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
+    TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
+    TABLEAU_TOKEN_VALUE: ${{ secrets.TABLEAU_TOKEN_VALUE }}
+    TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
 
     steps:
       - name: Checkout repository
