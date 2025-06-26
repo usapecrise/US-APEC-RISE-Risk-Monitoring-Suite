@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
 from io import StringIO
+import os
 from tableauhyperapi import (
     HyperProcess,
     Connection,
@@ -11,17 +12,16 @@ from tableauhyperapi import (
     CreateMode,
     TableName
 )
+import tableauserverclient as TSC
 
-# Step 1: Download CSV from GitHub
+# STEP 1: Download CSV from GitHub
 csv_url = "https://raw.githubusercontent.com/usapecrise/US-APEC-RISE-Risk-Monitoring-Suite/main/data/risk_signals.csv"
 response = requests.get(csv_url)
-response.raise_for_status()  # Fail loudly if URL is broken
+response.raise_for_status()
+df = pd.read_csv(StringIO(response.text))
+print("✅ CSV downloaded and loaded into DataFrame")
 
-# Step 2: Load into pandas
-csv_data = StringIO(response.text)
-df = pd.read_csv(csv_data)
-
-# Step 3: Define Hyper table schema
+# STEP 2: Define Hyper schema
 table_name = TableName("Extract", "Risk_Signals")
 table_definition = TableDefinition(
     table_name=table_name,
@@ -36,26 +36,21 @@ table_definition = TableDefinition(
     ]
 )
 
-# Step 4: Create the .hyper file and insert data
+# STEP 3: Create .hyper file
+hyper_path = "risk_signals.hyper"
 with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-    with Connection(endpoint=hyper.endpoint, database="risk_signals.hyper", create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
+    with Connection(endpoint=hyper.endpoint, database=hyper_path, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
         connection.catalog.create_schema("Extract")
         connection.catalog.create_table(table_definition)
-
-        # Insert rows from DataFrame into the Hyper file
         with Inserter(connection, table_definition) as inserter:
             inserter.add_rows(rows=df.itertuples(index=False, name=None))
             inserter.execute()
+print(f"✅ Hyper file created: {hyper_path}")
 
-print("✅ Hyper file created and populated successfully: risk_signals.hyper")
-
-import tableauserverclient as TSC
-import os
-
-# Step 5: Publish to Tableau Cloud using environment variables
-token_name = os.environ["ScenarioPush"]
-token_value = os.environ["LwLRC1TQQQa6Xo73kvgQ7g==:HmKlfJ18jBJoJoUMlifI9jwHTGAT8P0Q"]
-site_id = os.environ.get("thecadmusgrouponline", "")
+# STEP 4: Publish to Tableau Cloud
+token_name = os.environ["TABLEAU_TOKEN_NAME"]
+token_value = os.environ["TABLEAU_TOKEN_VALUE"]
+site_id = os.environ.get("TABLEAU_SITE_ID", "")
 
 tableau_auth = TSC.PersonalAccessTokenAuth(
     token_name=token_name,
@@ -63,7 +58,7 @@ tableau_auth = TSC.PersonalAccessTokenAuth(
     site_id=site_id
 )
 
-server = TSC.Server("https://us-east-1a.online.tableau.com", use_server_version=True)
+server = TSC.Server("https://prod-useast-a.online.tableau.com", use_server_version=True)
 
 with server.auth.sign_in(tableau_auth):
     all_projects, _ = server.projects.get()
@@ -78,9 +73,8 @@ with server.auth.sign_in(tableau_auth):
 
     published_ds = server.datasources.publish(
         datasource,
-        "risk_signals.hyper",
+        hyper_path,
         mode=TSC.Server.PublishMode.Overwrite
     )
 
-    print(f"✅ Published to Tableau Cloud: {published_ds.name} in project 'US APEC-RISE'")
-
+    print(f"✅ Successfully published to Tableau Cloud: {published_ds.name} in project '{project.name}'")
