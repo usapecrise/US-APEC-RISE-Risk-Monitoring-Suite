@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
-      TABLEAU_TOKEN_VALUE: ${{ secrets.TABLEAU_TOKEN_VALUE }}
-      TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
+      TABLEAU_TOKEN_NAME: ${{ secrets.apec-risk-publisher }}
+      TABLEAU_TOKEN_VALUE: ${{ secrets./NH9ScBsReG+HKbWMMoZ4Q==:zNkZHTry1XOQwj1nnI6PVH6AqX4pnxSV }}
+      TABLEAU_SITE_ID: ${{ secrets.thecadmusgrouponline }}
 
     steps:
       - name: Checkout repository
