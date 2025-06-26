@@ -55,7 +55,7 @@ import os
 # Step 5: Publish to Tableau Cloud using environment variables
 token_name = os.environ["ScenarioPush"]
 token_value = os.environ["LwLRC1TQQQa6Xo73kvgQ7g==:HmKlfJ18jBJoJoUMlifI9jwHTGAT8P0Q"]
-site_id = os.environ.get("thecadmusgrouponline", "")  # Empty string for default site
+site_id = os.environ.get("thecadmusgrouponline", "")
 
 tableau_auth = TSC.PersonalAccessTokenAuth(
     token_name=token_name,
