@@ -1,12 +1,20 @@
 name: Publish Risk Signals to Tableau Cloud
 
 on:
+  # ✅ Run when relevant files are pushed
   push:
+    branches:
+      - main
     paths:
       - 'data/risk_signals.csv'
       - '.github/scripts/publish_to_tableau.py'
+
+  # ✅ Run on manual trigger from Actions tab
+  workflow_dispatch:
+
+  # ✅ Run on schedule (every day at 6:00 AM UTC)
   schedule:
-    - cron: '0 6 * * *'  # Runs daily at 6:00 AM UTC
+    - cron: '0 6 * * *'
 
 jobs:
   publish-to-tableau:
