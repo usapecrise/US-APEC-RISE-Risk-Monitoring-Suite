@@ -47,11 +47,15 @@ with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
             inserter.execute()
 print(f"✅ Hyper file created: {hyper_path}")
 
-# STEP 4: Publish to Tableau Cloud
-token_name = os.environ["TABLEAU_TOKEN_NAME"]
-token_value = os.environ["TABLEAU_TOKEN_VALUE"]
-site_id = os.environ.get("TABLEAU_SITE_ID", "")
+# STEP 4: Load secrets from environment
+try:
+    token_name = os.environ["TABLEAU_TOKEN_NAME"]
+    token_value = os.environ["TABLEAU_TOKEN_VALUE"]
+    site_id = os.environ.get("TABLEAU_SITE_ID", "")
+except KeyError as e:
+    raise RuntimeError(f"❌ Missing required environment variable: {e.args[0]}")
 
+# STEP 5: Publish to Tableau Cloud
 tableau_auth = TSC.PersonalAccessTokenAuth(
     token_name=token_name,
     personal_access_token=token_value,
@@ -63,12 +67,16 @@ server = TSC.Server("https://prod-useast-a.online.tableau.com", use_server_versi
 with server.auth.sign_in(tableau_auth):
     all_projects, _ = server.projects.get()
     project = next((p for p in all_projects if p.name == "US APEC-RISE"), None)
+
     if not project:
+        print("Available projects:")
+        for p in all_projects:
+            print(f"- {p.name}")
         raise RuntimeError("❌ Tableau project 'US APEC-RISE' not found.")
 
-    datasource = TSC.HyperDatasourceItem(
-        name="APEC Risk Signals",
-        project_id=project.id
+    datasource = TSC.DatasourceItem(
+        project_id=project.id,
+        name="APEC Risk Signals"
     )
 
     published_ds = server.datasources.publish(
