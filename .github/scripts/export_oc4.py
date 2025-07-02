@@ -5,7 +5,7 @@ import os
 # Airtable credentials
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO/tblWHWKfWjS6hNvGM/viw2EwmPNldgtya6E'
-TABLE_NAME = 'OC4 Business/Market Growth'
+TABLE_NAME = 'OC4: Business/Market Growth'
 VIEW_NAME = 'Grid view'
 
 # Airtable API URL
