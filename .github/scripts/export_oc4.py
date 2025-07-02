@@ -6,7 +6,7 @@ import os
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO/tblWHWKfWjS6hNvGM/viw2EwmPNldgtya6E'
 TABLE_NAME = 'OC4 Business/Market Growth'
-VIEW_NAME = 'Grid view'  # or whatever view name you're using
+VIEW_NAME = 'Grid view'
 
 # Airtable API URL
 url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}?view={VIEW_NAME}"
