@@ -20,6 +20,7 @@ while True:
     if offset:
         params['offset'] = offset
     response = requests.get(url, headers=headers, params=params).json()
+    print("Response from Airtable:", response)
     records.extend(response['records'])
     offset = response.get('offset')
     if not offset:
