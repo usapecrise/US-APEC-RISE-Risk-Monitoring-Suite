@@ -2,7 +2,7 @@ import requests
 import csv
 import os
 
-# Airtable credentials
+# Airtable credentials and table config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
 TABLE_NAME = 'OC4: Business/Market Growth'
@@ -12,6 +12,8 @@ VIEW_NAME = 'Grid view'
 url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}?view={VIEW_NAME}"
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
+print("Requesting:", url)  # Optional debug line
+
 records = []
 offset = None
 
@@ -20,7 +22,11 @@ while True:
     if offset:
         params['offset'] = offset
     response = requests.get(url, headers=headers, params=params).json()
-    print("Response from Airtable:", response)
+    
+    if 'records' not in response:
+        print("❌ Airtable API Error:", response)
+        exit(1)
+
     records.extend(response['records'])
     offset = response.get('offset')
     if not offset:
@@ -34,4 +40,7 @@ with open('OC4.csv', 'w', newline='', encoding='utf-8') as csvfile:
         writer.writeheader()
         for record in records:
             writer.writerow(record['fields'])
+
+print("✅ Export complete: OC4.csv")
+
 
