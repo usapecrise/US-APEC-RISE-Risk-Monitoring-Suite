@@ -5,14 +5,13 @@ import os
 # Airtable credentials and table config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-TABLE_NAME = 'OC4: Business/Market Growth'
+TABLE_NAME = 'OC4 Market Growth'
 VIEW_NAME = 'Grid view'
 
-# Airtable API URL
 url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}?view={VIEW_NAME}"
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-print("Requesting:", url)  # Optional debug line
+print("Requesting:", url)
 
 records = []
 offset = None
