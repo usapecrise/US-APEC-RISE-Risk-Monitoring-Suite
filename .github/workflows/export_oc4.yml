@@ -1,32 +1,36 @@
-name: Export OC4 Data
+name: Export OC4 to GitHub
 
 on:
   schedule:
-    - cron: '0 6 * * *' # daily at 6am UTC
-  workflow_dispatch:    # also allow manual runs
+    - cron: '0 9 * * *'  # Every day at 9 AM UTC
+  workflow_dispatch:
 
 jobs:
-  export:
+  export-oc4:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install requests pandas
+        run: pip install requests
 
       - name: Run export script
-        run: python export_oc4_to_csv.py
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python export_oc4.py
 
       - name: Commit and push OC4.csv
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
           git add OC4.csv
-          git commit -m "Auto-export OC4 data [skip ci]" || echo "No changes to commit"
+          git commit -m "Auto-update OC4.csv [skip ci]" || echo "No changes"
           git push
+
