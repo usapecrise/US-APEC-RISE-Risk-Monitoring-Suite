@@ -25,6 +25,7 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc4.py
+        run: python .github/scripts/export_oc1.py
 
 
       - name: Commit and push OC4.csv
