@@ -41,10 +41,15 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_ot3.py
 
+      - name: Run OT4 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_ot4.py
+
       - name: Commit and push KPI CSVs
         run: |
           git config user.name github-actions
           git config user.email github-actions@users.noreply.github.com
-          git add OC4.csv OC1.csv OT2.csv OT3.csv
-          git commit -m "Auto-update OC4, OC1, OT2, OT3 [skip ci]" || echo "No changes"
+          git add OC1.csv OC4.csv OT2.csv OT3.csv OT4.csv
+          git commit -m "Auto-update OC1, OC4, OT2, OT3, OT4 [skip ci]" || echo "No changes"
           git push
