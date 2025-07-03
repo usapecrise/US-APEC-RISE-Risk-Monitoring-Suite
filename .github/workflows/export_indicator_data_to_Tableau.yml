@@ -1,4 +1,4 @@
-name: Export OC4 to GitHub
+name: Export KPI Data to GitHub
 
 on:
   schedule:
