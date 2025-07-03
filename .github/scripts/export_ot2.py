@@ -31,8 +31,8 @@ while True:
     if not offset:
         break
 
-# Write to OC4.csv
-with open('OC4.csv', 'w', newline='', encoding='utf-8') as csvfile:
+# Write to OT2.csv
+with open('OT2.csv', 'w', newline='', encoding='utf-8') as csvfile:
     if records:
         fieldnames = list(records[0]['fields'].keys())
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
