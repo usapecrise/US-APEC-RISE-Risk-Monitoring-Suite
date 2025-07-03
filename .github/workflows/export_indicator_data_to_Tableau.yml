@@ -21,21 +21,20 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run export script
+      - name: Run OC4 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-      - name: Run OC4 export script
         run: python .github/scripts/export_oc4.py
 
       - name: Run OC1 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc1.py
-
 
       - name: Commit and push OC4.csv
         run: |
           git config user.name github-actions
           git config user.email github-actions@users.noreply.github.com
-          git add OC4.csv
-          git commit -m "Auto-update OC4.csv [skip ci]" || echo "No changes"
+          git add OC4.csv OC1.csv
+          git commit -m "Auto-update OC4 and OC1 [skip ci]" || echo "No changes"
           git push
-
