@@ -27,6 +27,8 @@ jobs:
         run: |
           python .github/scripts/export_oc1.py
           python .github/scripts/export_oc4.py
+          python .github/scripts/export_ot2.py
+          python .github/scripts/export_ot3.py
           python .github/scripts/export_ot4.py
 
       - name: Install rclone
@@ -41,6 +43,8 @@ jobs:
       - name: Upload KPI CSVs to Google Drive
         run: |
           rclone copyto OC1.csv gdrive:/APEC-RISE/OC1.csv
-          rclone copyto OC4.csv gdrive:/APEC-RISE/OC4.csv
+          rclone copyto OC1.csv gdrive:/APEC-RISE/OC4.csv
+          rclone copyto OC4.csv gdrive:/APEC-RISE/OT2.csv
+          rclone copyto OC4.csv gdrive:/APEC-RISE/OT3.csv
           rclone copyto OT4.csv gdrive:/APEC-RISE/OT4.csv
 
