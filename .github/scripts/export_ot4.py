@@ -35,7 +35,7 @@ while True:
     if not offset:
         break
 
-with open('ot4.csv', 'w', newline='', encoding='utf-8') as csvfile:
+with open('OT4.csv', 'w', newline='', encoding='utf-8') as csvfile:
     if records:
         fieldnames = list(records[0]['fields'].keys())
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
