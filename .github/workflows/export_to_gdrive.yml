@@ -33,10 +33,10 @@ jobs:
         run: |
           curl https://rclone.org/install.sh | sudo bash
 
-      - name: Configure rclone
+      - name: Configure rclone from base64
         run: |
           mkdir -p ~/.config/rclone
-          echo "${{ secrets.RCLONE_CONF }}" > ~/.config/rclone/rclone.conf
+          echo "${{ secrets.RCLONE_CONF_B64 }}" | base64 -d > ~/.config/rclone/rclone.conf
 
       - name: Upload CSVs to Google Drive
         run: |
