@@ -38,8 +38,9 @@ jobs:
           mkdir -p ~/.config/rclone
           echo "${{ secrets.RCLONE_CONF_B64 }}" | base64 -d > ~/.config/rclone/rclone.conf
 
-      - name: Upload CSVs to Google Drive
+      - name: Upload KPI CSVs to Google Drive
         run: |
-          rclone copy OC1.csv gdrive:/APEC-RISE/
-          rclone copy OC4.csv gdrive:/APEC-RISE/
-          rclone copy OT4.csv gdrive:/APEC-RISE/
+          rclone copyto OC1.csv gdrive:/APEC-RISE/OC1.csv
+          rclone copyto OC4.csv gdrive:/APEC-RISE/OC4.csv
+          rclone copyto OT4.csv gdrive:/APEC-RISE/OT4.csv
+
