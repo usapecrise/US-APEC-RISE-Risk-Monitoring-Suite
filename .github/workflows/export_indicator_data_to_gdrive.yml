@@ -43,8 +43,8 @@ jobs:
       - name: Upload KPI CSVs to Google Drive
         run: |
           rclone copyto OC1.csv gdrive:/APEC-RISE/OC1.csv
-          rclone copyto OC1.csv gdrive:/APEC-RISE/OC4.csv
-          rclone copyto OC4.csv gdrive:/APEC-RISE/OT2.csv
-          rclone copyto OC4.csv gdrive:/APEC-RISE/OT3.csv
+          rclone copyto OC4.csv gdrive:/APEC-RISE/OC4.csv
+          rclone copyto OT2.csv gdrive:/APEC-RISE/OT2.csv
+          rclone copyto OT3.csv gdrive:/APEC-RISE/OT3.csv
           rclone copyto OT4.csv gdrive:/APEC-RISE/OT4.csv
 
