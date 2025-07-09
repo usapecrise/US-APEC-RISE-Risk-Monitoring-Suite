@@ -6,7 +6,7 @@ from urllib.parse import quote
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'OC1 Policy Reforms'
+MAIN_TABLE = 'OC4 Market Growth'
 VIEW_NAME = 'Grid view'
 
 # Linked table names (change if needed)
@@ -74,7 +74,7 @@ for record in main_records:
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
 
 # Step 4: Export to CSV
-output_file = 'OC1.csv'
+output_file = 'OC4.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     if main_records:
         all_fieldnames = set()
