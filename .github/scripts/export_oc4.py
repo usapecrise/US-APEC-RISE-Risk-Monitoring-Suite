@@ -1,45 +1,90 @@
 import requests
 import csv
 import os
+from urllib.parse import quote
 
-# Airtable credentials and table config
+# Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-TABLE_NAME = 'OC4 Market Growth'
+MAIN_TABLE = 'OC1 Policy Reforms'
 VIEW_NAME = 'Grid view'
 
-url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}?view={VIEW_NAME}"
+# Linked table names (change if needed)
+LINKED_TABLES = {
+    'Economy': 'Economy List',
+    'Workshop Title': 'Workshop Log',
+    'Workstream': 'Workstream Reference'
+}
+
+# The field in each linked table to display (adjust if needed)
+DISPLAY_FIELDS = {
+    'Economy': 'Economy Name',
+    'Workshop Title': 'Workshop Title',
+    'Workstream': 'Workstream Name'
+}
+
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-print("Requesting:", url)
+# Helper: fetch all records from a table
+def fetch_all_records(table, view=None):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
+    if view:
+        url += f"?view={quote(view)}"
+    all_records = []
+    offset = None
 
-records = []
-offset = None
+    while True:
+        params = {}
+        if offset:
+            params['offset'] = offset
+        response = requests.get(url, headers=headers, params=params).json()
 
-while True:
-    params = {}
-    if offset:
-        params['offset'] = offset
-    response = requests.get(url, headers=headers, params=params).json()
-    
-    if 'records' not in response:
-        print("❌ Airtable API Error:", response)
-        exit(1)
+        if 'records' not in response:
+            print(f"❌ Error fetching {table}:", response)
+            break
 
-    records.extend(response['records'])
-    offset = response.get('offset')
-    if not offset:
-        break
+        all_records.extend(response['records'])
+        offset = response.get('offset')
+        if not offset:
+            break
 
-# Write to OC4.csv
-with open('OC4.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    if records:
-        fieldnames = list(records[0]['fields'].keys())
+    return all_records
+
+# Step 1: Fetch all linked tables and build lookup dictionaries
+linked_id_maps = {}
+for field, table_name in LINKED_TABLES.items():
+    records = fetch_all_records(table_name)
+    display_field = DISPLAY_FIELDS[field]
+    id_to_display = {
+        rec['id']: rec['fields'].get(display_field, 'Unknown')
+        for rec in records
+    }
+    linked_id_maps[field] = id_to_display
+
+# Step 2: Fetch main records
+main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
+
+# Step 3: Replace linked record IDs with readable names
+for record in main_records:
+    fields = record['fields']
+    for field_name in LINKED_TABLES.keys():
+        linked_ids = fields.get(field_name, [])
+        if isinstance(linked_ids, list):
+            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
+            fields[f"{field_name} (Name)"] = ", ".join(readable_names)
+
+# Step 4: Export to CSV
+output_file = 'OC1.csv'
+with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
+    if main_records:
+        all_fieldnames = set()
+        for rec in main_records:
+            all_fieldnames.update(rec['fields'].keys())
+        fieldnames = list(all_fieldnames)
+
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        for record in records:
-            writer.writerow(record['fields'])
+        for rec in main_records:
+            writer.writerow(rec['fields'])
 
-print("✅ Export complete: OC4.csv")
-
-
+print(f"✅ Export complete: {output_file}")
