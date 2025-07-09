@@ -1,6 +1,8 @@
-Firm Title,Economy,Indicator ID,Workstream,Private Sector Engagements,OT2 Private Sector Engagements,Fiscal Year,PSE Origin,PSE Size,PSE Type
-Boeing,['recpZloXb0mHklgbP'],OT4,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],['recJzH5qmByYEaKoR'],['FY25'],US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-Stendard ,['recpZloXb0mHklgbP'],OT4,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],['recJzH5qmByYEaKoR'],['FY25'],US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-Davidson Technologies,['recpZloXb0mHklgbP'],OT4,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],['recJzH5qmByYEaKoR'],['FY25'],US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-Japanese Standards Association Group ,['recwq4aSF2E8X1P3p'],OT4,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],['recJzH5qmByYEaKoR'],['FY25'],Third Country-Based,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
-SAE Industry Technologies Consortia,['recpZloXb0mHklgbP'],OT4,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],['recJzH5qmByYEaKoR'],['FY25'],US-Based,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+Indicator ID,Workstream (Name),Fiscal Year,PSE Origin,Economy,PSE Size,Firm Title,Economy (Name),Workstream,Private Sector Engagements,PSE Type,OT2 Private Sector Engagements
+OT4,Unknown,['FY25'],US-Based,['recpZloXb0mHklgbP'],Large (100+ employees),Boeing,Unknown,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],For-profit commercial entities (excluding financial institutions and social enterprises),['recJzH5qmByYEaKoR']
+OT4,Unknown,['FY25'],US-Based,['recpZloXb0mHklgbP'],Large (100+ employees),Stendard ,Unknown,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],For-profit commercial entities (excluding financial institutions and social enterprises),
+OT4,Unknown,['FY25'],US-Based,['recpZloXb0mHklgbP'],Large (100+ employees),Davidson Technologies,Unknown,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],For-profit commercial entities (excluding financial institutions and social enterprises),['recJzH5qmByYEaKoR']
+OT4,Unknown,['FY25'],Third Country-Based,['recwq4aSF2E8X1P3p'],Large (100+ employees),Japanese Standards Association Group ,Unknown,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],"Business, Trade and Industry Associations (including Chambers of Commerce)",
+OT4,Unknown,['FY25'],US-Based,['recpZloXb0mHklgbP'],Small (10-49 employees),SAE Industry Technologies Consortia,Unknown,['recO6Wye9q46CaYxb'],['recyeMjbHskbfgqpX'],"Business, Trade and Industry Associations (including Chambers of Commerce)",['recJzH5qmByYEaKoR']
+OT4,,,,,,Stendard,,,,,['recJzH5qmByYEaKoR']
+OT4,,,,,,Japanese Standards Association Group,,,,,['recJzH5qmByYEaKoR']
