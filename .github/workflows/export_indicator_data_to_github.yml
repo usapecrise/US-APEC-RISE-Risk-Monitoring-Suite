@@ -19,32 +19,38 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install pandas requests
+        run: |
+          pip install pandas requests
 
       - name: Run OC4 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc4.py
+        run: |
+          python .github/scripts/export_oc4.py
 
       - name: Run OC1 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc1.py
+        run: |
+          python .github/scripts/export_oc1.py
 
       - name: Run OT2 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_ot2.py
+        run: |
+          python .github/scripts/export_ot2.py
 
       - name: Run OT3 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_ot3.py
+        run: |
+          python .github/scripts/export_ot3.py
 
       - name: Run OT4 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_ot4.py
+        run: |
+          python .github/scripts/export_ot4.py
 
       - name: Commit and push KPI CSVs if changed
         run: |
@@ -57,3 +63,4 @@ jobs:
             git push
           else
             echo "🟰 No changes to commit"
+
