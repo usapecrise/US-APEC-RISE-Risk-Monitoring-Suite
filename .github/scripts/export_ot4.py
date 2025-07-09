@@ -43,4 +43,4 @@ with open('OT4.csv', 'w', newline='', encoding='utf-8') as csvfile:
         for record in records:
             writer.writerow(record['fields'])
 
-print("✅ Export complete: Ot4.csv")
+print("✅ Export complete: OT4.csv")
