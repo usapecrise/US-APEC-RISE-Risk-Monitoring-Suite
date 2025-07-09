@@ -46,14 +46,14 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_ot4.py
 
- name: Commit and push KPI CSVs if changed
-  run: |
-    git config user.name "github-actions"
-    git config user.email "github-actions@users.noreply.github.com"
-    git add OC1.csv OC4.csv OT2.csv OT3.csv OT4.csv
+      - name: Commit and push KPI CSVs if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add OC1.csv OC4.csv OT2.csv OT3.csv OT4.csv
 
-    if ! git diff --cached --quiet; then
-      git commit -m "🔄 Auto-update KPI exports [skip ci]"
-      git push
-    else
-      echo "🟰 No changes to commit"
+          if ! git diff --cached --quiet; then
+            git commit -m "🔄 Auto-update KPI exports [skip ci]"
+            git push
+          else
+            echo "🟰 No changes to commit"
