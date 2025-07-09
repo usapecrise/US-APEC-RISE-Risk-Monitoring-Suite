@@ -1,0 +1,59 @@
+name: Export KPI Data to GitHub
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # Every day at 9 AM UTC
+  workflow_dispatch:
+
+jobs:
+  export-kpis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Run OC4 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_oc4.py
+
+      - name: Run OC1 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_oc1.py
+
+      - name: Run OT2 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_ot2.py
+
+      - name: Run OT3 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_ot3.py
+
+      - name: Run OT4 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_ot4.py
+
+      - name: Commit and push KPI CSVs if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add OC1.csv OC4.csv OT2.csv OT3.csv OT4.csv
+
+          if ! git diff --cached --quiet; then
+            git commit -m "🔄 Auto-update KPI exports [skip ci]"
+            git push
+          else
+            echo "🟰 No changes to commit"
