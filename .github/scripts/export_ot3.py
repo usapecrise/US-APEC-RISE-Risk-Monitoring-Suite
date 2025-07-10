@@ -11,14 +11,14 @@ VIEW_NAME = 'Grid view'
 
 # Linked table names
 LINKED_TABLES = {
-    'Workstream': 'Workstream Reference',
+    'Workstream': 'Workstream Reference List',
     'Economy': 'Economy List'
 }
 
 # Fields to display from each linked table
 DISPLAY_FIELDS = {
-    'Workstream': 'Workstream Name',
-    'Economy': 'Economy Name'
+    'Workstream': 'Workstream',
+    'Economy': 'Economy'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
