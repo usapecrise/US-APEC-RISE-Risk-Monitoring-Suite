@@ -11,16 +11,16 @@ VIEW_NAME = 'Grid view'
 
 # Linked table names
 LINKED_TABLES = {
-    'Workstream': 'Workstream Reference',
-    'Economy': 'Economy List',
-    'Private Sector Firms': 'OT4 Private Sector Firms'
+    'Workstream': 'Workstream Reference List',
+    'Economy': 'Economy Reference List',
+    'Firm': 'OT4 Private Sector Firms'
 }
 
 # Fields to display from the linked tables
 DISPLAY_FIELDS = {
-    'Workstream': 'Workstream Name',
-    'Economy': 'Economy Name',
-    'Private Sector Firms': 'Firm Name'  # Change to match field name in OT4 if needed
+    'Workstream': 'Workstream',
+    'Economy': 'Economy',
+    'Firms': 'Firm'  # Change to match field name in OT4 if needed
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
