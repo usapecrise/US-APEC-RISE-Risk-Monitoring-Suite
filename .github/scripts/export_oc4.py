@@ -20,8 +20,8 @@ LINKED_TABLES = {
 # Fields to display from the linked tables
 DISPLAY_FIELDS = {
     'Economy': 'Economy Name',
-    'Workshop Title': 'Workshop Title',
-    'Workstream': 'Workstream Name'
+    'Workshop': 'Workshop Title',
+    'Workstream': 'Workstream'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
