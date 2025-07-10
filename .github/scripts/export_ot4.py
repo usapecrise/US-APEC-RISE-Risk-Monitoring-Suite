@@ -11,16 +11,16 @@ VIEW_NAME = 'Grid view'
 
 # Linked table names
 LINKED_TABLES = {
-    'Economy': 'Economy List',
+    'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List'
     # Add more if needed, e.g., 'Engagement': 'OT2 Private Sector Engagements'
 }
 
 # Display field from each linked table
 DISPLAY_FIELDS = {
-    'Economy': 'Economy Name',
-    'Workstream': 'Workstream Name'
-    # 'Engagement': 'Engagement Title' or another identifying field
+    'Economy': 'Economy',
+    'Workstream': 'Workstream'
+    # 'Engagement': 'Engagement'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
