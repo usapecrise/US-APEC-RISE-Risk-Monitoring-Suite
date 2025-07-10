@@ -2,6 +2,7 @@ import requests
 import csv
 import os
 from urllib.parse import quote
+from datetime import datetime
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
@@ -46,6 +47,7 @@ def fetch_all_records(table, view=None):
         if not offset:
             break
 
+    print(f"✅ Fetched {len(all_records)} records from '{table}'")
     return all_records
 
 # Step 1: Fetch linked records and build lookup dictionaries
@@ -61,15 +63,32 @@ for field, table_name in LINKED_TABLES.items():
 
 # Step 2: Fetch main table records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
+print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
-# Step 3: Replace linked record IDs with display names
+# Step 3: Replace linked record IDs with display names and add timestamp
+timestamp = datetime.utcnow().isoformat()
 for record in main_records:
     fields = record['fields']
     for field_name in LINKED_TABLES.keys():
-        linked_value = fields.get(field_name, [])
-        if isinstance(linked_value, list):
-            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_value]
+        linked_ids = fields.get(field_name, [])
+        if isinstance(linked_ids, list):
+            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
-        elif isinstance(linked_value, str):
-            # Just in case it's a single string instead of a list
-            fields[f"{field_name} (Name)"] = linked_id_maps[field_name].get(linked_value, 'Unknown')
+    fields['Last Updated'] = timestamp  # Force file change
+
+# Step 4: Export to CSV
+output_file = 'OC1.csv'
+with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
+    if main_records:
+        all_fieldnames = set()
+        for rec in main_records:
+            all_fieldnames.update(rec['fields'].keys())
+        fieldnames = list(all_fieldnames)
+
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for rec in main_records:
+            writer.writerow(rec['fields'])
+
+print(f"✅ Export complete: {output_file}")
+
