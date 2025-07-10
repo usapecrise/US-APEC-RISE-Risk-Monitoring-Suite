@@ -2,6 +2,7 @@ import requests
 import csv
 import os
 from urllib.parse import quote
+from datetime import datetime
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
@@ -9,14 +10,14 @@ BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'OC4 Market Growth'
 VIEW_NAME = 'Grid view'
 
-# Linked table names (change if needed)
+# Linked table names
 LINKED_TABLES = {
     'Economy': 'Economy List',
     'Workshop Title': 'Workshop Log',
     'Workstream': 'Workstream Reference'
 }
 
-# The field in each linked table to display (adjust if needed)
+# Fields to display from the linked tables
 DISPLAY_FIELDS = {
     'Economy': 'Economy Name',
     'Workshop Title': 'Workshop Title',
@@ -48,9 +49,10 @@ def fetch_all_records(table, view=None):
         if not offset:
             break
 
+    print(f"✅ Fetched {len(all_records)} records from '{table}'")
     return all_records
 
-# Step 1: Fetch all linked tables and build lookup dictionaries
+# Step 1: Fetch linked tables and build ID→Name maps
 linked_id_maps = {}
 for field, table_name in LINKED_TABLES.items():
     records = fetch_all_records(table_name)
@@ -61,10 +63,12 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
 
-# Step 2: Fetch main records
+# Step 2: Fetch main table records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
+print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
-# Step 3: Replace linked record IDs with readable names
+# Step 3: Replace linked record IDs with display names and add timestamp
+timestamp = datetime.utcnow().isoformat()
 for record in main_records:
     fields = record['fields']
     for field_name in LINKED_TABLES.keys():
@@ -72,6 +76,7 @@ for record in main_records:
         if isinstance(linked_ids, list):
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
+    fields['Last Updated'] = timestamp  # Force update
 
 # Step 4: Export to CSV
 output_file = 'OC4.csv'
@@ -88,3 +93,4 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             writer.writerow(rec['fields'])
 
 print(f"✅ Export complete: {output_file}")
+
