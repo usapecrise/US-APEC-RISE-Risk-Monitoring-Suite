@@ -52,7 +52,7 @@ def fetch_all_records(table, view=None):
     print(f"✅ Fetched {len(all_records)} records from '{table}'")
     return all_records
 
-# Step 1: Fetch linked tables and build ID→Name maps
+# Step 1: Fetch linked records and build lookup dictionaries
 linked_id_maps = {}
 for field, table_name in LINKED_TABLES.items():
     records = fetch_all_records(table_name)
@@ -62,6 +62,7 @@ for field, table_name in LINKED_TABLES.items():
         for rec in records
     }
     linked_id_maps[field] = id_to_display
+    print(f"🔎 Built lookup for {field} with {len(id_to_display)} entries")
 
 # Step 2: Fetch main table records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
@@ -75,9 +76,12 @@ for record in main_records:
         linked_ids = fields.get(field_name, [])
         if isinstance(linked_ids, list):
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
-            fields[f"{field_name} (Name)"] = ", ".join(readable_names)
+        else:
+            readable_names = []
+
+        fields[f"{field_name} (Name)"] = ", ".join(readable_names) if readable_names else "None"
     fields['Last Updated'] = timestamp  # Force file change
-    
+
 # Step 4: Export to CSV
 output_file = 'OC4.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
