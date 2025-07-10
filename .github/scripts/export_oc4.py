@@ -7,7 +7,7 @@ from datetime import datetime
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'OC4 Business/Market Growth'
+MAIN_TABLE = 'OC4 Market Growth'
 VIEW_NAME = 'Grid view'
 
 # Confirmed field and table mappings
