@@ -63,8 +63,8 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
     if field == 'Workshop':
-    print("🔍 Sample Workshop ID mapping:")
-    print(list(id_to_display.items())[:3])
+        print("🔍 Sample Workshop ID mapping:")
+        print(list(id_to_display.items())[:3])
 
 
 # Step 2: Fetch main table records
