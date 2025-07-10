@@ -20,7 +20,7 @@ LINKED_TABLES = {
 DISPLAY_FIELDS = {
     'Workstream': 'Workstream',
     'Economy': 'Economy',
-    'Firms': 'Firm'  # Change to match field name in OT4 if needed
+    'Firm': 'Firm'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
