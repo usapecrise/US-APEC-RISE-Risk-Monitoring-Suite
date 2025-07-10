@@ -62,7 +62,10 @@ for field, table_name in LINKED_TABLES.items():
         for rec in records
     }
     linked_id_maps[field] = id_to_display
-    print(f"🔎 Built lookup for {field} with {len(id_to_display)} entries")
+    if field == 'Workshop':
+    print("🔍 Sample Workshop ID mapping:")
+    print(list(id_to_display.items())[:3])
+
 
 # Step 2: Fetch main table records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
