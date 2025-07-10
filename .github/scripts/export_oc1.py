@@ -11,8 +11,8 @@ VIEW_NAME = 'Grid view'
 
 # Linked table names
 LINKED_TABLES = {
-    'Economy': 'Economy List',
-    'Workstream': 'Workstream Reference'
+    'Economy': 'Economy Reference List',
+    'Workstream': 'Workstream Reference List'
 }
 
 # Fields to display from the linked tables
@@ -70,20 +70,5 @@ for record in main_records:
         if isinstance(linked_ids, list):
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
-
-# Step 4: Export to CSV
-output_file = 'OC1.csv'
-with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    if main_records:
-        all_fieldnames = set()
-        for rec in main_records:
-            all_fieldnames.update(rec['fields'].keys())
-        fieldnames = list(all_fieldnames)
-
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for rec in main_records:
-            writer.writerow(rec['fields'])
-
-print(f"✅ Export complete: {output_file}")
+        elif isinstance(linked_id_
 
