@@ -66,9 +66,10 @@ main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 for record in main_records:
     fields = record['fields']
     for field_name in LINKED_TABLES.keys():
-        linked_ids = fields.get(field_name, [])
-        if isinstance(linked_ids, list):
-            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
+        linked_value = fields.get(field_name, [])
+        if isinstance(linked_value, list):
+            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_value]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
-        elif isinstance(linked_id_
-
+        elif isinstance(linked_value, str):
+            # Just in case it's a single string instead of a list
+            fields[f"{field_name} (Name)"] = linked_id_maps[field_name].get(linked_value, 'Unknown')
