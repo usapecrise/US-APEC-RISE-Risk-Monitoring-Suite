@@ -22,6 +22,12 @@ jobs:
         run: |
           pip install pandas requests
 
+      - name: Run OT1 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: |
+          python .github/scripts/export_ot1.py
+          
       - name: Run OC4 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
@@ -56,7 +62,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add OC1.csv OC4.csv OT2.csv OT3.csv OT4.csv
+          git add OC1.csv OC4.csv OT2.csv OT3.csv OT4.csv OT1.csv
           git commit -m "🔄 Auto-update KPI exports [skip ci]" || echo "🟰 Nothing to commit (no file changes)"
           git push
 
