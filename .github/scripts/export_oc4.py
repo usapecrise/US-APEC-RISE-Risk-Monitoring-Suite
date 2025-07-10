@@ -14,7 +14,7 @@ VIEW_NAME = 'Grid view'
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List',
-    'Workshop': 'Workshop/Event Reference List'
+    'Workshop': 'Workshop Reference List'
 }
 
 DISPLAY_FIELDS = {
