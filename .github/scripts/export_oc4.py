@@ -12,9 +12,9 @@ VIEW_NAME = 'Grid view'
 
 # Linked table names
 LINKED_TABLES = {
-    'Economy': 'Economy List',
-    'Workshop Title': 'Workshop Log',
-    'Workstream': 'Workstream Reference'
+    'Economy': 'Economy Reference List',
+    'Workshop Title': 'Workshop/Event Reference List',
+    'Workstream': 'Workstream Reference List'
 }
 
 # Fields to display from the linked tables
