@@ -76,8 +76,8 @@ for record in main_records:
         if isinstance(linked_ids, list):
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
-    fields['Last Updated'] = timestamp  # Force update
-
+    fields['Last Updated'] = timestamp  # Force file change
+    
 # Step 4: Export to CSV
 output_file = 'OC4.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
