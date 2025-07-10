@@ -13,7 +13,7 @@ VIEW_NAME = 'Grid view'
 LINKED_TABLES = {
     'Workstream': 'Workstream Reference List',
     'Economy': 'Economy Reference List',
-    'Workshop': Workshop Reference List',
+    'Workshop': 'Workshop Reference List',
     'Firm': 'OT4 Private Sector Firms'
 }
 
