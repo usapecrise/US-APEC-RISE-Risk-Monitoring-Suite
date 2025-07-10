@@ -13,14 +13,14 @@ VIEW_NAME = 'Grid view'
 # Linked table names
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
-    'Title': 'Workshop/Event Reference List',
+    'Workshop': 'Workshop/Event Reference List',
     'Workstream': 'Workstream Reference List'
 }
 
 # Fields to display from the linked tables
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
-    'Title': 'Workshop Title',
+    'Workshop': 'Workshop',
     'Workstream': 'Workstream'
 }
 
