@@ -12,7 +12,7 @@ VIEW_NAME = 'Grid view'
 # Linked table names
 LINKED_TABLES = {
     'Workstream': 'Workstream Reference List',
-    'Economy': 'Economy List'
+    'Economy': 'Economy Reference List'
 }
 
 # Fields to display from each linked table
