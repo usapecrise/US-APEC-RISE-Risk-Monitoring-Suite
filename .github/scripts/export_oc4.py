@@ -7,21 +7,20 @@ from datetime import datetime
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'OC4 Market Growth'
+MAIN_TABLE = 'OC4 Business/Market Growth'
 VIEW_NAME = 'Grid view'
 
-# Linked table names
+# Confirmed field and table mappings
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
-    'Workshop': 'Workshop/Event Reference List',
-    'Workstream': 'Workstream Reference List'
+    'Workstream': 'Workstream Reference List',
+    'Workshop': 'Workshop/Event Reference List'
 }
 
-# Fields to display from the linked tables
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
-    'Workshop': 'Workshop',
-    'Workstream': 'Workstream'
+    'Workstream': 'Workstream',
+    'Workshop': 'Workshop'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -62,10 +61,7 @@ for field, table_name in LINKED_TABLES.items():
         for rec in records
     }
     linked_id_maps[field] = id_to_display
-    if field == 'Workshop':
-        print("🔍 Sample Workshop ID mapping:")
-        print(list(id_to_display.items())[:3])
-
+    print(f"🔎 {field} lookup sample:", list(id_to_display.items())[:3])
 
 # Step 2: Fetch main table records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
@@ -78,12 +74,14 @@ for record in main_records:
     for field_name in LINKED_TABLES.keys():
         linked_ids = fields.get(field_name, [])
         if isinstance(linked_ids, list):
-            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
+            readable_names = [
+                linked_id_maps[field_name].get(id, 'Unknown')
+                for id in linked_ids
+            ]
         else:
             readable_names = []
-
         fields[f"{field_name} (Name)"] = ", ".join(readable_names) if readable_names else "None"
-    fields['Last Updated'] = timestamp  # Force file change
+    fields['Last Updated'] = timestamp
 
 # Step 4: Export to CSV
 output_file = 'OC4.csv'
@@ -100,4 +98,3 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             writer.writerow(rec['fields'])
 
 print(f"✅ Export complete: {output_file}")
-
