@@ -19,8 +19,8 @@ LINKED_TABLES = {
 
 # Fields to display from the linked tables
 DISPLAY_FIELDS = {
-    'Economy': 'Economy Name',
-    'Workshop': 'Workshop Title',
+    'Economy': 'Economy',
+    'Workshop': 'Title',
     'Workstream': 'Workstream'
 }
 
