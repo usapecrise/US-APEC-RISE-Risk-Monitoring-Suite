@@ -83,13 +83,15 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     if main_records:
         fieldnames = [
             'Indicator ID',
+            'Workshop',
             'Workshop (Name)',
             'Workshop Date',
             'Sex',
+            'Economy',
             'Economy (Name)',
             'Other Economy',
             'Organization',
-            'Email',
+            'Workstream',
             'Workstream (Name)'
         ]
 
