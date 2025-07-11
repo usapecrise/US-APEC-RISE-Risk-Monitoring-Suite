@@ -10,14 +10,17 @@ BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'OT1 Sign-Ins (Workshops)'
 VIEW_NAME = 'Grid view'
 
-# Linked table names
+# Confirmed field and table mappings
 LINKED_TABLES = {
-
+    'Economy': 'Economy Reference List',
+    'Workstream': 'Workstream Reference List',
+    'Workshop': 'Workshop Reference List'
 }
 
-# Fields to display from the linked tables
 DISPLAY_FIELDS = {
-
+    'Economy': 'Economy',
+    'Workstream': 'Workstream',
+    'Workshop': 'Workshop'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
