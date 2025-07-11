@@ -76,7 +76,6 @@ for record in main_records:
 
 # Step 4: Export to CSV
 output_file = 'OT1.csv'
-output_file = 'OT1.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     if main_records:
         fieldnames = [
@@ -90,10 +89,12 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             'Email',
             'Workstream (Name)'
         ]
-    
+
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for rec in main_records:
-            writer.writerow(rec['fields'])
-
+            row = rec['fields']
+            filtered_row = {key: row.get(key, '') for key in fieldnames}
+            writer.writerow(filtered_row)
+            
 print(f"✅ Export complete: {output_file}")
