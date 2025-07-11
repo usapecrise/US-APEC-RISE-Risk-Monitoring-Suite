@@ -76,18 +76,20 @@ for record in main_records:
 
 # Step 4: Export to CSV
 output_file = 'OT1.csv'
+output_file = 'OT1.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    if main_records
-          'Indicator ID',
-          'Workshop (Name)',
-          'Workshop Date',
-          'Sex',
-          'Economy (Name)',
-          'Other Economy',
-          'Organization',
-          'Email',
-          'Workstream (Name)',
-          'Date Attended'
+    if main_records:
+        fieldnames = [
+            'Indicator ID',
+            'Workshop (Name)',
+            'Workshop Date',
+            'Sex',
+            'Economy (Name)',
+            'Other Economy',
+            'Organization',
+            'Email',
+            'Workstream (Name)'
+        ]
     
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
