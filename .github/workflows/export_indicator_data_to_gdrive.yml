@@ -27,10 +27,15 @@ jobs:
         run: |
           python .github/scripts/export_oc1.py
           python .github/scripts/export_oc4.py
+          python .github/scripts/export_oc5.py
+          python .github/scripts/export_oc6.py
+          python .github/scripts/export_oc7.py
+          python .github/scripts/export_ot1.py
           python .github/scripts/export_ot2.py
           python .github/scripts/export_ot3.py
           python .github/scripts/export_ot4.py
-
+          python .github/scripts/export_ot5.py
+          
       - name: Install rclone
         run: |
           curl https://rclone.org/install.sh | sudo bash
@@ -44,7 +49,12 @@ jobs:
         run: |
           rclone copyto OC1.csv gdrive:/APEC-RISE/OC1.csv
           rclone copyto OC4.csv gdrive:/APEC-RISE/OC4.csv
+          rclone copyto OC4.csv gdrive:/APEC-RISE/OC5.csv
+          rclone copyto OC4.csv gdrive:/APEC-RISE/OC6.csv
+          rclone copyto OC4.csv gdrive:/APEC-RISE/OC7.csv
+          rclone copyto OT2.csv gdrive:/APEC-RISE/OT1.csv
           rclone copyto OT2.csv gdrive:/APEC-RISE/OT2.csv
           rclone copyto OT3.csv gdrive:/APEC-RISE/OT3.csv
           rclone copyto OT4.csv gdrive:/APEC-RISE/OT4.csv
+          rclone copyto OT4.csv gdrive:/APEC-RISE/OT5.csv
 
