@@ -1,8 +1,17 @@
-Firm (Name),Workstream (Name),Economy (Name),Engagement (Name),Fiscal Year,U.S. FAOs Addressed,PSE Modality,Firm (Name).1
-"Boeing, Davidson Technologies, SAE Industry Technologies Consortia, Stendard ",Digital Standards,Republic of Korea,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,['Economic Growth (Other)'],,"Boeing, Davidson Technologies, SAE Industry Technologies Consortia, Stendard "
-"Akin Gump, Ansley International Consultants",Technical Barriers to Trade,Republic of Korea,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,FY25,['Economic Growth (Other)'],,"Akin Gump, Ansley International Consultants"
-"Codit, Amazon, Crowell & Moring LLP",Cloud Computing,Republic of Korea,Workshop on Advancing Cloud Transformation,FY25,['Economic Growth (Other)'],,"Codit, Amazon, Crowell & Moring LLP"
-"American Chemistry Council, Akin Gump, United States Council for International Business ",Free Trade Area of the Asia-Pacific,Republic of Korea,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,FY25,['Economic Growth (Other)'],,"American Chemistry Council, Akin Gump, United States Council for International Business "
-"American Chemistry Council, Dow",Supply Chain Connectivity,Republic of Korea,APEC 17th A2C2 Meeting,FY25,['Economic Growth (Other)'],,"American Chemistry Council, Dow"
-,Services,Republic of Korea,APEC Workshop on Services Technical Standards Development: The Process and Impact,FY25,['Economic Growth (Other)'],,
-Coupang,Digital Trade,Republic of Korea,Digital Trade Policy Dialogue,FY25,['Economic Growth (Other)'],,Coupang
+Firm (Name),Workstream (Name),Economy (Name),Engagement (Name),Fiscal Year,U.S. FAOs Addressed,PSE Modality
+Boeing,Digital Standards,Republic of Korea,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,Economic Growth (Other),
+Davidson Technologies,Digital Standards,Republic of Korea,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,Economic Growth (Other),
+SAE Industry Technologies Consortia,Digital Standards,Republic of Korea,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,Economic Growth (Other),
+Stendard ,Digital Standards,Republic of Korea,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,Economic Growth (Other),
+Akin Gump,Technical Barriers to Trade,Republic of Korea,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,FY25,Economic Growth (Other),
+Ansley International Consultants,Technical Barriers to Trade,Republic of Korea,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,FY25,Economic Growth (Other),
+Codit,Cloud Computing,Republic of Korea,Workshop on Advancing Cloud Transformation,FY25,Economic Growth (Other),
+Amazon,Cloud Computing,Republic of Korea,Workshop on Advancing Cloud Transformation,FY25,Economic Growth (Other),
+Crowell & Moring LLP,Cloud Computing,Republic of Korea,Workshop on Advancing Cloud Transformation,FY25,Economic Growth (Other),
+American Chemistry Council,Free Trade Area of the Asia-Pacific,Republic of Korea,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,FY25,Economic Growth (Other),
+Akin Gump,Free Trade Area of the Asia-Pacific,Republic of Korea,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,FY25,Economic Growth (Other),
+United States Council for International Business ,Free Trade Area of the Asia-Pacific,Republic of Korea,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,FY25,Economic Growth (Other),
+American Chemistry Council,Supply Chain Connectivity,Republic of Korea,APEC 17th A2C2 Meeting,FY25,Economic Growth (Other),
+Dow,Supply Chain Connectivity,Republic of Korea,APEC 17th A2C2 Meeting,FY25,Economic Growth (Other),
+nan,Services,Republic of Korea,APEC Workshop on Services Technical Standards Development: The Process and Impact,FY25,Economic Growth (Other),
+Coupang,Digital Trade,Republic of Korea,Digital Trade Policy Dialogue,FY25,Economic Growth (Other),
