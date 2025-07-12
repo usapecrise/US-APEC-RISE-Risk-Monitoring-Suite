@@ -76,11 +76,11 @@ for record in main_records:
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
 
-# Step 4: Write initial cleaned CSV with readable fields only
+# Step 4: Write intermediate clean file (only readable fields)
 output_file_clean = 'OT2_clean.csv'
 filtered_records = []
 
-# Define only the readable fields to keep
+# Select fields to keep
 desired_fields = [
     'Firm (Name)',
     'Workstream (Name)',
@@ -88,30 +88,34 @@ desired_fields = [
     'Engagement (Name)',
     'Fiscal Year',
     'U.S. FAOs Addressed',
-    'PSE Modality',
-    'Firm (Name)'
+    'PSE Modality'
 ]
 
-# Build cleaned record list
 for rec in main_records:
     fields = rec['fields']
     clean_row = {k: fields.get(k, '') for k in desired_fields}
     filtered_records.append(clean_row)
 
-# Save clean file
 with open(output_file_clean, 'w', newline='', encoding='utf-8') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=desired_fields)
     writer.writeheader()
     for row in filtered_records:
         writer.writerow(row)
 
-print(f"✅ Clean file created: {output_file_clean}")
+print("✅ Clean file created: OT2_clean.csv")
 
-# Step 5 (Optional): Explode multi-select Workstream field into multiple rows
+# Step 5: Final cleanup and explode multi-value fields
 df = pd.read_csv(output_file_clean)
-df_exploded = df.assign(**{
-    'Workstream (Name)': df['Workstream (Name)'].str.split(', ')
-}).explode('Workstream (Name)')
 
-df_exploded.to_csv('OT2.csv', index=False)
-print("✅ Exploded file created: OT2.csv")
+# Clean FAO field (remove brackets/quotes)
+df['U.S. FAOs Addressed'] = df['U.S. FAOs Addressed'].astype(str).str.replace(r"[\[\]']", "", regex=True)
+
+# Split Workstream and Firm into multiple rows
+df = df.assign(**{
+    'Workstream (Name)': df['Workstream (Name)'].astype(str).str.split(', '),
+    'Firm (Name)': df['Firm (Name)'].astype(str).str.split(', ')
+}).explode('Workstream (Name)').explode('Firm (Name)')
+
+# Final export
+df.to_csv('OT2.csv', index=False)
+print("✅ Final exploded and cleaned file created: OT2.csv")
