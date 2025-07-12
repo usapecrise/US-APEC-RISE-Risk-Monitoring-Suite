@@ -27,18 +27,6 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: |
           python .github/scripts/export_ot1.py
-          
-      - name: Run OC4 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_oc4.py
-
-      - name: Run OC1 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_oc1.py
 
       - name: Run OT2 export script
         env:
@@ -57,6 +45,24 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: |
           python .github/scripts/export_ot4.py
+          
+      - name: Run OT5 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: |
+          python .github/scripts/export_ot5.py
+
+      - name: Run OC1 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: |
+          python .github/scripts/export_oc1.py
+
+      - name: Run OC4 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: |
+          python .github/scripts/export_oc4.py
 
       - name: Run OC5 export script
         env:
@@ -76,17 +82,11 @@ jobs:
         run: |
           python .github/scripts/export_oc7.py
 
-   - name: Run OT5 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_ot5.py
-          
       - name: Commit and push KPI CSVs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add OC1.csv OC4.csv OT2.csv OT3.csv OT4.csv OT1.csv OC5.csv OC6.csv
+          git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC4.CSV OC5.csv OC6.csv OC7.csv
           git commit -m "🔄 Auto-update KPI exports [skip ci]" || echo "🟰 Nothing to commit (no file changes)"
           git push
 
