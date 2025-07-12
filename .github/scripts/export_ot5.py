@@ -6,14 +6,14 @@ from urllib.parse import quote
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'OT5 Private Sector Commitments'
+MAIN_TABLE = 'OT5 Private Sector Resources'
 VIEW_NAME = 'Grid view'
 
 # Linked tables and display fields (customize as needed)
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List',
-    'Firm': 'OT4 Private Sector Firms'
+    'Firm': 'OT4 Private Sector Firms',
     'Engagement': 'OT2 Private Sector Engagements'
 
 }
