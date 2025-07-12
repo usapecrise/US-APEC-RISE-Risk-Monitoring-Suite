@@ -1,6 +1,7 @@
 import requests
 import csv
 import os
+import pandas as pd
 from urllib.parse import quote
 
 # Airtable credentials and config
@@ -75,18 +76,42 @@ for record in main_records:
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
 
-# Step 4: Write to CSV
-output_file = 'OT2.csv'
-with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    if main_records:
-        all_fieldnames = set()
-        for rec in main_records:
-            all_fieldnames.update(rec['fields'].keys())
-        fieldnames = list(all_fieldnames)
+# Step 4: Write initial cleaned CSV with readable fields only
+output_file_clean = 'OT2_clean.csv'
+filtered_records = []
 
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for rec in main_records:
-            writer.writerow(rec['fields'])
+# Define only the readable fields to keep
+desired_fields = [
+    'Firm (Name)',
+    'Workstream (Name)',
+    'Economy (Name)',
+    'Engagement (Name)',
+    'Fiscal Year',
+    'U.S. FAOs Addressed',
+    'PSE Modality',
+    'Firm (Name)'
+]
 
-print(f"✅ Export complete: {output_file}")
+# Build cleaned record list
+for rec in main_records:
+    fields = rec['fields']
+    clean_row = {k: fields.get(k, '') for k in desired_fields}
+    filtered_records.append(clean_row)
+
+# Save clean file
+with open(output_file_clean, 'w', newline='', encoding='utf-8') as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=desired_fields)
+    writer.writeheader()
+    for row in filtered_records:
+        writer.writerow(row)
+
+print(f"✅ Clean file created: {output_file_clean}")
+
+# Step 5 (Optional): Explode multi-select Workstream field into multiple rows
+df = pd.read_csv(output_file_clean)
+df_exploded = df.assign(**{
+    'Workstream (Name)': df['Workstream (Name)'].str.split(', ')
+}).explode('Workstream (Name)')
+
+df_exploded.to_csv('OT2_exploded.csv', index=False)
+print("✅ Exploded file created: OT2_exploded.csv")
