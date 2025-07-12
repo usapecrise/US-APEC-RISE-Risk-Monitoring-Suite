@@ -6,20 +6,18 @@ from urllib.parse import quote
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'OC7 Reform Barriers'
+MAIN_TABLE = 'OC7 Barriers Resolved'
 VIEW_NAME = 'Grid view'
 
 # Linked table names and their display fields
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
-    'Workstream': 'Workstream Reference List',
-    'Reform': 'Policy Reform Tracker'
+    'Workstream': 'Workstream Reference List'
 }
 
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
-    'Workstream': 'Workstream',
-    'Reform': 'Reform Title'
+    'Workstream': 'Workstream'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
