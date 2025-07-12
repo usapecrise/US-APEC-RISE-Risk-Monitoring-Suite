@@ -20,7 +20,7 @@ LINKED_TABLES = {
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream',
-    'Workshop': 'Workshop'
+    'Workshop': 'Workshop'  # update this to 'Title' if your Workshop Reference List uses that field
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -51,7 +51,7 @@ def fetch_all_records(table, view=None):
     print(f"✅ Fetched {len(all_records)} records from '{table}'")
     return all_records
 
-# Step 1: Fetch linked records and build lookup dictionaries
+# Step 1: Build lookup maps for linked fields
 linked_id_maps = {}
 for field, table_name in LINKED_TABLES.items():
     records = fetch_all_records(table_name)
@@ -62,11 +62,11 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
 
-# Step 2: Fetch main table records
+# Step 2: Fetch OT1 Sign-In records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
-# Step 3: Replace linked record IDs with display names and add timestamp
+# Step 3: Enrich with readable names and timestamp
 timestamp = datetime.utcnow().isoformat()
 for record in main_records:
     fields = record['fields']
@@ -75,7 +75,7 @@ for record in main_records:
         if isinstance(linked_ids, list):
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
-    record['fields']['Last Updated'] = timestamp
+    fields['Last Updated'] = timestamp  # Force update
 
 # Step 4: Export to CSV
 output_file = 'OT1.csv'
@@ -92,7 +92,8 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             'Other Economy',
             'Organization',
             'Workstream',
-            'Workstream (Name)'
+            'Workstream (Name)',
+            'Last Updated'  # ✅ Ensures file content changes each time
         ]
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -101,5 +102,5 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             row = rec['fields']
             filtered_row = {key: row.get(key, '') for key in fieldnames}
             writer.writerow(filtered_row)
-            
+
 print(f"✅ Export complete: {output_file}")
