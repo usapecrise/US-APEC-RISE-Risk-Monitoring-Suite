@@ -76,6 +76,12 @@ jobs:
         run: |
           python .github/scripts/export_oc7.py
 
+   - name: Run OT5 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: |
+          python .github/scripts/export_ot5.py
+          
       - name: Commit and push KPI CSVs
         run: |
           git config user.name "github-actions"
