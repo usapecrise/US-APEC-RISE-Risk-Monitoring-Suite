@@ -74,7 +74,7 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: |
-          python .github/scripts/export_oc6.py
+           python .github/scripts/export_oc6.py
 
       - name: Run OC7 export script
         env:
@@ -87,17 +87,13 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
 
-          # ✅ Stage files first
+          # ✅ Stage and commit first (even before pulling)
           git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC4.csv OC5.csv OC6.csv OC7.csv
-          
-          # ✅ Then pull latest changes safely
-          git pull --rebase origin main
-
-          # ✅ Commit and push
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          git commit -m "🔄 Auto-update KPI exports on $timestamp" --allow-empty
-          git push
+          git commit -m "🔄 Auto-update KPI exports on $timestamp" --allow-empty || echo "No changes to commit"
 
-          timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          git commit -m "🔄 Auto-update KPI exports on $timestamp" --allow-empty
+          # ✅ Pull and rebase AFTER committing local changes
+          git pull --rebase origin main || echo "⚠️ Rebase failed or unnecessary"
+
+          # ✅ Push changes
           git push
