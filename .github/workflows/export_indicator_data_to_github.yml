@@ -25,75 +25,67 @@ jobs:
       - name: Run OT1 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_ot1.py
+        run: python .github/scripts/export_ot1.py
 
       - name: Run OT2 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_ot2.py
+        run: python .github/scripts/export_ot2.py
 
       - name: Run OT3 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_ot3.py
+        run: python .github/scripts/export_ot3.py
 
       - name: Run OT4 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_ot4.py
+        run: python .github/scripts/export_ot4.py
           
       - name: Run OT5 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_ot5.py
+        run: python .github/scripts/export_ot5.py
 
       - name: Run OC1 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_oc1.py
+        run: python .github/scripts/export_oc1.py
 
       - name: Run OC4 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_oc4.py
+        run: python .github/scripts/export_oc4.py
 
       - name: Run OC5 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_oc5.py
+        run: python .github/scripts/export_oc5.py
           
       - name: Run OC6 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-           python .github/scripts/export_oc6.py
+        run: python .github/scripts/export_oc6.py
 
       - name: Run OC7 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_oc7.py
+        run: python .github/scripts/export_oc7.py
           
       - name: Commit and push KPI CSVs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
 
-          # ✅ Stage and commit first (even before pulling)
+          # ✅ Stage files
           git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC4.csv OC5.csv OC6.csv OC7.csv
+
+          # ✅ Commit before pulling
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          git commit -m "🔄 Auto-update KPI exports on $timestamp" --allow-empty || echo "No changes to commit"
+          git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
 
-          # ✅ Pull and rebase AFTER committing local changes
-          git pull --rebase origin main || echo "⚠️ Rebase failed or unnecessary"
+          # ✅ Pull safely after commit
+          git pull --rebase origin main
 
-          # ✅ Push changes
+          # ✅ Push to main
           git push
