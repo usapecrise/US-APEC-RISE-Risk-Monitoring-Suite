@@ -113,11 +113,18 @@ df = pd.read_csv(output_file_clean)
 # Clean FAO field (remove brackets/quotes)
 df['U.S. FAOs Addressed'] = df['U.S. FAOs Addressed'].astype(str).str.replace(r"[\[\]']", "", regex=True)
 
-# Split Workstream and Firm into multiple rows
+# Split all multi-value fields into lists
 df = df.assign(**{
-    'Workstream (Name)': df['Workstream (Name)'].astype(str).str.split(', '),
-    'Firm (Name)': df['Firm (Name)'].astype(str).str.split(', ')
-}).explode('Workstream (Name)').explode('Firm (Name)')
+    'Firm (Name)': df['Firm (Name)'].astype(str).str.split(','),
+    'U.S. FAOs Addressed': df['U.S. FAOs Addressed'].astype(str).str.split(',')
+})
+
+# Explode each to long format
+df = df.explode('Workstream (Name)').explode('Firm (Name)').explode('U.S. FAOs Addressed')
+
+# Strip whitespace
+df['Firm (Name)'] = df['Firm (Name)'].str.strip()
+df['U.S. FAOs Addressed'] = df['U.S. FAOs Addressed'].str.strip()
 
 # Final export
 df.to_csv('OT2.csv', index=False)
