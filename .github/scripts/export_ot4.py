@@ -12,15 +12,16 @@ VIEW_NAME = 'Grid view'
 # Linked table names
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
-    'Workstream': 'Workstream Reference List'
-    # Add more if needed, e.g., 'Engagement': 'OT2 Private Sector Engagements'
+    'Workstream': 'Workstream Reference List',
+    'Engagement': "OT2 Private Sector Engagements',
+    
 }
 
 # Display field from each linked table
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
-    'Workstream': 'Workstream'
-    # 'Engagement': 'Engagement'
+    'Workstream': 'Workstream',
+    'Engagement': 'Engagement',
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -73,19 +74,27 @@ for record in main_records:
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
 
-# Step 4: Export to CSV
+# Step 4: Export to CSV (Only selected fields)
+# Define the fields you want to include in the CSV
+EXPORT_FIELDS = [
+    'Firm Name',
+    'Economy (Name)',
+    'Workstream (Name)',
+    'Engagement (Name)',
+    'Date of Engagement',
+    'Fiscal Year',
+    'PSE Size',
+    'PSE Type'
+]
+
 output_file = 'OT4.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    if main_records:
-        all_fieldnames = set()
-        for rec in main_records:
-            all_fieldnames.update(rec['fields'].keys())
-        fieldnames = list(all_fieldnames)
-
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for rec in main_records:
-            writer.writerow(rec['fields'])
+    writer = csv.DictWriter(csvfile, fieldnames=EXPORT_FIELDS)
+    writer.writeheader()
+    for rec in main_records:
+        row = {field: rec['fields'].get(field, '') for field in EXPORT_FIELDS}
+        writer.writerow(row)
 
 print(f"✅ Export complete: {output_file}")
+
 
