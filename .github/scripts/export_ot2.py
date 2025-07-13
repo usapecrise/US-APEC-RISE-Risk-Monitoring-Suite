@@ -24,7 +24,8 @@ DISPLAY_FIELDS = {
     'Workstream': 'Workstream',
     'Economy': 'Economy',
     'Engagement': 'Workshop',
-    'Firm': 'Firm'
+    'Firm': 'Firm',
+    'Amount': 'Amount'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
