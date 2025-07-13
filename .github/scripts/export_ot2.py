@@ -3,6 +3,7 @@ import csv
 import os
 import pandas as pd
 from urllib.parse import quote
+from datetime import datetime
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
@@ -124,6 +125,10 @@ df = df.explode('Workstream (Name)').explode('Firm (Name)').explode('U.S. FAOs A
 df['Firm (Name)'] = df['Firm (Name)'].str.strip()
 df['U.S. FAOs Addressed'] = df['U.S. FAOs Addressed'].str.strip()
 
+# ✅ Add timestamp to ensure file always changes
+df['Export Timestamp'] = datetime.utcnow().isoformat()
+
 # Final export
 df.to_csv('OT2.csv', index=False)
 print("✅ Final exploded and cleaned file created: OT2.csv")
+
