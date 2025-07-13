@@ -1,15 +1,19 @@
-"Firm (Name),Economy (Name)",Workstream (Name),Engagement (Name),Fiscal Year,PSE Size,PSE Type
-,Technical Barriers to Trade,,FY25,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Cloud Computing,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,"Free Trade Area of the Asia-Pacific, Supply Chain Connectivity",,FY25,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
-,Technical Barriers to Trade,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Digital Standards,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Cloud Computing,,FY25,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Cloud Computing,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Digital Standards,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Supply Chain Connectivity,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Services,,FY25,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
-,Digital Standards,,FY25,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
-,Digital Standards,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Free Trade Area of the Asia-Pacific,,FY25,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+Firm (Name),Economy (Name),Workstream (Name),Engagement (Name),Fiscal Year,PSE Origin,PSE Size,PSE Type
+Akin Gump,United States of America,Technical Barriers to Trade,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,FY25,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+Amazon,United States of America,Cloud Computing,Workshop on Advancing Cloud Transformation,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+American Chemistry Council,United States of America,Free Trade Area of the Asia-Pacific,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,FY25,US-Based,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+American Chemistry Council,United States of America,Free Trade Area of the Asia-Pacific,APEC 17th A2C2 Meeting,FY25,US-Based,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+American Chemistry Council,United States of America,Supply Chain Connectivity,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,FY25,US-Based,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+American Chemistry Council,United States of America,Supply Chain Connectivity,APEC 17th A2C2 Meeting,FY25,US-Based,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+Ansley International Consultants,Mexico,Technical Barriers to Trade,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+Boeing,United States of America,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+Codit,United States of America,Cloud Computing,Workshop on Advancing Cloud Transformation,FY25,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+Coupang,United States of America,nan,nan,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+Crowell & Moring LLP,United States of America,Cloud Computing,Workshop on Advancing Cloud Transformation,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+Davidson Technologies,United States of America,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+Dow,United States of America,Supply Chain Connectivity,APEC 17th A2C2 Meeting,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+Information Technology Industry Council,United States of America,Services,nan,FY25,US-Based,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+SAE Industry Technologies Consortia,United States of America,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,US-Based,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+Stendard ,United States of America,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+United States Council for International Business ,United States of America,Free Trade Area of the Asia-Pacific,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,FY25,US-Based,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+# Exported at 2025-07-13T18:31:06.333906Z
