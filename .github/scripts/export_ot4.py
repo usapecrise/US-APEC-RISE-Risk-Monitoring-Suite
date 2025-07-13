@@ -95,6 +95,7 @@ EXPORT_FIELDS = [
     'Workstream (Name)',
     'Engagement (Name)',
     'Fiscal Year',
+    'PSE Origin',
     'PSE Size',
     'PSE Type'
 ]
