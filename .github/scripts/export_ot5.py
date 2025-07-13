@@ -2,6 +2,7 @@ import requests
 import csv
 import os
 from urllib.parse import quote
+from datetime import datetime
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
@@ -82,14 +83,18 @@ fieldnames = [
     'Fiscal Year',
     'U.S. FAOs Addressed',
     'Resource Type',
-    'Resource Origin'
+    'Resource Origin',
+    'Export Timestamp'  # New column to ensure uniqueness
 ]
+
+timestamp = datetime.utcnow().isoformat()
 
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     for rec in main_records:
         row = {field: rec['fields'].get(field, '') for field in fieldnames}
+        row['Export Timestamp'] = timestamp  # Add the timestamp
         writer.writerow(row)
 
 print(f"✅ Export complete: {output_file}")
