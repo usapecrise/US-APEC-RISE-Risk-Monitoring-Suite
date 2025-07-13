@@ -2,6 +2,7 @@ import requests
 import csv
 import os
 from urllib.parse import quote
+from datetime import datetime
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
@@ -70,18 +71,27 @@ for record in main_records:
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
 
-# Step 4: Export to CSV
+# Step 4: Export to CSV with selected fields only
 output_file = 'OC7.csv'
-with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    if main_records:
-        all_fieldnames = set()
-        for rec in main_records:
-            all_fieldnames.update(rec['fields'].keys())
-        fieldnames = list(all_fieldnames)
+desired_fields = [
+    'Barrier',
+    'Economy (Name)',
+    'Workstream (Name)',
+    'Barrier Type',
+    'Adaptive Action Type',
+    'Fiscal Year',
+    'Export Timestamp' 
+]
 
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for rec in main_records:
-            writer.writerow(rec['fields'])
+timestamp = datetime.utcnow().isoformat()
+
+with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=desired_fields)
+    writer.writeheader()
+    for rec in main_records:
+        row = {field: rec['fields'].get(field, '') for field in desired_fields if field != 'Export Timestamp'}
+        row['Export Timestamp'] = timestamp
+        writer.writerow(row)
 
 print(f"✅ Export complete: {output_file}")
+
