@@ -91,7 +91,7 @@ desired_fields = [
     'Fiscal Year',
     'U.S. FAOs Addressed',
     'PSE Modality',
-    'Resource (Amount)
+    'Resource (Amount)'
 ]
 
 for rec in main_records:
