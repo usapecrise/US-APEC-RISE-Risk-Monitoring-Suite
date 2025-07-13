@@ -1,4 +1,4 @@
-Firm (Name),Workstream (Name),Engagement (Name),Amount,Economy (Name),Indicator ID
-,,,1000,,OT5
-,,,,,OT5
-,,,,,OT5
+Workstream (Name),Engagement (Name),Amount,Indicator ID,Economy (Name),Firm (Name)
+,,1000,OT5,,
+,,,OT5,,
+,,,OT5,,
