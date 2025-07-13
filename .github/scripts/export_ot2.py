@@ -15,7 +15,8 @@ LINKED_TABLES = {
     'Workstream': 'Workstream Reference List',
     'Economy': 'Economy Reference List',
     'Engagement': 'Workshop Reference List',
-    'Firm': 'OT4 Private Sector Firms'
+    'Firm': 'OT4 Private Sector Firms',
+    'Amount: 'OT5 Private Sector Resources'
 }
 
 # Fields to display from the linked tables
@@ -88,7 +89,8 @@ desired_fields = [
     'Engagement (Name)',
     'Fiscal Year',
     'U.S. FAOs Addressed',
-    'PSE Modality'
+    'PSE Modality',
+    'Resource (Amount)
 ]
 
 for rec in main_records:
