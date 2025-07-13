@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from urllib.parse import quote
 from datetime import datetime
+from itertools import product
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
@@ -29,7 +30,6 @@ DISPLAY_FIELDS = {
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-# Fetch all records from Airtable
 def fetch_all_records(table, view=None):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
     if view:
@@ -42,20 +42,17 @@ def fetch_all_records(table, view=None):
         if offset:
             params['offset'] = offset
         response = requests.get(url, headers=headers, params=params).json()
-
         if 'records' not in response:
             print(f"❌ Error fetching {table}:", response)
             break
-
         all_records.extend(response['records'])
         offset = response.get('offset')
         if not offset:
             break
-
     print(f"✅ Fetched {len(all_records)} from {table}")
     return all_records
 
-# Step 1: Build lookup maps for linked fields
+# Step 1: Build lookup maps
 linked_id_maps = {}
 for field, table in LINKED_TABLES.items():
     records = fetch_all_records(table)
@@ -69,30 +66,45 @@ for field, table in LINKED_TABLES.items():
 # Step 2: Fetch main OT4 records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 
-# Step 3: Resolve linked record IDs to display names and flatten fields
-export_rows = []
+# Step 3: Process and normalize data
+flattened_rows = []
 for record in main_records:
-    fields = record['fields']
+    fields = record.get('fields', {})
 
-    # Resolve linked fields to readable names
-    for field_name in ['Workstream', 'Engagement', 'Economy', 'Resource']:
-        linked_ids = fields.get(field_name, [])
-        if isinstance(linked_ids, list):
-            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
-            fields[f"{field_name} (Name)"] = ", ".join(readable_names)
+    firm_name = fields.get('Firm') or fields.get('Name') or fields.get('Organization Name') or 'Unknown'
+    economy = [
+        linked_id_maps['Economy'].get(eid, 'Unknown')
+        for eid in fields.get('Economy', [])
+    ] or ['']
+    workstreams = [
+        linked_id_maps['Workstream'].get(wid, 'Unknown')
+        for wid in fields.get('Workstream', [])
+    ] or ['']
+    engagements = [
+        linked_id_maps['Engagement'].get(eid, 'Unknown')
+        for eid in fields.get('Engagement', [])
+    ] or ['']
+    fiscal_years = fields.get('Fiscal Year', []) or ['']
+    pse_origin = fields.get('PSE Origin', '')
+    pse_size = fields.get('PSE Size', '')
+    pse_type = fields.get('PSE Type', '')
 
-    # Flatten Fiscal Year
-    fiscal_year = fields.get('Fiscal Year', [])
-    fields['Fiscal Year'] = ", ".join(fiscal_year) if isinstance(fiscal_year, list) else fiscal_year
+    # Cartesian product of multi-select combinations
+    for combo in product(workstreams, engagements, fiscal_years):
+        flattened_rows.append({
+            'Firm (Name)': firm_name,
+            'Economy (Name)': ', '.join(economy),
+            'Workstream (Name)': combo[0],
+            'Engagement (Name)': combo[1],
+            'Fiscal Year': combo[2],
+            'PSE Origin': pse_origin,
+            'PSE Size': pse_size,
+            'PSE Type': pse_type,
+            'Timestamp': datetime.utcnow().isoformat() + "Z"
+        })
 
-    # Firm name (plain text)
-    firm_name = fields.get('Firm') or fields.get('Name') or fields.get('Organization Name')
-    fields['Firm (Name)'] = firm_name if firm_name else 'Unknown'
-
-    export_rows.append(fields)
-
-# Step 4: Write intermediate CSV
-intermediate_file = 'OT4_clean.csv'
+# Step 4: Export to final CSV
+output_file = 'OT4.csv'
 EXPORT_FIELDS = [
     'Firm (Name)',
     'Economy (Name)',
@@ -101,40 +113,10 @@ EXPORT_FIELDS = [
     'Fiscal Year',
     'PSE Origin',
     'PSE Size',
-    'PSE Type'
+    'PSE Type',
+    'Timestamp'
 ]
 
-with open(intermediate_file, 'w', newline='', encoding='utf-8') as f:
-    writer = csv.DictWriter(f, fieldnames=EXPORT_FIELDS)
-    writer.writeheader()
-    for row in export_rows:
-        writer.writerow({field: row.get(field, '') for field in EXPORT_FIELDS})
-
-print(f"✅ Clean file created: {intermediate_file}")
-
-# Step 5: Explode multi-value fields and add timestamp
-df = pd.read_csv(intermediate_file)
-
-# Clean and split multi-select fields
-multi_fields = ['Workstream (Name)', 'Engagement (Name)', 'Fiscal Year']
-for field in multi_fields:
-    df[field] = (
-        df[field]
-        .astype(str)
-        .str.replace(r"[\[\]']", "", regex=True)
-        .str.split(',')
-    )
-
-# Explode each multi-value field and strip whitespace
-for field in multi_fields:
-    df = df.explode(field)
-    df[field] = df[field].str.strip()
-
-# Add Timestamp column to each row
-timestamp = datetime.utcnow().isoformat() + "Z"
-df['Timestamp'] = timestamp
-
-# Final export
-final_file = 'OT4.csv'
-df.to_csv(final_file, index=False)
-print(f"✅ Final exploded and Tableau-ready file created: {final_file}")
+df = pd.DataFrame(flattened_rows)
+df.to_csv(output_file, index=False, columns=EXPORT_FIELDS)
+print(f"✅ Final deduplicated and exploded file created: {output_file}")
