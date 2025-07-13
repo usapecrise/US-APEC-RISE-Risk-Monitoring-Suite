@@ -82,17 +82,17 @@ for record in main_records:
     pse_type = fields.get('PSE Type', '')
 
     # Cartesian product of multi-select combinations
-    for combo in product(workstreams, engagements, fiscal_years):
-        flattened_rows.append({
-            'Firm (Name)': firm_name,
-            'Economy (Name)': ', '.join(economy),
-            'Workstream (Name)': combo[0],
-            'Fiscal Year': combo[2],
-            'PSE Origin': pse_origin,
-            'PSE Size': pse_size,
-            'PSE Type': pse_type,
-            'Timestamp': datetime.utcnow().isoformat() + "Z"
-        })
+    for combo in product(workstreams, fiscal_years):
+flattened_rows.append({
+    'Firm (Name)': firm_name,
+    'Economy (Name)': ', '.join(economy),
+    'Workstream (Name)': combo[0],
+    'Fiscal Year': combo[1],
+    'PSE Origin': pse_origin,
+    'PSE Size': pse_size,
+    'PSE Type': pse_type,
+    'Timestamp': datetime.utcnow().isoformat() + "Z"
+})
 
 # Step 4: Export to final CSV
 output_file = 'OT4.csv'
