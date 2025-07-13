@@ -81,7 +81,6 @@ EXPORT_FIELDS = [
     'Economy (Name)',
     'Workstream (Name)',
     'Engagement (Name)',
-    'Date of Engagement',
     'Fiscal Year',
     'PSE Size',
     'PSE Type'
