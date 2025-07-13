@@ -14,7 +14,6 @@ VIEW_NAME = 'Grid view'
 LINKED_TABLES = {
     'Workstream': 'Workstream Reference List',
     'Economy': 'Economy Reference List',
-    'Engagement': 'Workshop Reference List',
     'Firm': 'OT4 Private Sector Firms',
     'Amount': 'OT5 Private Sector Resources'
 }
@@ -23,7 +22,6 @@ LINKED_TABLES = {
 DISPLAY_FIELDS = {
     'Workstream': 'Workstream',
     'Economy': 'Economy',
-    'Engagement': 'Workshop',
     'Firm': 'Firm',
     'Amount': 'Amount'
 }
@@ -87,7 +85,7 @@ desired_fields = [
     'Firm (Name)',
     'Workstream (Name)',
     'Economy (Name)',
-    'Engagement (Name)',
+    'Engagement',
     'Fiscal Year',
     'U.S. FAOs Addressed',
     'PSE Modality',
