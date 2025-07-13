@@ -14,7 +14,7 @@ LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List',
     'Engagement': 'OT2 Private Sector Engagements',
-    
+    'Firm': 'OT5 Private Sector Resources'
 }
 
 # Display field from each linked table
@@ -22,6 +22,8 @@ DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream',
     'Engagement': 'Engagement',
+    'Firm': 'Name',
+    'Resource': 'Resource'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -65,17 +67,23 @@ for field, table in LINKED_TABLES.items():
 # Step 2: Fetch main OT4 records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 
-# Step 3: Resolve linked record IDs to readable names
+# Step 3: Resolve linked record IDs to readable names and flatten Fiscal Year
 for record in main_records:
     fields = record['fields']
+    
+    # Resolve linked record names
     for field_name in LINKED_TABLES.keys():
         linked_ids = fields.get(field_name, [])
         if isinstance(linked_ids, list):
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
 
-# Step 4: Export to CSV (Only selected fields)
-# Define the fields you want to include in the CSV
+    # Flatten Fiscal Year list
+    fiscal_year = fields.get('Fiscal Year', [])
+    if isinstance(fiscal_year, list):
+        fields['Fiscal Year'] = ", ".join(fiscal_year)
+
+# Step 4: Export to CSV
 EXPORT_FIELDS = [
     'Firm (Name)',
     'Economy (Name)',
@@ -95,5 +103,3 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         writer.writerow(row)
 
 print(f"✅ Export complete: {output_file}")
-
-
