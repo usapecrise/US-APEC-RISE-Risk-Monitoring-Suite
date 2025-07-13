@@ -1,15 +1,15 @@
 "Firm (Name),Economy (Name)",Workstream (Name),Engagement (Name),Fiscal Year,PSE Size,PSE Type
-,Technical Barriers to Trade,Unknown,FY25,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Cloud Computing,Unknown,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,"Free Trade Area of the Asia-Pacific, Supply Chain Connectivity","Unknown, Unknown",FY25,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
-,Technical Barriers to Trade,Unknown,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Digital Standards,Unknown,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Cloud Computing,Unknown,FY25,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,,Unknown,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Cloud Computing,Unknown,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Digital Standards,Unknown,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Supply Chain Connectivity,Unknown,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Services,Unknown,FY25,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
-,Digital Standards,Unknown,FY25,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
-,Digital Standards,Unknown,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
-,Free Trade Area of the Asia-Pacific,Unknown,FY25,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+,Technical Barriers to Trade,,FY25,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,Cloud Computing,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,"Free Trade Area of the Asia-Pacific, Supply Chain Connectivity",,FY25,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+,Technical Barriers to Trade,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,Digital Standards,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,Cloud Computing,,FY25,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,Cloud Computing,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,Digital Standards,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,Supply Chain Connectivity,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,Services,,FY25,Large (100+ employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+,Digital Standards,,FY25,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
+,Digital Standards,,FY25,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises)
+,Free Trade Area of the Asia-Pacific,,FY25,Small (10-49 employees),"Business, Trade and Industry Associations (including Chambers of Commerce)"
