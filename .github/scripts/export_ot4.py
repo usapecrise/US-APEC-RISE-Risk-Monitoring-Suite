@@ -22,7 +22,7 @@ DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream',
     'Engagement': 'Engagement',
-    'Firm': 'Name',
+    'Firm': 'Firm',
     'Resource': 'Resource'
 }
 
