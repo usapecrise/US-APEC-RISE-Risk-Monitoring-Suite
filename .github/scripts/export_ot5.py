@@ -9,21 +9,15 @@ BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'OT5 Private Sector Resources'
 VIEW_NAME = 'Grid view'
 
-# Linked tables and display fields (customize as needed)
+# Linked tables and display fields
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List',
-    'Firm': 'OT4 Private Sector Firms',
-    'Engagement': 'OT2 Private Sector Engagements'
-
 }
 
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream',
-    'Firm': 'Firm',
-    'Engagement': 'Engagement'
-
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -75,19 +69,27 @@ for record in main_records:
         if isinstance(linked_ids, list):
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
+        elif isinstance(linked_ids, str):
+            fields[f"{field_name} (Name)"] = linked_id_maps[field_name].get(linked_ids, 'Unknown')
 
-# Step 4: Export to CSV
+# Step 4: Export to CSV with only selected fields
 output_file = 'OT5.csv'
-with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    if main_records:
-        all_fieldnames = set()
-        for rec in main_records:
-            all_fieldnames.update(rec['fields'].keys())
-        fieldnames = list(all_fieldnames)
+fieldnames = [
+    'Firm (Name)',
+    'Economy (Name)',
+    'Workstream (Name)',
+    'Amount',
+    'Fiscal Year',
+    'U.S. FAOs Addressed',
+    'Resource Type',
+    'Resource Origin'
+]
 
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for rec in main_records:
-            writer.writerow(rec['fields'])
+with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for rec in main_records:
+        row = {field: rec['fields'].get(field, '') for field in fieldnames}
+        writer.writerow(row)
 
 print(f"✅ Export complete: {output_file}")
