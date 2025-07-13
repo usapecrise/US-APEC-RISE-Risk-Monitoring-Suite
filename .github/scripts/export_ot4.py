@@ -68,31 +68,37 @@ for record in main_records:
     fields = record.get('fields', {})
 
     firm_name = fields.get('Firm') or fields.get('Name') or fields.get('Organization Name') or 'Unknown'
+
     economy = [
         linked_id_maps['Economy'].get(eid, 'Unknown')
         for eid in fields.get('Economy', [])
-    ] or ['']
+        if eid in linked_id_maps['Economy']
+    ] or ['Unknown']
+
     workstreams = [
         linked_id_maps['Workstream'].get(wid, 'Unknown')
         for wid in fields.get('Workstream', [])
-    ] or ['']
-    fiscal_years = fields.get('Fiscal Year', []) or ['']
+        if wid in linked_id_maps['Workstream']
+    ] or ['Unknown']
+
+    fiscal_years = fields.get('Fiscal Year', [])
+    fiscal_years = fiscal_years if isinstance(fiscal_years, list) and fiscal_years else ['Unknown']
+
     pse_origin = fields.get('PSE Origin', '')
     pse_size = fields.get('PSE Size', '')
     pse_type = fields.get('PSE Type', '')
 
-    # Cartesian product of multi-select combinations
-for combo in product(workstreams, fiscal_years):
-    flattened_rows.append({
-        'Firm (Name)': firm_name,
-        'Economy (Name)': ', '.join(economy),
-        'Workstream (Name)': combo[0],
-        'Fiscal Year': combo[1],
-        'PSE Origin': pse_origin,
-        'PSE Size': pse_size,
-        'PSE Type': pse_type,
-        'Timestamp': datetime.utcnow().isoformat() + "Z"
-    })
+    for combo in product(workstreams, fiscal_years):
+        flattened_rows.append({
+            'Firm (Name)': firm_name,
+            'Economy (Name)': ', '.join(economy),
+            'Workstream (Name)': combo[0],
+            'Fiscal Year': combo[1],
+            'PSE Origin': pse_origin,
+            'PSE Size': pse_size,
+            'PSE Type': pse_type,
+            'Timestamp': datetime.utcnow().isoformat() + "Z"
+        })
 
 # Step 4: Export to final CSV
 output_file = 'OT4.csv'
