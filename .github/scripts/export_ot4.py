@@ -74,7 +74,7 @@ export_rows = []
 for record in main_records:
     fields = record['fields']
 
-    # Resolve linked multi-select fields
+    # Resolve linked fields to readable names
     for field_name in ['Workstream', 'Engagement', 'Economy', 'Resource']:
         linked_ids = fields.get(field_name, [])
         if isinstance(linked_ids, list):
@@ -85,7 +85,7 @@ for record in main_records:
     fiscal_year = fields.get('Fiscal Year', [])
     fields['Fiscal Year'] = ", ".join(fiscal_year) if isinstance(fiscal_year, list) else fiscal_year
 
-    # Firm name (plain text field)
+    # Firm name (plain text)
     firm_name = fields.get('Firm') or fields.get('Name') or fields.get('Organization Name')
     fields['Firm (Name)'] = firm_name if firm_name else 'Unknown'
 
@@ -112,7 +112,7 @@ with open(intermediate_file, 'w', newline='', encoding='utf-8') as f:
 
 print(f"✅ Clean file created: {intermediate_file}")
 
-# Step 5: Explode multi-value fields
+# Step 5: Explode multi-value fields and add timestamp
 df = pd.read_csv(intermediate_file)
 
 # Clean and split multi-select fields
@@ -130,12 +130,11 @@ for field in multi_fields:
     df = df.explode(field)
     df[field] = df[field].str.strip()
 
+# Add Timestamp column to each row
+timestamp = datetime.utcnow().isoformat() + "Z"
+df['Timestamp'] = timestamp
+
 # Final export
 final_file = 'OT4.csv'
 df.to_csv(final_file, index=False)
-
-# Append timestamp for GitHub commit detection
-with open(final_file, 'a') as f:
-    f.write(f"# Exported at {datetime.utcnow().isoformat()}Z\n")
-
 print(f"✅ Final exploded and Tableau-ready file created: {final_file}")
