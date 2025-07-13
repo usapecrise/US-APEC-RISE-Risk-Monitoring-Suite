@@ -77,7 +77,7 @@ for record in main_records:
 # Step 4: Export to CSV (Only selected fields)
 # Define the fields you want to include in the CSV
 EXPORT_FIELDS = [
-    'Firm Name',
+    'Firm (Name)',
     'Economy (Name)',
     'Workstream (Name)',
     'Engagement (Name)',
