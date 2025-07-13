@@ -67,6 +67,7 @@ for field, table in LINKED_TABLES.items():
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 
 # Step 3: Resolve linked record IDs to readable names and flatten Fiscal Year
+export_rows = []
 for record in main_records:
     fields = record['fields']
     
@@ -82,9 +83,14 @@ for record in main_records:
     if isinstance(fiscal_year, list):
         fields['Fiscal Year'] = ", ".join(fiscal_year)
 
+    firm_name = fields.get('Firm') or fields.get('Name') or fields.get('Organization Name')
+    fields['Firm (Name)'] = firm_name if firm_name else 'Unknown'
+    
+    export_rows.append(fields)
+
 # Step 4: Export to CSV
 EXPORT_FIELDS = [
-    'Firm,'
+    'Firm (Name),'
     'Economy (Name)',
     'Workstream (Name)',
     'Engagement (Name)',
