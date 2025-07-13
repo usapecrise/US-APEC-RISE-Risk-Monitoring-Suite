@@ -1,7 +1,9 @@
 import requests
 import csv
 import os
+import pandas as pd
 from urllib.parse import quote
+from datetime import datetime
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
@@ -27,7 +29,7 @@ DISPLAY_FIELDS = {
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-# Helper: fetch all records from a table
+# Fetch all records from Airtable
 def fetch_all_records(table, view=None):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
     if view:
@@ -50,6 +52,7 @@ def fetch_all_records(table, view=None):
         if not offset:
             break
 
+    print(f"✅ Fetched {len(all_records)} from {table}")
     return all_records
 
 # Step 1: Build lookup maps for linked fields
@@ -66,31 +69,32 @@ for field, table in LINKED_TABLES.items():
 # Step 2: Fetch main OT4 records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 
-# Step 3: Resolve linked record IDs to readable names and flatten Fiscal Year
+# Step 3: Resolve linked record IDs to display names and flatten fields
 export_rows = []
 for record in main_records:
     fields = record['fields']
-    
-    # Resolve linked record names
-    for field_name in LINKED_TABLES.keys():
+
+    # Resolve linked multi-select fields
+    for field_name in ['Workstream', 'Engagement', 'Economy', 'Resource']:
         linked_ids = fields.get(field_name, [])
         if isinstance(linked_ids, list):
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
 
-    # Flatten Fiscal Year list
+    # Flatten Fiscal Year
     fiscal_year = fields.get('Fiscal Year', [])
-    if isinstance(fiscal_year, list):
-        fields['Fiscal Year'] = ", ".join(fiscal_year)
+    fields['Fiscal Year'] = ", ".join(fiscal_year) if isinstance(fiscal_year, list) else fiscal_year
 
+    # Firm name (plain text field)
     firm_name = fields.get('Firm') or fields.get('Name') or fields.get('Organization Name')
     fields['Firm (Name)'] = firm_name if firm_name else 'Unknown'
-    
+
     export_rows.append(fields)
 
-# Step 4: Export to CSV
+# Step 4: Write intermediate CSV
+intermediate_file = 'OT4_clean.csv'
 EXPORT_FIELDS = [
-    'Firm (Name),'
+    'Firm (Name)',
     'Economy (Name)',
     'Workstream (Name)',
     'Engagement (Name)',
@@ -100,12 +104,38 @@ EXPORT_FIELDS = [
     'PSE Type'
 ]
 
-output_file = 'OT4.csv'
-with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    writer = csv.DictWriter(csvfile, fieldnames=EXPORT_FIELDS)
+with open(intermediate_file, 'w', newline='', encoding='utf-8') as f:
+    writer = csv.DictWriter(f, fieldnames=EXPORT_FIELDS)
     writer.writeheader()
-    for rec in main_records:
-        row = {field: rec['fields'].get(field, '') for field in EXPORT_FIELDS}
-        writer.writerow(row)
+    for row in export_rows:
+        writer.writerow({field: row.get(field, '') for field in EXPORT_FIELDS})
 
-print(f"✅ Export complete: {output_file}")
+print(f"✅ Clean file created: {intermediate_file}")
+
+# Step 5: Explode multi-value fields
+df = pd.read_csv(intermediate_file)
+
+# Clean and split multi-select fields
+multi_fields = ['Workstream (Name)', 'Engagement (Name)', 'Fiscal Year']
+for field in multi_fields:
+    df[field] = (
+        df[field]
+        .astype(str)
+        .str.replace(r"[\[\]']", "", regex=True)
+        .str.split(',')
+    )
+
+# Explode each multi-value field and strip whitespace
+for field in multi_fields:
+    df = df.explode(field)
+    df[field] = df[field].str.strip()
+
+# Final export
+final_file = 'OT4.csv'
+df.to_csv(final_file, index=False)
+
+# Append timestamp for GitHub commit detection
+with open(final_file, 'a') as f:
+    f.write(f"# Exported at {datetime.utcnow().isoformat()}Z\n")
+
+print(f"✅ Final exploded and Tableau-ready file created: {final_file}")
