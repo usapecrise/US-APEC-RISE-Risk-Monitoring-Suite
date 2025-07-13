@@ -85,7 +85,7 @@ for record in main_records:
 
 # Step 4: Export to CSV
 EXPORT_FIELDS = [
-    'Firm,
+    'Firm,'
     'Economy (Name)',
     'Workstream (Name)',
     'Engagement (Name)',
