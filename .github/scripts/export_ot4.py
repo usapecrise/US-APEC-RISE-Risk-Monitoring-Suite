@@ -16,16 +16,12 @@ VIEW_NAME = 'Grid view'
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List',
-    'Engagement': 'OT2 Private Sector Engagements',
-    'Resource': 'OT5 Private Sector Resources'
 }
 
 # Display field from each linked table
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream',
-    'Engagement': 'Engagement',
-    'Resource': 'Resource'
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -80,10 +76,6 @@ for record in main_records:
         linked_id_maps['Workstream'].get(wid, 'Unknown')
         for wid in fields.get('Workstream', [])
     ] or ['']
-    engagements = [
-        linked_id_maps['Engagement'].get(eid, 'Unknown')
-        for eid in fields.get('Engagement', [])
-    ] or ['']
     fiscal_years = fields.get('Fiscal Year', []) or ['']
     pse_origin = fields.get('PSE Origin', '')
     pse_size = fields.get('PSE Size', '')
@@ -95,7 +87,6 @@ for record in main_records:
             'Firm (Name)': firm_name,
             'Economy (Name)': ', '.join(economy),
             'Workstream (Name)': combo[0],
-            'Engagement (Name)': combo[1],
             'Fiscal Year': combo[2],
             'PSE Origin': pse_origin,
             'PSE Size': pse_size,
@@ -109,7 +100,6 @@ EXPORT_FIELDS = [
     'Firm (Name)',
     'Economy (Name)',
     'Workstream (Name)',
-    'Engagement (Name)',
     'Fiscal Year',
     'PSE Origin',
     'PSE Size',
