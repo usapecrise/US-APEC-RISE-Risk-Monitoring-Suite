@@ -14,7 +14,7 @@ LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List',
     'Engagement': 'OT2 Private Sector Engagements',
-    'Firm': 'OT5 Private Sector Resources'
+    'Resource': 'OT5 Private Sector Resources'
 }
 
 # Display field from each linked table
