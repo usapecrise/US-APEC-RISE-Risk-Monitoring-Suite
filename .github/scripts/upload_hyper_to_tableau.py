@@ -24,6 +24,10 @@ signin_payload = {
 }
 auth_response = requests.post(f"{BASE_URL}/auth/signin", json=signin_payload)
 auth_response.raise_for_status()
+print("⚠️ Tableau response body:")
+print(auth_response.text)
+
+auth_response.raise_for_status() 
 auth_data = auth_response.json()
 auth_token = auth_data["credentials"]["token"]
 site_id = auth_data["credentials"]["site"]["id"]
