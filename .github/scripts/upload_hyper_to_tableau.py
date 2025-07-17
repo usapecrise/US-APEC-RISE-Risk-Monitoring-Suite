@@ -14,12 +14,12 @@ PROJECT_ID = os.environ['TABLEAU_PROJECT_ID']
 API_VERSION = "3.21"
 BASE_URL = f"https://prod-useast-a.online.tableau.com/api/{API_VERSION}"
 
-# Step 1: Sign in to Tableau (JSON response)
+# Step 1: Sign in to Tableau (JSON mode)
 signin_payload = {
     "credentials": {
         "personalAccessTokenName": TOKEN_NAME,
         "personalAccessTokenSecret": TOKEN_SECRET,
-        "site": { "contentUrl": SITE_ID }
+        "site": {"contentUrl": SITE_ID}
     }
 }
 
@@ -53,12 +53,19 @@ for csv_file in csv_files:
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_file, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
             table_name = TableName("Extract", "Extract")
+
+            # ✅ Ensure schema exists
+            connection.catalog.create_schema("Extract")
+
+            # Infer schema from CSV headers
             with open(csv_file, 'r', encoding='utf-8-sig') as f:
                 header_line = f.readline().strip()
             columns = header_line.split(",")
+
             table_def = TableDefinition(table_name=table_name)
             for col in columns:
                 table_def.add_column(col.strip(), SqlType.text())
+
             connection.catalog.create_table(table_def)
 
             with Inserter(connection, table_def) as inserter:
@@ -95,3 +102,4 @@ for csv_file in csv_files:
 # Step 3: Sign out
 requests.post(f"{BASE_URL}/auth/signout", headers=headers)
 print("🔒 Signed out of Tableau session.")
+
