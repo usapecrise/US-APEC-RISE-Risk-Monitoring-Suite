@@ -6,7 +6,7 @@ from tableauhyperapi import (
     SqlType, TableDefinition, Inserter, TableName
 )
 
-# Load environment variables
+# Load environment variables from GitHub Secrets
 TOKEN_NAME = os.environ['TABLEAU_TOKEN_NAME']
 TOKEN_SECRET = os.environ['TABLEAU_TOKEN_SECRET']
 SITE_ID = os.environ['TABLEAU_SITE_ID']
@@ -14,26 +14,33 @@ PROJECT_ID = os.environ['TABLEAU_PROJECT_ID']
 API_VERSION = "3.21"
 BASE_URL = f"https://prod-useast-a.online.tableau.com/api/{API_VERSION}"
 
-# Step 1: Sign in to Tableau
+# Step 1: Sign in to Tableau (JSON response)
 signin_payload = {
     "credentials": {
         "personalAccessTokenName": TOKEN_NAME,
         "personalAccessTokenSecret": TOKEN_SECRET,
-        "site": {"contentUrl": SITE_ID}
+        "site": { "contentUrl": SITE_ID }
     }
 }
-auth_response = requests.post(f"{BASE_URL}/auth/signin", json=signin_payload)
-auth_response.raise_for_status()
-print("⚠️ Tableau response body:")
-print(auth_response.text)
 
-auth_response.raise_for_status() 
+auth_headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+}
+
+auth_response = requests.post(
+    f"{BASE_URL}/auth/signin",
+    json=signin_payload,
+    headers=auth_headers
+)
+auth_response.raise_for_status()
 auth_data = auth_response.json()
+
 auth_token = auth_data["credentials"]["token"]
 site_id = auth_data["credentials"]["site"]["id"]
-headers = {"X-Tableau-Auth": auth_token}
+headers = { "X-Tableau-Auth": auth_token }
 
-# Step 2: Convert all CSV files in root to HYPER and upload
+# Step 2: Convert all CSVs to .hyper and upload
 csv_files = glob.glob("*.csv")
 print(f"🔍 Found {len(csv_files)} CSV files: {csv_files}")
 
@@ -52,7 +59,6 @@ for csv_file in csv_files:
             table_def = TableDefinition(table_name=table_name)
             for col in columns:
                 table_def.add_column(col.strip(), SqlType.text())
-
             connection.catalog.create_table(table_def)
 
             with Inserter(connection, table_def) as inserter:
@@ -76,12 +82,15 @@ for csv_file in csv_files:
             ),
             'tableau_datasource': (hyper_file, file_data, 'application/octet-stream')
         }
+
         upload_url = f"{BASE_URL}/sites/{site_id}/datasources?overwrite=true"
         response = requests.post(upload_url, files=file_payload, headers=headers)
+
         if response.status_code == 201:
             print(f"✅ Successfully published {base_name}.hyper")
         else:
-            print(f"❌ Failed to publish {base_name}.hyper\n{response.text}")
+            print(f"❌ Failed to publish {base_name}.hyper")
+            print(response.status_code, response.text)
 
 # Step 3: Sign out
 requests.post(f"{BASE_URL}/auth/signout", headers=headers)
