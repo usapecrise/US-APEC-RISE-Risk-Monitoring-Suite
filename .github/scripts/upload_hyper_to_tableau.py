@@ -24,5 +24,7 @@ signin_payload = {
     }
 }
 auth_headers = {
-    "Content-Typ
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+}
 
