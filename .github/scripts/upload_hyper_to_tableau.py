@@ -15,6 +15,12 @@ PROJECT_ID = os.environ['TABLEAU_PROJECT_ID']
 API_VERSION = "3.21"
 BASE_URL = f"https://prod-useast-a.online.tableau.com/api/{API_VERSION}"
 
+print("🚦 Starting Tableau Hyper upload script")
+print(f"📁 Current directory: {os.getcwd()}")
+print(f"🔍 Looking for CSVs in: {os.listdir('.')}")
+csv_files = glob.glob("*.csv")
+print(f"🗂️ Matched CSV files: {csv_files}")
+
 # Step 1: Sign in to Tableau
 signin_payload = {
     "credentials": {
