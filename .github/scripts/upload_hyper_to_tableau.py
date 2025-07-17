@@ -68,9 +68,16 @@ for csv_file in csv_files:
 
             connection.catalog.create_table(table_def)
 
-            with Inserter(connection, table_def) as inserter:
-                inserter.add_rows_from_csv(csv_file)
-                inserter.execute()
+            import csv
+
+with Inserter(connection, table_def) as inserter:
+    with open(csv_file, 'r', encoding='utf-8-sig') as f:
+        reader = csv.reader(f)
+        next(reader)  # Skip header row
+        for row in reader:
+            inserter.add_row(row)
+    inserter.execute()
+
 
     # Step 2b: Upload .hyper to Tableau
     print(f"🚀 Uploading {hyper_file} to Tableau as datasource '{base_name}'...")
