@@ -73,7 +73,7 @@ for csv_file in csv_files:
             with Inserter(connection, table_def) as inserter:
                 with open(csv_file, "r", encoding="utf-8-sig") as f:
                     reader = csv.reader(f)
-                    next(reader)  # Skip header row
+                    next(reader)  # Skip header
                     inserter.add_rows(reader)
                 inserter.execute()
 
@@ -91,8 +91,14 @@ for csv_file in csv_files:
         print(f"🔍 Response: {upload_req.text}")
         continue
 
-
-    upload_id = upload_req.json()["fileUpload"]["uploadSessionId"]
+    try:
+        upload_json = upload_req.json()
+        upload_id = upload_json["fileUpload"]["uploadSessionId"]
+    except ValueError:
+        print("❌ Failed to parse upload response as JSON.")
+        print(f"🔍 Status: {upload_req.status_code}")
+        print(f"🔍 Response body:\n{upload_req.text or '[Empty response]'}")
+        continue
 
     with open(hyper_name, 'rb') as f:
         upload_resp = requests.put(
