@@ -104,15 +104,17 @@ for csv_file in csv_files:
         print(f"🔍 Response body:\n{upload_req.text or '[Empty response]'}")
         continue
 
-       with open(hyper_name, 'rb') as f:
-           upload_resp = requests.put(
-               f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
-               data=f,
-               headers={
-                   "X-Tableau-Auth": auth_token  # ✅ OMIT 'Content-Type'
-     
-        }
-    )
+    # ✅ Upload Hyper file using PUT
+    try:
+        with open(hyper_name, 'rb') as f:
+            upload_resp = requests.put(
+                f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
+                data=f,
+                headers={"X-Tableau-Auth": auth_token}
+            )
+    except Exception as e:
+        print(f"❌ Exception during upload of {hyper_name}: {e}")
+        continue
 
     if upload_resp.status_code != 200:
         print(f"🔥 Upload failed for {hyper_name}: Status {upload_resp.status_code}")
@@ -149,7 +151,7 @@ for csv_file in csv_files:
         print(f"🔥 Publish failed for {csv_file}: Status {publish_resp.status_code}")
         print(f"🔍 Response: {publish_resp.text}\n")
 
-# Sign out
+# ✅ Sign out
 requests.post(
     f"{BASE_URL}/auth/signout",
     headers={"X-Tableau-Auth": auth_token}
