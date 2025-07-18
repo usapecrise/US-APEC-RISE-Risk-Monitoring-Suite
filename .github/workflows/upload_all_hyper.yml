@@ -1,39 +1,36 @@
-name: Upload Hyper Files to Tableau
+name: Upload CSVs to Tableau
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - '**/*.csv'
+      - '**.csv'
       - '.github/scripts/upload_hyper_to_tableau.py'
+      - '.github/workflows/upload-to-tableau.yml'
 
 jobs:
-  upload-to-tableau:
+  build:
     runs-on: ubuntu-latest
 
-    env:
-      TABLEAU_PAT_NAME: ${{ secrets.TABLEAU_PAT_NAME }}
-      TABLEAU_PAT_SECRET: ${{ secrets.TABLEAU_PAT_SECRET }}
-      TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
-      TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
-
     steps:
-      - name: ⬇️ Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🐍 Set up Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: 📦 Install Python Dependencies
-        run: pip install tableauhyperapi requests
-
-      - name: 🧪 Check Required Secrets
+      - name: Install dependencies
         run: |
-          echo "TABLEAU_PAT_NAME = ${{ secrets.TABLEAU_PAT_NAME }}"
-          echo "TABLEAU_SITE_ID = ${{ secrets.TABLEAU_SITE_ID }}"
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: 🚀 Run Hyper Upload Script
+      - name: Run Tableau Hyper upload script
+        env:
+          TABLEAU_PAT_NAME: ${{ secrets.TABLEAU_PAT_NAME }}
+          TABLEAU_PAT_SECRET: ${{ secrets.TABLEAU_PAT_SECRET }}
+          TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
+          TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
+          TABLEAU_USER_ID: ${{ secrets.TABLEAU_USER_ID }}
         run: python .github/scripts/upload_hyper_to_tableau.py
-
