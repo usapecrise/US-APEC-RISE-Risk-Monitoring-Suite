@@ -104,13 +104,13 @@ for csv_file in csv_files:
         print(f"🔍 Response body:\n{upload_req.text or '[Empty response]'}")
         continue
 
-    with open(hyper_name, 'rb') as f:
-        upload_resp = requests.put(
-            f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
-            data=f,
-            headers={
-                "X-Tableau-Auth": auth_token,
-                "Content-Type": "application/octet-stream"
+       with open(hyper_name, 'rb') as f:
+           upload_resp = requests.put(
+               f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
+               data=f,
+               headers={
+                   "X-Tableau-Auth": auth_token  # ✅ OMIT 'Content-Type'
+     
         }
     )
 
