@@ -4,8 +4,8 @@ import requests
 from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Telemetry, Inserter, CreateMode
 
 # Tableau credentials from environment variables
-TABLEAU_PAT_NAME = os.environ["TABLEAU_TOKEN_NAME"]
-TABLEAU_PAT_SECRET = os.environ["TABLEAU_TOKEN_SECRET"]
+TABLEAU_PAT_NAME = os.environ["TABLEAU_PAT_NAME"]
+TABLEAU_PAT_SECRET = os.environ["TABLEAU_PAT_SECRET"]
 TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
 TABLEAU_USER_ID = os.environ["TABLEAU_USER_ID"]
 TABLEAU_PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
@@ -24,8 +24,8 @@ auth_response = requests.post(
     f"{BASE_URL}/auth/signin",
     json={
         "credentials": {
-            "personalAccessTokenName": TABLEAU_TOKEN_NAME,
-            "personalAccessTokenSecret": TABLEAU_TOKEN_SECRET,
+            "personalAccessTokenName": TABLEAU_PAT_NAME,
+            "personalAccessTokenSecret": TABLEAU_PAT_SECRET,
             "site": {"contentUrl": TABLEAU_SITE_ID}
         }
     }
