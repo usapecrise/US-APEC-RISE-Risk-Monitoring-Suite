@@ -92,19 +92,18 @@ for csv_file in csv_files:
         print(f"🔍 Response: {upload_req.text}")
         continue
 
-import xml.etree.ElementTree as ET
+    # ✅ Parse XML to get uploadSessionId
+    try:
+        root = ET.fromstring(upload_req.text)
+        ns = {"t": "http://tableau.com/api"}
+        upload_id = root.find(".//t:fileUpload", ns).attrib["uploadSessionId"]
+    except Exception as e:
+        print("❌ Failed to parse upload response as XML.")
+        print(f"🔍 Error: {e}")
+        print(f"🔍 Status: {upload_req.status_code}")
+        print(f"🔍 Response body:\n{upload_req.text or '[Empty response]'}")
+        continue
 
-try:
-    root = ET.fromstring(upload_req.text)
-    ns = {"t": "http://tableau.com/api"}
-    upload_id = root.find(".//t:fileUpload", ns).attrib["uploadSessionId"]
-except Exception as e:
-    print("❌ Failed to parse upload response as XML.")
-    print(f"🔍 Error: {e}")
-    print(f"🔍 Status: {upload_req.status_code}")
-    print(f"🔍 Response body:\n{upload_req.text or '[Empty response]'}")
-    continue
-    
     with open(hyper_name, 'rb') as f:
         upload_resp = requests.put(
             f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
