@@ -4,8 +4,8 @@ import requests
 from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Telemetry, Inserter, CreateMode
 
 # Tableau credentials from environment variables
-TABLEAU_PAT_NAME = os.environ["TABLEAU_PAT_NAME"]
-TABLEAU_PAT_SECRET = os.environ["TABLEAU_PAT_SECRET"]
+TABLEAU_PAT_NAME = os.environ["TABLEAU_TOKEN_NAME"]
+TABLEAU_PAT_SECRET = os.environ["TABLEAU_TOKEN_SECRET"]
 TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
 TABLEAU_USER_ID = os.environ["TABLEAU_USER_ID"]
 TABLEAU_PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
