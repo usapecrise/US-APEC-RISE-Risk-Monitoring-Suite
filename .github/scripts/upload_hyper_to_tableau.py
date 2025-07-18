@@ -14,7 +14,7 @@ PROJECT_ID = os.environ['TABLEAU_PROJECT_ID']
 # 📡 Tableau base URL
 BASE_URL = "https://prod-useast-a.online.tableau.com/api/3.21"
 
-print("\U0001F6A6 Starting Tableau Hyper upload script")
+print("🚦 Starting Tableau Hyper upload script")
 print(f"📁 Current directory: {os.getcwd()}")
 print(f"🔍 Looking for CSVs in: {os.listdir('.')}")
 
@@ -40,7 +40,7 @@ auth_payload = {
 }
 
 MAX_RETRIES = 3
-RETRY_DELAY = 10
+RETRY_DELAY = 10  # seconds
 
 for attempt in range(MAX_RETRIES):
     try:
@@ -74,12 +74,14 @@ headers = {
 # ✅ Loop through and convert/upload each CSV
 for csv_file in dataset_files:
     try:
+        print(f"\n⚙️ Converting {csv_file} to .hyper...")
+
         base_name = os.path.splitext(csv_file)[0]
         hyper_file = f"{base_name}.hyper"
-        print(f"\n⚙️ Converting {csv_file} to {hyper_file}")
 
         with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
             with Connection(endpoint=hyper.endpoint, database=hyper_file, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
+                print(f"📂 Connected to Hyper engine for {csv_file}")
                 table_name = TableName("Extract", "Extract")
                 connection.catalog.create_schema("Extract")
 
@@ -92,6 +94,7 @@ for csv_file in dataset_files:
                 for col in columns:
                     table_def.add_column(col, SqlType.text())
                 connection.catalog.create_table(table_def)
+                print(f"🧱 Table created: {columns}")
 
                 with Inserter(connection, table_def) as inserter:
                     with open(csv_file, 'r', encoding='utf-8-sig') as f:
@@ -102,45 +105,47 @@ for csv_file in dataset_files:
                     inserter.execute()
                 print(f"✅ Finished inserting rows from {csv_file}")
 
+        print(f"📦 Size of {hyper_file}: {os.path.getsize(hyper_file)} bytes")
         print(f"🚀 Uploading {hyper_file} to Tableau staging...")
 
-        with open(hyper_file, 'rb') as f:
-            upload_response = requests.post(
-                f"{BASE_URL}/sites/{site_id}/fileUploads",
-                headers={**headers, "Content-Type": "application/octet-stream"},
-                data=f.read()
-            )
+        with open(hyper_file, 'rb') as file_data:
+            file_bytes = file_data.read()
 
-        if upload_response.status_code != 200:
-            raise Exception(f"File upload failed: {upload_response.text}")
+        upload_url = f"{BASE_URL}/sites/{site_id}/fileUploads"
+        upload_headers = headers.copy()
+        upload_headers['Content-Type'] = 'application/octet-stream'
+        upload_response = requests.post(upload_url, headers=upload_headers, data=file_bytes)
 
-        upload_session_id = upload_response.json()['fileUpload']['uploadSessionId']
+        if upload_response.status_code == 200:
+            upload_session_id = upload_response.json()['fileUpload']['uploadSessionId']
+            print(f"✅ Uploaded {hyper_file} to staging. Session ID: {upload_session_id}")
 
-        publish_payload = f"""
+            publish_url = f"{BASE_URL}/sites/{site_id}/datasources?uploadSessionId={upload_session_id}&datasourceType=hyper&overwrite=true"
+            publish_payload = f"""
             <tsRequest>
               <datasource name=\"{base_name}\">
                 <project id=\"{PROJECT_ID}\" />
               </datasource>
             </tsRequest>
-        """.strip()
+            """
+            publish_headers = headers.copy()
+            publish_headers['Content-Type'] = 'application/xml'
+            publish_response = requests.post(publish_url, headers=publish_headers, data=publish_payload.encode('utf-8'))
 
-        publish_response = requests.post(
-            f"{BASE_URL}/sites/{site_id}/datasources?uploadSessionId={upload_session_id}&datasourceType=hyper&overwrite=true",
-            headers={**headers, "Content-Type": "application/xml"},
-            data=publish_payload.encode('utf-8')
-        )
-
-        if publish_response.status_code == 201:
-            print(f"✅ Successfully published {hyper_file} to Tableau")
+            if publish_response.status_code == 201:
+                print(f"✅ Published {base_name}.hyper to Tableau")
+            else:
+                print(f"❌ Failed to publish {base_name}.hyper")
+                print(f"Status: {publish_response.status_code}, Message: {publish_response.text}")
         else:
-            print(f"❌ Failed to publish {hyper_file} to Tableau")
-            print(publish_response.text)
+            print(f"🔥 Error with {csv_file}: File upload failed: {upload_response.text}")
 
         os.remove(hyper_file)
 
     except Exception as e:
-        print(f"🔥 Error with {csv_file}: {e}")
+        print(f"🔥 Error processing {csv_file}: {e}")
 
 # ❄️ Sign out of Tableau
 requests.post(f"{BASE_URL}/auth/signout", headers=headers)
 print("\n🚪 Signed out of Tableau")
+
