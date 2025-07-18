@@ -1,4 +1,5 @@
 import os
+import csv
 import requests
 from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Telemetry, Inserter, CreateMode
 
