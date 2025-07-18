@@ -12,7 +12,7 @@ SITE_ID = os.environ['TABLEAU_SITE_ID']
 PROJECT_ID = os.environ['TABLEAU_PROJECT_ID']
 
 # 📡 Tableau base URL
-BASE_URL = "https://api.tableau.com/api/3.21"
+BASE_URL = "https://prod-useast-a.online.tableau.com/api/3.21"
 
 print("🚦 Starting Tableau Hyper upload script")
 print(f"📁 Current directory: {os.getcwd()}")
