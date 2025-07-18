@@ -112,8 +112,9 @@ for csv_file in dataset_files:
                 }
             )
         if upload_resp.status_code != 200:
-            raise Exception(f"🔥 Upload failed: {upload_resp.text}")
-        print(f"📤 Uploaded {hyper_file} (session ID: {upload_id})")
+            raise Exception(f"🔥 Upload failed (status {upload_resp.status_code}):\n{upload_resp.text or '[No response body]'}")
+        else:
+            print(f"📤 Uploaded {hyper_file} successfully (status {upload_resp.status_code})")
 
         # Step 3: Publish as datasource
         publish_url = f"{BASE_URL}/sites/{site_id}/datasources?uploadSessionId={upload_id}&datasourceType=hyper&overwrite=true"
