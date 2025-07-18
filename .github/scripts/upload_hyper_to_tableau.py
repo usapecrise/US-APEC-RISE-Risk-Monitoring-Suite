@@ -105,10 +105,10 @@ for csv_file in csv_files:
         continue
 
     with open(hyper_name, 'rb') as f:
-    upload_resp = requests.post(
-        f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
-        headers={"X-Tableau-Auth": auth_token},
-        files={"file": (os.path.basename(hyper_name), f, "application/octet-stream")}
+        upload_resp = requests.post(
+            f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
+            headers={"X-Tableau-Auth": auth_token},
+            files={"file": (os.path.basename(hyper_name), f, "application/octet-stream")}
     )
 
     if upload_resp.status_code != 200:
