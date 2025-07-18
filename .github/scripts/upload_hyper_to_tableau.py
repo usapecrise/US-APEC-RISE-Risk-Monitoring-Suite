@@ -60,21 +60,21 @@ for csv_file in csv_files:
     print(f"⚙️ Converting {csv_file} to .hyper...")
 
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-    with Connection(endpoint=hyper.endpoint, database=hyper_name, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
-        with open(csv_file, "r", encoding="utf-8-sig") as f:
-            header = f.readline().strip().split(",")
-
-        table_def = TableDefinition(table_name="Extract")
-        for col in header:
-            table_def.add_column(col, SqlType.text())
-        connection.catalog.create_table(table_def)
-
-        with Inserter(connection, table_def) as inserter:
+        with Connection(endpoint=hyper.endpoint, database=hyper_name, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
             with open(csv_file, "r", encoding="utf-8-sig") as f:
-                reader = csv.reader(f)
-                next(reader)  # Skip header row
-                inserter.add_rows(reader)
-            inserter.execute()
+                header = f.readline().strip().split(",")
+
+            table_def = TableDefinition(table_name="Extract")
+            for col in header:
+                table_def.add_column(col, SqlType.text())
+            connection.catalog.create_table(table_def)
+
+            with Inserter(connection, table_def) as inserter:
+                with open(csv_file, "r", encoding="utf-8-sig") as f:
+                    reader = csv.reader(f)
+                    next(reader)  # Skip header row
+                    inserter.add_rows(reader)
+                inserter.execute()
 
     file_size = os.path.getsize(hyper_name)
     print(f"📦 Size of {hyper_name}: {file_size} bytes")
