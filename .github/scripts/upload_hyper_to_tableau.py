@@ -78,18 +78,22 @@ for csv_file in dataset_files:
                     inserter.execute()
 
         # Step 1: Upload file to Tableau
-        print(f"🚀 Uploading {hyper_file} to Tableau staging...")
-        with open(hyper_file, 'rb') as f:
-            upload_response = requests.post(
-                f"{BASE_URL}/sites/{site_id}/fileUploads",
-                headers=headers,
-                files={"file": f}
-            )
+       print(f"🚀 Uploading {hyper_file} to Tableau staging...")
 
-        if upload_response.status_code != 200:
-            raise Exception(f"File upload failed: {upload_response.text}")
+       with open(hyper_file, 'rb') as f:
+           file_data = f.read()  # Read raw bytes
 
-        upload_session_id = upload_response.json()['fileUpload']['uploadSessionId']
+       upload_response = requests.post(
+           f"{BASE_URL}/sites/{site_id}/fileUploads",
+           headers={**headers, "Content-Type": "application/octet-stream"},
+           data=file_data
+)
+
+      if upload_response.status_code != 200:
+          raise Exception(f"File upload failed: {upload_response.text}")
+
+      upload_session_id = upload_response.json()['fileUpload']['uploadSessionId']
+
 
         # Step 2: Publish .hyper from staging to Tableau
         print(f"📦 Publishing {base_name}.hyper to Tableau project...")
