@@ -21,6 +21,7 @@ print(f"🗂️ Matched CSV files: {csv_files}")
 print("🔑 Authenticating with Tableau...")
 auth_response = requests.post(
     f"{BASE_URL}/auth/signin",
+    headers={"Accept": "application/json"},
     json={
         "credentials": {
             "personalAccessTokenName": TABLEAU_PAT_NAME,
