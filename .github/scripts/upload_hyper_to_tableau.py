@@ -86,9 +86,11 @@ for csv_file in csv_files:
         headers={"X-Tableau-Auth": auth_token}
     )
 
-    if upload_req.status_code != 200:
+    if upload_req.status_code not in (200, 201):
         print(f"🔥 Upload session failed for {csv_file}: {upload_req.status_code}")
+        print(f"🔍 Response: {upload_req.text}")
         continue
+
 
     upload_id = upload_req.json()["fileUpload"]["uploadSessionId"]
 
