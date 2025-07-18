@@ -23,8 +23,8 @@ jobs:
 
       - name: Upload All Hyper Files to Tableau
         env:
-          TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_TOKEN_NAME }}
-          TABLEAU_TOKEN_SECRET: ${{ secrets.TABLEAU_TOKEN_SECRET }}
+          TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_PAT_NAME }}
+          TABLEAU_TOKEN_SECRET: ${{ secrets.TABLEAU_PAT_SECRET }}
           TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
           TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
           TABLEAU_USER_ID: ${{ secrets.TABLEAU_USER_ID }}
