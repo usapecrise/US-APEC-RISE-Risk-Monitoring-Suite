@@ -1,5 +1,5 @@
-Last Updated,Economy (Name),Indicator ID,Workstream,Workstream (Name),Economy
-2025-07-17T09:48:27.514569,Australia,OC1,['recO6Wye9q46CaYxb'],Digital Standards,['recDqTNOBKhjhCrKi']
-2025-07-17T09:48:27.514569,Brunei Darussalam,OC1,['recqvqMEpTfZTKevx'],Technical Barriers to Trade,['recHl6lfQpjvbcZqE']
-2025-07-17T09:48:27.514569,Canada,OC1,,,['reckjm7JH9PAcSfTJ']
-2025-07-17T09:48:27.514569,,OC1,,,
+Last Updated,Indicator ID,Economy (Name),Workstream (Name),Economy,Workstream
+2025-07-18T09:49:08.135827,OC1,Australia,Digital Standards,['recDqTNOBKhjhCrKi'],['recO6Wye9q46CaYxb']
+2025-07-18T09:49:08.135827,OC1,Brunei Darussalam,Technical Barriers to Trade,['recHl6lfQpjvbcZqE'],['recqvqMEpTfZTKevx']
+2025-07-18T09:49:08.135827,OC1,Canada,,['reckjm7JH9PAcSfTJ'],
+2025-07-18T09:49:08.135827,OC1,,,,
