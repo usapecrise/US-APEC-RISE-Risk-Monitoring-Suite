@@ -1,108 +1,102 @@
 import os
-import csv
 import requests
-import uuid
-from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Telemetry, Inserter, CreateMode
+import xml.etree.ElementTree as ET
+from tableauhyperapi import HyperProcess, Connection, Telemetry, TableDefinition, SqlType, Inserter, TableName, CreateMode
+import pandas as pd
+from requests_toolbelt import MultipartEncoder
 
-# Tableau credentials from environment variables
+# 🔑 Load environment variables
+TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
+TABLEAU_USER_ID = os.environ["TABLEAU_USER_ID"]
 TABLEAU_PAT_NAME = os.environ["TABLEAU_PAT_NAME"]
 TABLEAU_PAT_SECRET = os.environ["TABLEAU_PAT_SECRET"]
-TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
 TABLEAU_PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
-BASE_URL = "https://prod-useast-a.online.tableau.com/api/3.21"
+TABLEAU_REST_URL = os.environ["TABLEAU_REST_URL"]
 
-def create_multipart_payload(hyper_path, datasource_name, project_id):
-    boundary = f"----WebKitFormBoundary{uuid.uuid4().hex}"
-    with open(hyper_path, "rb") as f:
-        hyper_data = f.read()
-
-    xml_part = f"""--{boundary}
-Content-Disposition: name="request_payload"
-Content-Type: text/xml
-
-<tsRequest>
-  <datasource name="{datasource_name}">
-    <project id="{project_id}" />
-  </datasource>
-</tsRequest>
-"""
-
-    hyper_part = f"""--{boundary}
-Content-Disposition: name="tableau_datasource"; filename="{datasource_name}.hyper"
-Content-Type: application/octet-stream
-
-""".encode("utf-8") + hyper_data + f"\n--{boundary}--".encode("utf-8")
-
-    return boundary, xml_part.encode("utf-8") + hyper_part
-
-print("🚦 Starting Tableau Hyper upload script")
-print(f"📁 Current directory: {os.getcwd()}")
-
-csv_files = [f for f in os.listdir(".") if f.endswith(".csv")]
-print(f"🗂️ Matched CSV files: {csv_files}")
-
-# Authenticate
-print("🔑 Authenticating with Tableau...")
-auth_resp = requests.post(
-    f"{BASE_URL}/auth/signin",
-    headers={"Accept": "application/json"},
-    json={
+# 🚀 Authenticate
+def authenticate():
+    auth_payload = {
         "credentials": {
             "personalAccessTokenName": TABLEAU_PAT_NAME,
             "personalAccessTokenSecret": TABLEAU_PAT_SECRET,
-            "site": {"contentUrl": TABLEAU_SITE_ID}
+            "site": {"contentUrl": ""}
         }
     }
-)
-auth_resp.raise_for_status()
-auth_data = auth_resp.json()
-auth_token = auth_data["credentials"]["token"]
-site_id = auth_data["credentials"]["site"]["id"]
-print("✅ Tableau auth successful\n")
+    response = requests.post(f"{TABLEAU_REST_URL}/auth/signin", json=auth_payload)
+    response.raise_for_status()
+    token = response.json()["credentials"]["token"]
+    site_id = response.json()["credentials"]["site"]["id"]
+    user_id = response.json()["credentials"]["user"]["id"]
+    return token, site_id, user_id
 
-# Process each CSV
-for csv_file in csv_files:
-    hyper_name = csv_file.replace(".csv", ".hyper")
-    print(f"⚙️ Converting {csv_file} to {hyper_name}...")
+# 🧼 Clean up and sign out
+def sign_out(token):
+    headers = {"X-Tableau-Auth": token}
+    requests.post(f"{TABLEAU_REST_URL}/auth/signout", headers=headers)
 
-    with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-        with Connection(endpoint=hyper.endpoint, database=hyper_name, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
-            with open(csv_file, "r", encoding="utf-8-sig") as f:
-                headers = f.readline().strip().split(",")
-
-            table_def = TableDefinition(table_name="Extract")
-            for col in headers:
-                table_def.add_column(col, SqlType.text())
+# 🔁 CSV → HYPER
+def convert_csv_to_hyper(csv_file, hyper_file):
+    df = pd.read_csv(csv_file)
+    with HyperProcess(Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
+        with Connection(endpoint=hyper.endpoint, database=hyper_file, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
+            cols = [TableDefinition.Column(col, SqlType.text()) for col in df.columns]
+            table_def = TableDefinition(table_name=TableName("Extract", "Extract"), columns=cols)
             connection.catalog.create_table(table_def)
-
             with Inserter(connection, table_def) as inserter:
-                with open(csv_file, "r", encoding="utf-8-sig") as f:
-                    reader = csv.reader(f)
-                    next(reader)
-                    inserter.add_rows(reader)
+                inserter.add_rows(df.values.tolist())
                 inserter.execute()
 
-    print(f"📦 Created {hyper_name} ({os.path.getsize(hyper_name)} bytes)")
+# 📤 Upload + Publish HYPER
+def publish_to_tableau(hyper_file, token, site_id):
+    headers = {"X-Tableau-Auth": token}
+    metadata = f"""
+    <tsRequest>
+        <datasource name="{hyper_file.stem}" >
+            <project id="{TABLEAU_PROJECT_ID}" />
+        </datasource>
+    </tsRequest>
+    """.strip()
 
-    print(f"📤 Publishing {hyper_name} to Tableau...")
-    boundary, payload = create_multipart_payload(hyper_name, csv_file.replace(".csv", ""), TABLEAU_PROJECT_ID)
-
-    publish_url = f"{BASE_URL}/sites/{site_id}/datasources?datasourceType=hyper"
-    publish_resp = requests.post(
-        publish_url,
-        headers={
-            "X-Tableau-Auth": auth_token,
-            "Content-Type": f"multipart/mixed; boundary={boundary}"
+    m = MultipartEncoder(
+        fields={
+            "request_payload": ("", metadata, "text/xml"),
+            "tableau_datasource": (hyper_file.name, open(hyper_file, "rb"), "application/octet-stream")
         },
-        data=payload
+        boundary="----WebKitFormBoundary7MA4YWxkTrZu0gW"
     )
 
-    if publish_resp.status_code == 201:
-        print(f"✅ Published {csv_file} as a datasource.\n")
-    else:
-        print(f"🔥 Failed to publish {csv_file}: {publish_resp.status_code}")
-        print(f"🔍 Response: {publish_resp.text}\n")
+    publish_url = f"{TABLEAU_REST_URL}/sites/{site_id}/datasources?uploadSessionId={hyper_file.stem}&datasourceType=hyper&overwrite=true"
+    response = requests.post(publish_url, data=m, headers={
+        "X-Tableau-Auth": token,
+        "Content-Type": m.content_type
+    })
 
-# Sign out
-requests.post(f"{BASE_URL}/auth/signout", headers={"X-Tableau-Auth": auth_token})
-print("🚪 Signed out of Tableau")
+    if response.status_code == 201:
+        print(f"✅ Published: {hyper_file.name}")
+    else:
+        print(f"🔥 Failed to publish {hyper_file.name}: {response.status_code}")
+        print(f"🔍 Response: {response.text}")
+
+# 🧠 Main logic
+def main():
+    print("🚦 Starting Tableau Hyper upload script")
+    csv_files = [f for f in os.listdir() if f.endswith(".csv")]
+    print(f"🗂️ Matched CSV files: {csv_files}")
+
+    token, site_id, user_id = authenticate()
+    print("✅ Tableau auth successful")
+
+    for csv in csv_files:
+        hyper = csv.replace(".csv", ".hyper")
+        print(f"\n⚙️ Converting {csv} to {hyper}...")
+        convert_csv_to_hyper(csv, hyper)
+        print(f"📦 Created {hyper} ({os.path.getsize(hyper)} bytes)")
+        print(f"📤 Publishing {hyper} to Tableau...")
+        publish_to_tableau(Path(hyper), token, site_id)
+
+    sign_out(token)
+    print("🚪 Signed out of Tableau")
+
+if __name__ == "__main__":
+    from pathlib import Path
+    main()
