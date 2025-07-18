@@ -29,8 +29,25 @@ auth_response = requests.post(
         }
     }
 )
-auth_response.raise_for_status()
-auth_data = auth_response.json()
+
+print(f"🔍 Auth response status: {auth_response.status_code}")
+print(f"🔍 Auth response body:\n{auth_response.text}")
+
+try:
+    auth_response.raise_for_status()
+    auth_data = auth_response.json()
+except requests.exceptions.HTTPError as e:
+    print(f"❌ HTTP error during authentication: {e}")
+    exit(1)
+except requests.exceptions.JSONDecodeError:
+    print("❌ Failed to decode Tableau auth response as JSON.")
+    print("🔎 This usually means:")
+    print("   - PAT name or secret is invalid")
+    print("   - SITE ID is incorrect")
+    print("   - BASE_URL is wrong")
+    print("   - Tableau Cloud is temporarily down")
+    exit(1)
+
 auth_token = auth_data["credentials"]["token"]
 site_id = auth_data["credentials"]["site"]["id"]
 user_id = auth_data["credentials"]["user"]["id"]
@@ -94,7 +111,7 @@ for csv_file in csv_files:
 
     xml_payload = f"""
     <tsRequest>
-      <datasource name="{csv_file.replace('.csv', '')}" >
+      <datasource name="{csv_file.replace('.csv', '')}">
         <project id="{TABLEAU_PROJECT_ID}" />
       </datasource>
     </tsRequest>
