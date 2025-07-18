@@ -1,6 +1,7 @@
 import os
 import csv
 import requests
+import xml.etree.ElementTree as ET
 from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Telemetry, Inserter, CreateMode
 
 # Tableau credentials from environment variables
@@ -91,15 +92,19 @@ for csv_file in csv_files:
         print(f"🔍 Response: {upload_req.text}")
         continue
 
-    try:
-        upload_json = upload_req.json()
-        upload_id = upload_json["fileUpload"]["uploadSessionId"]
-    except ValueError:
-        print("❌ Failed to parse upload response as JSON.")
-        print(f"🔍 Status: {upload_req.status_code}")
-        print(f"🔍 Response body:\n{upload_req.text or '[Empty response]'}")
-        continue
+import xml.etree.ElementTree as ET
 
+try:
+    root = ET.fromstring(upload_req.text)
+    ns = {"t": "http://tableau.com/api"}
+    upload_id = root.find(".//t:fileUpload", ns).attrib["uploadSessionId"]
+except Exception as e:
+    print("❌ Failed to parse upload response as XML.")
+    print(f"🔍 Error: {e}")
+    print(f"🔍 Status: {upload_req.status_code}")
+    print(f"🔍 Response body:\n{upload_req.text or '[Empty response]'}")
+    continue
+    
     with open(hyper_name, 'rb') as f:
         upload_resp = requests.put(
             f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
