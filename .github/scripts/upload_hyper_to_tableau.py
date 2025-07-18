@@ -8,11 +8,10 @@ from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, 
 TABLEAU_PAT_NAME = os.environ["TABLEAU_PAT_NAME"]
 TABLEAU_PAT_SECRET = os.environ["TABLEAU_PAT_SECRET"]
 TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
-TABLEAU_USER_ID = os.environ["TABLEAU_USER_ID"]
 TABLEAU_PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
 BASE_URL = "https://prod-useast-a.online.tableau.com/api/3.21"
 
-print("\U0001F6A6 Starting Tableau Hyper upload script")
+print("🚦 Starting Tableau Hyper upload script")
 print(f"📁 Current directory: {os.getcwd()}")
 
 # Locate all CSVs
@@ -33,19 +32,8 @@ auth_response = requests.post(
     }
 )
 
-print(f"🔍 Auth response status: {auth_response.status_code}")
-print(f"🔍 Auth response body:\n{auth_response.text}")
-
-try:
-    auth_response.raise_for_status()
-    auth_data = auth_response.json()
-except requests.exceptions.HTTPError as e:
-    print(f"❌ HTTP error during authentication: {e}")
-    exit(1)
-except requests.exceptions.JSONDecodeError:
-    print("❌ Failed to decode Tableau auth response as JSON.")
-    exit(1)
-
+auth_response.raise_for_status()
+auth_data = auth_response.json()
 auth_token = auth_data["credentials"]["token"]
 site_id = auth_data["credentials"]["site"]["id"]
 user_id = auth_data["credentials"]["user"]["id"]
@@ -69,64 +57,49 @@ for csv_file in csv_files:
             with Inserter(connection, table_def) as inserter:
                 with open(csv_file, "r", encoding="utf-8-sig") as f:
                     reader = csv.reader(f)
-                    next(reader)  # Skip header
+                    next(reader)
                     inserter.add_rows(reader)
                 inserter.execute()
 
-    file_size = os.path.getsize(hyper_name)
-    print(f"📦 Size of {hyper_name}: {file_size} bytes")
+    print(f"📦 Size of {hyper_name}: {os.path.getsize(hyper_name)} bytes")
 
-    print(f"🚀 Uploading {hyper_name} to Tableau staging...")
-    upload_req = requests.post(
+    print(f"🚀 Initiating file upload session for {hyper_name}...")
+    upload_session = requests.post(
         f"{BASE_URL}/sites/{site_id}/fileUploads",
         headers={"X-Tableau-Auth": auth_token}
     )
 
-    if upload_req.status_code not in (200, 201):
-        print(f"🔥 Upload session failed for {csv_file}: {upload_req.status_code}")
-        print(f"🔍 Response: {upload_req.text}")
-        continue
+    upload_session.raise_for_status()
+    upload_id = ET.fromstring(upload_session.text).find(".//{http://tableau.com/api}fileUpload").attrib["uploadSessionId"]
 
-    try:
-        root = ET.fromstring(upload_req.text)
-        ns = {"t": "http://tableau.com/api"}
-        upload_id = root.find(".//t:fileUpload", ns).attrib["uploadSessionId"]
-    except Exception as e:
-        print("❌ Failed to parse upload response as XML.")
-        print(f"🔍 Error: {e}")
-        continue
-
-    # ✅ Correctly upload .hyper file with PUT
-    with open(hyper_name, 'rb') as f:
+    print(f"📤 Uploading {hyper_name} to Tableau (uploadSessionId={upload_id})...")
+    with open(hyper_name, "rb") as file_data:
         upload_resp = requests.put(
             f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
             headers={
                 "X-Tableau-Auth": auth_token,
                 "Content-Type": "application/octet-stream"
             },
-            data=f
+            data=file_data
         )
 
     if upload_resp.status_code != 200:
-        print(f"🔥 Upload failed for {hyper_name}: Status {upload_resp.status_code}")
-        print(f"🔍 Raw response: {upload_resp.text if upload_resp.text else '[No response body]'}")
+        print(f"🔥 Upload failed for {hyper_name}: {upload_resp.status_code}")
+        print(f"🔍 Response: {upload_resp.text}")
         continue
 
-    print(f"✅ Uploaded {hyper_name} to staging")
+    print(f"✅ Uploaded {hyper_name} to Tableau")
 
-    # Publish the uploaded .hyper file
-    print(f"📡 Publishing {hyper_name} as data source...")
-
-    publish_url = f"{BASE_URL}/sites/{site_id}/datasources?uploadSessionId={upload_id}&datasourceType=hyper"
-
+    print(f"📡 Publishing {csv_file} as a new datasource...")
     xml_payload = f"""
     <tsRequest>
-      <datasource name=\"{csv_file.replace('.csv', '')}\">
-        <project id=\"{TABLEAU_PROJECT_ID}\" />
-      </datasource>
+        <datasource name="{csv_file.replace('.csv', '')}">
+            <project id="{TABLEAU_PROJECT_ID}" />
+        </datasource>
     </tsRequest>
     """.strip()
 
+    publish_url = f"{BASE_URL}/sites/{site_id}/datasources?uploadSessionId={upload_id}&datasourceType=hyper"
     publish_resp = requests.post(
         publish_url,
         headers={
@@ -137,15 +110,11 @@ for csv_file in csv_files:
     )
 
     if publish_resp.status_code == 201:
-        print(f"✅ Published {csv_file.replace('.csv', '')} to Tableau project.\n")
+        print(f"✅ Successfully published {csv_file.replace('.csv', '')} to Tableau.\n")
     else:
-        print(f"🔥 Publish failed for {csv_file}: Status {publish_resp.status_code}")
+        print(f"🔥 Publish failed for {csv_file}: {publish_resp.status_code}")
         print(f"🔍 Response: {publish_resp.text}\n")
 
 # Sign out
-requests.post(
-    f"{BASE_URL}/auth/signout",
-    headers={"X-Tableau-Auth": auth_token}
-)
+requests.post(f"{BASE_URL}/auth/signout", headers={"X-Tableau-Auth": auth_token})
 print("🚪 Signed out of Tableau")
-
