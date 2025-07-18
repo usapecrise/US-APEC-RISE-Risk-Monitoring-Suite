@@ -24,8 +24,8 @@ auth_response = requests.post(
     f"{BASE_URL}/auth/signin",
     json={
         "credentials": {
-            "personalAccessTokenName": TABLEAU_PAT_NAME,
-            "personalAccessTokenSecret": TABLEAU_PAT_SECRET,
+            "personalAccessTokenName": TABLEAU_TOKEN_NAME,
+            "personalAccessTokenSecret": TABLEAU_TOKEN_SECRET,
             "site": {"contentUrl": TABLEAU_SITE_ID}
         }
     }
