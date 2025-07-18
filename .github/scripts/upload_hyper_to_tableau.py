@@ -1,5 +1,4 @@
 import os
-import glob
 import requests
 from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Telemetry, Inserter, CreateMode
 
@@ -11,15 +10,15 @@ TABLEAU_USER_ID = os.environ["TABLEAU_USER_ID"]
 TABLEAU_PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
 BASE_URL = "https://prod-useast-a.online.tableau.com/api/3.21"
 
-print("\U0001F6A6 Starting Tableau Hyper upload script")
-print(f"\U0001F4C1 Current directory: {os.getcwd()}")
+print("🚦 Starting Tableau Hyper upload script")
+print(f"📁 Current directory: {os.getcwd()}")
 
 # Locate all CSVs
 csv_files = [f for f in os.listdir(".") if f.endswith(".csv")]
-print(f"\U0001F5C2️ Matched CSV files: {csv_files}")
+print(f"🗂️ Matched CSV files: {csv_files}")
 
 # Authenticate to Tableau
-print("\U0001F511 Authenticating with Tableau...")
+print("🔑 Authenticating with Tableau...")
 auth_response = requests.post(
     f"{BASE_URL}/auth/signin",
     json={
@@ -40,13 +39,13 @@ print("✅ Tableau auth successful\n")
 # Start Hyper conversion and upload
 for csv_file in csv_files:
     hyper_name = csv_file.replace(".csv", ".hyper")
-    print(f"\u2699\ufe0f Converting {csv_file} to .hyper...")
+    print(f"⚙️ Converting {csv_file} to .hyper...")
 
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_name, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
             with open(csv_file, "r", encoding="utf-8-sig") as f:
                 header = f.readline().strip().split(",")
-            
+
             table_def = TableDefinition(table_name="Extract")
             for col in header:
                 table_def.add_column(col, SqlType.text())
@@ -60,7 +59,6 @@ for csv_file in csv_files:
     print(f"📦 Size of {hyper_name}: {file_size} bytes")
 
     print(f"🚀 Uploading {hyper_name} to Tableau staging...")
-
     upload_req = requests.post(
         f"{BASE_URL}/sites/{site_id}/fileUploads",
         headers={"X-Tableau-Auth": auth_token}
@@ -89,11 +87,37 @@ for csv_file in csv_files:
 
     print(f"✅ Uploaded {hyper_name} to staging")
 
-    # Optional: You could publish here or do it later
+    # ✅ Publish the uploaded .hyper as a data source
+    print(f"📡 Publishing {hyper_name} as data source...")
+
+    publish_url = f"{BASE_URL}/sites/{site_id}/datasources?uploadSessionId={upload_id}&datasourceType=hyper"
+
+    xml_payload = f"""
+    <tsRequest>
+      <datasource name="{csv_file.replace('.csv', '')}" >
+        <project id="{TABLEAU_PROJECT_ID}" />
+      </datasource>
+    </tsRequest>
+    """.strip()
+
+    publish_resp = requests.post(
+        publish_url,
+        headers={
+            "X-Tableau-Auth": auth_token,
+            "Content-Type": "application/xml"
+        },
+        data=xml_payload.encode("utf-8")
+    )
+
+    if publish_resp.status_code == 201:
+        print(f"✅ Published {csv_file.replace('.csv', '')} to Tableau project.\n")
+    else:
+        print(f"🔥 Publish failed for {csv_file}: Status {publish_resp.status_code}")
+        print(f"🔍 Response: {publish_resp.text}\n")
 
 # Sign out
 requests.post(
     f"{BASE_URL}/auth/signout",
     headers={"X-Tableau-Auth": auth_token}
 )
-print("\ud83d\udeaa Signed out of Tableau")
+print("🚪 Signed out of Tableau")
