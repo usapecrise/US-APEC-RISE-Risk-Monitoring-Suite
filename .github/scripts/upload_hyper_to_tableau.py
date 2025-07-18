@@ -44,11 +44,6 @@ except requests.exceptions.HTTPError as e:
     exit(1)
 except requests.exceptions.JSONDecodeError:
     print("❌ Failed to decode Tableau auth response as JSON.")
-    print("🔎 This usually means:")
-    print("   - PAT name or secret is invalid")
-    print("   - SITE ID is incorrect")
-    print("   - BASE_URL is wrong")
-    print("   - Tableau Cloud is temporarily down")
     exit(1)
 
 auth_token = auth_data["credentials"]["token"]
@@ -56,7 +51,7 @@ site_id = auth_data["credentials"]["site"]["id"]
 user_id = auth_data["credentials"]["user"]["id"]
 print("✅ Tableau auth successful\n")
 
-# Start Hyper conversion and upload
+# Convert and upload each CSV
 for csv_file in csv_files:
     hyper_name = csv_file.replace(".csv", ".hyper")
     print(f"⚙️ Converting {csv_file} to .hyper...")
@@ -92,7 +87,6 @@ for csv_file in csv_files:
         print(f"🔍 Response: {upload_req.text}")
         continue
 
-    # ✅ Parse XML to get uploadSessionId
     try:
         root = ET.fromstring(upload_req.text)
         ns = {"t": "http://tableau.com/api"}
@@ -100,21 +94,18 @@ for csv_file in csv_files:
     except Exception as e:
         print("❌ Failed to parse upload response as XML.")
         print(f"🔍 Error: {e}")
-        print(f"🔍 Status: {upload_req.status_code}")
-        print(f"🔍 Response body:\n{upload_req.text or '[Empty response]'}")
         continue
 
-    # ✅ Upload Hyper file using PUT
-    try:
-        with open(hyper_name, 'rb') as f:
-            upload_resp = requests.put(
-                f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
-                data=f,
-                headers={"X-Tableau-Auth": auth_token}
-            )
-    except Exception as e:
-        print(f"❌ Exception during upload of {hyper_name}: {e}")
-        continue
+    # ✅ Corrected: Use PUT to send .hyper file to staging
+    with open(hyper_name, 'rb') as f:
+        upload_resp = requests.put(
+            f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
+            headers={
+                "X-Tableau-Auth": auth_token,
+                "Content-Type": "application/octet-stream"
+            },
+            data=f
+        )
 
     if upload_resp.status_code != 200:
         print(f"🔥 Upload failed for {hyper_name}: Status {upload_resp.status_code}")
@@ -123,7 +114,7 @@ for csv_file in csv_files:
 
     print(f"✅ Uploaded {hyper_name} to staging")
 
-    # ✅ Publish the uploaded .hyper as a data source
+    # Publish the uploaded .hyper file
     print(f"📡 Publishing {hyper_name} as data source...")
 
     publish_url = f"{BASE_URL}/sites/{site_id}/datasources?uploadSessionId={upload_id}&datasourceType=hyper"
@@ -151,7 +142,7 @@ for csv_file in csv_files:
         print(f"🔥 Publish failed for {csv_file}: Status {publish_resp.status_code}")
         print(f"🔍 Response: {publish_resp.text}\n")
 
-# ✅ Sign out
+# Sign out
 requests.post(
     f"{BASE_URL}/auth/signout",
     headers={"X-Tableau-Auth": auth_token}
