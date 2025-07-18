@@ -2,3 +2,4 @@ streamlit
 pandas
 numpy
 streamlit>=1.0.0
+tableauhyperapi
