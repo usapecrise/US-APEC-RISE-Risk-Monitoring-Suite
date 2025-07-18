@@ -4,7 +4,7 @@ import requests
 import xml.etree.ElementTree as ET
 from tableauhyperapi import HyperProcess, Connection, TableDefinition, SqlType, Telemetry, Inserter, CreateMode
 
-# Tableau credentials from environment variables
+# Environment variables
 TABLEAU_PAT_NAME = os.environ["TABLEAU_PAT_NAME"]
 TABLEAU_PAT_SECRET = os.environ["TABLEAU_PAT_SECRET"]
 TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
@@ -15,11 +15,11 @@ BASE_URL = "https://prod-useast-a.online.tableau.com/api/3.21"
 print("🚦 Starting Tableau Hyper upload script")
 print(f"📁 Current directory: {os.getcwd()}")
 
-# Locate all CSVs
+# List all CSVs
 csv_files = [f for f in os.listdir(".") if f.endswith(".csv")]
 print(f"🗂️ Matched CSV files: {csv_files}")
 
-# Authenticate to Tableau
+# Authenticate
 print("🔑 Authenticating with Tableau...")
 auth_response = requests.post(
     f"{BASE_URL}/auth/signin",
@@ -39,11 +39,8 @@ print(f"🔍 Auth response body:\n{auth_response.text}")
 try:
     auth_response.raise_for_status()
     auth_data = auth_response.json()
-except requests.exceptions.HTTPError as e:
-    print(f"❌ HTTP error during authentication: {e}")
-    exit(1)
-except requests.exceptions.JSONDecodeError:
-    print("❌ Failed to decode Tableau auth response as JSON.")
+except Exception as e:
+    print(f"❌ Auth error: {e}")
     exit(1)
 
 auth_token = auth_data["credentials"]["token"]
@@ -51,16 +48,16 @@ site_id = auth_data["credentials"]["site"]["id"]
 user_id = auth_data["credentials"]["user"]["id"]
 print("✅ Tableau auth successful\n")
 
-# Convert and upload each CSV
+# Process each CSV
 for csv_file in csv_files:
     hyper_name = csv_file.replace(".csv", ".hyper")
     print(f"⚙️ Converting {csv_file} to .hyper...")
 
+    # Convert CSV to .hyper
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_name, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
             with open(csv_file, "r", encoding="utf-8-sig") as f:
                 header = f.readline().strip().split(",")
-
             table_def = TableDefinition(table_name="Extract")
             for col in header:
                 table_def.add_column(col, SqlType.text())
@@ -73,8 +70,7 @@ for csv_file in csv_files:
                     inserter.add_rows(reader)
                 inserter.execute()
 
-    file_size = os.path.getsize(hyper_name)
-    print(f"📦 Size of {hyper_name}: {file_size} bytes")
+    print(f"📦 Size of {hyper_name}: {os.path.getsize(hyper_name)} bytes")
 
     print(f"🚀 Uploading {hyper_name} to Tableau staging...")
     upload_req = requests.post(
@@ -83,7 +79,7 @@ for csv_file in csv_files:
     )
 
     if upload_req.status_code not in (200, 201):
-        print(f"🔥 Upload session failed for {csv_file}: {upload_req.status_code}")
+        print(f"🔥 Upload session failed: {upload_req.status_code}")
         print(f"🔍 Response: {upload_req.text}")
         continue
 
@@ -96,15 +92,15 @@ for csv_file in csv_files:
         print(f"🔍 Error: {e}")
         continue
 
-    # ✅ Corrected: Use PUT to send .hyper file to staging
     with open(hyper_name, 'rb') as f:
-        upload_resp = requests.put(
+        files = {
+            'request_payload': (None, '', 'text/plain'),
+            'tableau_file': (hyper_name, f, 'application/octet-stream')
+        }
+        upload_resp = requests.post(
             f"{BASE_URL}/sites/{site_id}/fileUploads/{upload_id}",
-            headers={
-                "X-Tableau-Auth": auth_token,
-                "Content-Type": "application/octet-stream"
-            },
-            data=f
+            headers={"X-Tableau-Auth": auth_token},
+            files=files
         )
 
     if upload_resp.status_code != 200:
@@ -114,11 +110,8 @@ for csv_file in csv_files:
 
     print(f"✅ Uploaded {hyper_name} to staging")
 
-    # Publish the uploaded .hyper file
     print(f"📡 Publishing {hyper_name} as data source...")
-
     publish_url = f"{BASE_URL}/sites/{site_id}/datasources?uploadSessionId={upload_id}&datasourceType=hyper"
-
     xml_payload = f"""
     <tsRequest>
       <datasource name="{csv_file.replace('.csv', '')}">
