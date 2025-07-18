@@ -1,31 +1,39 @@
-name: Upload All CSVs to Tableau
+name: Upload Hyper Files to Tableau
 
 on:
-  workflow_dispatch:    # Manual trigger
-  schedule:
-    - cron: '0 10 * * *'  # Runs daily at 6am ET
+  workflow_dispatch:
+  push:
+    paths:
+      - '**/*.csv'
+      - '.github/scripts/upload_hyper_to_tableau.py'
 
 jobs:
-  upload:
+  upload-to-tableau:
     runs-on: ubuntu-latest
 
+    env:
+      TABLEAU_PAT_NAME: ${{ secrets.TABLEAU_PAT_NAME }}
+      TABLEAU_PAT_SECRET: ${{ secrets.TABLEAU_PAT_SECRET }}
+      TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
+      TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
+
     steps:
-      - name: Checkout Repo
+      - name: ⬇️ Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
-        run: pip install requests tableauhyperapi
+      - name: 📦 Install Python Dependencies
+        run: pip install tableauhyperapi requests
 
-      - name: Upload All Hyper Files to Tableau
-        env:
-          TABLEAU_TOKEN_NAME: ${{ secrets.TABLEAU_PAT_NAME }}
-          TABLEAU_TOKEN_SECRET: ${{ secrets.TABLEAU_PAT_SECRET }}
-          TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
-          TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
-          TABLEAU_USER_ID: ${{ secrets.TABLEAU_USER_ID }}
+      - name: 🧪 Check Required Secrets
+        run: |
+          echo "TABLEAU_PAT_NAME = ${{ secrets.TABLEAU_PAT_NAME }}"
+          echo "TABLEAU_SITE_ID = ${{ secrets.TABLEAU_SITE_ID }}"
+
+      - name: 🚀 Run Hyper Upload Script
         run: python .github/scripts/upload_hyper_to_tableau.py
+
