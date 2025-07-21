@@ -40,7 +40,7 @@ def convert_csv_to_hyper(csv_path, hyper_path):
     for col in df.columns:
         table_def.add_column(col, SqlType.text())
 
-    with HyperProcess as hyper:
+    with HyperProcess() as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_path, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
             connection.catalog.create_table(table_def)
             with Inserter(connection, table_def) as inserter:
