@@ -12,6 +12,7 @@ TABLEAU_PAT_NAME = os.environ["TABLEAU_PAT_NAME"]
 TABLEAU_PAT_SECRET = os.environ["TABLEAU_PAT_SECRET"]
 TABLEAU_PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
 TABLEAU_REST_URL = os.environ["TABLEAU_REST_URL"]
+TABLEAU_SITE_NAME = os.environ["TABLEAU_SITE_NAME"]
 
 # 🚀 Authenticate
 def authenticate():
@@ -19,7 +20,7 @@ def authenticate():
         "credentials": {
             "personalAccessTokenName": TABLEAU_PAT_NAME,
             "personalAccessTokenSecret": TABLEAU_PAT_SECRET,
-            "site": {"contentUrl": ""}
+            "site": {"contentUrl": TABLEAU_SITE_NAME}
         }
     }
     response = requests.post(f"{TABLEAU_REST_URL}/auth/signin", json=auth_payload)
