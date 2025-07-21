@@ -13,22 +13,17 @@ on:
 
 jobs:
   upload:
-    # ← this is line 14
-    if: github.event_name != 'schedule'
+    if: github.event_name != 'schedule'    # on push or manual
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install upload dependencies
-        run: |
-          pip install pandas tableauhyperapi tableauserverclient
+      - name: Install upload deps
+        run: pip install pandas tableauhyperapi tableauserverclient
 
       - name: Upload CSVs to Tableau
         run: python .github/scripts/upload_hyper_to_tableau.py
@@ -40,19 +35,18 @@ jobs:
           TABLEAU_REST_URL:   ${{ secrets.TABLEAU_REST_URL }}
 
   refresh:
-    if: github.event_name == 'schedule'
+    if: |
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install refresh dependencies
+      - name: Install refresh deps
         run: pip install tableauserverclient
 
       - name: Refresh Tableau extracts
