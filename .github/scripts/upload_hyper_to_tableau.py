@@ -2,12 +2,11 @@ import os
 import requests
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from tableauhyperapi import (
-    HyperProcess, Connection, Telemetry, TableDefinition, SqlType,
-    Inserter, TableName, CreateMode
-)
 import pandas as pd
-from requests_toolbelt import MultipartEncoder
+from tableauhyperapi import (
+    HyperProcess, Connection, Telemetry, TableDefinition,
+    SqlType, Inserter, TableName, CreateMode
+)
 
 # 🔑 Load environment variables
 TABLEAU_SITE_ID = os.environ["TABLEAU_SITE_ID"]
@@ -18,7 +17,7 @@ TABLEAU_PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
 TABLEAU_REST_URL = os.environ["TABLEAU_REST_URL"]
 TABLEAU_SITE_NAME = os.environ["TABLEAU_SITE_NAME"]
 
-# 🚀 Authenticate (XML response)
+# 🚀 Authenticate using XML
 def authenticate():
     auth_payload = {
         "credentials": {
@@ -33,7 +32,6 @@ def authenticate():
     response = requests.post(signin_url, json=auth_payload)
 
     print(f"📬 Response status code: {response.status_code}")
-    print(f"📬 Response headers: {response.headers}")
     print(f"📬 Response text: {response.text[:300]}...")
 
     response.raise_for_status()
@@ -56,7 +54,7 @@ def sign_out(token):
 def convert_csv_to_hyper(csv_file, hyper_file):
     df = pd.read_csv(csv_file)
 
-    # ✅ Replace NaN with '' and cast everything to string for TEXT insertion
+    # ✅ Replace NaNs and cast everything to string
     df = df.fillna('').astype(str)
 
     with HyperProcess(Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
@@ -72,9 +70,8 @@ def convert_csv_to_hyper(csv_file, hyper_file):
                 inserter.add_rows(df.values.tolist())
                 inserter.execute()
 
-# 📤 Publish HYPER
+# 📤 Upload HYPER using standard requests
 def publish_to_tableau(hyper_file, token, site_id):
-    headers = {"X-Tableau-Auth": token}
     metadata = f"""
     <tsRequest>
         <datasource name="{hyper_file.stem}">
@@ -83,19 +80,22 @@ def publish_to_tableau(hyper_file, token, site_id):
     </tsRequest>
     """.strip()
 
-    m = MultipartEncoder(
-        fields={
-            "request_payload": ("", metadata, "text/xml"),
-            "tableau_datasource": (hyper_file.name, open(hyper_file, "rb"), "application/octet-stream")
-        }
+    publish_url = (
+        f"{TABLEAU_REST_URL}/sites/{site_id}/datasources?"
+        f"uploadSessionId={hyper_file.stem}&datasourceType=hyper&overwrite=true"
     )
 
-    publish_url = f"{TABLEAU_REST_URL}/sites/{site_id}/datasources?uploadSessionId={hyper_file.stem}&datasourceType=hyper&overwrite=true"
+    with open(hyper_file, "rb") as f:
+        files = {
+            "request_payload": ("", metadata, "text/xml"),
+            "tableau_datasource": (hyper_file.name, f, "application/octet-stream"),
+        }
 
-    response = requests.post(publish_url, data=m, headers={
-        "X-Tableau-Auth": token,
-        "Content-Type": m.content_type
-    })
+        response = requests.post(
+            publish_url,
+            files=files,
+            headers={"X-Tableau-Auth": token}
+        )
 
     if response.status_code == 201:
         print(f"✅ Published: {hyper_file.name}")
@@ -103,7 +103,7 @@ def publish_to_tableau(hyper_file, token, site_id):
         print(f"🔥 Failed to publish {hyper_file.name}: {response.status_code}")
         print(f"🔍 Response: {response.text}")
 
-# 🧠 Main logic
+# 🧠 Main workflow
 def main():
     print("🚦 Starting Tableau Hyper upload script")
     csv_files = [f for f in os.listdir() if f.endswith(".csv")]
@@ -125,3 +125,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
