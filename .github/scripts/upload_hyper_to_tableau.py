@@ -87,8 +87,7 @@ def publish_to_tableau(hyper_file, token, site_id):
         fields={
             "request_payload": ("", metadata, "text/xml"),
             "tableau_datasource": (hyper_file.name, open(hyper_file, "rb"), "application/octet-stream")
-        },
-        boundary="----WebKitFormBoundary7MA4YWxkTrZu0gW"
+        }
     )
 
     publish_url = f"{TABLEAU_REST_URL}/sites/{site_id}/datasources?uploadSessionId={hyper_file.stem}&datasourceType=hyper&overwrite=true"
