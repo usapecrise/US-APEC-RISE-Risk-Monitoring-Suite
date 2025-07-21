@@ -56,14 +56,13 @@ def sign_out(token):
 def convert_csv_to_hyper(csv_file, hyper_file):
     df = pd.read_csv(csv_file)
 
-    # ✅ Convert NaNs to empty strings so Tableau doesn't error on TEXT fields
-    df = df.fillna('')
+    # ✅ Replace NaN with '' and cast everything to string for TEXT insertion
+    df = df.fillna('').astype(str)
 
     with HyperProcess(Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_file, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
             connection.catalog.create_schema("Extract")
 
-            # Define all columns as TEXT
             cols = [TableDefinition.Column(col, SqlType.text()) for col in df.columns]
             table_def = TableDefinition(table_name=TableName("Extract", "Extract"), columns=cols)
 
