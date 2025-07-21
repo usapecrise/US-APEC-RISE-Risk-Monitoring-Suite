@@ -13,16 +13,24 @@ on:
 
 jobs:
   upload:
-    if: github.event_name != 'schedule'  # only on push or manual
+    # ← this is line 14
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with: {python-version: '3.10'}
-      - name: Install upload deps
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install upload dependencies
         run: |
           pip install pandas tableauhyperapi tableauserverclient
-      - name: Upload CSVs → Tableau
+
+      - name: Upload CSVs to Tableau
         run: python .github/scripts/upload_hyper_to_tableau.py
         env:
           TABLEAU_PAT_NAME:   ${{ secrets.TABLEAU_PAT_NAME }}
@@ -32,15 +40,21 @@ jobs:
           TABLEAU_REST_URL:   ${{ secrets.TABLEAU_REST_URL }}
 
   refresh:
-     refresh:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with: {python-version: '3.10'}
-      - name: Install refresh deps
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install refresh dependencies
         run: pip install tableauserverclient
+
       - name: Refresh Tableau extracts
         run: python .github/scripts/refresh_tableau_datasources.py
         env:
