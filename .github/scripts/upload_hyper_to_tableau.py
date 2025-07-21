@@ -23,12 +23,26 @@ def authenticate():
             "site": {"contentUrl": TABLEAU_SITE_NAME}
         }
     }
-    response = requests.post(f"{TABLEAU_REST_URL}/auth/signin", json=auth_payload)
-    response.raise_for_status()
-    token = response.json()["credentials"]["token"]
-    site_id = response.json()["credentials"]["site"]["id"]
-    user_id = response.json()["credentials"]["user"]["id"]
-    return token, site_id, user_id
+
+    signin_url = f"{TABLEAU_REST_URL}/auth/signin"
+    print(f"📡 Sending auth request to: {signin_url}")
+    print(f"🧾 Payload: {auth_payload}")
+
+    response = requests.post(signin_url, json=auth_payload)
+
+    print(f"📬 Response status code: {response.status_code}")
+    print(f"📬 Response headers: {response.headers}")
+    print(f"📬 Response text: {response.text[:500]}")  # first 500 chars
+
+    try:
+        response.raise_for_status()
+        token = response.json()["credentials"]["token"]
+        site_id = response.json()["credentials"]["site"]["id"]
+        user_id = response.json()["credentials"]["user"]["id"]
+        return token, site_id, user_id
+    except Exception as e:
+        print("❌ Authentication failed — check token, site name, and REST URL")
+        raise
 
 # 🧼 Clean up and sign out
 def sign_out(token):
