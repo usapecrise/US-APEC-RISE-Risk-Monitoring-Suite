@@ -86,16 +86,18 @@ def publish_to_tableau(hyper_file, token, site_id):
     )
 
     with open(hyper_file, "rb") as f:
+        # ✅ Important: omit filename for XML payload part
         files = {
-            "request_payload": ("", metadata, "text/xml"),
+            "request_payload": (None, metadata, "text/xml"),
             "tableau_datasource": (hyper_file.name, f, "application/octet-stream"),
         }
 
-        response = requests.post(
-            publish_url,
-            files=files,
-            headers={"X-Tableau-Auth": token}
-        )
+        headers = {
+            "X-Tableau-Auth": token
+            # DO NOT manually set Content-Type — let `requests` handle it
+        }
+
+        response = requests.post(publish_url, files=files, headers=headers)
 
     if response.status_code == 201:
         print(f"✅ Published: {hyper_file.name}")
