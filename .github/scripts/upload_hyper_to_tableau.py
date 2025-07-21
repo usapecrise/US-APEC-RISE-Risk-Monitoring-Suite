@@ -1,7 +1,11 @@
 import os
 import requests
 import xml.etree.ElementTree as ET
-from tableauhyperapi import HyperProcess, Connection, Telemetry, TableDefinition, SqlType, Inserter, TableName, CreateMode
+from pathlib import Path
+from tableauhyperapi import (
+    HyperProcess, Connection, Telemetry, TableDefinition, SqlType,
+    Inserter, TableName, CreateMode
+)
 import pandas as pd
 from requests_toolbelt import MultipartEncoder
 
@@ -14,9 +18,7 @@ TABLEAU_PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
 TABLEAU_REST_URL = os.environ["TABLEAU_REST_URL"]
 TABLEAU_SITE_NAME = os.environ["TABLEAU_SITE_NAME"]
 
-# 🚀 Authenticate
-import xml.etree.ElementTree as ET
-
+# 🚀 Authenticate (XML response)
 def authenticate():
     auth_payload = {
         "credentials": {
@@ -36,7 +38,6 @@ def authenticate():
 
     response.raise_for_status()
 
-    # ✅ Parse XML
     root = ET.fromstring(response.text)
     ns = {"t": "http://tableau.com/api"}
 
@@ -46,7 +47,7 @@ def authenticate():
 
     return token, site_id, user_id
 
-# 🧼 Clean up and sign out
+# 🧼 Sign out
 def sign_out(token):
     headers = {"X-Tableau-Auth": token}
     requests.post(f"{TABLEAU_REST_URL}/auth/signout", headers=headers)
@@ -54,21 +55,28 @@ def sign_out(token):
 # 🔁 CSV → HYPER
 def convert_csv_to_hyper(csv_file, hyper_file):
     df = pd.read_csv(csv_file)
+
     with HyperProcess(Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_file, create_mode=CreateMode.CREATE_AND_REPLACE) as connection:
+            # ✅ Create schema explicitly
+            connection.catalog.create_schema("Extract")
+
+            # Create table definition
             cols = [TableDefinition.Column(col, SqlType.text()) for col in df.columns]
             table_def = TableDefinition(table_name=TableName("Extract", "Extract"), columns=cols)
+
             connection.catalog.create_table(table_def)
+
             with Inserter(connection, table_def) as inserter:
                 inserter.add_rows(df.values.tolist())
                 inserter.execute()
 
-# 📤 Upload + Publish HYPER
+# 📤 Publish HYPER
 def publish_to_tableau(hyper_file, token, site_id):
     headers = {"X-Tableau-Auth": token}
     metadata = f"""
     <tsRequest>
-        <datasource name="{hyper_file.stem}" >
+        <datasource name="{hyper_file.stem}">
             <project id="{TABLEAU_PROJECT_ID}" />
         </datasource>
     </tsRequest>
@@ -83,6 +91,7 @@ def publish_to_tableau(hyper_file, token, site_id):
     )
 
     publish_url = f"{TABLEAU_REST_URL}/sites/{site_id}/datasources?uploadSessionId={hyper_file.stem}&datasourceType=hyper&overwrite=true"
+
     response = requests.post(publish_url, data=m, headers={
         "X-Tableau-Auth": token,
         "Content-Type": m.content_type
@@ -115,5 +124,4 @@ def main():
     print("🚪 Signed out of Tableau")
 
 if __name__ == "__main__":
-    from pathlib import Path
     main()
