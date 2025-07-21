@@ -15,6 +15,8 @@ TABLEAU_REST_URL = os.environ["TABLEAU_REST_URL"]
 TABLEAU_SITE_NAME = os.environ["TABLEAU_SITE_NAME"]
 
 # 🚀 Authenticate
+import xml.etree.ElementTree as ET
+
 def authenticate():
     auth_payload = {
         "credentials": {
@@ -26,23 +28,23 @@ def authenticate():
 
     signin_url = f"{TABLEAU_REST_URL}/auth/signin"
     print(f"📡 Sending auth request to: {signin_url}")
-    print(f"🧾 Payload: {auth_payload}")
-
     response = requests.post(signin_url, json=auth_payload)
 
     print(f"📬 Response status code: {response.status_code}")
     print(f"📬 Response headers: {response.headers}")
-    print(f"📬 Response text: {response.text[:500]}")  # first 500 chars
+    print(f"📬 Response text: {response.text[:300]}...")
 
-    try:
-        response.raise_for_status()
-        token = response.json()["credentials"]["token"]
-        site_id = response.json()["credentials"]["site"]["id"]
-        user_id = response.json()["credentials"]["user"]["id"]
-        return token, site_id, user_id
-    except Exception as e:
-        print("❌ Authentication failed — check token, site name, and REST URL")
-        raise
+    response.raise_for_status()
+
+    # ✅ Parse XML
+    root = ET.fromstring(response.text)
+    ns = {"t": "http://tableau.com/api"}
+
+    token = root.find("t:credentials", ns).attrib["token"]
+    site_id = root.find("t:credentials/t:site", ns).attrib["id"]
+    user_id = root.find("t:credentials/t:user", ns).attrib["id"]
+
+    return token, site_id, user_id
 
 # 🧼 Clean up and sign out
 def sign_out(token):
