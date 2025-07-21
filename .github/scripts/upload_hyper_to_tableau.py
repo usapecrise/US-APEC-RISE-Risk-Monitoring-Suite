@@ -64,6 +64,11 @@ def main():
             print(f" • {p.name}: {p.id}")
         # ← end snippet
 
+PROJECT_ID = os.environ["TABLEAU_PROJECT_ID"]
+if not PROJECT_ID:
+    raise RuntimeError("TABLEAU_PROJECT_ID is empty! Check your GitHub secret.")
+print(f"🔑 Using project ID: {PROJECT_ID[:8]}…")  # prints only first 8 chars
+
         # Now publish using the PROJECT_ID secret (once you've confirmed it)
         for base, hyper in hyper_files:
             print(f"📤 Publishing {hyper} as '{base}' into project ID {PROJECT_ID}")
