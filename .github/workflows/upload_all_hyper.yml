@@ -32,7 +32,8 @@ jobs:
           TABLEAU_REST_URL:   ${{ secrets.TABLEAU_REST_URL }}
 
   refresh:
-    if: github.event_name == 'schedule'  # only on scheduled runs
+     refresh:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
