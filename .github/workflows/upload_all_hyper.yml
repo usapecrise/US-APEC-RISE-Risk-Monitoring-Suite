@@ -1,12 +1,16 @@
 name: Upload CSVs to Tableau
 
 on:
+  # trigger on any CSV push, or manual
   push:
     paths:
       - '**/*.csv'
       - '.github/scripts/upload_hyper_to_tableau.py'
       - '.github/workflows/upload_all_hyper.yml'
   workflow_dispatch:
+  # 🔁 run every night at 6 AM UTC (1 AM Eastern)
+  schedule:
+    - cron: '0 6 * * *'
 
 jobs:
   upload:
@@ -34,3 +38,4 @@ jobs:
           TABLEAU_SITE_NAME:  ${{ secrets.TABLEAU_SITE_NAME }}
           TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
           TABLEAU_REST_URL:   ${{ secrets.TABLEAU_REST_URL }}
+
