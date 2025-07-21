@@ -1,33 +1,32 @@
 import os
 import glob
 import pandas as pd
-from tableauhyperapi import (
-    HyperProcess, Connection, TableDefinition, SqlType,
-    Inserter, CreateMode, Telemetry
-)
+import xml.etree.ElementTree as ET
 import tableauserverclient as TSC
+from tableauhyperapi import (
+    HyperProcess,
+    Telemetry,
+    Connection,
+    TableDefinition,
+    SqlType,
+    Inserter,
+    CreateMode
+)
 
 # ── CONFIG ─────────────────────────────────────────────────────────────────────
 PAT_NAME       = os.environ["TABLEAU_PAT_NAME"]
 PAT_SECRET     = os.environ["TABLEAU_PAT_SECRET"]
-SITE_NAME      = os.environ["TABLEAU_SITE_NAME"]     # e.g. 'thecadmusgrouponline'
-PROJECT_ID     = os.environ["TABLEAU_PROJECT_ID"]    # your Tableau Project UUID
-TABLEAU_SERVER = os.environ["TABLEAU_REST_URL"]      # e.g. 'https://prod-useast-a.online.tableau.com'
+SITE_NAME      = os.environ["TABLEAU_SITE_NAME"]      # e.g. 'thecadmusgrouponline'
+PROJECT_ID     = os.environ["TABLEAU_PROJECT_ID"]     # will be verified below
+TABLEAU_SERVER = os.environ["TABLEAU_REST_URL"]       # e.g. 'https://prod-useast-a.online.tableau.com'
 
 # ── CSV → HYPER ────────────────────────────────────────────────────────────────
 def convert_csv_to_hyper(csv_path, hyper_path):
-    """Convert CSV to Hyper with all columns cast to TEXT (strings)."""
-    # 1) Read CSV
-    df = pd.read_csv(csv_path)
-    # 2) Replace NaN with empty string & cast every cell to str
-    df = df.fillna('').astype(str)
-
-    # 3) Define a Hyper table with TEXT columns
+    df = pd.read_csv(csv_path).fillna("").astype(str)
     table_def = TableDefinition(table_name="Extract")
     for col in df.columns:
         table_def.add_column(col, SqlType.text())
 
-    # 4) Write to .hyper
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(
             endpoint=hyper.endpoint,
@@ -43,7 +42,7 @@ def convert_csv_to_hyper(csv_path, hyper_path):
 
 # ── MAIN & PUBLISH ─────────────────────────────────────────────────────────────
 def main():
-    # 1) Convert CSVs
+    # Convert CSVs
     csv_files = glob.glob("*.csv")
     hyper_files = []
     for csv in csv_files:
@@ -53,13 +52,21 @@ def main():
         convert_csv_to_hyper(csv, hyper)
         hyper_files.append((base, hyper))
 
-    # 2) Sign in & publish via TSC
+    # Sign in via TSC
     print("🔑 Signing in to Tableau Cloud…")
     auth = TSC.PersonalAccessTokenAuth(PAT_NAME, PAT_SECRET, SITE_NAME)
     server = TSC.Server(TABLEAU_SERVER, use_server_version=True)
     with server.auth.sign_in(auth):
+        # ← INSERTED SNIPPET: list all projects and their IDs
+        all_projects, _ = server.projects.get()
+        print("🍀 Available Projects:")
+        for p in all_projects:
+            print(f" • {p.name}: {p.id}")
+        # ← end snippet
+
+        # Now publish using the PROJECT_ID secret (once you've confirmed it)
         for base, hyper in hyper_files:
-            print(f"📤 Publishing {hyper} as '{base}'")
+            print(f"📤 Publishing {hyper} as '{base}' into project ID {PROJECT_ID}")
             ds_item = TSC.DatasourceItem(PROJECT_ID, name=base)
             server.datasources.publish(
                 ds_item,
@@ -72,3 +79,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
