@@ -34,4 +34,5 @@ jobs:
           TABLEAU_SITE_ID: ${{ secrets.TABLEAU_SITE_ID }}
           TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
           TABLEAU_USER_ID: ${{ secrets.TABLEAU_USER_ID }}
+          TABLEAU_REST_URL: ${{ secrets.TABLEAU_REST_URL }}
         run: python .github/scripts/upload_hyper_to_tableau.py
