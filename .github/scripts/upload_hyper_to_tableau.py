@@ -22,21 +22,14 @@ TABLEAU_SERVER = os.environ["TABLEAU_REST_URL"]       # e.g. 'https://prod-useas
 # ── CONVERT CSV TO HYPER ─────────────────────────────────────────────────────────
 def convert_csv_to_hyper(csv_path: str, hyper_path: str):
     """Convert a CSV file to a Hyper extract with all TEXT columns."""
-    # Read CSV and normalize values
     df = pd.read_csv(csv_path).fillna("").astype(str)
 
-    # Define Hyper table schema (all TEXT)
     table_def = TableDefinition(table_name="Extract")
     for col in df.columns:
         table_def.add_column(col, SqlType.text())
 
-    # Write to Hyper
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-        with Connection(
-            endpoint=hyper.endpoint,
-            database=hyper_path,
-            create_mode=CreateMode.CREATE_AND_REPLACE
-        ) as conn:
+        with Connection(endpoint=hyper.endpoint, database=hyper_path, create_mode=CreateMode.CREATE_AND_REPLACE) as conn:
             conn.catalog.create_table(table_def)
             with Inserter(conn, table_def) as inserter:
                 inserter.add_rows(rows=df.values.tolist())
@@ -47,10 +40,10 @@ def convert_csv_to_hyper(csv_path: str, hyper_path: str):
 
 # ── MAIN & PUBLISH ─────────────────────────────────────────────────────────────
 def main():
-    # 1) Convert all CSVs to Hyper
     csv_files = glob.glob("*.csv")
     hyper_files = []
     print("🗂️  CSV files found:", csv_files)
+
     for csv in csv_files:
         base = os.path.splitext(csv)[0]
         hyper = f"{base}.hyper"
@@ -58,36 +51,44 @@ def main():
         convert_csv_to_hyper(csv, hyper)
         hyper_files.append((base, hyper))
 
-    # 2) Authenticate & publish via Tableau Server Client
+    # Authenticate
     print("🔑 Signing in to Tableau Cloud…")
     auth = TSC.PersonalAccessTokenAuth(PAT_NAME, PAT_SECRET, SITE_NAME)
     server = TSC.Server(TABLEAU_SERVER, use_server_version=True)
+
     with server.auth.sign_in(auth):
-        # Sanity check for project ID
         if not PROJECT_ID:
-            raise RuntimeError("TABLEAU_PROJECT_ID is empty! Check your GitHub secret.")
+            raise RuntimeError("❌ TABLEAU_PROJECT_ID is empty! Check your GitHub secret.")
         print(f"🔑 Using project ID: {PROJECT_ID[:8]}…")
 
-        # Optional: list all projects to verify names/IDs
-        all_projects, _ = server.projects.get()
-        print("🍀 Available Projects:")
-        for p in all_projects:
-            print(f" • {p.name}: {p.id}")
+        # Find schedule to use (e.g. named "Extract Refresh", or change this as needed)
+        schedules, _ = server.schedules.get()
+        schedule = next((s for s in schedules if "Extract Refresh" in s.name), None)
 
-        # Publish each Hyper file
+        if not schedule:
+            print("⚠️ No 'Extract Refresh' schedule found on server. Skipping scheduling.")
+        else:
+            print(f"🗓️  Found schedule: {schedule.name} (ID: {schedule.id})")
+
+        # Publish each .hyper file
         for base, hyper in hyper_files:
             print(f"📤 Publishing {hyper} as '{base}' into project ID {PROJECT_ID}")
-            ds_item = TSC.DatasourceItem(PROJECT_ID, name=base)
-            server.datasources.publish(
+            ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=base)
+            published_ds = server.datasources.publish(
                 ds_item,
                 hyper,
                 mode=TSC.Server.PublishMode.Overwrite
             )
-            print(f"✅ Published '{base}'")
+            print(f"✅ Published '{base}' (Datasource ID: {published_ds.id})")
+
+            # Schedule extract refresh
+            if schedule:
+                task = TSC.ExtractRefreshTaskItem(datasource_id=published_ds.id, schedule_id=schedule.id)
+                job = server.tasks.run(task)
+                print(f"⏳ Scheduled refresh job started: {job.id}")
 
         server.auth.sign_out()
     print("🚪 Signed out of Tableau")
 
 if __name__ == "__main__":
     main()
-
