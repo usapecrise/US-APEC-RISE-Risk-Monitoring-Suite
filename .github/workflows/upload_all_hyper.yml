@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: pip install pandas tableauhyperapi tableauserverclient
 
-      - name: Upload and Refresh Extracts
+      - name: Upload and overwrite Tableau extracts
         run: python .github/scripts/upload_hyper_to_tableau.py
         env:
           TABLEAU_PAT_NAME:   ${{ secrets.TABLEAU_PAT_NAME }}
