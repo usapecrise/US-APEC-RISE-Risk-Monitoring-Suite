@@ -10,6 +10,9 @@ BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'KPI Targets'
 VIEW_NAME = 'Grid view'
 
+# ✅ Only export these specific columns (match Airtable field names exactly)
+SELECTED_FIELDS = ['Indicator ID', 'Name', 'Type', 'Target', 'Unit']
+
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
 # Helper: fetch all records from a table
@@ -43,17 +46,12 @@ main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
 # Step 2: Export to CSV
-output_file = 'KPI Targets.csv'
+output_file = 'KPI_Targets.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    if main_records:
-        all_fieldnames = set()
-        for rec in main_records:
-            all_fieldnames.update(rec['fields'].keys())
-        fieldnames = list(all_fieldnames)
-
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for rec in main_records:
-            writer.writerow(rec['fields'])
+    writer = csv.DictWriter(csvfile, fieldnames=SELECTED_FIELDS)
+    writer.writeheader()
+    for rec in main_records:
+        row = {field: rec['fields'].get(field, "") for field in SELECTED_FIELDS}
+        writer.writerow(row)
 
 print(f"✅ Export complete: {output_file}")
