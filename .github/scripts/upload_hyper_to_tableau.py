@@ -69,11 +69,8 @@ def main():
 
             print(f"✅ Overwrote extract: '{datasource_name}' (Datasource ID: {published_ds.id})")
 
-            # Trigger an immediate refresh (will only work for extracts)
-            job = server.datasources.refresh(published_ds)
-            print(f"🔄 Triggered refresh for '{datasource_name}' (Job ID: {job.id})")
-
-    print("🚪 Finished upload + refresh process.")
+    print("🚪 Finished upload process.")
 
 if __name__ == "__main__":
     main()
+
