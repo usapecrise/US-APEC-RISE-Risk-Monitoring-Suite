@@ -60,14 +60,14 @@ def main():
 
             ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=datasource_name)
 
-            # Always create new extract to avoid overwriting Live sources
+            # Overwrite existing extract of same name
             published_ds = server.datasources.publish(
                 ds_item,
                 hyper,
-                mode=TSC.Server.PublishMode.CreateNew
+                mode=TSC.Server.PublishMode.Overwrite
             )
 
-            print(f"✅ Published extract: '{datasource_name}' (Datasource ID: {published_ds.id})")
+            print(f"✅ Overwrote extract: '{datasource_name}' (Datasource ID: {published_ds.id})")
 
             # Trigger an immediate refresh (will only work for extracts)
             job = server.datasources.refresh(published_ds)
