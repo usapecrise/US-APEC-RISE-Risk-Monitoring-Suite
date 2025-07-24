@@ -1,80 +1,33 @@
-import os
-import glob
-import pandas as pd
-from tableauhyperapi import (
-    HyperProcess,
-    Telemetry,
-    Connection,
-    TableDefinition,
-    SqlType,
-    Inserter,
-    CreateMode
-)
-import tableauserverclient as TSC
+name: Daily Tableau Upload & Refresh
 
-# ── CONFIG ─────────────────────────────────────────────────────────────────────
-PAT_NAME       = os.environ["TABLEAU_PAT_NAME"]
-PAT_SECRET     = os.environ["TABLEAU_PAT_SECRET"]
-SITE_NAME      = os.environ["TABLEAU_SITE_NAME"]       # e.g. 'thecadmusgrouponline'
-PROJECT_ID     = os.environ["TABLEAU_PROJECT_ID"]      # Tableau Project LUID
-TABLEAU_SERVER = os.environ["TABLEAU_REST_URL"]        # e.g. 'https://prod-useast-a.online.tableau.com'
+on:
+  push:
+    paths:
+      - '**/*.csv'
+      - '.github/scripts/upload_hyper_to_tableau.py'
+      - '.github/workflows/upload_all_hyper.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'   # every day at 06:00 UTC
 
-# ── CONVERT CSV TO HYPER ───────────────────────────────────────────────────────
-def convert_csv_to_hyper(csv_path: str, hyper_path: str):
-    """Convert CSV to .hyper format (all TEXT columns)"""
-    df = pd.read_csv(csv_path).fillna("").astype(str)
-    table_def = TableDefinition(table_name="Extract")
-    for col in df.columns:
-        table_def.add_column(col, SqlType.text())
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
-    with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-        with Connection(endpoint=hyper.endpoint, database=hyper_path, create_mode=CreateMode.CREATE_AND_REPLACE) as conn:
-            conn.catalog.create_table(table_def)
-            with Inserter(conn, table_def) as inserter:
-                inserter.add_rows(rows=df.values.tolist())
-                inserter.execute()
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    print(f"📦 Created {hyper_path} ({os.path.getsize(hyper_path)} bytes)")
+      - name: Install dependencies
+        run: pip install pandas tableauhyperapi tableauserverclient
 
-# ── PUBLISH TO TABLEAU ─────────────────────────────────────────────────────────
-def main():
-    # Step 1: Convert all CSVs in the repo to .hyper
-    csv_files = glob.glob("*.csv")
-    hyper_files = []
-    print("🗂️ Found CSVs:", csv_files)
-
-    for csv in csv_files:
-        base = os.path.splitext(csv)[0]
-        hyper = f"{base}.hyper"
-        convert_csv_to_hyper(csv, hyper)
-        hyper_files.append((base, hyper))
-
-    # Step 2: Authenticate with Tableau Server
-    auth = TSC.PersonalAccessTokenAuth(PAT_NAME, PAT_SECRET, SITE_NAME)
-    server = TSC.Server(TABLEAU_SERVER, use_server_version=True)
-
-    with server.auth.sign_in(auth):
-        for base, hyper in hyper_files:
-            datasource_name = f"{base}_Extract"
-            print(f"📤 Publishing {hyper} as '{datasource_name}' into project ID {PROJECT_ID}")
-
-            ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=datasource_name)
-
-            # Overwrite existing extract of same name
-            published_ds = server.datasources.publish(
-                ds_item,
-                hyper,
-                mode=TSC.Server.PublishMode.Overwrite
-            )
-
-            print(f"✅ Overwrote extract: '{datasource_name}' (Datasource ID: {published_ds.id})")
-
-            # Trigger an immediate refresh (will only work for extracts)
-            job = server.datasources.refresh(published_ds)
-            print(f"🔄 Triggered refresh for '{datasource_name}' (Job ID: {job.id})")
-
-    print("🚪 Finished upload + refresh process.")
-
-if __name__ == "__main__":
-    main()
-
+      - name: Upload and Refresh Extracts
+        run: python .github/scripts/upload_hyper_to_tableau.py
+        env:
+          TABLEAU_PAT_NAME:   ${{ secrets.TABLEAU_PAT_NAME }}
+          TABLEAU_PAT_SECRET: ${{ secrets.TABLEAU_PAT_SECRET }}
+          TABLEAU_SITE_NAME:  ${{ secrets.TABLEAU_SITE_NAME }}
+          TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
+          TABLEAU_REST_URL:   ${{ secrets.TABLEAU_REST_URL }}
