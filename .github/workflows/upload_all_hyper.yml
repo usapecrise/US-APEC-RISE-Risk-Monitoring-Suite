@@ -1,4 +1,4 @@
-name: Daily Tableau Upload & Refresh
+name: Daily Tableau Upload & Overwrite
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - '.github/workflows/upload_all_hyper.yml'
   workflow_dispatch:
   schedule:
-    - cron: '0 6 * * *'   # every day at 06:00 UTC
+    - cron: '0 6 * * *'   # Runs daily at 06:00 UTC
 
 jobs:
   upload:
@@ -31,3 +31,4 @@ jobs:
           TABLEAU_SITE_NAME:  ${{ secrets.TABLEAU_SITE_NAME }}
           TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
           TABLEAU_REST_URL:   ${{ secrets.TABLEAU_REST_URL }}
+
