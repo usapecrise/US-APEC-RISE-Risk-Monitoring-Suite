@@ -49,13 +49,14 @@ def main():
         for base, hyper in hyper_files:
             print(f"📤 Publishing {hyper} as '{base}' into project ID {PROJECT_ID}")
 
-            # Force it to be published as an extract with Overwrite
+            # Force extract behavior
             ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=base)
+            ds_item.connection_credentials = None  # Ensure no live connection is embedded
+
             published_ds = server.datasources.publish(
                 ds_item,
                 hyper,
-                mode=TSC.Server.PublishMode.Overwrite,
-                connection_credentials=None  # force no embedded live connection
+                mode=TSC.Server.PublishMode.Overwrite
             )
 
             print(f"✅ Overwrote extract: '{base}' (Datasource ID: {published_ds.id})")
