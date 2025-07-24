@@ -71,6 +71,11 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc7.py
+        
+      - name: Run KPI Targets export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_KPI_targets.py
           
       - name: Commit and push KPI CSVs
         run: |
@@ -78,7 +83,7 @@ jobs:
           git config user.email "github-actions@users.noreply.github.com"
 
           # ✅ Stage files
-          git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC4.csv OC5.csv OC6.csv OC7.csv
+          git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC4.csv OC5.csv OC6.csv OC7.csv KPI_targets.csv
 
           # ✅ Commit before pulling
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
