@@ -1,11 +1,10 @@
-name: Tableau Automation
+name: Daily Tableau Upload & Refresh
 
 on:
   push:
     paths:
       - '**/*.csv'
       - '.github/scripts/upload_hyper_to_tableau.py'
-      - '.github/scripts/refresh_tableau_datasources.py'
       - '.github/workflows/upload_all_hyper.yml'
   workflow_dispatch:
   schedule:
@@ -13,7 +12,6 @@ on:
 
 jobs:
   upload:
-    if: github.event_name != 'schedule'    # on push or manual
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,10 +20,10 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install upload deps
+      - name: Install dependencies
         run: pip install pandas tableauhyperapi tableauserverclient
 
-      - name: Upload CSVs to Tableau
+      - name: Upload and Refresh Extracts
         run: python .github/scripts/upload_hyper_to_tableau.py
         env:
           TABLEAU_PAT_NAME:   ${{ secrets.TABLEAU_PAT_NAME }}
@@ -34,26 +32,3 @@ jobs:
           TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
           TABLEAU_REST_URL:   ${{ secrets.TABLEAU_REST_URL }}
 
-  refresh:
-    if: |
-      github.event_name == 'schedule' ||
-      github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install refresh deps
-        run: pip install tableauserverclient
-
-      - name: Refresh Tableau extracts
-        run: python .github/scripts/refresh_tableau_datasources.py
-        env:
-          TABLEAU_PAT_NAME:   ${{ secrets.TABLEAU_PAT_NAME }}
-          TABLEAU_PAT_SECRET: ${{ secrets.TABLEAU_PAT_SECRET }}
-          TABLEAU_SITE_NAME:  ${{ secrets.TABLEAU_SITE_NAME }}
-          TABLEAU_PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
-          TABLEAU_REST_URL:   ${{ secrets.TABLEAU_REST_URL }}
