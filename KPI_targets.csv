@@ -1,0 +1,13 @@
+Indicator ID,Name,Type,Target,Unit
+OC1,Number of policy or regulatory reforms adopted by APEC economies as a result of U.S. support,Outcome,20,Number
+OC2,Percentage of APEC economies adopting U.S.-aligned governance frameworks or best practices,Outcome,15,Number
+OT1,Person hours of USG-supported training completed in trade and investment (EG.2-1),Output,"50,000",Number
+OT2,Number of USG engagements jointly undertaken with private sector enterprises (PSE-1),Output,75,Number
+OC3,Percentage of APEC initiatives under US APEC-RISE that resulted in participating APEC economies aligning policies or practices with U.S.-backed reforms.,Outcome,60%,Percent
+OT3,"Number of US APEC-RISE initiatives referenced or reflected in official APEC policy documents, statements, or communiqués",Output,30,Number
+OC4,Percentage of U.S. private sector partners reporting U.S.-supported technical assistance expanded opportunities for business growth and market engagement in APEC economies,Outcome,80%,Percent
+OC5,Number of new connections or networks facilitated for the public or private sector through US APEC-RISE activities,Outcome,50,Number
+OT4,Number of private sector enterprises that engaged with the USG to support U.S. Foreign Assistance objectives (PSE-2),Output,120,Number
+OC6,"Number of local institutions demonstrating continued use of U.S.-supported tools, technical knowledge, or practices",Outcome,20,Number
+OC7,Percentage of identified barriers to reform adoption successfully resolved through adaptive actions,Outcome,70%,Percent
+OT5,Value of private sector resource commitments to support U.S. Foreign Assistance Objectives (PSE-4),Output,"US$1,500,000",USD
