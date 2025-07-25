@@ -91,7 +91,7 @@ for record in main_records:
     for combo in product(workstreams, fiscal_years):
         flattened_rows.append({
             'Firm (Name)': firm_name,
-            'Indicator ID',
+            'Indicator ID': indicator_id,
             'Economy (Name)': ', '.join(economy),
             'Workstream (Name)': combo[0],
             'Fiscal Year': combo[1],
@@ -105,6 +105,7 @@ for record in main_records:
 output_file = 'OT4.csv'
 EXPORT_FIELDS = [
     'Firm (Name)',
+    'Indicator ID',
     'Economy (Name)',
     'Workstream (Name)',
     'Fiscal Year',
