@@ -84,6 +84,7 @@ filtered_records = []
 # Select fields to keep
 desired_fields = [
     'Firm (Name)',
+    'Indicator ID',
     'Workstream (Name)',
     'Economy (Name)',
     'Engagement',
