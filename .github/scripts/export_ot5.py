@@ -77,6 +77,7 @@ for record in main_records:
 output_file = 'OT5.csv'
 fieldnames = [
     'Firm (Name)',
+    'Indicator ID',
     'Economy (Name)',
     'Workstream (Name)',
     'Amount',
