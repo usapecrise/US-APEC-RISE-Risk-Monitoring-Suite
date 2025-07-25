@@ -83,6 +83,7 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             'Name',
             'Institution Type',
             'Input Type',
+            'Indicator ID',
             'Economy',
             'Economy (Name)',
             'Workstream',
