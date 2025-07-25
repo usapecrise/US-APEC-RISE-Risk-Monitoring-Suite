@@ -82,6 +82,7 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     if main_records:
         fieldnames = [
             'Connection',
+            'Indicator ID',
             'Economy (Name)',
             'Workstream (Name)',
             'Last Updated'
