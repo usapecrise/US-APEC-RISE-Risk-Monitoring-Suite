@@ -77,6 +77,7 @@ desired_fields = [
     'Barrier',
     'Economy (Name)',
     'Workstream (Name)',
+    'Indicator ID',
     'Barrier Type',
     'Adaptive Action Type',
     'Fiscal Year',
