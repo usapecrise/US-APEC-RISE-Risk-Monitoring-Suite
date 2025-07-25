@@ -91,6 +91,7 @@ for record in main_records:
     for combo in product(workstreams, fiscal_years):
         flattened_rows.append({
             'Firm (Name)': firm_name,
+            'Indicator ID',
             'Economy (Name)': ', '.join(economy),
             'Workstream (Name)': combo[0],
             'Fiscal Year': combo[1],
