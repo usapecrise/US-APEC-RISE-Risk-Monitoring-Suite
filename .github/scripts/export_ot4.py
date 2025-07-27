@@ -11,6 +11,7 @@ AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'OT4 Private Sector Firms'
 VIEW_NAME = 'Grid view'
+indicator_id = 'OT4'
 
 # Linked table names
 LINKED_TABLES = {
