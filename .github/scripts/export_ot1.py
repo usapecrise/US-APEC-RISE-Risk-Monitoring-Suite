@@ -89,6 +89,7 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             'Sex',
             'Economy',
             'Economy (Name)',
+            'Fiscal Year',
             'Other Economy',
             'Organization',
             'Workstream',
