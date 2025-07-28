@@ -20,7 +20,7 @@ LINKED_TABLES = {
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream',
-    'Workshop': 'Workshop'  # update this to 'Title' if your Workshop Reference List uses that field
+    'Workshop': 'Workshop'  # or 'Title', depending on your schema
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -72,10 +72,18 @@ for record in main_records:
     fields = record['fields']
     for field_name in LINKED_TABLES.keys():
         linked_ids = fields.get(field_name, [])
-        if isinstance(linked_ids, list):
+        if isinstance(linked_ids, list) and linked_ids:
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
+        else:
+            fields[f"{field_name} (Name)"] = "Unknown"
     fields['Last Updated'] = timestamp  # Force update
+
+# Debug: check enrichment
+if main_records:
+    print("🔍 Sample enriched record:")
+    print("Economy:", main_records[0]['fields'].get('Economy'))
+    print("Economy (Name):", main_records[0]['fields'].get('Economy (Name)'))
 
 # Step 4: Export to CSV
 output_file = 'OT1.csv'
@@ -94,7 +102,7 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             'Organization',
             'Workstream',
             'Workstream (Name)',
-            'Last Updated'  # ✅ Ensures file content changes each time
+            'Last Updated'
         ]
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -103,5 +111,24 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             row = rec['fields']
             filtered_row = {key: row.get(key, '') for key in fieldnames}
             writer.writerow(filtered_row)
+    else:
+        # Write headers only if no data, to prevent empty CSV error
+        writer = csv.DictWriter(csvfile, fieldnames=[
+            'Indicator ID',
+            'Workshop',
+            'Workshop (Name)',
+            'Workshop Date',
+            'Sex',
+            'Economy',
+            'Economy (Name)',
+            'Fiscal Year',
+            'Other Economy',
+            'Organization',
+            'Workstream',
+            'Workstream (Name)',
+            'Last Updated'
+        ])
+        writer.writeheader()
 
 print(f"✅ Export complete: {output_file}")
+
