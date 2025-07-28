@@ -19,7 +19,7 @@ LINKED_TABLES = {
 
 DISPLAY_FIELDS = {
     'Workstream': 'Workstream',
-    'Workshop': 'Workshop',  # Change to 'Title' if your Workshop table uses a different field
+    'Workshop': 'Workshop',  # Change to 'Title' if needed
     'Economy': 'Economy'
 }
 
@@ -98,6 +98,15 @@ for record in main_records:
             fields[f"{field_name} (Name)"] = "Unknown"
 
     fields['Last Updated'] = timestamp
+    fields['Indicator ID'] = 'OT1'
+
+# Helper to flatten all values for clean CSV export
+def flatten(value):
+    if isinstance(value, list):
+        return ", ".join(str(v) for v in value)
+    if value in [None, ""]:
+        return "Unknown"
+    return str(value)
 
 # Step 4: Export to CSV
 output_file = 'OT1.csv'
@@ -124,11 +133,9 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     if main_records:
         for rec in main_records:
             row = rec['fields']
-            row['Indicator ID'] = 'OT1'  # Optional: static value for tracking
-            filtered_row = {key: row.get(key, '') for key in fieldnames}
+            filtered_row = {key: flatten(row.get(key)) for key in fieldnames}
             writer.writerow(filtered_row)
     else:
         print("⚠️ No OT1 records found — writing header only.")
 
 print(f"✅ Export complete: {output_file}")
-
