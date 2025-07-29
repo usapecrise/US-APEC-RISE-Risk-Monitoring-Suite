@@ -14,10 +14,20 @@ SITE_NAME      = os.environ["TABLEAU_SITE_NAME"]
 PROJECT_ID     = os.environ["TABLEAU_PROJECT_ID"]
 TABLEAU_SERVER = os.environ["TABLEAU_REST_URL"]
 
-# ── FIXED NAME FOR EXTRACT ─────────────────────────────
-FIXED_EXTRACT_NAME = "OT1 Extract"      # 👈 This is the name Tableau Cloud will use
-INPUT_CSV_FILENAME = "OT1.csv"          # 👈 CSV file to convert and upload
-OUTPUT_HYPER_FILE  = "OT1.hyper"        # 👈 Temp file name used locally
+# ── FIXED MAPPINGS: CSV → EXTRACT NAME ──────────────────
+EXTRACT_NAME_MAP = {
+    "OT1.csv": "OT1 Extract",
+    "OT2.csv": "OT2 Extract",
+    "OT3.csv": "OT3 Extract",
+    "OT4.csv": "OT4 Extract",
+    "OT5.csv": "OT5 Extract",
+    "OC1.csv": "OC1 Extract",
+    "OC4.csv": "OC4 Extract",
+    "OC5.csv": "OC5 Extract",
+    "OC6.csv": "OC6 Extract",
+    "OC7.csv": "OC7 Extract",
+    "KPI_targets.csv": "KPI Target Reference"
+}
 
 # ── CONVERT CSV TO HYPER ───────────────────────────────
 def convert_csv_to_hyper(csv_path: str, hyper_path: str):
@@ -37,33 +47,37 @@ def convert_csv_to_hyper(csv_path: str, hyper_path: str):
 
 # ── PUBLISH TO TABLEAU CLOUD ───────────────────────────
 def main():
-    if not os.path.exists(INPUT_CSV_FILENAME):
-        print(f"❌ CSV not found: {INPUT_CSV_FILENAME}")
-        return
+    csv_files = glob.glob("*.csv")
+    print("🗂️ Found CSVs:", csv_files)
 
-    # Step 1: Convert to .hyper
-    print(f"🔄 Converting {INPUT_CSV_FILENAME} → {OUTPUT_HYPER_FILE}")
-    convert_csv_to_hyper(INPUT_CSV_FILENAME, OUTPUT_HYPER_FILE)
-
-    # Step 2: Publish to Tableau
     auth = TSC.PersonalAccessTokenAuth(PAT_NAME, PAT_SECRET, SITE_NAME)
     server = TSC.Server(TABLEAU_SERVER, use_server_version=True)
 
     with server.auth.sign_in(auth):
-        print(f"📤 Publishing '{OUTPUT_HYPER_FILE}' as '{FIXED_EXTRACT_NAME}' into project ID {PROJECT_ID}")
+        for csv_file in csv_files:
+            if csv_file not in EXTRACT_NAME_MAP:
+                print(f"⚠️ Skipping unrecognized file: {csv_file}")
+                continue
 
-        ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=FIXED_EXTRACT_NAME)
-        ds_item.connection_credentials = None  # Prevents embedding of live creds
+            extract_name = EXTRACT_NAME_MAP[csv_file]
+            hyper_path = f"{os.path.splitext(csv_file)[0]}.hyper"
 
-        published_ds = server.datasources.publish(
-            ds_item,
-            OUTPUT_HYPER_FILE,
-            mode=TSC.Server.PublishMode.Overwrite
-        )
+            print(f"🔄 Converting {csv_file} → {hyper_path}")
+            convert_csv_to_hyper(csv_file, hyper_path)
 
-        print(f"✅ Overwrote extract: '{FIXED_EXTRACT_NAME}' (Datasource ID: {published_ds.id})")
+            print(f"📤 Publishing '{hyper_path}' as '{extract_name}' into project ID {PROJECT_ID}")
+            ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=extract_name)
+            ds_item.connection_credentials = None
 
-    print("🚪 Finished upload process.")
+            published_ds = server.datasources.publish(
+                ds_item,
+                hyper_path,
+                mode=TSC.Server.PublishMode.Overwrite
+            )
+
+            print(f"✅ Overwrote extract: '{extract_name}' (Datasource ID: {published_ds.id})")
+
+    print("🚪 Finished uploading all extracts.")
 
 if __name__ == "__main__":
     main()
