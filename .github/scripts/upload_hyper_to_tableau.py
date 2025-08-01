@@ -42,7 +42,7 @@ def convert_csv_to_hyper(csv_path: str, hyper_path: str):
         else:
             return SqlType.text()
 
-    table_def = TableDefinition(table_name=TableName("Extract", ""))
+    table_def = TableDefinition(table_name=TableName("Extract"))
     for col in df.columns:
         table_def.add_column(col, map_dtype(df[col].dtype))
 
