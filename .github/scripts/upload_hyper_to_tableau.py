@@ -14,6 +14,11 @@ SITE_NAME      = os.environ["TABLEAU_SITE_NAME"]
 PROJECT_ID     = os.environ["TABLEAU_PROJECT_ID"]
 TABLEAU_SERVER = os.environ["TABLEAU_REST_URL"]
 
+# Optional: Workbooks to refresh after publish
+WORKBOOKS_TO_REFRESH = [
+    "US APEC-RISE Dashboard"
+]
+
 # ── FIXED MAPPINGS: CSV → EXTRACT NAME ──────────────────
 EXTRACT_NAME_MAP = {
     "OT1.csv": "OT1 Extract",
@@ -33,7 +38,6 @@ EXTRACT_NAME_MAP = {
 def convert_csv_to_hyper(csv_path: str, hyper_path: str):
     df = pd.read_csv(csv_path)
 
-    # Define column types properly
     def map_dtype(dtype):
         if pd.api.types.is_integer_dtype(dtype):
             return SqlType.int()
@@ -44,11 +48,10 @@ def convert_csv_to_hyper(csv_path: str, hyper_path: str):
 
     table_def = TableDefinition(table_name=TableName("Extract"))
     for col in df.columns:
-        table_def.add_column(col, map_dtype(df[col].dtype))
-
-    # Ensure text columns are explicitly strings (not NaN/float)
-    for col in df.select_dtypes(include=["object", "string"]).columns:
-        df[col] = df[col].astype(str).fillna("")
+        sql_type = map_dtype(df[col].dtype)
+        table_def.add_column(col, sql_type)
+        if sql_type == SqlType.text():
+            df[col] = df[col].astype(str).fillna("")
 
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_path, create_mode=CreateMode.CREATE_AND_REPLACE) as conn:
@@ -59,7 +62,25 @@ def convert_csv_to_hyper(csv_path: str, hyper_path: str):
 
     print(f"📦 Created {hyper_path} ({os.path.getsize(hyper_path)} bytes)")
 
-# ── PUBLISH TO TABLEAU CLOUD ───────────────────────────
+# ── TRIGGER WORKBOOK REFRESH ───────────────────────────
+def trigger_workbook_refresh(server, workbook_name):
+    print(f"🔁 Searching for workbook '{workbook_name}'...")
+    all_workbooks, _ = server.workbooks.get()
+    matched = [wb for wb in all_workbooks if wb.name == workbook_name]
+
+    if not matched:
+        print(f"❌ Workbook '{workbook_name}' not found.")
+        return
+
+    workbook = matched[0]
+    print(f"🔄 Triggering refresh for workbook '{workbook.name}' (ID: {workbook.id})")
+    try:
+        job = server.workbooks.refresh(workbook)
+        print(f"⏳ Refresh job submitted (Job ID: {job.id})")
+    except Exception as e:
+        print(f"❌ Failed to refresh workbook '{workbook.name}': {e}")
+
+# ── MAIN EXECUTION ─────────────────────────────────────
 def main():
     csv_files = glob.glob("*.csv")
     print("🗂️ Found CSVs:", csv_files)
@@ -91,8 +112,11 @@ def main():
 
             print(f"✅ Overwrote extract: '{extract_name}' (Datasource ID: {published_ds.id})")
 
-    print("🚪 Finished uploading all extracts.")
+        # Refresh workbooks if configured
+        for wb_name in WORKBOOKS_TO_REFRESH:
+            trigger_workbook_refresh(server, wb_name)
+
+    print("✅ Finished uploading extracts and refreshing workbooks.")
 
 if __name__ == "__main__":
     main()
-
