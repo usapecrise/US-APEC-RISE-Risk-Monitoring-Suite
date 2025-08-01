@@ -3,7 +3,7 @@ import glob
 import pandas as pd
 from tableauhyperapi import (
     HyperProcess, Telemetry, Connection, TableDefinition,
-    SqlType, Inserter, CreateMode
+    SqlType, Inserter, CreateMode, TableName
 )
 import tableauserverclient as TSC
 
@@ -31,16 +31,26 @@ EXTRACT_NAME_MAP = {
 
 # ── CONVERT CSV TO HYPER ───────────────────────────────
 def convert_csv_to_hyper(csv_path: str, hyper_path: str):
-    df = pd.read_csv(csv_path).fillna("").astype(str)
-    table_def = TableDefinition(table_name="Extract")
+    df = pd.read_csv(csv_path)
+
+    # Use explicit types based on df dtypes
+    def map_dtype(dtype):
+        if pd.api.types.is_integer_dtype(dtype):
+            return SqlType.int()
+        elif pd.api.types.is_float_dtype(dtype):
+            return SqlType.double()
+        else:
+            return SqlType.text()
+
+    table_def = TableDefinition(table_name=TableName("Extract", ""))
     for col in df.columns:
-        table_def.add_column(col, SqlType.text())
+        table_def.add_column(col, map_dtype(df[col].dtype))
 
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_path, create_mode=CreateMode.CREATE_AND_REPLACE) as conn:
             conn.catalog.create_table(table_def)
             with Inserter(conn, table_def) as inserter:
-                inserter.add_rows(rows=df.values.tolist())
+                inserter.add_rows(rows=df.itertuples(index=False, name=None))
                 inserter.execute()
 
     print(f"📦 Created {hyper_path} ({os.path.getsize(hyper_path)} bytes)")
