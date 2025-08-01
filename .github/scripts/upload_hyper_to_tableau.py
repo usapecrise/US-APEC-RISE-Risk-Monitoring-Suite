@@ -33,7 +33,7 @@ EXTRACT_NAME_MAP = {
 def convert_csv_to_hyper(csv_path: str, hyper_path: str):
     df = pd.read_csv(csv_path)
 
-    # Use explicit types based on df dtypes
+    # Define column types properly
     def map_dtype(dtype):
         if pd.api.types.is_integer_dtype(dtype):
             return SqlType.int()
@@ -45,6 +45,10 @@ def convert_csv_to_hyper(csv_path: str, hyper_path: str):
     table_def = TableDefinition(table_name=TableName("Extract"))
     for col in df.columns:
         table_def.add_column(col, map_dtype(df[col].dtype))
+
+    # Ensure text columns are explicitly strings (not NaN/float)
+    for col in df.select_dtypes(include=["object", "string"]).columns:
+        df[col] = df[col].astype(str).fillna("")
 
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
         with Connection(endpoint=hyper.endpoint, database=hyper_path, create_mode=CreateMode.CREATE_AND_REPLACE) as conn:
