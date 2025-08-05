@@ -27,6 +27,8 @@ EXTRACT_NAME_MAP = {
     "OT4.csv": "OT4 Extract",
     "OT5.csv": "OT5 Extract",
     "OC1.csv": "OC1 Extract",
+    "OC2.csv": "OC2 Extract",
+    "OC3.csv": "OC3 Extract",
     "OC4.csv": "OC4 Extract",
     "OC5.csv": "OC5 Extract",
     "OC6.csv": "OC6 Extract",
