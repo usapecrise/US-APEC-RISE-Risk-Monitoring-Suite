@@ -52,6 +52,16 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc1.py
 
+      - name: Run OC2 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_oc2.py
+
+      - name: Run OC3 export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_oc3.py
+
       - name: Run OC4 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
@@ -83,7 +93,7 @@ jobs:
           git config user.email "github-actions@users.noreply.github.com"
 
           # ✅ Stage files
-          git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC4.csv OC5.csv OC6.csv OC7.csv KPI_targets.csv
+          git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv KPI_targets.csv
 
           # ✅ Commit before pulling
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
