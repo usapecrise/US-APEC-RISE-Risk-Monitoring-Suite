@@ -77,7 +77,7 @@ for record in main_records:
     fields['Last Updated'] = timestamp  # Force file change
 
 # Step 4: Export to CSV
-output_file = 'Workshop Master List.csv'
+output_file = 'Workshop_Master_List.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     if main_records:
         all_fieldnames = set()
