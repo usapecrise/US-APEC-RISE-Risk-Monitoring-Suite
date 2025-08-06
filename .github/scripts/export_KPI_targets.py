@@ -46,7 +46,7 @@ main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
 # Step 2: Export to CSV
-output_file = 'KPI_targets.csv'
+output_file = 'KPI_Targets.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=SELECTED_FIELDS)
     writer.writeheader()
