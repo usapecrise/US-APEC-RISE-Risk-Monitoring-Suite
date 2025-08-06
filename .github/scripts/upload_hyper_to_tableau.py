@@ -33,7 +33,8 @@ EXTRACT_NAME_MAP = {
     "OC5.csv": "OC5 Extract",
     "OC6.csv": "OC6 Extract",
     "OC7.csv": "OC7 Extract",
-    "KPI_targets.csv": "KPI Target Reference"
+    "KPI_Targets.csv": "KPI Target Reference",
+    "Workshop_Master_List.csv': Workshop Master List
 }
 
 # ── CONVERT CSV TO HYPER ───────────────────────────────
