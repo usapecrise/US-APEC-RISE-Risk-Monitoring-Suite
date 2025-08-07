@@ -116,6 +116,7 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         'Workshop',
         'Workshop (Name)',
         'Workshop Date',
+        'Email Address',
         'Sex',
         'Economy',
         'Economy (Name)',
