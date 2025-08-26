@@ -2,7 +2,7 @@ name: Export KPI Data to GitHub
 
 on:
   schedule:
-    - cron: "0 9 * * *"   # Every day at 9 AM UTC
+    - cron: "0 9 * * *"    # every day at 09:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -86,7 +86,7 @@ jobs:
         env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_Feedback_Form_Data.py
 
-      - name: Run Stakeholder Reference List export script
+      - name: Run Stakeholder Reference List export script (wide + long)
         env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_Stakeholder_Reference_List.py
 
@@ -101,17 +101,14 @@ jobs:
           git config user.name  "$GIT_AUTHOR_NAME"
           git config user.email "$GIT_AUTHOR_EMAIL"
 
-          # Stage files
           git add \
             OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv \
             OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv \
             KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv \
             Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv
 
-          # Commit (no-op if nothing changed)
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
 
-          # Rebase/push
           git pull --rebase origin ${{ github.ref_name }}
           git push
