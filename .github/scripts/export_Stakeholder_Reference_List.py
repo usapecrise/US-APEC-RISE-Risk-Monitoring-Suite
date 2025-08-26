@@ -7,17 +7,12 @@ Export Stakeholder Reference List (wide + long) for Tableau.
 - Resolves linked fields in the main table:
     * "Economy Reference List"  -> names from "Economy Reference List" (display: "Economy")
     * "Workstream"              -> names from "Workstream Reference List" (display: "Workstream")
-    * Engagements               -> **also** from "Workstream Reference List" (display candidates below)
+    * Engagements               -> ALSO from "Workstream Reference List"
+      (uses first present among: "Engagement Title", "Title", "Name", "Workstream")
 
 - Outputs:
     Stakeholder_Reference_List.csv
     Stakeholder_Reference_List_long.csv
-
-Notes:
-- Engagement field in the main table is auto-detected among:
-    ["Engagement Title", "Engagement", "Engagements"]
-- Engagement IDs are resolved from the *same* "Workstream Reference List" using
-  these candidate columns (first present wins): ["Engagement Title", "Title", "Name", "Workstream"]
 """
 
 import os, sys, csv, json, time, requests
@@ -32,17 +27,20 @@ AIRTABLE_TOKEN = os.environ.get("AIRTABLE_TOKEN")
 if not AIRTABLE_TOKEN:
     print("❌ AIRTABLE_TOKEN is not set."); sys.exit(1)
 
-BASE_ID   = "app0Ljjhrp3lTTpTO"
+BASE_ID    = "app0Ljjhrp3lTTpTO"
 MAIN_TABLE = "Stakeholder Reference List"
 VIEW_NAME  = "Grid view"
 
+# Keys MUST match the main-table field names that hold linked-record IDs
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
 }
 
+# Main-table field name for engagements (auto-detected)
 ENGAGEMENT_FIELD_CANDIDATES = ["Engagement Title", "Engagement", "Engagements"]
-# Engagements are resolved from the Workstream Reference List:
+
+# Engagement display columns inside Workstream Reference List (first present wins)
 ENGAGEMENT_DISPLAY_CANDIDATES_IN_WS_TABLE = ["Engagement Title", "Title", "Name", "Workstream"]
 
 WIDE_OUT = "Stakeholder_Reference_List.csv"
@@ -56,7 +54,8 @@ HEADERS = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 def fetch_all_records(table, view=None, strict=True):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
     params = {}
-    if view: params["view"] = view
+    if view:
+        params["view"] = view
     out = []
     while True:
         resp = requests.get(url, headers=HEADERS, params=params, timeout=30)
@@ -72,7 +71,8 @@ def fetch_all_records(table, view=None, strict=True):
             else: print(msg); return []
         out.extend(data["records"])
         off = data.get("offset")
-        if not off: break
+        if not off:
+            break
         params["offset"] = off
         time.sleep(0.1)
     print(f"✅ Fetched {len(out)} from '{table}'")
@@ -108,7 +108,8 @@ for rec in main_records:
         if cand in f:
             engagement_field = cand
             break
-    if engagement_field: break
+    if engagement_field:
+        break
 print(f"🔎 Engagement field: {engagement_field or 'none found'}")
 
 # ------------------------------
@@ -122,22 +123,24 @@ for main_field, cfg in LINKED_CONFIG.items():
     display = cfg["display"]
     recs = fetch_all_records(table, strict=True)
     if table == "Workstream Reference List":
-        # Keep the full record for engagement title resolution
         workstream_records_by_id = {r["id"]: r for r in recs}
     linked_id_maps[main_field] = {
         r["id"]: r.get("fields", {}).get(display, "Unknown") for r in recs
     }
 
-# Engagement ID -> Title mapping FROM Workstream Reference List
+# Build Engagement ID -> Title mapping FROM Workstream Reference List
 engagement_id_to_title = {}
 for rid, r in workstream_records_by_id.items():
     title = pick(r.get("fields", {}), ENGAGEMENT_DISPLAY_CANDIDATES_IN_WS_TABLE)
     if title:
         engagement_id_to_title[rid] = title
-# ------------------------------
+
 timestamp = datetime.utcnow().isoformat()
 wide_rows, long_rows = [], []
 
+# ------------------------------
+# Transform records
+# ------------------------------
 for rec in main_records:
     fields = dict(rec.get("fields", {}))  # shallow copy
 
@@ -149,18 +152,16 @@ for rec in main_records:
         fields[f"{disp} (Name)"] = ", ".join(names) if names else ""
         fields[f"{disp}_List"]  = pipe_join(names)
 
-    # Resolve Engagements (from WS table)
+    # Resolve Engagements (IDs come from WS table)
     engagements_resolved = []
     if engagement_field:
         raw = ensure_list(fields.get(engagement_field))
         if looks_like_ids(raw):
             engagements_resolved = [engagement_id_to_title.get(x, x) for x in raw]
+            if raw:
+                fields["Engagement_IDs"] = pipe_join(raw)  # keep for debugging
         else:
-            # Multi-select strings (dropdown) or plain text
             engagements_resolved = [str(x).strip() for x in raw if str(x).strip()]
-        # Keep raw IDs if any, for debugging
-        if looks_like_ids(raw):
-            fields["Engagement_IDs"] = pipe_join(raw)
 
     fields["Engagement_List"]  = pipe_join(engagements_resolved)
     fields["Engagement_Count"] = len(engagements_resolved)
@@ -177,4 +178,50 @@ for rec in main_records:
         row = dict(fields)
         row["Workstream_Single"] = ws
         row["Economy_Single"]    = ec
-        row["Enga]()
+        row["Engagement_Single"] = en
+        # Overwrite single-name fields for clarity in long file
+        row["Workstream (Name)"] = ws
+        row["Economy (Name)"]    = ec
+        long_rows.append(row)
+
+# ------------------------------
+# Write WIDE CSV
+# ------------------------------
+if wide_rows:
+    preferred = [
+        "Title", "Organization Type", "Fiscal Year",
+        "Workstream (Name)", "Economy (Name)",
+        "Workstream_List", "Economy_List",
+        "Engagement_List", "Engagement_Count", "Engagement_IDs",
+        "Last Updated",
+    ]
+    other = sorted({k for r in wide_rows for k in r.keys()} - set(preferred))
+    fieldnames = preferred + other
+    with open(WIDE_OUT, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames, quoting=csv.QUOTE_MINIMAL)
+        w.writeheader()
+        for r in wide_rows:
+            w.writerow(r)
+print(f"✅ Export complete: {WIDE_OUT}")
+
+# ------------------------------
+# Write LONG CSV
+# ------------------------------
+if long_rows:
+    preferred_long = [
+        "Title", "Organization Type", "Fiscal Year",
+        "Workstream_Single", "Economy_Single", "Engagement_Single",
+        "Workstream (Name)", "Economy (Name)",
+        "Workstream_List", "Economy_List", "Engagement_List",
+        "Engagement_Count", "Engagement_IDs",
+        "Last Updated",
+    ]
+    other_long = sorted({k for r in long_rows for k in r.keys()} - set(preferred_long))
+    fieldnames_long = preferred_long + other_long
+    with open(LONG_OUT, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames_long, quoting=csv.QUOTE_MINIMAL)
+        w.writeheader()
+        for r in long_rows:
+            w.writerow(r)
+print(f"✅ Export complete: {LONG_OUT}")
+
