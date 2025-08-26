@@ -2,8 +2,11 @@ name: Export KPI Data to GitHub
 
 on:
   schedule:
-    - cron: '0 9 * * *'  # Every day at 9 AM UTC
+    - cron: "0 9 * * *"   # Every day at 9 AM UTC
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   export-kpis:
@@ -11,113 +14,104 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install pandas requests
 
       - name: Run OT1 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_ot1.py
 
       - name: Run OT2 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_ot2.py
 
       - name: Run OT3 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_ot3.py
 
       - name: Run OT4 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_ot4.py
-          
+
       - name: Run OT5 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_ot5.py
 
       - name: Run OC1 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_oc1.py
 
       - name: Run OC2 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_oc2.py
 
       - name: Run OC3 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_oc3.py
 
       - name: Run OC4 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_oc4.py
 
       - name: Run OC5 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_oc5.py
-          
+
       - name: Run OC6 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_oc6.py
 
       - name: Run OC7 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_oc7.py
-        
+
       - name: Run KPI Targets export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_KPI_Targets.py
 
       - name: Run Workshop Master List export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_Workshop_Master_List.py
 
       - name: Run Feedback Form Data export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_Feedback_Form_Data.py
 
       - name: Run Stakeholder Reference List export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
         run: python .github/scripts/export_Stakeholder_Reference_List.py
 
       - name: Commit and push KPI CSVs
+        env:
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@users.noreply.github.com"
+          set -e
+          git config user.name  "$GIT_AUTHOR_NAME"
+          git config user.email "$GIT_AUTHOR_EMAIL"
 
-          # ✅ Stage files
-          git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv 
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_Stakeholder_Reference_List.py
+          # Stage files
+          git add \
+            OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv \
+            OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv \
+            KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv \
+            Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv
 
-          # ✅ Commit before pulling
+          # Commit (no-op if nothing changed)
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
 
-          # ✅ Pull safely after commit
-          git pull --rebase origin main
-
-          # ✅ Push to main
+          # Rebase/push
+          git pull --rebase origin ${{ github.ref_name }}
           git push
