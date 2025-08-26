@@ -101,14 +101,15 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_Stakeholder_Reference_List.py
-        
       - name: Commit and push KPI CSVs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
 
           # ✅ Stage files
-          git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv Stakeholder_Reference_List.csv
+          git add OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv 
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_Stakeholder_Reference_List.py
 
           # ✅ Commit before pulling
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
