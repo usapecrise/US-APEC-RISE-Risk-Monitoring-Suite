@@ -5,22 +5,15 @@
 Export Stakeholder Reference List (wide + long) for Tableau.
 
 - Resolves linked fields:
-    * "Economy Reference List"  -> Economy names (from "Economy Reference List" table, display col "Economy")
-    * "Workstream"              -> Workstream names (from "Workstream Reference List" table, display col "Workstream")
+    * "Economy Reference List"  -> Economy names (display col "Economy")
+    * "Workstream"              -> Workstream names (display col "Workstream")
 
-- Treats "Engagement" as a multi-select (list of strings) or empty.
-  (If you later convert Engagement to a linked table, we can add a resolver.)
+- Handles Engagement as a multi-select dropdown (strings). If you later
+  convert to a linked table, it will try to resolve IDs as well (optional).
 
-- Outputs:
+Outputs:
     Stakeholder_Reference_List.csv
     Stakeholder_Reference_List_long.csv
-
-- Adds:
-    * Workstream_List, Economy_List, Engagement_List (pipe-joined)
-    * Engagement_Count
-    * Last Updated
-    * Long rows normalized on Workstream × Economy × Engagement with
-      Workstream_Single, Economy_Single, Engagement_Single
 """
 
 import os
@@ -45,13 +38,21 @@ BASE_ID = "app0Ljjhrp3lTTpTO"
 MAIN_TABLE = "Stakeholder Reference List"
 VIEW_NAME = "Grid view"
 
-# Keys MUST match the field names in the main table that hold linked-record IDs.
+# Linked field configs (keys MUST match field names in the main table)
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
 }
 
-# Outputs (change to "data/..." if desired)
+# Engagement detection: first matching field name will be used
+ENGAGEMENT_FIELD_CANDIDATES = ["Engagement Title", "Engagement", "Engagements"]
+
+# Optional: if you later make Engagement a linked table, fill these in
+OPTIONAL_ENGAGEMENT_LINKED = {
+    "table": None,           # e.g., "Engagement Reference List"
+    "display": None,         # e.g., "Engagement Title"
+}
+
 WIDE_OUT = "Stakeholder_Reference_List.csv"
 LONG_OUT = "Stakeholder_Reference_List_long.csv"
 
@@ -60,7 +61,7 @@ HEADERS = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 # ------------------------------
 # Helpers
 # ------------------------------
-def fetch_all_records(table: str, view: str | None = None) -> list[dict]:
+def fetch_all_records(table: str, view: str | None = None, strict: bool = True) -> list[dict]:
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
     params = {}
     if view:
@@ -72,12 +73,18 @@ def fetch_all_records(table: str, view: str | None = None) -> list[dict]:
         try:
             data = resp.json()
         except json.JSONDecodeError:
-            print(f"❌ Non-JSON response from Airtable for table '{table}': {resp.text[:200]}")
-            sys.exit(1)
+            msg = f"❌ Non-JSON response from Airtable for table '{table}': {resp.text[:200]}"
+            if strict:
+                print(msg); sys.exit(1)
+            else:
+                print(msg); return []
 
         if "records" not in data:
-            print(f"❌ Error fetching '{table}': {data}")
-            sys.exit(1)
+            msg = f"❌ Error fetching '{table}': {data}"
+            if strict:
+                print(msg); sys.exit(1)
+            else:
+                print(msg); return []
 
         all_records.extend(data["records"])
         offset = data.get("offset")
@@ -90,7 +97,6 @@ def fetch_all_records(table: str, view: str | None = None) -> list[dict]:
     return all_records
 
 def ensure_list(v):
-    """Return [] for None, keep list as-is, or wrap scalars in a list."""
     if v is None:
         return []
     if isinstance(v, list):
@@ -98,36 +104,70 @@ def ensure_list(v):
     return [v]
 
 def pipe_join(values):
-    """Join a list of strings with '|', skipping empties/whitespace."""
     vals = [str(x).strip() for x in values if str(x).strip()]
     return "|".join(vals) if vals else ""
 
+def looks_like_airtable_ids(values):
+    """Heuristic: all items are strings starting with 'rec'."""
+    if not values:
+        return False
+    return all(isinstance(x, str) and x.startswith("rec") for x in values)
+
 # ------------------------------
-# Build linked ID -> display maps
+# Fetch main table first (so we can detect Engagement field)
+# ------------------------------
+main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME, strict=True)
+print(f"🔍 Retrieved {len(main_records)} records from '{MAIN_TABLE}'")
+
+# Detect engagement field name actually present
+engagement_field_name = None
+for rec in main_records:
+    fields = rec.get("fields", {})
+    for cand in ENGAGEMENT_FIELD_CANDIDATES:
+        if cand in fields:
+            engagement_field_name = cand
+            break
+    if engagement_field_name:
+        break
+
+if engagement_field_name:
+    print(f"🔎 Using engagement field: '{engagement_field_name}'")
+else:
+    print("ℹ️ No engagement field found among candidates; proceeding without engagement values.")
+
+# ------------------------------
+# Build linked ID -> display maps (Economy, Workstream)
 # ------------------------------
 linked_id_maps: dict[str, dict] = {}
 for main_field, cfg in LINKED_CONFIG.items():
     table_name = cfg["table"]
     display_col = cfg["display"]
-    records = fetch_all_records(table_name)
-    id_to_display = {rec["id"]: rec.get("fields", {}).get(display_col, "Unknown") for rec in records}
-    linked_id_maps[main_field] = id_to_display
+    records = fetch_all_records(table_name, strict=True)
+    linked_id_maps[main_field] = {
+        rec["id"]: rec.get("fields", {}).get(display_col, "Unknown") for rec in records
+    }
 
-# ------------------------------
-# Fetch main table
-# ------------------------------
-main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
-print(f"🔍 Retrieved {len(main_records)} records from '{MAIN_TABLE}'")
+# Optional: build engagement linked map if configured
+engagement_link_map = None
+if OPTIONAL_ENGAGEMENT_LINKED["table"] and OPTIONAL_ENGAGEMENT_LINKED["display"]:
+    t = OPTIONAL_ENGAGEMENT_LINKED["table"]
+    d = OPTIONAL_ENGAGEMENT_LINKED["display"]
+    try:
+        records = fetch_all_records(t, strict=False)
+        if records:
+            engagement_link_map = {rec["id"]: rec.get("fields", {}).get(d, "Unknown") for rec in records}
+            print(f"✅ Built engagement linked map from '{t}' ({len(engagement_link_map)} items)")
+    except Exception as e:
+        print(f"⚠️ Could not build engagement linked map: {e}")
 
 timestamp = datetime.utcnow().isoformat()
 
-wide_rows: list[dict] = []
-long_rows: list[dict] = []
+wide_rows, long_rows = [], []
 
 for rec in main_records:
     fields = dict(rec.get("fields", {}))  # shallow copy
 
-    # Resolve linked names for Economy & Workstream
+    # Resolve Economy & Workstream linked lists into names
     for main_field, cfg in LINKED_CONFIG.items():
         ids = ensure_list(fields.get(main_field))
         names = [linked_id_maps[main_field].get(_id, "Unknown") for _id in ids]
@@ -135,34 +175,34 @@ for rec in main_records:
         fields[f"{disp} (Name)"] = ", ".join(names) if names else ""
         fields[f"{disp}_List"] = pipe_join(names)
 
-    # Handle Engagement as multi-select (list of strings) or empty
-    engagements = ensure_list(fields.get("Engagement"))
-    # If Airtable returns linked IDs here in the future, you can still count them; they’ll be strings.
-    # Convert any non-strings to strings; trim whitespace
-    engagements = [str(x).strip() for x in engagements if str(x).strip()]
+    # Resolve Engagement (multi-select strings or linked IDs or empty)
+    engagements = []
+    if engagement_field_name:
+        raw_vals = ensure_list(fields.get(engagement_field_name))
+        if looks_like_airtable_ids(raw_vals) and engagement_link_map:
+            engagements = [engagement_link_map.get(_id, _id) for _id in raw_vals]
+        else:
+            engagements = [str(x).strip() for x in raw_vals if str(x).strip()]
+    # Store engagement as pipe-joined list + count
     fields["Engagement_List"] = pipe_join(engagements)
     fields["Engagement_Count"] = len(engagements)
 
-    # Force timestamp for pipeline diffs
+    # Timestamp to force diffs
     fields["Last Updated"] = timestamp
 
     wide_rows.append(fields)
 
     # ---- Build LONG rows (normalize Workstream × Economy × Engagement) ----
-    ws_vals = fields.get("Workstream_List", "")
-    ec_vals = fields.get("Economy_List", "")
-    en_vals = fields.get("Engagement_List", "")
+    ws_vals = [s for s in fields.get("Workstream_List", "").split("|") if s] or [""]
+    ec_vals = [s for s in fields.get("Economy_List", "").split("|") if s] or [""]
+    en_vals = [s for s in fields.get("Engagement_List", "").split("|") if s] or [""]
 
-    ws_list = [s for s in ws_vals.split("|") if s] or [""]
-    ec_list = [s for s in ec_vals.split("|") if s] or [""]
-    en_list = [s for s in en_vals.split("|") if s] or [""]  # stays empty if none selected
-
-    for ws, ec, en in product(ws_list, ec_list, en_list):
+    for ws, ec, en in product(ws_vals, ec_vals, en_vals):
         long_row = dict(fields)
         long_row["Workstream_Single"] = ws
         long_row["Economy_Single"] = ec
         long_row["Engagement_Single"] = en
-        # Overwrite human-friendly singles for clarity
+        # Overwrite "(Name)" fields to the single values for clarity in long file
         long_row["Workstream (Name)"] = ws
         long_row["Economy (Name)"] = ec
         long_rows.append(long_row)
@@ -213,18 +253,8 @@ if long_rows:
 print(f"✅ Export complete: {LONG_OUT}")
 
 # ------------------------------
-# Sanity checks (non-fatal)
+# Sanity notes
 # ------------------------------
-try:
-    wide_titles = {r.get("Title", "") for r in wide_rows}
-    long_titles = {r.get("Title", "") for r in long_rows}
-    missing = wide_titles - long_titles
-    if missing:
-        print(f"⚠️  Titles missing in long export (sample): {sorted(list(missing))[:5]}")
-    if not any(row.get("Economy_Single") for row in long_rows):
-        print("⚠️  Economy_Single is empty for all rows (no economies selected).")
-    if not any(row.get("Workstream_Single") for row in long_rows):
-        print("⚠️  Workstream_Single is empty for all rows (no workstreams selected).")
-    # This will be common now that Engagement is optional, so not warning on it.
-except Exception as e:
-    print(f"⚠️  Sanity check warning: {e}")
+if not engagement_field_name:
+    print("ℹ️ No engagement field detected (checked: Engagement Title, Engagement, Engagements).")
+
