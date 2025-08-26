@@ -27,67 +27,83 @@ jobs:
           pip install pandas requests
 
       - name: Run OT1 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_ot1.py
 
       - name: Run OT2 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_ot2.py
 
       - name: Run OT3 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_ot3.py
 
       - name: Run OT4 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_ot4.py
 
       - name: Run OT5 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_ot5.py
 
       - name: Run OC1 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc1.py
 
       - name: Run OC2 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc2.py
 
       - name: Run OC3 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc3.py
 
       - name: Run OC4 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc4.py
 
       - name: Run OC5 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc5.py
 
       - name: Run OC6 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc6.py
 
       - name: Run OC7 export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_oc7.py
 
       - name: Run KPI Targets export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_KPI_Targets.py
 
       - name: Run Workshop Master List export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_Workshop_Master_List.py
 
       - name: Run Feedback Form Data export script
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_Feedback_Form_Data.py
 
       - name: Run Stakeholder Reference List export script (wide + long)
-        env: { AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }} }
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_Stakeholder_Reference_List.py
 
       - name: Commit and push KPI CSVs
@@ -112,3 +128,4 @@ jobs:
 
           git pull --rebase origin ${{ github.ref_name }}
           git push
+
