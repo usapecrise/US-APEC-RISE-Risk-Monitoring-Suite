@@ -1,4 +1,20 @@
-import os, sys, csv, json, time, requests
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Export Stakeholder Reference List (wide + long) for Tableau.
+
+- Resolves linked fields in the main table:
+    * "Economy Reference List" -> names from "Economy Reference List" (display: "Economy")
+    * "Workstream"             -> names from "Workstream Reference List" (display: "Workstream")
+    * "Engagement"             -> linked to "Workshop Reference List" (display: "Workshop Title")
+
+- Outputs:
+    Stakeholder_Reference_List.csv          (wide, human-friendly)
+    Stakeholder_Reference_List_long.csv     (normalized: Workstream × Economy × Workshop)
+"""
+
+import os, sys, csv, time, requests
 from urllib.parse import quote
 from datetime import datetime
 from itertools import product
@@ -86,7 +102,7 @@ for rec in main_records:
     # Split lists for normalization (long format)
     ws_list = [s.strip() for s in fields.get("Workstream_List", "").split("|") if s.strip()] or [""]
     ec_list = [s.strip() for s in fields.get("Economy_List", "").split("|") if s.strip()] or [""]
-    wk_list = [s.strip() for s in fields.get("Workshop_List", "").split("|") if s.strip()] or [""]
+    wk_list = [s.strip() for s in fields.get("Workshop Title_List", "").split("|") if s.strip()] or [""]
 
     for ws, ec, wk in product(ws_list, ec_list, wk_list):
         row = dict(fields)
