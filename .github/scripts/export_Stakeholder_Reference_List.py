@@ -15,11 +15,11 @@ BASE_ID     = "app0Ljjhrp3lTTpTO"
 MAIN_TABLE  = "Stakeholder Reference List"
 VIEW_NAME   = "Grid view"
 
-# Linked fields: Airtable field name -> (linked table + display field)
+# Linked fields: Stakeholder field name -> {linked table + display field}
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
-    "Workshop":               {"table": "Workshop Reference List", "display": "Workshop Title"},
+    "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop"},
 }
 
 WIDE_OUT = "Stakeholder_Reference_List.csv"
@@ -76,12 +76,10 @@ for rec in main_records:
     fields["Last Updated"] = timestamp
 
     # Resolve linked tables into pipe-joined name lists
-    for main_field, idmap in linked_id_maps.items():
+    for main_field, cfg in LINKED_CONFIG.items():
         ids = ensure_list(fields.get(main_field))
-        names = [idmap.get(i, "Unknown") for i in ids]
-        # Use display name (e.g. "Economy") instead of Airtable field name
-        display = LINKED_CONFIG[main_field]["display"]
-        fields[f"{display}_List"] = join_pipe(names)
+        names = [linked_id_maps[main_field].get(i, "Unknown") for i in ids]
+        fields[f"{cfg['display']}_List"] = join_pipe(names)
 
     wide_rows.append(fields)
 
