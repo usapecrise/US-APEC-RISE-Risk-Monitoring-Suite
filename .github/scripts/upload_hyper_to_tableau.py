@@ -36,7 +36,7 @@ EXTRACT_NAME_MAP = {
     "KPI_Targets.csv": "KPI Target Reference",
     "Workshop_Master_List.csv": "Workshop Master List",
     "Feedback_Form_Data.csv": "Feedback Form Data",
-    "Stakeholder_Reference_List.csv": "Stakeholder Reference List"
+    "Stakeholder_Reference_List.csv": "Stakeholder Reference List",
     "Stakeholder_Reference_List_long.csv": "Stakeholder Reference List Long"
 }
 
