@@ -19,7 +19,7 @@ VIEW_NAME   = "Grid view"
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
-    "Workshop":               {"table": "Workshop Reference List", "display": "Workshop"},
+    "Workshop":               {"table": "Workshop Reference List", "display": "Workshop Title"},
 }
 
 WIDE_OUT = "Stakeholder_Reference_List.csv"
