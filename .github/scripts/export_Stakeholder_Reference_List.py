@@ -8,10 +8,11 @@ Export Stakeholder Reference List (wide + long) for Tableau.
     * "Economy Reference List" -> names from "Economy Reference List" (display: "Economy")
     * "Workstream"             -> names from "Workstream Reference List" (display: "Workstream")
     * "Engagement"             -> linked to "Workshop Reference List" (display: "Workshop Title")
+    * "Engagement ID"          -> linked to "Workshop Reference List" (display: "Engagement ID")
 
 - Outputs:
     Stakeholder_Reference_List.csv          (wide, human-friendly)
-    Stakeholder_Reference_List_long.csv     (normalized: Workstream × Economy × Workshop)
+    Stakeholder_Reference_List_long.csv     (normalized: Workstream × Economy × Workshop × Engagement ID)
 """
 
 import os, sys, csv, time, requests
@@ -36,6 +37,7 @@ LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
     "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop Title"},
+    "Engagement ID":          {"table": "Workshop Reference List",  "display": "Engagement ID"},
 }
 
 WIDE_OUT = "Stakeholder_Reference_List.csv"
@@ -100,15 +102,17 @@ for rec in main_records:
     wide_rows.append(fields)
 
     # Split lists for normalization (long format)
-    ws_list = [s.strip() for s in fields.get("Workstream_List", "").split("|") if s.strip()] or [""]
-    ec_list = [s.strip() for s in fields.get("Economy_List", "").split("|") if s.strip()] or [""]
-    wk_list = [s.strip() for s in fields.get("Workshop Title_List", "").split("|") if s.strip()] or [""]
+    ws_list  = [s.strip() for s in fields.get("Workstream_List", "").split("|") if s.strip()] or [""]
+    ec_list  = [s.strip() for s in fields.get("Economy_List", "").split("|") if s.strip()] or [""]
+    wk_list  = [s.strip() for s in fields.get("Workshop Title_List", "").split("|") if s.strip()] or [""]
+    eid_list = [s.strip() for s in fields.get("Engagement ID_List", "").split("|") if s.strip()] or [""]
 
-    for ws, ec, wk in product(ws_list, ec_list, wk_list):
+    for ws, ec, wk, eid in product(ws_list, ec_list, wk_list, eid_list):
         row = dict(fields)
-        row["Workstream_Single"] = ws
-        row["Economy_Single"]    = ec
-        row["Workshop_Single"]   = wk
+        row["Workstream_Single"]      = ws
+        row["Economy_Single"]         = ec
+        row["Workshop_Single"]        = wk
+        row["Engagement_ID_Single"]   = eid
         long_rows.append(row)
 
 # ==============================
@@ -127,3 +131,4 @@ if long_rows:
         writer.writeheader()
         writer.writerows(long_rows)
     print(f"✅ Export complete: {LONG_OUT}")
+
