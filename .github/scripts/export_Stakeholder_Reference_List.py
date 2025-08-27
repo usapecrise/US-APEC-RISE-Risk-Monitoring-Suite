@@ -15,10 +15,11 @@ BASE_ID     = "app0Ljjhrp3lTTpTO"
 MAIN_TABLE  = "Stakeholder Reference List"
 VIEW_NAME   = "Grid view"
 
+# Linked fields: Airtable field name -> (linked table + display field)
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
-    "Engagements":            {"table": "Workshop Reference List",              "display": "Workshop Title"},
+    "Workshop":               {"table": "Workshop Reference List", "display": "Workshop"},
 }
 
 WIDE_OUT = "Stakeholder_Reference_List.csv"
@@ -36,7 +37,8 @@ def fetch_all_records(table, view=None):
         resp = requests.get(url, headers=HEADERS, params=params, timeout=30)
         data = resp.json()
         out.extend(data.get("records", []))
-        if "offset" not in data: break
+        if "offset" not in data:
+            break
         params["offset"] = data["offset"]
         time.sleep(0.1)
     print(f"✅ Fetched {len(out)} from '{table}'")
@@ -73,37 +75,41 @@ for rec in main_records:
     fields = dict(rec.get("fields", {}))
     fields["Last Updated"] = timestamp
 
-    # Resolve linked lists
+    # Resolve linked tables into pipe-joined name lists
     for main_field, idmap in linked_id_maps.items():
         ids = ensure_list(fields.get(main_field))
         names = [idmap.get(i, "Unknown") for i in ids]
-        fields[f"{main_field}_List"] = join_pipe(names)
+        # Use display name (e.g. "Economy") instead of Airtable field name
+        display = LINKED_CONFIG[main_field]["display"]
+        fields[f"{display}_List"] = join_pipe(names)
 
     wide_rows.append(fields)
 
-    ws_list = ensure_list(fields.get("Workstream_List", "").split("|")) if fields.get("Workstream_List") else [""]
-    ec_list = ensure_list(fields.get("Economy Reference List_List", "").split("|")) if fields.get("Economy Reference List_List") else [""]
-    en_list = ensure_list(fields.get("Engagements_List", "").split("|")) if fields.get("Engagements_List") else [""]
+    # Split lists for normalization (long format)
+    ws_list = [s.strip() for s in fields.get("Workstream_List", "").split("|") if s.strip()] or [""]
+    ec_list = [s.strip() for s in fields.get("Economy_List", "").split("|") if s.strip()] or [""]
+    wk_list = [s.strip() for s in fields.get("Workshop_List", "").split("|") if s.strip()] or [""]
 
-    for ws, ec, en in product(ws_list, ec_list, en_list):
+    for ws, ec, wk in product(ws_list, ec_list, wk_list):
         row = dict(fields)
         row["Workstream_Single"] = ws
         row["Economy_Single"]    = ec
-        row["Engagement_Single"] = en
+        row["Workshop_Single"]   = wk
         long_rows.append(row)
 
 # ==============================
 # Write outputs
 # ==============================
-with open(WIDE_OUT, "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=wide_rows[0].keys())
-    writer.writeheader()
-    writer.writerows(wide_rows)
+if wide_rows:
+    with open(WIDE_OUT, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=wide_rows[0].keys())
+        writer.writeheader()
+        writer.writerows(wide_rows)
+    print(f"✅ Export complete: {WIDE_OUT}")
 
-with open(LONG_OUT, "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=long_rows[0].keys())
-    writer.writeheader()
-    writer.writerows(long_rows)
-
-print(f"✅ Export complete: {WIDE_OUT}")
-print(f"✅ Export complete: {LONG_OUT}")
+if long_rows:
+    with open(LONG_OUT, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=long_rows[0].keys())
+        writer.writeheader()
+        writer.writerows(long_rows)
+    print(f"✅ Export complete: {LONG_OUT}")
