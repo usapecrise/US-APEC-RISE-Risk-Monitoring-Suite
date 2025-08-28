@@ -8,7 +8,7 @@ on:
       - '.github/workflows/upload_all_hyper.yml'
   workflow_dispatch:
   schedule:
-    - cron: '0 6 * * *'   # Runs daily at 06:00 UTC
+    - cron: '0 6 * * *'   # Runs daily at 10:00 UTC
 
 jobs:
   upload:
