@@ -2,7 +2,7 @@ name: Export KPI Data to GitHub
 
 on:
   schedule:
-    - cron: "0 9 * * *"    # every day at 09:00 UTC
+    - cron: "0 9 * * *"    # every day at 07:00 UTC
   workflow_dispatch:
 
 permissions:
