@@ -2,16 +2,12 @@ import requests
 import csv
 import os
 from urllib.parse import quote
-from datetime import datetime
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'KPI Targets'
 VIEW_NAME = 'Grid view'
-
-# ✅ Only export these specific columns (match Airtable field names exactly)
-SELECTED_FIELDS = ['Indicator ID', 'Name', 'Type', 'Target', 'Unit']
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
@@ -45,13 +41,25 @@ def fetch_all_records(table, view=None):
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
-# Step 2: Export to CSV
+# Step 2: Collect all possible field names
+all_fields = set()
+for rec in main_records:
+    all_fields.update(rec.get('fields', {}).keys())
+all_fields = list(all_fields)
+
+print(f"📋 Detected {len(all_fields)} fields: {all_fields}")
+
+# Step 3: Export to CSV
 output_file = 'KPI_Targets.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    writer = csv.DictWriter(csvfile, fieldnames=SELECTED_FIELDS)
+    writer = csv.DictWriter(csvfile, fieldnames=all_fields)
     writer.writeheader()
-    for rec in main_records:
-        row = {field: rec['fields'].get(field, "") for field in SELECTED_FIELDS}
+    for i, rec in enumerate(main_records):
+        row = rec.get('fields', {})
         writer.writerow(row)
+
+        # 🔎 Debug preview: print first 3 rows
+        if i < 3:
+            print("DEBUG row:", row)
 
 print(f"✅ Export complete: {output_file}")
