@@ -2,6 +2,7 @@ import requests
 import csv
 import os
 from urllib.parse import quote
+from datetime import datetime, timezone
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
@@ -47,15 +48,21 @@ for rec in main_records:
     all_fields.update(rec.get('fields', {}).keys())
 all_fields = list(all_fields)
 
-print(f"📋 Detected {len(all_fields)} fields: {all_fields}")
+# Add timestamp field
+all_fields.append("Last Exported")
+
+print(f"📋 Detected {len(all_fields)} fields (including Last Exported): {all_fields}")
 
 # Step 3: Export to CSV
 output_file = 'KPI_Targets.csv'
+timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=all_fields)
     writer.writeheader()
     for i, rec in enumerate(main_records):
-        row = rec.get('fields', {})
+        row = rec.get('fields', {}).copy()
+        row["Last Exported"] = timestamp
         writer.writerow(row)
 
         # 🔎 Debug preview: print first 3 rows
@@ -63,3 +70,4 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             print("DEBUG row:", row)
 
 print(f"✅ Export complete: {output_file}")
+
