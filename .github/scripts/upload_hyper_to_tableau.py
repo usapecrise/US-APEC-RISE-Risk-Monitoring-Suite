@@ -37,7 +37,8 @@ EXTRACT_NAME_MAP = {
     "Workshop_Master_List.csv": "Workshop Master List",
     "Feedback_Form_Data.csv": "Feedback Form Data",
     "Stakeholder_Reference_List.csv": "Stakeholder Reference List",
-    "Stakeholder_Reference_List_long.csv": "Stakeholder Reference List Long"
+    "Stakeholder_Reference_List_long.csv": "Stakeholder Reference List Long",
+    "Feedback_Form_Data_Long.csv": "Feedback Form Data Long"
 }
 
 # ── CONVERT CSV TO HYPER ───────────────────────────────
