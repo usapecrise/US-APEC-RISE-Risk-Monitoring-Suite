@@ -54,7 +54,7 @@ def preprocess_feedback():
     df_words = pd.DataFrame(records, columns=["Word", "Source"])
 
     # ── Detailed counts (Word x Source) ─────────────────
-    df_counts = df_words.groupby(["Word","Source"]).size().reset_index(name="Frequency")
+    df_counts = df_words.groupby(["Word", "Source"]).size().reset_index(name="Frequency")
     df_total = df_words.groupby("Word").size().reset_index(name="TotalFrequency")
     df_detailed = pd.merge(df_counts, df_total, on="Word").sort_values(by="TotalFrequency", ascending=False)
 
@@ -62,4 +62,11 @@ def preprocess_feedback():
     df_total_only = df_total.sort_values(by="TotalFrequency", ascending=False)
 
     # Save both files
-    df_total_only.to_csv(OUTPUT_FILE_T_
+    df_total_only.to_csv(OUTPUT_FILE_TOTAL, index=False)
+    df_detailed.to_csv(OUTPUT_FILE_DETAILED, index=False)
+
+    print(f"✅ Saved {OUTPUT_FILE_TOTAL} (collapsed by Word)")
+    print(f"✅ Saved {OUTPUT_FILE_DETAILED} (detailed with Source breakdown)")
+
+if __name__ == "__main__":
+    preprocess_feedback()
