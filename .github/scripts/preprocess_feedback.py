@@ -1,16 +1,18 @@
 import pandas as pd
 import re, string
 from nltk.stem import WordNetLemmatizer
+from nltk.util import ngrams
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 # ----------------------------
 # CONFIG
 # ----------------------------
-INPUT_FILE = "Feedback_Form_Data_Long.csv"   
-OUTPUT_FILE_TOTAL = "word_frequency.csv"     
-OUTPUT_FILE_DETAILED = "word_frequency_detailed.csv"  
-OUTPUT_FILE_SENTIMENT = "sentiment_summary.csv"  
-OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"  # NEW
+INPUT_FILE = "Feedback_Form_Data_Long.csv"
+OUTPUT_FILE_TOTAL = "word_frequency.csv"
+OUTPUT_FILE_DETAILED = "word_frequency_detailed.csv"
+OUTPUT_FILE_SENTIMENT = "sentiment_summary.csv"
+OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"
+OUTPUT_FILE_PHRASES = "top_phrases.csv"   # NEW
 
 TEXT_FIELDS = {
     "Suggested Improvements": "Improvements",
@@ -102,14 +104,14 @@ def map_structured_sentiment(question, response):
 # Main Preprocess
 # ----------------------------
 def preprocess_feedback():
-    # Load exported feedback
     df = pd.read_csv(INPUT_FILE)
 
     records = []
+    phrase_records = []
     sentiment_records = []
     by_question_records = []
 
-    # ── Structured sentiment mapping ─────────────────────
+    # Structured sentiment mapping
     for col, qtype in STRUCTURED_FIELDS.items():
         if col in df.columns:
             for resp in df[col].dropna():
@@ -117,26 +119,31 @@ def preprocess_feedback():
                 sentiment_records.append(sent)
                 by_question_records.append((qtype.capitalize(), sent))
 
-    # ── Open-text analysis ───────────────────────────────
+    # Open-text analysis
     for col, source in TEXT_FIELDS.items():
         if col in df.columns:
             for text in df[col].dropna():
                 cleaned = clean_text(text)
+                words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
 
-                # Sentiment classification (per response, not per word)
+                # Sentiment
                 sentiment = get_sentiment(text)
                 sentiment_records.append(sentiment)
                 by_question_records.append((source, sentiment))
 
-                # Tokenize into words
-                for word in cleaned.split():
-                    if word not in STOPWORDS and len(word) > 2:
-                        word = normalize_word(word)
-                        records.append((word, source))
+                # Word-level frequencies
+                for word in words:
+                    records.append((word, source))
 
-    # ── Word frequency outputs ───────────────────────────
-    df_words = pd.DataFrame(records, columns=["Word", "Source"])
-    if not df_words.empty:
+                # Phrase-level (bigrams/trigrams)
+                for n in [2, 3]:
+                    for gram in ngrams(words, n):
+                        phrase = " ".join(gram)
+                        phrase_records.append((phrase, source))
+
+    # Word frequency outputs
+    if records:
+        df_words = pd.DataFrame(records, columns=["Word", "Source"])
         df_counts = df_words.groupby(["Word", "Source"]).size().reset_index(name="Frequency")
         df_total = df_words.groupby("Word").size().reset_index(name="TotalFrequency")
         df_detailed = pd.merge(df_counts, df_total, on="Word").sort_values(by="TotalFrequency", ascending=False)
@@ -144,27 +151,28 @@ def preprocess_feedback():
 
         df_total_only.to_csv(OUTPUT_FILE_TOTAL, index=False)
         df_detailed.to_csv(OUTPUT_FILE_DETAILED, index=False)
-        print(f"✅ Saved {OUTPUT_FILE_TOTAL} (collapsed by Word)")
-        print(f"✅ Saved {OUTPUT_FILE_DETAILED} (detailed with Source breakdown)")
 
-    # ── Sentiment summary outputs ────────────────────────
-    df_sentiment = pd.Series(sentiment_records).value_counts(normalize=False).reset_index()
+    # Phrase frequency output (NEW)
+    if phrase_records:
+        df_phrases = pd.DataFrame(phrase_records, columns=["Phrase", "Source"])
+        df_phrases_count = df_phrases.groupby("Phrase").size().reset_index(name="Frequency")
+        df_phrases_top = df_phrases_count.sort_values(by="Frequency", ascending=False).head(20)  # top 20 phrases
+        df_phrases_top.to_csv(OUTPUT_FILE_PHRASES, index=False)
+
+    # Sentiment summary
+    df_sentiment = pd.Series(sentiment_records).value_counts().reset_index()
     df_sentiment.columns = ["Sentiment", "Count"]
     df_sentiment.to_csv(OUTPUT_FILE_SENTIMENT, index=False)
-    print(f"✅ Saved {OUTPUT_FILE_SENTIMENT} (Positive / Neutral / Negative counts)")
 
-    # NEW: Sentiment by question with percentages
+    # Sentiment by question
     df_byq = pd.DataFrame(by_question_records, columns=["Question", "Sentiment"])
     df_byq_summary = df_byq.value_counts().reset_index(name="Count")
-
-    # Normalize within each question to get percentages
     df_byq_pct = df_byq.groupby("Question")["Sentiment"].value_counts(normalize=True).mul(100).reset_index(name="Percent")
-
-    # Merge counts + percentages into one file
     df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"])
     df_final.to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
 
-    print(f"✅ Saved {OUTPUT_FILE_SENTIMENT_BYQ} (sentiment breakdown by question, with % values)")
+    print("✅ Preprocessing complete")
+    print(f"Saved {OUTPUT_FILE_TOTAL}, {OUTPUT_FILE_DETAILED}, {OUTPUT_FILE_PHRASES}, {OUTPUT_FILE_SENTIMENT}, {OUTPUT_FILE_SENTIMENT_BYQ}")
 
 if __name__ == "__main__":
     preprocess_feedback()
