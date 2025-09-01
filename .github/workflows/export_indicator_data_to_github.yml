@@ -102,7 +102,7 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_Feedback_Form_Data.py
         
-      - name: Generate Word Frequency CSV for Tableau
+      - name: Generate Word Frequency & Sentiment CSVs
         run: python .github/scripts/preprocess_feedback.py
 
       - name: Run Stakeholder Reference List export script (wide + long)
@@ -127,11 +127,10 @@ jobs:
             KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv \
             Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv \
             Feedback_Form_Data_Long.csv word_frequency.csv word_frequency_detailed.csv \
-            sentiment_summary.csv top_phrases.csv
+            sentiment_summary.csv sentiment_by_question.csv top_phrases.csv
 
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
 
-          git pull --rebase origin ${{ github.ref_name }}
-          git push
-
+          # 🚨 Always overwrite remote branch with generated CSVs
+          git push origin HEAD:${{ github.ref_name }} --force
