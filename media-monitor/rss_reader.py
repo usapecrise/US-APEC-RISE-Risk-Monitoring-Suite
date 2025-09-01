@@ -1,14 +1,16 @@
 import feedparser
 import json
-from datetime import datetime
 import os
+from datetime import datetime
+import pandas as pd
+from textblob import TextBlob
 
-# ✅ Ensure the /data folder exists
+# === Ensure /data folder exists ===
 os.makedirs("data", exist_ok=True)
 
 rss_sources = [
     # 🌐 Media
-    {"url": "https://www.smh.com.au/rss/world.xml", "source_type": "Media"}
+    {"url": "https://www.smh.com.au/rss/world.xml", "source_type": "Media"},
     {"url": "https://www.straitstimes.com/news/world/rss.xml", "source_type": "Media"},
     {"url": "https://www.straitstimes.com/news/asia/rss.xml", "source_type": "Media"},
     {"url": "https://feeds.bbci.co.uk/news/rss.xml", "source_type": "Media"},
@@ -19,11 +21,10 @@ rss_sources = [
     {"url": "https://asia.nikkei.com/rss", "source_type": "Media"},
     {"url": "https://vietnamnews.vn/rss/world.rss", "source_type": "Media"},
     {"url": "https://www.philstar.com/rss/world", "source_type": "Media"},
-    {"url": "https://nzherald.co.nz/rss/", "source_type": "Media"},
-    {"url": "https://www.rnz.co.nz/rss/pacific.xml", "source_type": "Media"}
-    {"url": "https://www.rnz.co.nz/rss/world.xml", "source_type": "Media"}
+    {"url": "https://www.rnz.co.nz/rss/pacific.xml", "source_type": "Media"},
+    {"url": "https://www.rnz.co.nz/rss/world.xml", "source_type": "Media"},
     {"url": "https://thediplomat.com/feed/", "source_type": "Media"},
-    
+
     # 🏛 Government
     {"url": "https://www.state.gov/rss-feed/east-asia-and-the-pacific/feed/", "source_type": "Government"},
     {"url": "https://au.usembassy.gov/feed/", "source_type": "Government"},
@@ -55,7 +56,7 @@ rss_sources = [
     {"url": "https://asiafoundation.org/feed/", "source_type": "Think Tank"},
 
     # 🌍 Multilateral
-     {"url": "https://www.apec.org/feeds/rss", "source_type": "Multilateral"},
+    {"url": "https://www.apec.org/feeds/rss", "source_type": "Multilateral"},
     {"url": "https://news.un.org/feed/subscribe/en/news/region/asia-pacific/feed/rss.xml", "source_type": "Multilateral"},
     {"url": "https://www.aseanbriefing.com/news/feed/", "source_type": "Multilateral"},
     {"url": "https://www.wto.org/english/news_e/news_e.rss", "source_type": "Multilateral"},
@@ -71,33 +72,27 @@ rss_sources = [
     {"url": "https://www.reutersagency.com/feed/?best-topics=trade&post_type=best", "source_type": "Private Sector"}
 ]
 
-# APEC economies + synonyms + capital cities
+# === Economy Keywords ===
 economy_keywords = {
-    "Australia":             ["Australia", "Canberra"],
-    "Brunei":                ["Brunei", "Brunei Darussalam", "Bandar Seri Begawan"],
-    "Canada":                ["Canada", "Ottawa"],
-    "Chile":                 ["Chile", "Santiago"],
-    "China":                 ["China", "PRC", "People's Republic of China", "Mainland China", "Beijing"],
-    "Hong Kong, China":      ["Hong Kong", "HK"],
-    "Indonesia":             ["Indonesia", "Republic of Indonesia", "Jakarta"],
-    "Japan":                 ["Japan", "Tokyo"],
-    "Republic of Korea":     ["Republic of Korea", "South Korea", "ROK", "Korea", "Seoul"],
-    "Malaysia":              ["Malaysia", "Malaysian", "Kuala Lumpur"],
-    "Mexico":                ["Mexico", "Mexican", "Mexico City"],
-    "New Zealand":           ["New Zealand", "NZ", "Wellington"],
-    "Papua New Guinea":      ["Papua New Guinea", "PNG", "Port Moresby"],
-    "Peru":                  ["Peru", "Peruvian", "Lima"],
-    "The Philippines":       ["The Philippines", "Philippines", "PHL", "Manila"],
-    "Russia":                ["Russia", "Russian Federation", "Russian", "Moscow"],
-    "Singapore":             ["Singapore"],  # city-state, so repeats
-    "Chinese Taipei":        ["Chinese Taipei", "Taipei", "Taiwan"],
-    "Thailand":              ["Thailand", "Thai", "Bangkok"],
-    "United States":         ["United States", "USA", "US", "Washington", "Washington D.C.", "DC"],
-    "Vietnam":               ["Vietnam", "Viet Nam", "Hanoi"]
+    "Australia": ["Australia", "Canberra"],
+    "Brunei": ["Brunei"],
+    "Canada": ["Canada", "Ottawa"],
+    "China": ["China", "Beijing"],
+    "Indonesia": ["Indonesia", "Jakarta"],
+    "Japan": ["Japan", "Tokyo"],
+    "Republic of Korea": ["South Korea", "Korea", "Seoul"],
+    "Malaysia": ["Malaysia", "Kuala Lumpur"],
+    "Mexico": ["Mexico", "Mexico City"],
+    "New Zealand": ["New Zealand", "NZ", "Wellington"],
+    "Philippines": ["Philippines", "Manila"],
+    "Singapore": ["Singapore"],
+    "Chinese Taipei": ["Taiwan", "Taipei"],
+    "Thailand": ["Thailand", "Bangkok"],
+    "United States": ["United States", "USA", "Washington"],
+    "Vietnam": ["Vietnam", "Hanoi"],
 }
 
-def tag_economy(text):
-    """Return list of economies whose keywords (including capitals) appear in text."""
+def tag_economies(text: str):
     found = []
     lower = text.lower()
     for econ, patterns in economy_keywords.items():
@@ -107,16 +102,16 @@ def tag_economy(text):
                 break
     return found or ["Uncategorized"]
 
-]
+def get_sentiment(text: str):
+    polarity = TextBlob(text).sentiment.polarity
+    if polarity > 0.1:
+        return "Positive"
+    elif polarity < -0.1:
+        return "Negative"
+    else:
+        return "Neutral"
 
-def tag_economies(text):
-    matches = []
-    for econ in known_economies:
-        if econ.lower() in text.lower():
-            matches.append(econ)
-    return list(set(matches)) or ["Unknown"]
-
-# ✅ Parse RSS feeds
+# === Parse Feeds ===
 articles = []
 
 for source in rss_sources:
@@ -126,35 +121,70 @@ for source in rss_sources:
 
     for entry in feed.entries:
         title = entry.get("title", "No title")
-        link = entry.get("link", "")
         summary = entry.get("summary", "") or entry.get("description", "")
-        published = entry.get("published", "") or entry.get("updated", "")
+        link = entry.get("link", "")
         try:
             published_dt = datetime(*entry.published_parsed[:6])
             published_str = published_dt.strftime("%Y-%m-%d")
         except Exception:
             published_str = datetime.now().strftime("%Y-%m-%d")
 
+        text = " ".join([title, summary])
+        economies = tag_economies(text + " " + link)
+        sentiment = get_sentiment(text)
+
         article = {
             "title": title,
+            "summary": summary,
             "link": link,
             "published": published_str,
-            "summary": summary,
-            "people": "",
-            "leadership_terms": "",
-            "aligned_with_us": "Unknown",
-            "matched_alignment_phrase": "",
-            "reform_themes": "",
-            "economy": ", ".join(tag_economies(title + summary + link)),
-            "source_type": source_type
+            "source_type": source_type,
+            "economy": ", ".join(economies),
+            "sentiment": sentiment,
         }
         articles.append(article)
 
-
-# ✅ Save results to JSON file
-output_path = "data/processed_articles.json"
-with open(output_path, "w", encoding="utf-8") as f:
+# === Save Raw JSON ===
+output_json = "data/processed_articles.json"
+with open(output_json, "w", encoding="utf-8") as f:
     json.dump(articles, f, ensure_ascii=False, indent=2)
 
-print(f"✅ Saved {len(articles)} articles to {output_path}")
+# === Save Media Log CSV ===
+df = pd.DataFrame(articles)
+output_csv = "data/media_log.csv"
+df.to_csv(output_csv, index=False)
 
+# === Create Risk Signals for Tableau ===
+def sentiment_to_scenario(sent):
+    if sent == "Positive":
+        return "Optimistic"
+    elif sent == "Negative":
+        return "Pessimistic"
+    else:
+        return "Baseline"
+
+def sentiment_to_strength(sent):
+    if sent == "Negative":
+        return "High"
+    elif sent == "Positive":
+        return "Medium"
+    else:
+        return "Low"
+
+df["Scenario"] = df["sentiment"].apply(sentiment_to_scenario)
+df["Signal Strength"] = df["sentiment"].apply(sentiment_to_strength)
+df["Assumption"] = "Political and Institutional Continuity"  # PMP mapping
+df["Workstream"] = "General"
+df["Justification"] = df["title"]
+
+risk_signals = df.rename(columns={"published": "Date", "economy": "Economy"})[
+    ["Date", "Economy", "Workstream", "Assumption", "Scenario", "Signal Strength", "Justification"]
+]
+
+risk_csv = "data/risk_signals.csv"
+risk_signals.to_csv(risk_csv, index=False)
+
+print(f"✅ Saved {len(df)} articles")
+print(f"   → {output_json}")
+print(f"   → {output_csv}")
+print(f"   → {risk_csv}")
