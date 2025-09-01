@@ -1,5 +1,6 @@
 import pandas as pd
 import re, string
+from nltk.stem import WordNetLemmatizer
 
 # ----------------------------
 # CONFIG
@@ -20,12 +21,20 @@ STOPWORDS = set([
     "by","or","as","our","are","will","can","from","have","not","has","had"
 ])
 
+lemmatizer = WordNetLemmatizer()
+
 def clean_text(text):
     if pd.isna(text):
         return ""
     text = text.lower()
     text = re.sub(f"[{re.escape(string.punctuation)}]", "", text)
     return text
+
+def normalize_word(word: str) -> str:
+    # Lemmatize verbs (so "sharing" → "share") and nouns ("applications" → "application")
+    word = lemmatizer.lemmatize(word, pos="v")
+    word = lemmatizer.lemmatize(word, pos="n")
+    return word
 
 def preprocess_feedback():
     # Load exported feedback
@@ -38,6 +47,7 @@ def preprocess_feedback():
                 cleaned = clean_text(text)
                 for word in cleaned.split():
                     if word not in STOPWORDS and len(word) > 2:
+                        word = normalize_word(word)   # 👈 normalize before adding
                         records.append((word, source))
 
     df_words = pd.DataFrame(records, columns=["Word", "Source"])
