@@ -1,14 +1,12 @@
 import pandas as pd
 import re, string
-from collections import Counter
 
 # ----------------------------
 # CONFIG
 # ----------------------------
-INPUT_FILE = "Feedback_Form_Data_Long.csv"   # your raw export file
+INPUT_FILE = "Feedback_Form_Data_Long.csv"   # file already exported earlier in workflow
 OUTPUT_FILE = "word_frequency.csv"           # output for Tableau
 
-# Columns to use and their "Source" labels
 TEXT_FIELDS = {
     "Suggested Improvements": "Improvements",
     "Sharing Examples": "Sharing",
@@ -29,10 +27,8 @@ def clean_text(text):
     text = re.sub(f"[{re.escape(string.punctuation)}]", "", text)
     return text
 
-# ----------------------------
-# MAIN
-# ----------------------------
 def preprocess_feedback():
+    # Load exported feedback
     df = pd.read_csv(INPUT_FILE)
 
     records = []
@@ -49,11 +45,18 @@ def preprocess_feedback():
     # Count per source
     df_counts = df_words.groupby(["Word","Source"]).size().reset_index(name="Frequency")
 
-    # Total counts across all sources
+    # Totals across all sources
     df_total = df_words.groupby("Word").size().reset_index(name="TotalFrequency")
 
     # Merge
     df_final = pd.merge(df_counts, df_total, on="Word")
 
     # Sort
-    df_final = df_final.sort_values(by="TotalFrequenc_
+    df_final = df_final.sort_values(by="TotalFrequency", ascending=False)
+
+    # Save to repo root (so GitHub Action can commit it like other CSVs)
+    df_final.to_csv(OUTPUT_FILE, index=False)
+    print(f"✅ Saved word frequencies to {OUTPUT_FILE}")
+
+if __name__ == "__main__":
+    preprocess_feedback()
