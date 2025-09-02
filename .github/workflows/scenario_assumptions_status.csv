@@ -27,15 +27,15 @@ def normalize_df(df, source_name):
     return df[COLUMNS].assign(source=source_name)
 
 def safe_read_csv(file):
-    """Read CSV in forgiving mode to avoid quoting errors."""
+    """Read CSV with forgiving settings to avoid illegal quoting errors."""
     try:
         df = pd.read_csv(
             file,
             sep=",",                    # force comma delimiter
-            quoting=csv.QUOTE_NONE,     # treat quotes as plain characters
+            quoting=csv.QUOTE_NONE,     # treat " as literal
             on_bad_lines="skip",        # skip malformed rows
             engine="python",            # tolerant parser
-            dtype=str                   # everything as text
+            dtype=str                   # read everything as string
         )
         return df
     except Exception as e:
@@ -50,7 +50,7 @@ def main():
             df = safe_read_csv(file)
             if not df.empty:
                 df = normalize_df(df, file)
-                # Strip stray quotes and whitespace
+                # Strip stray quotes and whitespace from text fields
                 for col in ["signal", "notes"]:
                     if col in df.columns:
                         df[col] = df[col].astype(str).str.replace('"', "", regex=False).str.strip()
