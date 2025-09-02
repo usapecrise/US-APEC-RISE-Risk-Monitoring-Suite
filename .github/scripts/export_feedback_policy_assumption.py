@@ -1,7 +1,7 @@
 import pandas as pd
 
 INPUT_FILE = "Feedback_Form_Data.csv"
-OUTPUT_FILE = "feedback_policy_assumption.csv"
+OUTPUT_FILE = "policy_reform_assumption.csv"
 
 def classify_status(pct_yes: float) -> str:
     """Apply scenario thresholds for application/sharing intent."""
