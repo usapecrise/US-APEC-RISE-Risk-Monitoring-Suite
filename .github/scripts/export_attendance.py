@@ -1,16 +1,18 @@
 import os
 import requests
 import pandas as pd
+import urllib.parse
 
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "YOUR_BASE_ID"
-TABLES = ["OT1 Sign-Ins (Workshops)", "Other Sign-Ins (Meetings/Dialogues)"]  # replace with your table names
+TABLES = ["OT1 Sign-Ins (Workshops)", "Other Sign-Ins (Meetings/Dialogues)"]
 VIEW_NAME = "Grid view"
 
 def fetch_table(table_name):
     """Fetch all records from an Airtable table."""
-    url = f"https://api.airtable.com/v0/{BASE_ID}/{table_name}"
+    table_name_encoded = urllib.parse.quote(table_name, safe="")
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{table_name_encoded}"
     headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
     records, offset = [], None
 
@@ -21,8 +23,11 @@ def fetch_table(table_name):
 
         resp = requests.get(url, headers=headers, params=params)
 
-        # ✅ Debug print goes AFTER the request
+        # Debug print (first 200 chars of response)
         print("DEBUG response for", table_name, ":", resp.status_code, resp.text[:200])
+
+        if resp.status_code != 200:
+            raise RuntimeError(f"Airtable API error {resp.status_code} for {table_name}: {resp.text}")
 
         data = resp.json()
         for r in data.get("records", []):
@@ -47,7 +52,6 @@ def fetch_table(table_name):
 dfs = [fetch_table(tbl) for tbl in TABLES]
 df = pd.concat(dfs, ignore_index=True)
 
-# Debug print
 print("DEBUG columns:", df.columns.tolist())
 
 if "Workshop" not in df.columns or "Workshop Date" not in df.columns:
@@ -56,7 +60,7 @@ if "Workshop" not in df.columns or "Workshop Date" not in df.columns:
 # Create Workshop Key
 df["Workshop Key"] = df["Workshop"].astype(str) + " | " + df["Workshop Date"].astype(str)
 
-# Save raw attendance with Workstream included
+# Save raw attendance
 df.to_csv("attendance_records.csv", index=False)
 print(f"✅ Exported {len(df)} rows from {len(TABLES)} tables → attendance_records.csv")
 
@@ -130,7 +134,7 @@ if not df.empty:
             "notes": f"≈{pct_ws:.0f}% of APEC economies participated"
         })
 
-        # --- Economy-level breakdown within each workstream ---
+        # --- Economy-level breakdown ---
         for econ, ge in g.groupby("Economy"):
             econ_ws_stats = (
                 ge.groupby("Workshop Key")
@@ -163,9 +167,9 @@ if not df.empty:
                 "notes": f"{pct_attended:.0f}% attendance rate"
             })
 
-    # Export all levels
     attendance_status = pd.DataFrame(rows)
     attendance_status.to_csv("attendance_assumption.csv", index=False)
     print(f"✅ Assumption status saved → attendance_assumption.csv ({len(rows)} rows)")
 else:
     print("⚠️ No attendance data found, skipping assumption status")
+
