@@ -71,8 +71,11 @@ def main():
         ]).to_csv("attendance_continuity_assumption.csv", index=False)
         return
 
-    # Normalize dates
+    # Normalize dates and economy field
     df["Workshop Date"] = pd.to_datetime(df["Workshop Date"], errors="coerce")
+    df["Economy"] = df["Economy"].apply(
+        lambda x: "; ".join(x) if isinstance(x, list) else str(x)
+    )
 
     # === 2. Identify last 3 events ===
     event_order = (
