@@ -155,12 +155,13 @@ jobs:
           git add \
             OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv \
             OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv \
-            KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv Attendance.csv \
+            KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv \
             Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv \
             Feedback_Form_Data_Long.csv word_frequency.csv word_frequency_detailed.csv \
-            sentiment_summary.csv sentiment_by_question.csv top_phrases.csv attendance_assumption.csv \
+            sentiment_summary.csv sentiment_by_question.csv top_phrases.csv attendance_records.csv \
             feedback_assumption.csv attendance_continuity_assumption.csv policy_reform_assumption.csv \
-            cost_share_assumption.csv assumptions_status.csv feedback_policy_assumption.csv risk_assumption.csv
+            cost_share_assumption.csv assumptions_status.csv feedback_policy_assumption.csv \
+            risk_assumption.csv attendance_assumption.csv
 
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
