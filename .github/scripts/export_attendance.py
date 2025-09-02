@@ -67,7 +67,6 @@ if not df.empty:
 
     last3 = workshop_stats.head(3)
     economies_present = last3["Economy"].mean()
-
     pct = (economies_present / 21) * 100
     scenario = (
         "optimistic" if pct >= 75 else
@@ -123,11 +122,44 @@ if not df.empty:
             "notes": f"≈{pct_ws:.0f}% of APEC economies participated"
         })
 
-    # Export both aggregate + workstream rows
+        # --- Economy-level breakdown within each workstream ---
+        for econ, ge in g.groupby("Economy"):
+            econ_ws_stats = (
+                ge.groupby("Workshop Key")
+                .agg({"Economy": "count", "Date": "first"})
+                .reset_index()
+                .sort_values("Date", ascending=False)
+            )
+
+            last3_econ_ws = econ_ws_stats.head(3)
+            if last3_econ_ws.empty:
+                continue
+
+            # Count how many of the last 3 workshops this economy attended
+            attended_count = (last3_econ_ws["Economy"] > 0).sum()
+            pct_attended = (attended_count / 3) * 100
+
+            scenario_econ = (
+                "optimistic" if pct_attended == 100 else
+                "baseline" if pct_attended >= 50 else
+                "pessimistic"
+            )
+
+            rows.append({
+                "assumption": "Stakeholder alignment with U.S. focus areas",
+                "monitoring_tool": "attendance",
+                "economy": econ,
+                "workstream": ws,
+                "level": "economy",
+                "date": last3_econ_ws["Date"].max().strftime("%Y-%m-%d"),
+                "signal": f"{econ} attended {attended_count} of last 3 {ws} dialogues",
+                "status": scenario_econ,
+                "notes": f"{pct_attended:.0f}% attendance rate"
+            })
+
+    # Export all levels
     attendance_status = pd.DataFrame(rows)
     attendance_status.to_csv("attendance_assumption.csv", index=False)
     print(f"✅ Assumption status saved → attendance_assumption.csv ({len(rows)} rows)")
 else:
     print("⚠️ No attendance data found, skipping assumption status")
-
-
