@@ -28,6 +28,15 @@ jobs:
       - name: Run Media Monitor (update_articles.py)
         run: python media-monitor/update_articles.py
 
+      - name: Debug — list files
+        run: |
+          echo "PWD:"
+          pwd
+          echo "Files here:"
+          ls -alh
+          echo "Files in media-monitor/:"
+          ls -alh media-monitor || true
+
       - name: Commit and push updated outputs
         run: |
           git config user.name "github-actions"
