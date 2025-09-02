@@ -1,4 +1,3 @@
-# .github/scripts/export_attendance_continuity.py
 import os
 import requests
 import pandas as pd
@@ -50,6 +49,16 @@ def fetch_table(table_label, table_id):
     return pd.DataFrame(records)
 
 
+def classify_economy(attended):
+    """Classify economy continuity status based on attendance out of 3."""
+    if attended == 3:
+        return "optimistic", "Consistently attended last 3 events"
+    elif attended == 2:
+        return "baseline", "Attended 2 of last 3 events"
+    else:
+        return "pessimistic", "Missed 2+ recent events"
+
+
 def main():
     # === 1. Fetch data ===
     dfs = [fetch_table(label, tid) for label, tid in TABLES.items()]
@@ -65,8 +74,7 @@ def main():
     # Normalize dates
     df["Workshop Date"] = pd.to_datetime(df["Workshop Date"], errors="coerce")
 
-    # === 2. Continuity by economy ===
-    # Sort events (most recent 3 workshops)
+    # === 2. Identify last 3 events ===
     event_order = (
         df.groupby("Workshop")["Workshop Date"].min()
         .sort_values(ascending=False)
@@ -75,6 +83,7 @@ def main():
     last3_events = list(event_order[:3])
     last3_df = df[df["Workshop"].isin(last3_events)]
 
+    # === 3. Economy-level responsiveness ===
     economy_stats = (
         last3_df.groupby("Economy")["Workshop"].nunique()
         .reset_index(name="Events_Attended")
@@ -84,16 +93,7 @@ def main():
     for _, row in economy_stats.iterrows():
         economy = row["Economy"]
         attended = row["Events_Attended"]
-
-        if attended == 3:
-            status = "optimistic"
-            signal = "Consistently attended last 3 events"
-        elif attended == 2:
-            status = "baseline"
-            signal = "Attended 2 of last 3 events"
-        else:
-            status = "pessimistic"
-            signal = "Missed 2+ recent events"
+        status, signal = classify_economy(attended)
 
         records.append({
             "assumption": "Political and institutional continuity",
@@ -105,6 +105,26 @@ def main():
             "notes": f"{economy} attended {attended}/3 most recent APEC events"
         })
 
+    # === 4. APEC aggregate continuity ===
+    avg_attended = economy_stats["Events_Attended"].mean() if not economy_stats.empty else 0
+    if avg_attended >= 2.5:
+        agg_status = "optimistic"
+    elif avg_attended >= 1.5:
+        agg_status = "baseline"
+    else:
+        agg_status = "pessimistic"
+
+    records.append({
+        "assumption": "Political and institutional continuity",
+        "monitoring_tool": "attendance",
+        "economy": "APEC (aggregate)",
+        "date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
+        "signal": f"On average, economies attended {avg_attended:.1f}/3 recent events",
+        "status": agg_status,
+        "notes": "Aggregate continuity measure across APEC economies"
+    })
+
+    # === 5. Export ===
     out_df = pd.DataFrame(records)
     out_df.to_csv("attendance_continuity_assumption.csv", index=False)
     print(f"✅ Continuity assumption saved → attendance_continuity_assumption.csv ({len(out_df)} rows)")
