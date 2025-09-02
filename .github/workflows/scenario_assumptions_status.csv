@@ -1,13 +1,14 @@
 import pandas as pd
 import os
 
+# ── CONFIG ──────────────────────────────────────────────
 OUTPUT_FILE = "assumptions_status.csv"
 
 # List of assumption CSVs to combine
 INPUT_FILES = [
     "feedback_assumption.csv",
-    "attendance_continuity_assumption.csv",  # actually Stakeholder Alignment
-    "attendance_assumption.csv",             # actually Political Continuity
+    "attendance_continuity_assumption.csv",  # Stakeholder Alignment
+    "attendance_assumption.csv",             # Political Continuity
     "feedback_policy_assumption.csv",
     "policy_reform_assumption.csv",
     "cost_share_assumption.csv",
@@ -27,18 +28,27 @@ def normalize_df(df, source_name):
             df[col] = ""
     return df[COLUMNS].assign(source=source_name)
 
+def safe_read_csv(file):
+    """Read CSV with tolerant settings to avoid quoting errors."""
+    try:
+        df = pd.read_csv(file, quoting=3, on_bad_lines="skip", engine="python")
+        return df
+    except Exception as e:
+        print(f"⚠️ Error parsing {file}: {e}")
+        return pd.DataFrame(columns=COLUMNS)
+
 def main():
     combined = []
-    
+
     for file in INPUT_FILES:
         if os.path.exists(file):
-            try:
-                df = pd.read_csv(file)
+            df = safe_read_csv(file)
+            if not df.empty:
                 df = normalize_df(df, file)
                 combined.append(df)
                 print(f"✅ Loaded {file} ({len(df)} rows)")
-            except Exception as e:
-                print(f"⚠️ Error reading {file}: {e}")
+            else:
+                print(f"⚠️ No usable rows in {file}")
         else:
             print(f"⚠️ Missing file: {file}")
 
@@ -51,3 +61,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
