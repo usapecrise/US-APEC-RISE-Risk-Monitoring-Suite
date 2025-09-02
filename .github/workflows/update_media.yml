@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0       # fetch full history
+          ref: main            # ensure we’re on the main branch
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -31,4 +34,5 @@ jobs:
           git config user.email "github-actions@github.com"
           git add *.csv *.json *.html || true
           git commit -m "Auto-update media monitor outputs" || echo "No changes to commit"
-          git push
+          git push origin main
+
