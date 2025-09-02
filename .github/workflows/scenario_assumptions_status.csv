@@ -4,7 +4,6 @@ import csv
 
 # ── CONFIG ──────────────────────────────────────────────
 OUTPUT_FILE = "assumptions_status.csv"
-ERROR_FILE = "assumptions_status_errors.csv"
 
 # List of assumption CSVs to combine
 INPUT_FILES = [
@@ -31,52 +30,46 @@ def normalize_df(df, source_name):
     return df[COLUMNS].assign(source=source_name)
 
 def safe_read_csv(file):
-    """Read CSV with tolerant settings and capture bad rows."""
-    bad_lines = []
+    """Read CSV while ignoring quoting issues."""
     try:
         df = pd.read_csv(
             file,
-            quoting=csv.QUOTE_NONE,   # treat quotes as plain characters
-            on_bad_lines="warn",      # warn about bad lines
-            engine="python"           # more tolerant parser
+            quoting=csv.QUOTE_NONE,   # treat quotes as plain text
+            on_bad_lines="skip",      # skip any malformed lines
+            engine="python"           # tolerant parser
         )
-        return df, bad_lines
+        return df
     except Exception as e:
-        print(f"⚠️ Error parsing {file}: {e}")
-        return pd.DataFrame(columns=COLUMNS), bad_lines
+        print(f"⚠️ Could not parse {file}: {e}")
+        return pd.DataFrame(columns=COLUMNS)
 
 def main():
     combined = []
-    error_records = []
 
     for file in INPUT_FILES:
         if os.path.exists(file):
-            df, bad_lines = safe_read_csv(file)
+            df = safe_read_csv(file)
             if not df.empty:
                 df = normalize_df(df, file)
                 combined.append(df)
                 print(f"✅ Loaded {file} ({len(df)} rows)")
             else:
                 print(f"⚠️ No usable rows in {file}")
-            if bad_lines:
-                error_records.extend([(file, l) for l in bad_lines])
         else:
             print(f"⚠️ Missing file: {file}")
 
     if combined:
         out_df = pd.concat(combined, ignore_index=True)
+
+        # Clean stray quotes from text fields
+        for col in ["signal", "notes"]:
+            if col in out_df.columns:
+                out_df[col] = out_df[col].astype(str).str.replace('"', "", regex=False)
+
         out_df.to_csv(OUTPUT_FILE, index=False)
         print(f"🎯 Combined assumptions saved → {OUTPUT_FILE} ({len(out_df)} rows)")
     else:
         print("⚠️ No assumption files found — nothing written.")
 
-    # Save error rows if any
-    if error_records:
-        with open(ERROR_FILE, "w") as f:
-            for src, line in error_records:
-                f.write(f"{src} :: {line}\n")
-        print(f"⚠️ Logged {len(error_records)} problematic rows → {ERROR_FILE}")
-
 if __name__ == "__main__":
     main()
-
