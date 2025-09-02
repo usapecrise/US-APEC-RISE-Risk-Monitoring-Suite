@@ -144,7 +144,7 @@ jobs:
             Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv \
             Feedback_Form_Data_Long.csv word_frequency.csv word_frequency_detailed.csv \
             sentiment_summary.csv sentiment_by_question.csv top_phrases.csv attendance_assumption.csv \
-            feedback_assumption.csv
+            feedback_assumption.csv attendance_continuity_assumption.cs
 
 
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
