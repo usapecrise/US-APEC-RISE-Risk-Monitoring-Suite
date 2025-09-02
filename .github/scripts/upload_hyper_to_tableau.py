@@ -42,7 +42,9 @@ EXTRACT_NAME_MAP = {
     "word_frequency.csv": "Word Frequency Extract",
     "word_frequency_detailed.csv": "Word Frequency Detailed Extract",
     "sentiment_summary.csv": "Sentiment Summary Extract",
-    "top_phrases.csv": "Top Phrases Extract"
+    "top_phrases.csv": "Top Phrases Extract",
+    "risk_signals.csv": "Risk Signals Extract",
+    "assumptions_status.csv": "Assumptions Status Extract"
 }
 
 # ── CONVERT CSV TO HYPER ───────────────────────────────
