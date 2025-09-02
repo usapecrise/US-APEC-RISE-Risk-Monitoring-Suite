@@ -43,13 +43,21 @@ def fetch_table(table_name):
 dfs = [fetch_table(tbl) for tbl in TABLES]
 df = pd.concat(dfs, ignore_index=True)
 
-# ✅ Standardize field names so rest of script works unchanged
-df = df.rename(columns={
+# ✅ Standardize column names
+rename_map = {
     "Workshop": "Workshop Title",
     "Workshop Date": "Date"
-})
+}
+df = df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns})
 
-# Create Workshop Key (title + date only)
+# Debug print (shows in GitHub Action logs)
+print("DEBUG columns:", df.columns.tolist())
+
+# Safety check
+if "Workshop Title" not in df.columns or "Date" not in df.columns:
+    raise KeyError(f"Expected Workshop Title/Date fields not found. Got: {df.columns.tolist()}")
+
+# Create Workshop Key
 df["Workshop Key"] = df["Workshop Title"].astype(str) + " | " + df["Date"].astype(str)
 
 # Save raw attendance with Workstream included
@@ -58,9 +66,7 @@ print(f"✅ Exported {len(df)} rows from {len(TABLES)} tables → attendance_rec
 
 # === 2. Generate Assumption Evidence (Stakeholder Alignment) ===
 if not df.empty:
-    # Normalize dates
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-
     rows = []
 
     # --- APEC-wide aggregate ---
@@ -141,7 +147,6 @@ if not df.empty:
             if last3_econ_ws.empty:
                 continue
 
-            # Count how many of the last 3 workshops this economy attended
             attended_count = (last3_econ_ws["Economy"] > 0).sum()
             pct_attended = (attended_count / 3) * 100
             scenario_econ = (
@@ -168,4 +173,5 @@ if not df.empty:
     print(f"✅ Assumption status saved → attendance_assumption.csv ({len(rows)} rows)")
 else:
     print("⚠️ No attendance data found, skipping assumption status")
+
 
