@@ -9,6 +9,7 @@ TABLES = ["OT1 Sign-Ins (Workshops)", "Other Sign-Ins (Meetings/Dialogues)"]  # 
 VIEW_NAME = "Grid view"
 
 def fetch_table(table_name):
+    """Fetch all records from an Airtable table."""
     url = f"https://api.airtable.com/v0/{BASE_ID}/{table_name}"
     headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
     records, offset = [], None
@@ -47,17 +48,12 @@ df["Workshop Key"] = df["Workshop Title"].astype(str) + " | " + df["Date"].astyp
 df.to_csv("attendance_records.csv", index=False)
 print(f"✅ Exported {len(df)} rows from {len(TABLES)} tables → attendance_records.csv")
 
-# === 2. Generate Assumption Classification ===
-# Scenario rules for "Stakeholder Alignment"
-# - Optimistic: ≥ 75% economies represented in last 3 workshops
-# - Baseline: 40–74%
-# - Pessimistic: < 40%
-
+# === 2. Generate Assumption Evidence (Stakeholder Alignment) ===
 if not df.empty:
     # Normalize dates
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
 
-    # Group by workshop (unique key) → count distinct economies
+    # Group by workshop → count distinct economies
     workshop_stats = (
         df.groupby("Workshop Key")
         .agg({"Economy": "nunique", "Date": "first"})
@@ -73,20 +69,25 @@ if not df.empty:
     pct = (economies_present / 21) * 100
 
     if pct >= 75:
-        scenario = "Optimistic"
+        scenario = "optimistic"
     elif pct >= 40:
-        scenario = "Baseline"
+        scenario = "baseline"
     else:
-        scenario = "Pessimistic"
+        scenario = "pessimistic"
 
+    # Structured assumption schema
     attendance_status = pd.DataFrame([{
-        "Assumption": "Stakeholder alignment with U.S. focus areas",
-        "Scenario": scenario,
-        "Date": last3["Date"].max().strftime("%Y-%m-%d"),
-        "Justification": f"Average {pct:.0f}% economy participation in last 3 dialogues"
+        "assumption": "Stakeholder alignment with U.S. focus areas",
+        "monitoring_tool": "attendance",
+        "economy": "APEC (aggregate)",
+        "date": last3["Date"].max().strftime("%Y-%m-%d"),
+        "signal": f"Average {economies_present:.1f} economies represented (last 3 dialogues)",
+        "status": scenario,
+        "notes": f"≈{pct:.0f}% of APEC economies participated"
     }])
 
     attendance_status.to_csv("attendance_assumption.csv", index=False)
     print(f"✅ Assumption status saved → attendance_assumption.csv")
 else:
     print("⚠️ No attendance data found, skipping assumption status")
+
