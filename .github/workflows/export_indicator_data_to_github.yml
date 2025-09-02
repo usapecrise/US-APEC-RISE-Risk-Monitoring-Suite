@@ -101,6 +101,11 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_Feedback_Form_Data.py
+
+      - name: Run Attendance export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_attendance.py
         
       - name: Generate Word Frequency & Sentiment CSVs
         run: python .github/scripts/preprocess_feedback.py
@@ -124,7 +129,7 @@ jobs:
           git add \
             OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv \
             OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv \
-            KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv \
+            KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv Attendance.csv \
             Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv \
             Feedback_Form_Data_Long.csv word_frequency.csv word_frequency_detailed.csv \
             sentiment_summary.csv sentiment_by_question.csv top_phrases.csv
