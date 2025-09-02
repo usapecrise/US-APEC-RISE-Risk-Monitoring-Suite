@@ -4,8 +4,8 @@ import pandas as pd
 
 # ── CONFIG ──────────────────────────────────────────────
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
-BASE_ID = "YOUR_BASE_ID"   # replace with your Airtable Base ID
-TABLE_NAME = "Feedback Form Data"   # replace with your Airtable table name
+BASE_ID = "app0Ljjhrp3lTTpTO"
+TABLE_NAME = "Feedback Form Entries"   # replace with your Airtable table name
 VIEW_NAME = "Grid view"
 
 OUTPUT_FILE = "policy_reform_assumption.csv"
