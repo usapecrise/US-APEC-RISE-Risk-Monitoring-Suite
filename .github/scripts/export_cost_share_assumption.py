@@ -29,11 +29,6 @@ else:
     latest_fy = "Unknown"
     df_latest = df
 
-# === Aggregate indicators ===
-total_amount = df_latest["Amount_clean"].sum()
-economies_count = df_latest["Economy"].nunique()
-firms_count = df_latest["Firm"].nunique()
-
 # === Classification rules (lower thresholds) ===
 def classify(total, econ_count, firm_count):
     if total >= 5000 and econ_count >= 2 and firm_count >= 2:
@@ -43,8 +38,14 @@ def classify(total, econ_count, firm_count):
     else:
         return "pessimistic"
 
-# === Aggregate signal ===
-rows = [{
+rows = []
+
+# === Aggregate APEC-wide signal ===
+total_amount = df_latest["Amount_clean"].sum()
+economies_count = df_latest["Economy"].nunique()
+firms_count = df_latest["Firm"].nunique()
+
+rows.append({
     "assumption": "Private sector cost-share commitments sustained",
     "monitoring_tool": "cost_share",
     "economy": "APEC (aggregate)",
@@ -54,7 +55,7 @@ rows = [{
     "signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Home Economy only)",
     "status": classify(total_amount, economies_count, firms_count),
     "notes": "Aggregate private sector resources recorded in OT5"
-}]
+})
 
 # === Economy-level signals ===
 for econ, g in df_latest.groupby("Economy"):
@@ -74,7 +75,28 @@ for econ, g in df_latest.groupby("Economy"):
         "notes": "Economy-specific private sector resources recorded in OT5"
     })
 
+# === Workstream-level signals ===
+if "Workstream" in df_latest.columns:
+    for ws, g in df_latest.groupby("Workstream"):
+        ws_total = g["Amount_clean"].sum()
+        ws_econs = g["Economy"].nunique()
+        ws_firms = g["Firm"].nunique()
+        scenario_ws = classify(ws_total, ws_econs, ws_firms)
+
+        rows.append({
+            "assumption": "Private sector cost-share commitments sustained",
+            "monitoring_tool": "cost_share",
+            "economy": "APEC (aggregate)",
+            "workstream": ws,
+            "level": "workstream",
+            "date": pd.Timestamp.today().strftime("%Y-%m-%d"),
+            "signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Home Economy only)",
+            "status": scenario_ws,
+            "notes": "Workstream-specific private sector resources recorded in OT5"
+        })
+
 # === Export ===
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows)")
+
