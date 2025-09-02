@@ -13,6 +13,7 @@ def fetch_table(table_name):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{table_name}"
     headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
     records, offset = [], None
+    print("DEBUG response for", table_name, ":", resp.status_code, resp.text[:200])
 
     while True:
         params = {"view": VIEW_NAME}
