@@ -1,0 +1,54 @@
+import pandas as pd
+import os
+
+# ── CONFIG ──────────────────────────────────────────────
+OUTPUT_FILE = "assumptions_status.csv"
+
+# List of assumption CSVs to combine
+INPUT_FILES = [
+    "feedback_assumption.csv",
+    "attendance_continuity_assumption.csv",  # actually Stakeholder Alignment
+    "attendance_assumption.csv",             # actually Political Continuity
+    "feedback_policy_assumption.csv",
+    "policy_reform_assumption.csv",
+    "cost_share_assumption.csv",
+    "risk_assumption.csv"
+]
+
+# Expected schema
+COLUMNS = [
+    "assumption", "monitoring_tool", "status",
+    "signal", "date", "economy", "notes"
+]
+
+def normalize_df(df, source_name):
+    """Ensure dataframe has all expected columns, fill if missing."""
+    for col in COLUMNS:
+        if col not in df.columns:
+            df[col] = ""
+    return df[COLUMNS].assign(source=source_name)
+
+def main():
+    combined = []
+    
+    for file in INPUT_FILES:
+        if os.path.exists(file):
+            try:
+                df = pd.read_csv(file)
+                df = normalize_df(df, file)
+                combined.append(df)
+                print(f"✅ Loaded {file} ({len(df)} rows)")
+            except Exception as e:
+                print(f"⚠️ Error reading {file}: {e}")
+        else:
+            print(f"⚠️ Missing file: {file}")
+
+    if combined:
+        out_df = pd.concat(combined, ignore_index=True)
+        out_df.to_csv(OUTPUT_FILE, index=False)
+        print(f"🎯 Combined assumptions saved → {OUTPUT_FILE} ({len(out_df)} rows)")
+    else:
+        print("⚠️ No assumption files found — nothing written.")
+
+if __name__ == "__main__":
+    main()
