@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 
-# ── CONFIG ──────────────────────────────────────────────
 OUTPUT_FILE = "assumptions_status.csv"
 
 # List of assumption CSVs to combine
