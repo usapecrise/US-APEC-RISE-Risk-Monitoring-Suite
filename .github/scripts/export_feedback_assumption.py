@@ -3,7 +3,7 @@ import pandas as pd
 
 # Input file (already exported by export_Feedback_Form_Data.py)
 RAW_FEEDBACK_FILE = "Feedback_Form_Data.csv"
-OUTPUT_FILE = "feedback_assumption.csv"
+OUTPUT_FILE = "feedback_policy_assumption.csv"
 
 def classify_scenario(pct: float) -> str:
     """Apply scenario thresholds based on % positive responses."""
