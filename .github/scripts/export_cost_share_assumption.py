@@ -6,7 +6,7 @@ import pandas as pd
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "app0Ljjhrp3lTTpTO"
 TABLE_ID = "OT5 Private Sector Resources"
-VIEW_ID = "Grid"
+VIEW_ID = "Grid view"
 
 def fetch_ot5():
     """Fetch OT5 Private Sector Resources data from Airtable."""
