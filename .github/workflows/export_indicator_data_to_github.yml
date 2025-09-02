@@ -118,6 +118,9 @@ jobs:
       - name: Run Feedback Assumption export script
         run: python .github/scripts/export_feedback_assumption.py
 
+      - name: Run Risk Assumption export script
+        run: python .github/scripts/export_risk_assumption.py
+        
       - name: Commit and push KPI CSVs
         env:
           GIT_AUTHOR_NAME: github-actions[bot]
