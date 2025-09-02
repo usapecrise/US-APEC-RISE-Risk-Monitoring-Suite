@@ -19,16 +19,12 @@ def fetch_table(table_name):
         if offset:
             params["offset"] = offset
 
-        resp = requests.get(url, headers=heade
-
-
-    while True:
-        params = {"view": VIEW_NAME}
-        if offset:
-            params["offset"] = offset
         resp = requests.get(url, headers=headers, params=params)
-        data = resp.json()
 
+        # ✅ Debug print goes AFTER the request
+        print("DEBUG response for", table_name, ":", resp.status_code, resp.text[:200])
+
+        data = resp.json()
         for r in data.get("records", []):
             f = r.get("fields", {})
             records.append({
