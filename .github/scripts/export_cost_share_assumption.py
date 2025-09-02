@@ -1,10 +1,52 @@
-# .github/scripts/export_cost_share_assumption.py
 import os
+import requests
 import pandas as pd
 
-# Load data
-file_path = "OT5 Private Sector Resources-Grid view.csv"  # adjust path if needed
-df = pd.read_csv(file_path)
+# Airtable Config
+AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
+BASE_ID = "app0Ljjhrp3lTTpTO"
+TABLE_ID = "YOUR_OT5_TABLE_ID"  # <-- replace with actual OT5 table ID
+VIEW_ID = None   # optional, can use a specific view filter
+
+def fetch_ot5():
+    """Fetch OT5 Private Sector Resources data from Airtable."""
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_ID}"
+    headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
+    records, offset = [], None
+
+    while True:
+        params = {}
+        if VIEW_ID:
+            params["view"] = VIEW_ID
+        if offset:
+            params["offset"] = offset
+
+        resp = requests.get(url, headers=headers, params=params)
+        print("DEBUG response:", resp.status_code, resp.text[:200])
+
+        if resp.status_code != 200:
+            raise RuntimeError(f"Airtable API error {resp.status_code}: {resp.text}")
+
+        data = resp.json()
+        for r in data.get("records", []):
+            f = r.get("fields", {})
+            records.append({
+                "Economy": f.get("Economy", ""),
+                "Firm": f.get("Firm", ""),
+                "Workstream": f.get("Workstream", ""),
+                "Fiscal Year": f.get("Fiscal Year", ""),
+                "Type": f.get("Type", ""),
+                "Amount": f.get("Amount", 0)
+            })
+
+        offset = data.get("offset")
+        if not offset:
+            break
+
+    return pd.DataFrame(records)
+
+# === Load data from Airtable ===
+df = fetch_ot5()
 
 # === Clean Amount field ===
 def parse_amount(x):
@@ -99,4 +141,3 @@ if "Workstream" in df_latest.columns:
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows)")
-
