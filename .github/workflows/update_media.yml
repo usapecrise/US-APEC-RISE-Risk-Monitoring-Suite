@@ -3,7 +3,7 @@ name: Update Media Monitor
 on:
   schedule:
     - cron: "0 6 * * *"   # runs daily at 06:00 UTC
-  workflow_dispatch:        # allow manual trigger
+  workflow_dispatch:
 
 jobs:
   update-media:
@@ -12,8 +12,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0       # fetch full history
-          ref: main            # ensure we’re on the main branch
+          fetch-depth: 0
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,7 +26,7 @@ jobs:
           pip install pandas feedparser textblob plotly
 
       - name: Run Media Monitor (update_articles.py)
-        run: python media-monitor/update_articles.py
+        run: python .github/scripts/update_articles.py
 
       - name: Debug — list files
         run: |
@@ -34,13 +34,14 @@ jobs:
           pwd
           echo "Files here:"
           ls -alh
-          echo "Files in media-monitor/:"
-          ls -alh media-monitor || true
+          echo "Files in .github/scripts:"
+          ls -alh .github/scripts || true
 
       - name: Commit and push updated outputs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add -f **/*.csv **/*.json **/*.html || true
+          git add -f *.csv *.json *.html || true
           git commit -m "Auto-update media monitor outputs" || echo "No changes to commit"
           git push origin main
+
