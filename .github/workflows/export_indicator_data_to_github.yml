@@ -126,6 +126,11 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_attendance_continuity.py
 
+      - name: Run Policy Reform Assumption export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_policy_reform_assumption.py
+
       - name: Commit and push KPI CSVs
         env:
           GIT_AUTHOR_NAME: github-actions[bot]
@@ -144,7 +149,7 @@ jobs:
             Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv \
             Feedback_Form_Data_Long.csv word_frequency.csv word_frequency_detailed.csv \
             sentiment_summary.csv sentiment_by_question.csv top_phrases.csv attendance_assumption.csv \
-            feedback_assumption.csv attendance_continuity_assumption.cs
+            feedback_assumption.csv attendance_continuity_assumption.csv policy_reform_assumption.csv
 
 
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
