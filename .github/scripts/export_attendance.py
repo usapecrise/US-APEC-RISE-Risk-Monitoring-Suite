@@ -24,8 +24,8 @@ def fetch_table(table_name):
         for r in data.get("records", []):
             f = r.get("fields", {})
             records.append({
-                "Workshop Title": f.get("Workshop", ""),
-                "Date": f.get("Workshop Date", ""),
+                "Workshop": f.get("Workshop", ""),
+                "Workshop Date": f.get("Workshop Date", ""),
                 "Workstream": f.get("Workstream", ""),
                 "Economy": f.get("Economy", ""),
                 "Participant Name": f.get("Participant Name", ""),
@@ -42,6 +42,12 @@ def fetch_table(table_name):
 # === 1. Export Raw Attendance ===
 dfs = [fetch_table(tbl) for tbl in TABLES]
 df = pd.concat(dfs, ignore_index=True)
+
+# ✅ Standardize field names so rest of script works unchanged
+df = df.rename(columns={
+    "Workshop": "Workshop Title",
+    "Workshop Date": "Date"
+})
 
 # Create Workshop Key (title + date only)
 df["Workshop Key"] = df["Workshop Title"].astype(str) + " | " + df["Date"].astype(str)
@@ -138,7 +144,6 @@ if not df.empty:
             # Count how many of the last 3 workshops this economy attended
             attended_count = (last3_econ_ws["Economy"] > 0).sum()
             pct_attended = (attended_count / 3) * 100
-
             scenario_econ = (
                 "optimistic" if pct_attended == 100 else
                 "baseline" if pct_attended >= 50 else
@@ -163,3 +168,4 @@ if not df.empty:
     print(f"✅ Assumption status saved → attendance_assumption.csv ({len(rows)} rows)")
 else:
     print("⚠️ No attendance data found, skipping assumption status")
+
