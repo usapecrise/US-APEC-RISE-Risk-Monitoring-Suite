@@ -137,6 +137,11 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_policy_reform_assumption.py
 
+      - name: Run Feedback Policy Assumption export
+        env:
+         AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_feedback_policy_assumption.py
+
       - name: Run Cost Share Assumption export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
