@@ -1,8 +1,10 @@
 import pandas as pd
 import os
+import csv
 
 # ── CONFIG ──────────────────────────────────────────────
 OUTPUT_FILE = "assumptions_status.csv"
+ERROR_FILE = "assumptions_status_errors.csv"
 
 # List of assumption CSVs to combine
 INPUT_FILES = [
@@ -29,26 +31,35 @@ def normalize_df(df, source_name):
     return df[COLUMNS].assign(source=source_name)
 
 def safe_read_csv(file):
-    """Read CSV with tolerant settings to avoid quoting errors."""
+    """Read CSV with tolerant settings and capture bad rows."""
+    bad_lines = []
     try:
-        df = pd.read_csv(file, quoting=3, on_bad_lines="skip", engine="python")
-        return df
+        df = pd.read_csv(
+            file,
+            quoting=csv.QUOTE_NONE,   # treat quotes as plain characters
+            on_bad_lines="warn",      # warn about bad lines
+            engine="python"           # more tolerant parser
+        )
+        return df, bad_lines
     except Exception as e:
         print(f"⚠️ Error parsing {file}: {e}")
-        return pd.DataFrame(columns=COLUMNS)
+        return pd.DataFrame(columns=COLUMNS), bad_lines
 
 def main():
     combined = []
+    error_records = []
 
     for file in INPUT_FILES:
         if os.path.exists(file):
-            df = safe_read_csv(file)
+            df, bad_lines = safe_read_csv(file)
             if not df.empty:
                 df = normalize_df(df, file)
                 combined.append(df)
                 print(f"✅ Loaded {file} ({len(df)} rows)")
             else:
                 print(f"⚠️ No usable rows in {file}")
+            if bad_lines:
+                error_records.extend([(file, l) for l in bad_lines])
         else:
             print(f"⚠️ Missing file: {file}")
 
@@ -58,6 +69,13 @@ def main():
         print(f"🎯 Combined assumptions saved → {OUTPUT_FILE} ({len(out_df)} rows)")
     else:
         print("⚠️ No assumption files found — nothing written.")
+
+    # Save error rows if any
+    if error_records:
+        with open(ERROR_FILE, "w") as f:
+            for src, line in error_records:
+                f.write(f"{src} :: {line}\n")
+        print(f"⚠️ Logged {len(error_records)} problematic rows → {ERROR_FILE}")
 
 if __name__ == "__main__":
     main()
