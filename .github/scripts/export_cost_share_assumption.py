@@ -5,8 +5,8 @@ import pandas as pd
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "app0Ljjhrp3lTTpTO"
-TABLE_ID = "YOUR_OT5_TABLE_ID"  # <-- replace with actual OT5 table ID
-VIEW_ID = None   # optional, can use a specific view filter
+TABLE_ID = "OT5 Private Sector Resources"
+VIEW_ID = "Grid"
 
 def fetch_ot5():
     """Fetch OT5 Private Sector Resources data from Airtable."""
