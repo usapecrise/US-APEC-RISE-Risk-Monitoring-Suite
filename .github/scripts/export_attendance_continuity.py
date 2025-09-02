@@ -6,7 +6,6 @@ import pandas as pd
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "app0Ljjhrp3lTTpTO"
 TABLES = {
-    "OT1 Sign-Ins (Workshops)": "tblIpPKx5wzr42YZX",
     "Other Sign-Ins (Meetings/Dialogues)": "tbl6qMYkcIzkl8q7D"
 }
 VIEW_ID = None  # or replace with your "viw..." if you want to filter by view
