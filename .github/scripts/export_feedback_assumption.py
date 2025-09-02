@@ -1,4 +1,5 @@
 import os
+import requests
 import pandas as pd
 
 # Airtable credentials and config
@@ -6,6 +7,9 @@ AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'Feedback Form Entries'
 VIEW_NAME = 'Grid view'
+
+# Output CSV path
+OUTPUT_FILE = "feedback_assumption.csv"
 
 def classify_scenario(pct: float) -> str:
     """Apply scenario thresholds based on % positive responses."""
@@ -16,14 +20,35 @@ def classify_scenario(pct: float) -> str:
     else:
         return "pessimistic"
 
+def fetch_airtable():
+    """Fetch data from Airtable Feedback Form Entries."""
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{MAIN_TABLE}"
+    headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
+    records, offset = [], None
+
+    while True:
+        params = {"view": VIEW_NAME}
+        if offset:
+            params["offset"] = offset
+        resp = requests.get(url, headers=headers, params=params)
+        resp.raise_for_status()
+        data = resp.json()
+
+        for r in data.get("records", []):
+            f = r.get("fields", {})
+            records.append(f)
+
+        offset = data.get("offset")
+        if not offset:
+            break
+
+    return pd.DataFrame(records)
+
 def main():
-    try:
-        df = pd.read_csv(RAW_FEEDBACK_FILE)
-    except FileNotFoundError:
-        print(f"⚠️ No feedback file found at {RAW_FEEDBACK_FILE}")
-        return
+    df = fetch_airtable()
+
     if df.empty:
-        print("⚠️ Feedback file is empty")
+        print("⚠️ Feedback table is empty")
         return
 
     # Normalize date
@@ -35,7 +60,7 @@ def main():
 
     records = []
 
-    # --- 1. Individual signals (detailed evidence) ---
+    # --- 1. Individual signals ---
     for col, label in [
         ("Knowledge Gain", "knowledge gain"),
         ("Application Intent", "application intent"),
@@ -54,11 +79,9 @@ def main():
                 "notes": f"Derived from Feedback Form responses ({col})"
             })
 
-    # --- 2. Composite signal (headline classification) ---
+    # --- 2. Composite signal ---
     if records:
-        avg_rate = sum([
-            float(r["signal"].split("%")[0]) for r in records
-        ]) / len(records)
+        avg_rate = sum([float(r["signal"].split("%")[0]) for r in records]) / len(records)
         composite_scenario = classify_scenario(avg_rate)
         records.append({
             "assumption": "Stakeholder alignment with U.S. focus areas",
