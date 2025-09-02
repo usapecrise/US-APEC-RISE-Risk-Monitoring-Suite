@@ -1,9 +1,11 @@
 import os
 import pandas as pd
 
-# Input file (already exported by export_Feedback_Form_Data.py)
-RAW_FEEDBACK_FILE = "Feedback_Form_Data.csv"
-OUTPUT_FILE = "feedback_policy_assumption.csv"
+# Airtable credentials and config
+AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
+BASE_ID = 'app0Ljjhrp3lTTpTO'
+MAIN_TABLE = 'Feedback Form Entries'
+VIEW_NAME = 'Grid view'
 
 def classify_scenario(pct: float) -> str:
     """Apply scenario thresholds based on % positive responses."""
