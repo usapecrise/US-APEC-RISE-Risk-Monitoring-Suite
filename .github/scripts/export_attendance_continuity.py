@@ -4,8 +4,8 @@ import pandas as pd
 
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
-BASE_ID = "YOUR_BASE_ID"
-TABLES = ["OT1 Sign-Ins (Workshops)", "Other Sign-Ins (Meetings/Dialogues)"]  # replace with your table names
+BASE_ID = "app0Ljjhrp3lTTpTO"
+TABLES = "OT1 Sign-Ins (Workshops)": "tblIpPKx5wzr42YZX", "Other Sign-Ins (Meetings/Dialogues)": "tbl6qMYkcIzkl8q7D"s
 VIEW_NAME = "Grid view"
 
 def fetch_table(table_name):
