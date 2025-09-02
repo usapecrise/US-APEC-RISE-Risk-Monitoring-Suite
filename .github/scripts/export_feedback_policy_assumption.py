@@ -8,7 +8,7 @@ BASE_ID = "app0Ljjhrp3lTTpTO"
 TABLE_NAME = "Feedback Form Entries"   # replace with your Airtable table name
 VIEW_NAME = "Grid view"
 
-OUTPUT_FILE = "policy_reform_assumption.csv"
+OUTPUT_FILE = "feedback_policy_assumption.csv"
 
 # ── FUNCTIONS ───────────────────────────────────────────
 def fetch_airtable():
