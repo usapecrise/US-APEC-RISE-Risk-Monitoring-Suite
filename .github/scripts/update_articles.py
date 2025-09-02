@@ -7,10 +7,6 @@ import pandas as pd
 from textblob import TextBlob
 import plotly.express as px
 from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-
-# === Ensure /data folder exists ===
-os.makedirs("data", exist_ok=True)
 
 # === RSS Feeds ===
 FEEDS = [
@@ -137,7 +133,7 @@ def classify_sentiment(text):
     return "Positive" if score > 0.2 else "Negative" if score < -0.2 else "Neutral"
 
 # === Load previous data if it exists ===
-processed_path = "data/processed_articles.json"
+processed_path = "processed_articles.json"
 existing_links = set()
 if os.path.exists(processed_path):
     with open(processed_path, "r", encoding="utf-8") as f:
@@ -186,7 +182,7 @@ with open(processed_path, "w", encoding="utf-8") as f:
     json.dump(all_articles, f, indent=2, ensure_ascii=False)
 
 df = pd.DataFrame(all_articles)
-df.to_csv("data/media_log.csv", index=False)
+df.to_csv("media_log.csv", index=False)
 
 print(f"✅ Added {len(articles)} new articles. Total: {len(all_articles)}")
 
@@ -225,7 +221,7 @@ for _, row in df.iterrows():
         })
 
 risk_signals = pd.DataFrame(signals)
-risk_signals.to_csv("data/risk_signals.csv", index=False)
+risk_signals.to_csv("risk_signals.csv", index=False)
 print(f"✅ Signals saved: {len(risk_signals)}")
 
 # === Roll-up Assumption Status ===
@@ -238,7 +234,7 @@ assumptions_status = (
     .first()
     .reset_index()[["Assumption", "Scenario", "Date"]]
 )
-assumptions_status.to_csv("data/assumptions_status.csv", index=False)
+assumptions_status.to_csv("assumptions_status.csv", index=False)
 
 print("✅ Assumptions roll-up saved.")
 
@@ -268,8 +264,8 @@ try:
         fig.add_trace(trace, row=2, col=1)
 
     fig.update_layout(title_text="📰 Media Monitor QA Dashboard", showlegend=True)
-    fig.write_html("data/media_dashboard.html")
+    fig.write_html("media_dashboard.html")
 
-    print("✅ QA dashboard saved → data/media_dashboard.html")
+    print("✅ QA dashboard saved → media_dashboard.html")
 except Exception as e:
     print(f"⚠️ Could not generate dashboard: {e}")
