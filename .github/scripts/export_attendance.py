@@ -1,17 +1,18 @@
 import os
 import requests
 import pandas as pd
+import urllib.parse
 
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "app0Ljjhrp3lTTpTO"
 
-# ✅ Use table IDs, not names
+# ✅ Use table IDs
 TABLES = {
     "OT1 Sign-Ins (Workshops)": "tblIpPKx5wzr42YZX",
     "Other Sign-Ins (Meetings/Dialogues)": "tbl6qMYkcIzkl8q7D"
 }
-VIEW_ID = None   # optional – you can pass view ID if you want to filter, else default view
+VIEW_ID = None   # optional – use view filter if needed
 
 def fetch_table(table_label, table_id):
     """Fetch all records from an Airtable table by ID."""
@@ -39,8 +40,8 @@ def fetch_table(table_label, table_id):
                 "Workshop": f.get("Workshop", ""),
                 "Workshop Date": f.get("Workshop Date", ""),
                 "Workstream": f.get("Workstream", ""),
-                "Economy": f.get("Economy", ""),
-                "Participant Name": f.get("Participant Name", ""),
+                "Economy": f.get("Economy", f.get("Economy or Guest", "")),  # handles both field names
+                "Participant Name": f.get("Participant Name", f.get("First Name", "")),
                 "Organization": f.get("Organization", ""),
                 "Source Table": table_label
             })
@@ -56,6 +57,11 @@ dfs = [fetch_table(label, tid) for label, tid in TABLES.items()]
 df = pd.concat(dfs, ignore_index=True)
 
 print("DEBUG columns:", df.columns.tolist())
+
+# ✅ Normalize Economy field: flatten list → string
+df["Economy"] = df["Economy"].apply(
+    lambda x: "; ".join(x) if isinstance(x, list) else str(x)
+)
 
 if "Workshop" not in df.columns or "Workshop Date" not in df.columns:
     raise KeyError(f"Expected Workshop/Workshop Date fields not found. Got: {df.columns.tolist()}")
