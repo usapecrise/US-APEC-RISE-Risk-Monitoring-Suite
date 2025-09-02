@@ -1,0 +1,34 @@
+name: Update Media Monitor
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # runs daily at 06:00 UTC
+  workflow_dispatch:        # allow manual trigger
+
+jobs:
+  update-media:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pandas feedparser textblob
+
+      - name: Run Media Monitor (update_articles.py)
+        run: python media-monitor/update_articles.py
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data/processed_articles.json data/media_log.csv data/risk_signals.csv data/assumptions_status.csv
+          git commit -m "Auto-update media monitor outputs" || echo "No changes to commit"
+          git push
