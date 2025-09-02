@@ -55,7 +55,7 @@ if not df.empty:
     # Normalize dates
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
 
-    # Group by workshop → count distinct economies
+    # --- APEC-wide aggregate (as before) ---
     workshop_stats = (
         df.groupby("Workshop Key")
         .agg({"Economy": "nunique", "Date": "first"})
@@ -63,13 +63,10 @@ if not df.empty:
         .sort_values("Date", ascending=False)
     )
 
-    # Look at last 3 workshops
     last3 = workshop_stats.head(3)
     economies_present = last3["Economy"].mean()
 
-    # Assume 21 APEC economies
     pct = (economies_present / 21) * 100
-
     if pct >= 75:
         scenario = "optimistic"
     elif pct >= 40:
@@ -77,8 +74,7 @@ if not df.empty:
     else:
         scenario = "pessimistic"
 
-    # Structured assumption schema
-    attendance_status = pd.DataFrame([{
+    rows = [{
         "assumption": "Stakeholder alignment with U.S. focus areas",
         "monitoring_tool": "attendance",
         "economy": "APEC (aggregate)",
@@ -86,9 +82,48 @@ if not df.empty:
         "signal": f"Average {economies_present:.1f} economies represented (last 3 dialogues)",
         "status": scenario,
         "notes": f"≈{pct:.0f}% of APEC economies participated"
-    }])
+    }]
 
+    # --- Workstream breakdown ---
+    for ws, g in df.groupby("Workstream"):
+        if g.empty:
+            continue
+
+        ws_stats = (
+            g.groupby("Workshop Key")
+            .agg({"Economy": "nunique", "Date": "first"})
+            .reset_index()
+            .sort_values("Date", ascending=False)
+        )
+
+        last3_ws = ws_stats.head(3)
+        if last3_ws.empty:
+            continue
+
+        economies_present_ws = last3_ws["Economy"].mean()
+        pct_ws = (economies_present_ws / 21) * 100
+
+        if pct_ws >= 75:
+            scenario_ws = "optimistic"
+        elif pct_ws >= 40:
+            scenario_ws = "baseline"
+        else:
+            scenario_ws = "pessimistic"
+
+        rows.append({
+            "assumption": "Stakeholder alignment with U.S. focus areas",
+            "monitoring_tool": "attendance",
+            "economy": f"APEC ({ws})",
+            "date": last3_ws["Date"].max().strftime("%Y-%m-%d"),
+            "signal": f"Average {economies_present_ws:.1f} economies represented (last 3 {ws} dialogues)",
+            "status": scenario_ws,
+            "notes": f"≈{pct_ws:.0f}% of APEC economies participated"
+        })
+
+    # Export both aggregate + workstream rows
+    attendance_status = pd.DataFrame(rows)
     attendance_status.to_csv("attendance_assumption.csv", index=False)
-    print(f"✅ Assumption status saved → attendance_assumption.csv")
+    print(f"✅ Assumption status saved → attendance_assumption.csv ({len(rows)} rows)")
 else:
     print("⚠️ No attendance data found, skipping assumption status")
+
