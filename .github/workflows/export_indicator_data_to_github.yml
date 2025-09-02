@@ -108,6 +108,8 @@ jobs:
         run: python .github/scripts/export_attendance.py
         
       - name: Generate Word Frequency & Sentiment CSVs
+        env:
+           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/preprocess_feedback.py
 
       - name: Run Stakeholder Reference List export script (wide + long)
@@ -116,9 +118,13 @@ jobs:
         run: python .github/scripts/export_Stakeholder_Reference_List.py
 
       - name: Run Feedback Assumption export script
+        env:
+           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_feedback_assumption.py
 
       - name: Run Risk Assumption export script
+        env:
+           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_risk_assumption.py
 
       - name: Run Attendance Continuity export script
