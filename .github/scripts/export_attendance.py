@@ -1,33 +1,36 @@
 import os
 import requests
 import pandas as pd
-import urllib.parse
 
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
-BASE_ID = "YOUR_BASE_ID"
-TABLES = ["OT1 Sign-Ins (Workshops)", "Other Sign-Ins (Meetings/Dialogues)"]
-VIEW_NAME = "Grid view"
+BASE_ID = "app0Ljjhrp3lTTpTO"
 
-def fetch_table(table_name):
-    """Fetch all records from an Airtable table."""
-    table_name_encoded = urllib.parse.quote(table_name, safe="")
-    url = f"https://api.airtable.com/v0/{BASE_ID}/{table_name_encoded}"
+# ✅ Use table IDs, not names
+TABLES = {
+    "OT1 Sign-Ins (Workshops)": "tblIpPKx5wzr42YZX",
+    "Other Sign-Ins (Meetings/Dialogues)": "tbl6qMYkcIzkl8q7D"
+}
+VIEW_ID = None   # optional – you can pass view ID if you want to filter, else default view
+
+def fetch_table(table_label, table_id):
+    """Fetch all records from an Airtable table by ID."""
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{table_id}"
     headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
     records, offset = [], None
 
     while True:
-        params = {"view": VIEW_NAME}
+        params = {}
+        if VIEW_ID:
+            params["view"] = VIEW_ID
         if offset:
             params["offset"] = offset
 
         resp = requests.get(url, headers=headers, params=params)
-
-        # Debug print (first 200 chars of response)
-        print("DEBUG response for", table_name, ":", resp.status_code, resp.text[:200])
+        print("DEBUG response for", table_label, ":", resp.status_code, resp.text[:200])
 
         if resp.status_code != 200:
-            raise RuntimeError(f"Airtable API error {resp.status_code} for {table_name}: {resp.text}")
+            raise RuntimeError(f"Airtable API error {resp.status_code} for {table_label}: {resp.text}")
 
         data = resp.json()
         for r in data.get("records", []):
@@ -39,7 +42,7 @@ def fetch_table(table_name):
                 "Economy": f.get("Economy", ""),
                 "Participant Name": f.get("Participant Name", ""),
                 "Organization": f.get("Organization", ""),
-                "Source Table": table_name
+                "Source Table": table_label
             })
 
         offset = data.get("offset")
@@ -49,7 +52,7 @@ def fetch_table(table_name):
     return pd.DataFrame(records)
 
 # === 1. Export Raw Attendance ===
-dfs = [fetch_table(tbl) for tbl in TABLES]
+dfs = [fetch_table(label, tid) for label, tid in TABLES.items()]
 df = pd.concat(dfs, ignore_index=True)
 
 print("DEBUG columns:", df.columns.tolist())
@@ -172,4 +175,3 @@ if not df.empty:
     print(f"✅ Assumption status saved → attendance_assumption.csv ({len(rows)} rows)")
 else:
     print("⚠️ No attendance data found, skipping assumption status")
-
