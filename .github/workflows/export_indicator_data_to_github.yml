@@ -132,9 +132,13 @@ jobs:
         run: python .github/scripts/export_policy_reform_assumption.py
 
       - name: Run Cost Share Assumption export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_cost_share_assumption.py
-
+        
       - name: Generate Unified Assumptions Status CSV
+        env:
+         AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/generate_assumptions_status.py
 
       - name: Commit and push KPI CSVs
