@@ -24,8 +24,8 @@ def fetch_table(table_name):
         for r in data.get("records", []):
             f = r.get("fields", {})
             records.append({
-                "Workshop Title": f.get("Workshop Title", ""),
-                "Date": f.get("Date", ""),
+                "Workshop Title": f.get("Workshop", ""),
+                "Date": f.get("Workshop Date", ""),
                 "Economy": f.get("Economy", ""),
                 "Participant Name": f.get("Participant Name", ""),
                 "Organization": f.get("Organization", ""),
