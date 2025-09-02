@@ -26,6 +26,7 @@ def fetch_table(table_name):
             records.append({
                 "Workshop Title": f.get("Workshop Title", ""),
                 "Date": f.get("Date", ""),
+                "Workstream": f.get("Workstream", ""),  # ✅ NEW
                 "Economy": f.get("Economy", ""),
                 "Participant Name": f.get("Participant Name", ""),
                 "Organization": f.get("Organization", ""),
@@ -42,9 +43,10 @@ def fetch_table(table_name):
 dfs = [fetch_table(tbl) for tbl in TABLES]
 df = pd.concat(dfs, ignore_index=True)
 
-# Create Workshop Key
+# Create Workshop Key (title + date only)
 df["Workshop Key"] = df["Workshop Title"].astype(str) + " | " + df["Date"].astype(str)
 
+# Save raw attendance with Workstream included
 df.to_csv("attendance_records.csv", index=False)
 print(f"✅ Exported {len(df)} rows from {len(TABLES)} tables → attendance_records.csv")
 
@@ -90,4 +92,3 @@ if not df.empty:
     print(f"✅ Assumption status saved → attendance_assumption.csv")
 else:
     print("⚠️ No attendance data found, skipping assumption status")
-
