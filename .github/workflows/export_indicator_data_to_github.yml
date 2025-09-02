@@ -134,6 +134,9 @@ jobs:
       - name: Run Cost Share Assumption export script
         run: python .github/scripts/export_cost_share_assumption.py
 
+      - name: Generate Unified Assumptions Status CSV
+        run: python .github/scripts/generate_assumptions_status.py
+
       - name: Commit and push KPI CSVs
         env:
           GIT_AUTHOR_NAME: github-actions[bot]
@@ -153,7 +156,7 @@ jobs:
             Feedback_Form_Data_Long.csv word_frequency.csv word_frequency_detailed.csv \
             sentiment_summary.csv sentiment_by_question.csv top_phrases.csv attendance_assumption.csv \
             feedback_assumption.csv attendance_continuity_assumption.csv policy_reform_assumption.csv \
-            cost_share_assumption.csv
+            cost_share_assumption.csv assumptions_status.csv
 
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
