@@ -3,7 +3,7 @@ name: Update Media Monitor
 on:
   schedule:
     - cron: "0 6 * * *"   # runs daily at 06:00 UTC
-  workflow_dispatch:
+  workflow_dispatch:        # allow manual trigger
 
 jobs:
   update-media:
@@ -32,16 +32,13 @@ jobs:
         run: |
           echo "PWD:"
           pwd
-          echo "Files here:"
+          echo "Files here after update_articles.py:"
           ls -alh
-          echo "Files in .github/scripts:"
-          ls -alh .github/scripts || true
 
       - name: Commit and push updated outputs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add -f *.csv *.json *.html || true
+          git add -A
           git commit -m "Auto-update media monitor outputs" || echo "No changes to commit"
           git push origin main
-
