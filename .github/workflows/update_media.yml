@@ -3,7 +3,7 @@ name: Update Media Monitor
 on:
   schedule:
     - cron: "0 6 * * *"   # runs daily at 06:00 UTC
-  workflow_dispatch:
+  workflow_dispatch:        # allow manual trigger
 
 jobs:
   update-media:
@@ -20,17 +20,15 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install pandas feedparser textblob plotly tableauserverclient tableauhyperapi
+          pip install pandas feedparser textblob plotly
 
       - name: Run Media Monitor (update_articles.py)
         run: python media-monitor/update_articles.py
 
-      - name: Upload Media Monitor outputs to Tableau
-        env:
-          PAT_NAME: ${{ secrets.TABLEAU_PAT_NAME }}
-          PAT_SECRET: ${{ secrets.TABLEAU_PAT_SECRET }}
-          SITE_NAME: ${{ secrets.TABLEAU_SITE_NAME }}
-          PROJECT_ID: ${{ secrets.TABLEAU_PROJECT_ID }}
-          TABLEAU_SERVER: ${{ secrets.TABLEAU_REST_URL }}
-        run: python .github/scripts/upload_hyper_to_tableau.py
-
+      - name: Commit and push updated outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add *.csv *.json *.html || true
+          git commit -m "Auto-update media monitor outputs" || echo "No changes to commit"
+          git push
