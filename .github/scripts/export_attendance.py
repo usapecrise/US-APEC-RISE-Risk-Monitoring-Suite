@@ -40,7 +40,7 @@ def fetch_table(table_label, table_id):
                 "Workshop": f.get("Workshop", ""),
                 "Workshop Date": f.get("Workshop Date", ""),
                 "Workstream": f.get("Workstream", ""),
-                "Economy": f.get("Economy", f.get("Economy or Guest", "")),  # handles both field names
+                "Economy": f.get("Economy", f.get("Economy or Guest", "")),
                 "Organization": f.get("Organization", ""),
                 "Source Table": table_label
             })
@@ -57,8 +57,11 @@ df = pd.concat(dfs, ignore_index=True)
 
 print("DEBUG columns:", df.columns.tolist())
 
-# ✅ Normalize Economy field: flatten list → string
+# ✅ Normalize fields: flatten lists → strings
 df["Economy"] = df["Economy"].apply(
+    lambda x: "; ".join(x) if isinstance(x, list) else str(x)
+)
+df["Workstream"] = df["Workstream"].apply(
     lambda x: "; ".join(x) if isinstance(x, list) else str(x)
 )
 
