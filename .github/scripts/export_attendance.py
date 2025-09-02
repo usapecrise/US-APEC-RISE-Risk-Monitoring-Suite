@@ -41,7 +41,6 @@ def fetch_table(table_label, table_id):
                 "Workshop Date": f.get("Workshop Date", ""),
                 "Workstream": f.get("Workstream", ""),
                 "Economy": f.get("Economy", f.get("Economy or Guest", "")),  # handles both field names
-                "Participant Name": f.get("Participant Name", f.get("First Name", "")),
                 "Organization": f.get("Organization", ""),
                 "Source Table": table_label
             })
