@@ -105,7 +105,7 @@ def main():
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average application intent",
                     "Status": classify_status(avg),
-                    "Notes": "Feedback from policy dialogue/meeting participants (Application Intent)"
+                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
                 })
         # Sharing
         if "Sharing Intent" in subset.columns:
@@ -120,7 +120,7 @@ def main():
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average sharing intent",
                     "Status": classify_status(avg),
-                    "Notes": "Feedback from policy dialogue/meeting participants (Sharing Intent)"
+                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
                 })
         # Composite
         if scores:
@@ -132,7 +132,7 @@ def main():
                 "Date": last_date,
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
-                "Notes": "Average of application and sharing intent (policy dialogues/meetings)"
+                "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
             })
 
     # === 1. APEC aggregate ===
