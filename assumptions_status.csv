@@ -1,270 +1,270 @@
 assumption,monitoring_tool,economy,date,signal,status,notes,source_file
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_assumption.csv
-,,,,,,,attendance_continuity_assumption.csv
-,,,,,,,attendance_continuity_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
-,,,,,,,feedback_policy_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-08-09,Average 13.0 economies represented (last 3 dialogues),optimistic,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-08-06,Average 16.0 economies represented (last 3 Digital Trade dialogues),optimistic,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Australia,2025-08-06,Australia attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Brunei Darussalam,2025-08-06,Brunei Darussalam attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Canada,2025-08-06,Canada attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chile,2025-08-06,Chile attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chinese Taipei,2025-08-06,Chinese Taipei attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Hong Kong; China,2025-08-06,Hong Kong; China attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Japan,2025-08-06,Japan attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Malaysia,2025-08-06,Malaysia attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Other,2025-08-06,Other attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Papua New Guinea,2025-08-06,Papua New Guinea attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,People's Republic of China,2025-08-06,People's Republic of China attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Republic of Korea,2025-08-06,Republic of Korea attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Russia,2025-08-06,Russia attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Singapore,2025-08-06,Singapore attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,The Philippines,2025-08-06,The Philippines attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,United States of America,2025-08-06,United States of America attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-08-02,Average 9.0 economies represented (last 3 Supply Chain Connectivity dialogues),baseline,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Canada,2025-08-02,Canada attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chile,2025-08-02,Chile attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chinese Taipei,2025-08-02,Chinese Taipei attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Japan,2025-08-02,Japan attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Malaysia,2025-08-02,Malaysia attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Other,2025-08-02,Other attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Peru,2025-08-02,Peru attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Republic of Korea,2025-08-02,Republic of Korea attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,United States of America,2025-08-02,United States of America attended 1/3 Supply Chain Connectivity dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-07-31,Average 8.0 economies represented (last 3 rec8X4hhBa5cOnk18 dialogues),baseline,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Australia,2025-07-31,Australia attended 1/3 rec8X4hhBa5cOnk18 dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chinese Taipei,2025-07-31,Chinese Taipei attended 1/3 rec8X4hhBa5cOnk18 dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Malaysia,2025-07-31,Malaysia attended 1/3 rec8X4hhBa5cOnk18 dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Papua New Guinea,2025-07-31,Papua New Guinea attended 1/3 rec8X4hhBa5cOnk18 dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Republic of Korea,2025-07-31,Republic of Korea attended 1/3 rec8X4hhBa5cOnk18 dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Thailand,2025-07-31,Thailand attended 1/3 rec8X4hhBa5cOnk18 dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,The Philippines,2025-07-31,The Philippines attended 1/3 rec8X4hhBa5cOnk18 dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,United States of America,2025-07-31,United States of America attended 1/3 rec8X4hhBa5cOnk18 dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-08-08,Average 13.0 economies represented (last 3 recIze3I0sDtjtxap dialogues),optimistic,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Australia,2025-08-08,Australia attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Brunei Darussalam,2025-08-08,Brunei Darussalam attended 1/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Canada,2025-08-08,Canada attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chile,2025-08-08,Chile attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chinese Taipei,2025-08-08,Chinese Taipei attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,"Hong Kong, China",2025-08-08,"Hong Kong, China attended 1/3 recIze3I0sDtjtxap dialogues",pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Indonesia,2025-08-08,Indonesia attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Japan,2025-08-08,Japan attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Malaysia,2025-08-08,Malaysia attended 1/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,New Zealand,2025-08-08,New Zealand attended 1/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Other,2025-08-08,Other attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,People's Republic of China,2025-08-08,People's Republic of China attended 1/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Peru,2025-08-08,Peru attended 1/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Republic of Korea,2025-08-05,Republic of Korea attended 1/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Singapore,2025-08-05,Singapore attended 1/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Thailand,2025-08-08,Thailand attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,The Philippines,2025-08-08,The Philippines attended 2/3 recIze3I0sDtjtxap dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-07-30,Average 7.3 economies represented (last 3 recO6Wye9q46CaYxb dialogues),baseline,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Australia,2025-07-28,Australia attended 2/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Canada,2025-07-28,Canada attended 2/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chinese Taipei,2025-07-30,Chinese Taipei attended 1/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Indonesia,2025-07-27,Indonesia attended 1/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Malaysia,2025-07-28,Malaysia attended 2/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,New Zealand,2025-07-27,New Zealand attended 1/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Other,2025-07-28,Other attended 2/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Papua New Guinea,2025-07-27,Papua New Guinea attended 1/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,People's Republic of China,2025-07-28,People's Republic of China attended 2/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Republic of Korea,2025-07-27,Republic of Korea attended 1/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Singapore,2025-07-27,Singapore attended 1/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Thailand,2025-07-30,Thailand attended 3/3 recO6Wye9q46CaYxb dialogues,optimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,The Philippines,2025-07-27,The Philippines attended 1/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,United States of America,2025-07-30,United States of America attended 2/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Viet Nam,2025-07-27,Viet Nam attended 1/3 recO6Wye9q46CaYxb dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-08-02,Average 11.0 economies represented (last 3 reckuD4pDTWtZesJN dialogues),baseline,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chile,2025-08-02,Chile attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chinese Taipei,2025-08-02,Chinese Taipei attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,"Hong Kong, China",2025-08-02,"Hong Kong, China attended 1/3 reckuD4pDTWtZesJN dialogues",pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Indonesia,2025-08-02,Indonesia attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Japan,2025-08-02,Japan attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Other,2025-08-02,Other attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Papua New Guinea,2025-08-02,Papua New Guinea attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Peru,2025-08-02,Peru attended 1/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Thailand,2025-08-02,Thailand attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,The Philippines,2025-08-02,The Philippines attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,United States of America,2025-08-02,United States of America attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Viet Nam,2025-08-02,Viet Nam attended 2/3 reckuD4pDTWtZesJN dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-07-29,Average 11.3 economies represented (last 3 recqvqMEpTfZTKevx dialogues),baseline,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Australia,2025-07-28,Australia attended 1/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Canada,2025-07-28,Canada attended 1/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chile,2025-07-29,Chile attended 2/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Indonesia,2025-07-29,Indonesia attended 2/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Malaysia,2025-07-29,Malaysia attended 3/3 recqvqMEpTfZTKevx dialogues,optimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Mexico,2025-07-29,Mexico attended 2/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Other,2025-07-29,Other attended 2/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,People's Republic of China,2025-07-29,People's Republic of China attended 3/3 recqvqMEpTfZTKevx dialogues,optimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Peru,2025-07-29,Peru attended 3/3 recqvqMEpTfZTKevx dialogues,optimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Republic of Korea,2025-07-29,Republic of Korea attended 3/3 recqvqMEpTfZTKevx dialogues,optimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Singapore,2025-07-29,Singapore attended 2/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Thailand,2025-07-29,Thailand attended 2/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,The Philippines,2025-07-29,The Philippines attended 2/3 recqvqMEpTfZTKevx dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,United States of America,2025-07-29,United States of America attended 3/3 recqvqMEpTfZTKevx dialogues,optimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Viet Nam,2025-07-29,Viet Nam attended 3/3 recqvqMEpTfZTKevx dialogues,optimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-08-09,Average 8.0 economies represented (last 3 recx8jdfEcebA5nAS dialogues),baseline,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Australia,2025-08-09,Australia attended 1/3 recx8jdfEcebA5nAS dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Canada,2025-08-09,Canada attended 1/3 recx8jdfEcebA5nAS dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Chile,2025-08-09,Chile attended 1/3 recx8jdfEcebA5nAS dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Indonesia,2025-08-09,Indonesia attended 1/3 recx8jdfEcebA5nAS dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Other,2025-08-09,Other attended 1/3 recx8jdfEcebA5nAS dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Papua New Guinea,2025-08-09,Papua New Guinea attended 1/3 recx8jdfEcebA5nAS dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,Thailand,2025-08-09,Thailand attended 1/3 recx8jdfEcebA5nAS dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Stakeholder alignment with U.S. focus areas,,The Philippines,2025-08-09,The Philippines attended 1/3 recx8jdfEcebA5nAS dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
+Political and institutional continuity,,,2025-08-06, attended 2/3 most recent events,optimistic,"Economy-level continuity. Thresholds: Optimistic ≥67% (2–3/3), Baseline =33% (1/3), Pessimistic =0%.",attendance_continuity_assumption.csv
+Political and institutional continuity,,APEC (aggregate),2025-08-06,"On average, economies attended 2.0/3 recent events",optimistic,"Aggregate continuity. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%.",attendance_continuity_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-09-03,86% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 200 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-09-03,79% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 200 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-09-03,74% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 200 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-09-03,90% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 200 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-09-03,Composite feedback score = 83%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,australia,2025-09-03,89% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 7 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,australia,2025-09-03,82% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 7 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,australia,2025-09-03,64% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 7 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,australia,2025-09-03,93% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 7 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,australia,2025-09-03,Composite feedback score = 82%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,canada,2025-09-03,92% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 9 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,canada,2025-09-03,67% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 9 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,canada,2025-09-03,78% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 9 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,canada,2025-09-03,100% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 9 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,canada,2025-09-03,Composite feedback score = 84%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chile,2025-09-03,90% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chile,2025-09-03,81% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chile,2025-09-03,71% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chile,2025-09-03,96% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chile,2025-09-03,Composite feedback score = 84%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,china,2025-09-03,83% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,china,2025-09-03,83% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,china,2025-09-03,67% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,china,2025-09-03,83% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,china,2025-09-03,Composite feedback score = 79%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chinese taipei,2025-09-03,58% average relevance,baseline,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chinese taipei,2025-09-03,62% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chinese taipei,2025-09-03,42% average application intent,baseline,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chinese taipei,2025-09-03,92% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,chinese taipei,2025-09-03,Composite feedback score = 64%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,"hong kong, china",2025-09-03,75% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,"hong kong, china",2025-09-03,75% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,"hong kong, china",2025-09-03,25% average application intent,pessimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,"hong kong, china",2025-09-03,50% average sharing intent,baseline,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,"hong kong, china",2025-09-03,Composite feedback score = 56%,baseline,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,indonesia,2025-09-03,92% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,indonesia,2025-09-03,88% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,indonesia,2025-09-03,88% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,indonesia,2025-09-03,88% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,indonesia,2025-09-03,Composite feedback score = 89%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,japan,2025-09-03,58% average relevance,baseline,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 3 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,japan,2025-09-03,67% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 3 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,japan,2025-09-03,50% average application intent,baseline,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 3 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,japan,2025-09-03,83% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 3 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,japan,2025-09-03,Composite feedback score = 65%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,malaysia,2025-09-03,81% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,malaysia,2025-09-03,75% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,malaysia,2025-09-03,75% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,malaysia,2025-09-03,83% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 12 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,malaysia,2025-09-03,Composite feedback score = 79%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,mexico,2025-09-03,88% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,mexico,2025-09-03,88% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,mexico,2025-09-03,75% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,mexico,2025-09-03,100% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,mexico,2025-09-03,Composite feedback score = 88%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,new zealand,2025-09-03,75% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 3 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,new zealand,2025-09-03,67% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 3 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,new zealand,2025-09-03,67% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 3 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,new zealand,2025-09-03,83% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 3 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,new zealand,2025-09-03,Composite feedback score = 73%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,other,2025-09-03,91% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 31 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,other,2025-09-03,77% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 31 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,other,2025-09-03,73% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 31 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,other,2025-09-03,84% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 31 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,other,2025-09-03,Composite feedback score = 81%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,papua new guinea,2025-09-03,96% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,papua new guinea,2025-09-03,92% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,papua new guinea,2025-09-03,75% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,papua new guinea,2025-09-03,100% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,papua new guinea,2025-09-03,Composite feedback score = 91%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,peru,2025-09-03,94% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 8 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,peru,2025-09-03,94% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 8 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,peru,2025-09-03,88% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 8 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,peru,2025-09-03,94% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 8 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,peru,2025-09-03,Composite feedback score = 92%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,republic of korea,2025-09-03,73% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 11 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,republic of korea,2025-09-03,73% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 11 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,republic of korea,2025-09-03,73% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 11 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,republic of korea,2025-09-03,86% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 11 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,republic of korea,2025-09-03,Composite feedback score = 76%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,singapore,2025-09-03,75% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 4 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,singapore,2025-09-03,75% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 4 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,singapore,2025-09-03,50% average application intent,baseline,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 4 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,singapore,2025-09-03,88% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 4 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,singapore,2025-09-03,Composite feedback score = 72%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,thailand,2025-09-03,83% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 15 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,thailand,2025-09-03,87% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 15 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,thailand,2025-09-03,87% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 15 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,thailand,2025-09-03,97% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 15 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,thailand,2025-09-03,Composite feedback score = 88%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the philippines,2025-09-03,95% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 15 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the philippines,2025-09-03,88% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 15 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the philippines,2025-09-03,83% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 15 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the philippines,2025-09-03,93% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 15 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the philippines,2025-09-03,Composite feedback score = 90%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the russian federation,2025-09-03,75% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the russian federation,2025-09-03,75% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the russian federation,2025-09-03,50% average application intent,baseline,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the russian federation,2025-09-03,50% average sharing intent,baseline,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,the russian federation,2025-09-03,Composite feedback score = 62%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,united states of america,2025-09-03,90% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 27 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,united states of america,2025-09-03,77% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 27 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,united states of america,2025-09-03,80% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 27 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,united states of america,2025-09-03,93% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 27 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,united states of america,2025-09-03,Composite feedback score = 85%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,viet nam,2025-09-03,81% average relevance,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 8 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,viet nam,2025-09-03,75% average knowledge gain,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 8 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,viet nam,2025-09-03,75% average application intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 8 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,viet nam,2025-09-03,94% average sharing intent,optimistic,"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 8 responses.",feedback_assumption.csv
+Stakeholder alignment with U.S. focus areas,,viet nam,2025-09-03,Composite feedback score = 81%,optimistic,"Composite of relevance, knowledge, application, and sharing scores.",feedback_assumption.csv
+Policy and regulatory openness,,APEC (aggregate),2025-09-03,70% average application intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 35 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,APEC (aggregate),2025-09-03,83% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 35 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,APEC (aggregate),2025-09-03,Composite feedback score = 76%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,canada,2025-09-03,50% average application intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,canada,2025-09-03,100% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,canada,2025-09-03,Composite feedback score = 75%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,chile,2025-09-03,50% average application intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,chile,2025-09-03,50% average sharing intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,chile,2025-09-03,Composite feedback score = 50%,baseline,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,china,2025-09-03,50% average application intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,china,2025-09-03,100% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,china,2025-09-03,Composite feedback score = 75%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,japan,2025-09-03,50% average application intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,japan,2025-09-03,100% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,japan,2025-09-03,Composite feedback score = 75%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,malaysia,2025-09-03,75% average application intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,malaysia,2025-09-03,100% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,malaysia,2025-09-03,Composite feedback score = 88%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,new zealand,2025-09-03,100% average application intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,new zealand,2025-09-03,100% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,new zealand,2025-09-03,Composite feedback score = 100%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,other,2025-09-03,67% average application intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,other,2025-09-03,83% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 6 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,other,2025-09-03,Composite feedback score = 75%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,papua new guinea,2025-09-03,50% average application intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,papua new guinea,2025-09-03,100% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,papua new guinea,2025-09-03,Composite feedback score = 75%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,peru,2025-09-03,100% average application intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,peru,2025-09-03,100% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,peru,2025-09-03,Composite feedback score = 100%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,republic of korea,2025-09-03,60% average application intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 5 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,republic of korea,2025-09-03,70% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 5 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,republic of korea,2025-09-03,Composite feedback score = 65%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,singapore,2025-09-03,50% average application intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,singapore,2025-09-03,75% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 2 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,singapore,2025-09-03,Composite feedback score = 62%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,the philippines,2025-09-03,50% average application intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,the philippines,2025-09-03,100% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,the philippines,2025-09-03,Composite feedback score = 75%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,the russian federation,2025-09-03,50% average application intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,the russian federation,2025-09-03,50% average sharing intent,baseline,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,the russian federation,2025-09-03,Composite feedback score = 50%,baseline,Composite of application and sharing scores.,feedback_policy_assumption.csv
+Policy and regulatory openness,,united states of america,2025-09-03,90% average application intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 10 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,united states of america,2025-09-03,80% average sharing intent,optimistic,"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 10 responses.",feedback_policy_assumption.csv
+Policy and regulatory openness,,united states of america,2025-09-03,Composite feedback score = 85%,optimistic,Composite of application and sharing scores.,feedback_policy_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Wed, 03 Sep 2025 03:12:20 +0000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Stakeholder alignment with U.S. focus areas', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",baseline,Derived from media monitoring / risk signals,risk_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Wed, 03 Sep 2025 03:12:20 +0000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Political and institutional continuity', 'Scenario': 'Pessimistic', 'Justification': 'coup', 'Signal Strength': 'High'}",pessimistic,Derived from media monitoring / risk signals,risk_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Wed, 03 Sep 2025 03:12:20 +0000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Supply chain and trade flow resilience', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",baseline,Derived from media monitoring / risk signals,risk_assumption.csv
@@ -1869,8 +1869,8 @@ Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Tue, 02
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Tue, 02 Sep 2025 18:59:24 +1000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Political and institutional continuity', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",optimistic,Derived from media monitoring / risk signals,risk_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Tue, 02 Sep 2025 18:59:24 +1000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Supply chain and trade flow resilience', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",baseline,Derived from media monitoring / risk signals,risk_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Tue, 02 Sep 2025 18:59:24 +1000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Private sector and stakeholder engagement', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",baseline,Derived from media monitoring / risk signals,risk_assumption.csv
-,,,,,,,policy_reform_assumption.csv
-,,,,,,,policy_reform_assumption.csv
-,,,,,,,policy_reform_assumption.csv
-,,,,,,,policy_reform_assumption.csv
-,,,,,,,cost_share_assumption.csv
+Policy and regulatory openness,,,2025-09-03,Unspecified Reform reform = ,baseline,Individual reform status. Thresholds: Optimistic = Adopted/In progress; Baseline = Unsure; Pessimistic = Not initiated.,policy_reform_assumption.csv
+Policy and regulatory openness,,,2025-09-03,0% of reforms adopted or in progress,pessimistic,"Economy-level summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 reforms.",policy_reform_assumption.csv
+Policy and regulatory openness,,APEC (aggregate),2025-09-03,0% of reforms adopted or in progress,pessimistic,"Workstream-level summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 reforms.",policy_reform_assumption.csv
+Policy and regulatory openness,,APEC (aggregate),2025-09-03,0% of reforms adopted or in progress,pessimistic,"Aggregate summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on 1 reforms.",policy_reform_assumption.csv
+Responsible local ownership,,APEC (aggregate),2025-09-03,"$0 from 0 firms across 0 economies (FY Unknown, Home Economy only)",pessimistic,"Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline.",cost_share_assumption.csv
