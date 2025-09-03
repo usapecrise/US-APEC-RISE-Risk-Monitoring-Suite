@@ -1,4 +1,4 @@
-import os
+import os 
 import requests
 import pandas as pd
 
@@ -66,7 +66,7 @@ def main():
     if df.empty:
         print("⚠️ No attendance data found, writing empty continuity file")
         pd.DataFrame(columns=[
-            "assumption","monitoring_tool","economy","date","signal","status","notes"
+            "Assumption","Monitoring Tool","Economy","Date","Signal","Status","Notes"
         ]).to_csv("attendance_continuity_assumption.csv", index=False)
         return
 
@@ -76,18 +76,21 @@ def main():
         lambda x: "; ".join(x) if isinstance(x, list) else str(x)
     )
 
+    # Create Workshop Key (Workshop + Date)
+    df["Workshop Key"] = df["Workshop"].astype(str) + " | " + df["Workshop Date"].astype(str)
+
     # === 2. Identify last 3 events ===
     event_order = (
-        df.groupby("Workshop")["Workshop Date"].min()
+        df.groupby("Workshop Key")["Workshop Date"].min()
         .sort_values(ascending=False)
         .index
     )
     last3_events = list(event_order[:3])
-    last3_df = df[df["Workshop"].isin(last3_events)]
+    last3_df = df[df["Workshop Key"].isin(last3_events)]
 
     # === 3. Economy-level responsiveness ===
     economy_stats = (
-        last3_df.groupby("Economy")["Workshop"].nunique()
+        last3_df.groupby("Economy")["Workshop Key"].nunique()
         .reset_index(name="Events_Attended")
     )
 
@@ -98,13 +101,13 @@ def main():
         status, signal = classify_economy(attended)
 
         records.append({
-            "assumption": "Political and institutional continuity",
-            "monitoring_tool": "attendance",
-            "economy": economy,
-            "date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
-            "signal": signal,
-            "status": status,
-            "notes": f"{economy} attended {attended}/3 most recent APEC events"
+            "Assumption": "Political and institutional continuity",
+            "Monitoring Tool": "Attendance",
+            "Economy": economy,
+            "Date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
+            "Signal": signal,
+            "Status": status,
+            "Notes": f"{economy} attended {attended}/3 most recent APEC events"
         })
 
     # === 4. APEC aggregate continuity ===
@@ -117,13 +120,13 @@ def main():
         agg_status = "pessimistic"
 
     records.append({
-        "assumption": "Political and institutional continuity",
-        "monitoring_tool": "attendance",
-        "economy": "APEC (aggregate)",
-        "date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
-        "signal": f"On average, economies attended {avg_attended:.1f}/3 recent events",
-        "status": agg_status,
-        "notes": "Aggregate continuity measure across APEC economies"
+        "Assumption": "Political and institutional continuity",
+        "Monitoring Tool": "Attendance",
+        "Economy": "APEC (aggregate)",
+        "Date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
+        "Signal": f"On average, economies attended {avg_attended:.1f}/3 recent events",
+        "Status": agg_status,
+        "Notes": "Thresholds: ≥2.5 optimistic, ≥1.5 baseline, <1.5 pessimistic"
     })
 
     # === 5. Export ===
