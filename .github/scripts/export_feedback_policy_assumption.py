@@ -5,40 +5,30 @@ import pandas as pd
 # ── CONFIG ──────────────────────────────────────────────
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "app0Ljjhrp3lTTpTO"
-TABLE_NAME = "Feedback Form Entries"   # replace with your Airtable table name
+TABLE_NAME = "Feedback Form Entries"
 VIEW_NAME = "Grid view"
 
 OUTPUT_FILE = "feedback_policy_assumption.csv"
 
 # ── FUNCTIONS ───────────────────────────────────────────
 def fetch_airtable():
-    """Fetch all records from Airtable and return as DataFrame."""
     url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
     headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
     records, offset = [], None
-
     while True:
         params = {"view": VIEW_NAME}
         if offset:
             params["offset"] = offset
         resp = requests.get(url, headers=headers, params=params)
         data = resp.json()
-
-        if "records" not in data:
-            print(f"⚠️ Error fetching Airtable: {data}")
-            break
-
-        records.extend(data["records"])
+        records.extend(data.get("records", []))
         offset = data.get("offset")
         if not offset:
             break
-
-    rows = [r.get("fields", {}) for r in records]
-    return pd.DataFrame(rows)
+    return pd.DataFrame([r.get("fields", {}) for r in records])
 
 
 def classify_status(score: float) -> str:
-    """Apply scenario thresholds for feedback signals (aligned with attendance)."""
     if score >= 60:
         return "optimistic"
     elif score >= 30:
@@ -54,11 +44,10 @@ def main():
         return
 
     # Normalize date
-    if "Date" in df.columns:
-        df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-        last_date = df["Date"].max().strftime("%Y-%m-%d")
-    else:
-        last_date = pd.Timestamp.today().strftime("%Y-%m-%d")
+    last_date = (
+        pd.to_datetime(df["Date"], errors="coerce").max().strftime("%Y-%m-%d")
+        if "Date" in df.columns else pd.Timestamp.today().strftime("%Y-%m-%d")
+    )
 
     # Filter for policy dialogues & meetings
     if "Workshop Title" in df.columns:
@@ -71,7 +60,7 @@ def main():
         print("⚠️ No policy dialogue/meeting feedback found")
         return
 
-    # Normalize responses to lowercase strings
+    # Normalize responses
     policy_df = policy_df.applymap(lambda x: str(x).strip().lower() if pd.notnull(x) else x)
 
     # Mapping dictionaries
@@ -80,7 +69,6 @@ def main():
         "somewhat: i may apply them occasionally when circumstances warrant": 50,
         "no: i do not foresee any practical use in my current role": 0
     }
-
     share_map = {
         "yes: i intend to actively share with colleagues or my network": 100,
         "somewhat: i may share in appropriate settings if relevant": 50,
@@ -89,39 +77,51 @@ def main():
 
     records = []
 
-    # === Helper function for scoring ===
-    def process_scores(subset, econ_label):
+    def process_scores(subset, econ_label, level):
         scores = []
+
         # Application
         if "Application Intent" in subset.columns:
             vals = subset["Application Intent"].map(apply_map).dropna()
             if not vals.empty:
                 avg = vals.mean()
+                n = vals.count()
                 scores.append(avg)
                 records.append({
                     "Assumption": "Policy and regulatory openness",
                     "Monitoring Tool": "Feedback",
                     "Economy": econ_label,
+                    "Workstream": "All",
+                    "Level": level,
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average application intent",
                     "Status": classify_status(avg),
-                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
+                    "Confidence Index 1 (Percent)": round(avg, 1),
+                    "Confidence Index 2 (Responses)": int(n),
+                    "Notes": f"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
                 })
+
         # Sharing
         if "Sharing Intent" in subset.columns:
             vals = subset["Sharing Intent"].map(share_map).dropna()
             if not vals.empty:
                 avg = vals.mean()
+                n = vals.count()
                 scores.append(avg)
                 records.append({
                     "Assumption": "Policy and regulatory openness",
                     "Monitoring Tool": "Feedback",
                     "Economy": econ_label,
+                    "Workstream": "All",
+                    "Level": level,
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average sharing intent",
                     "Status": classify_status(avg),
-                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
+                    "Confidence Index 1 (Percent)": round(avg, 1),
+                    "Confidence Index 2 (Responses)": int(n),
+                    "Notes": f"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
                 })
+
         # Composite
         if scores:
             comp = sum(scores) / len(scores)
@@ -129,29 +129,29 @@ def main():
                 "Assumption": "Policy and regulatory openness",
                 "Monitoring Tool": "Feedback",
                 "Economy": econ_label,
+                "Workstream": "All",
+                "Level": level,
                 "Date": last_date,
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
-                "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
+                "Confidence Index 1 (Percent)": round(comp, 1),
+                "Confidence Index 2 (Responses)": int(len(scores)),
+                "Notes": "Composite of application and sharing scores."
             })
 
-    # === 1. APEC aggregate ===
-    process_scores(policy_df, "APEC (aggregate)")
+    # Aggregate
+    process_scores(policy_df, "APEC (aggregate)", "Aggregate")
 
-    # === 2. Economy-level breakdown ===
+    # Economy breakdown
     if "Economy" in policy_df.columns:
         for econ, subset in policy_df.groupby("Economy"):
-            process_scores(subset, econ)
+            process_scores(subset, econ, "Economy")
 
-    # ── Save Output ─────────────────────────────────────
-    if records:
-        out_df = pd.DataFrame(records)
-        out_df.to_csv(OUTPUT_FILE, index=False)
-        print(f"✅ Feedback (policy openness) assumption saved → {OUTPUT_FILE} ({len(records)} rows)")
-    else:
-        print("⚠️ No valid policy dialogue/meeting feedback signals found")
+    # Save
+    out_df = pd.DataFrame(records)
+    out_df.to_csv(OUTPUT_FILE, index=False)
+    print(f"✅ Feedback (policy openness) assumption saved → {OUTPUT_FILE} ({len(out_df)} rows)")
 
 
-# ── MAIN ───────────────────────────────────────────────
 if __name__ == "__main__":
     main()
