@@ -37,11 +37,11 @@ def fetch_airtable():
     return pd.DataFrame(rows)
 
 
-def classify_status(pct_yes: float) -> str:
-    """Apply scenario thresholds for application/sharing intent."""
-    if pct_yes >= 75:
+def classify_status(score: float) -> str:
+    """Apply scenario thresholds for feedback signals (aligned with attendance)."""
+    if score >= 60:
         return "optimistic"
-    elif pct_yes >= 40:
+    elif score >= 30:
         return "baseline"
     else:
         return "pessimistic"
@@ -67,35 +67,57 @@ def main():
         print("⚠️ Workshop Title column not found, using all data")
         policy_df = df.copy()
 
+    if policy_df.empty:
+        print("⚠️ No policy dialogue/meeting feedback found")
+        return
+
+    # Normalize responses to lowercase strings
+    policy_df = policy_df.applymap(lambda x: str(x).strip().lower() if pd.notnull(x) else x)
+
+    # Mapping dictionaries
+    apply_map = {
+        "yes: i expect to incorporate them routinely in my day-to-day tasks": 100,
+        "somewhat: i may apply them occasionally when circumstances warrant": 50,
+        "no: i do not foresee any practical use in my current role": 0
+    }
+
+    share_map = {
+        "yes: i intend to actively share with colleagues or my network": 100,
+        "somewhat: i may share in appropriate settings if relevant": 50,
+        "not at this time: i do not currently have plans to share": 0
+    }
+
     records = []
 
     # ── Application Intent ───────────────────────────────
     if "Application Intent" in policy_df.columns:
-        app_yes_rate = (policy_df["Application Intent"].astype(str)
-                        .str.strip().str.lower() == "yes").mean() * 100
-        records.append({
-            "assumption": "Policy and regulatory openness",
-            "monitoring_tool": "feedback",
-            "economy": "APEC (aggregate)",   # refine if Economy field exists
-            "date": last_date,
-            "signal": f"{app_yes_rate:.0f}% intend to apply recommendations",
-            "status": classify_status(app_yes_rate),
-            "notes": "Feedback from policy dialogue/meeting participants (Application Intent)"
-        })
+        scores = policy_df["Application Intent"].map(apply_map).dropna()
+        if not scores.empty:
+            avg_score = scores.mean()
+            records.append({
+                "Assumption": "Policy and regulatory openness",
+                "Monitoring Tool": "Feedback",
+                "Economy": "APEC (aggregate)",   # refine if Economy field exists
+                "Date": last_date,
+                "Signal": f"{avg_score:.0f}% average application intent",
+                "Status": classify_status(avg_score),
+                "Notes": "Feedback from policy dialogue/meeting participants (Application Intent)"
+            })
 
     # ── Sharing Intent ──────────────────────────────────
     if "Sharing Intent" in policy_df.columns:
-        share_yes_rate = (policy_df["Sharing Intent"].astype(str)
-                          .str.strip().str.lower() == "yes").mean() * 100
-        records.append({
-            "assumption": "Policy and regulatory openness",
-            "monitoring_tool": "feedback",
-            "economy": "APEC (aggregate)",
-            "date": last_date,
-            "signal": f"{share_yes_rate:.0f}% intend to share recommendations",
-            "status": classify_status(share_yes_rate),
-            "notes": "Feedback from policy dialogue/meeting participants (Sharing Intent)"
-        })
+        scores = policy_df["Sharing Intent"].map(share_map).dropna()
+        if not scores.empty:
+            avg_score = scores.mean()
+            records.append({
+                "Assumption": "Policy and regulatory openness",
+                "Monitoring Tool": "Feedback",
+                "Economy": "APEC (aggregate)",
+                "Date": last_date,
+                "Signal": f"{avg_score:.0f}% average sharing intent",
+                "Status": classify_status(avg_score),
+                "Notes": "Feedback from policy dialogue/meeting participants (Sharing Intent)"
+            })
 
     # ── Save Output ─────────────────────────────────────
     if records:
@@ -103,9 +125,10 @@ def main():
         out_df.to_csv(OUTPUT_FILE, index=False)
         print(f"✅ Feedback (policy openness) assumption saved → {OUTPUT_FILE} ({len(records)} rows)")
     else:
-        print("⚠️ No valid policy dialogue/meeting feedback found")
+        print("⚠️ No valid policy dialogue/meeting feedback signals found")
 
 
 # ── MAIN ───────────────────────────────────────────────
 if __name__ == "__main__":
     main()
+
