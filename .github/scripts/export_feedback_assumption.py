@@ -108,7 +108,7 @@ def main():
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average relevance",
                     "Status": classify_status(avg),
-                    "Notes": "Feedback from training/workshop participants (Relevance to Work)"
+                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
                 })
 
         # Knowledge
@@ -124,7 +124,7 @@ def main():
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average knowledge gain",
                     "Status": classify_status(avg),
-                    "Notes": "Feedback from training/workshop participants (Knowledge Gain)"
+                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
                 })
 
         # Application
@@ -140,7 +140,7 @@ def main():
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average application intent",
                     "Status": classify_status(avg),
-                    "Notes": "Feedback from training/workshop participants (Application Intent)"
+                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
                 })
 
         # Sharing
@@ -156,7 +156,7 @@ def main():
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average sharing intent",
                     "Status": classify_status(avg),
-                    "Notes": "Feedback from training/workshop participants (Sharing Intent)"
+                    "Notes":b"Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
                 })
 
         # Composite
@@ -169,7 +169,7 @@ def main():
                 "Date": last_date,
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
-                "Notes": "Average of relevance, knowledge, application, and sharing intent"
+                "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
             })
 
     # === 1. APEC aggregate ===
