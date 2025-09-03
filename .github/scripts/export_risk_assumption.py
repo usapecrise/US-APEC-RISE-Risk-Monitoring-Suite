@@ -61,6 +61,17 @@ def main():
         print("⚠️ risk_signals.csv is empty")
         return
 
+    # Detect the text column dynamically
+    text_col = None
+    for candidate in ["signal", "text", "content", "description"]:
+        if candidate in df.columns:
+            text_col = candidate
+            break
+
+    if not text_col:
+        print(f"⚠️ No suitable text column found in {INPUT_FILE}. Available columns: {list(df.columns)}")
+        return
+
     records = []
 
     # === 1. Signal-level rows ===
@@ -69,7 +80,7 @@ def main():
         workstream = row.get("workstream", "Unspecified") if "workstream" in df.columns else "Unspecified"
         date = pd.to_datetime(row.get("date", ""), errors="coerce")
         date_str = date.strftime("%Y-%m-%d") if not pd.isna(date) else ""
-        signal_text = row.get("signal", "")
+        signal_text = row.get(text_col, "")
 
         status, score = classify_scenario(signal_text)
 
@@ -93,7 +104,7 @@ def main():
             total = len(subset)
             if total == 0:
                 continue
-            optimistic_count = subset["signal"].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+            optimistic_count = subset[text_col].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
             pct_opt = (optimistic_count / total) * 100
             econ_status = classify_percentage(pct_opt)
 
@@ -117,7 +128,7 @@ def main():
             total = len(subset)
             if total == 0:
                 continue
-            optimistic_count = subset["signal"].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+            optimistic_count = subset[text_col].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
             pct_opt = (optimistic_count / total) * 100
             ws_status = classify_percentage(pct_opt)
 
@@ -137,7 +148,7 @@ def main():
 
     # === 4. APEC aggregate summary ===
     total_signals = len(df)
-    optimistic_count = df["signal"].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+    optimistic_count = df[text_col].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
     pct_opt = (optimistic_count / total_signals) * 100 if total_signals > 0 else 0
     agg_status = classify_percentage(pct_opt)
 
@@ -163,4 +174,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
