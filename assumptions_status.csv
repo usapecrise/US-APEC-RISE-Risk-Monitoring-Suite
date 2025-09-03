@@ -1,121 +1,270 @@
 assumption,monitoring_tool,economy,date,signal,status,notes,source_file
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-08-09,Average 13.0 economies represented (last 3 dialogues),baseline,≈62% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-08-06,Average 16.0 economies represented (last 3 Digital Trade dialogues),optimistic,≈76% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Australia,2025-08-06,Australia attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Brunei Darussalam,2025-08-06,Brunei Darussalam attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Canada,2025-08-06,Canada attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chile,2025-08-06,Chile attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chinese Taipei,2025-08-06,Chinese Taipei attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Hong Kong; China,2025-08-06,Hong Kong; China attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Japan,2025-08-06,Japan attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Malaysia,2025-08-06,Malaysia attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Other,2025-08-06,Other attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Papua New Guinea,2025-08-06,Papua New Guinea attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,People's Republic of China,2025-08-06,People's Republic of China attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Republic of Korea,2025-08-06,Republic of Korea attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Russia,2025-08-06,Russia attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Singapore,2025-08-06,Singapore attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,The Philippines,2025-08-06,The Philippines attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,United States of America,2025-08-06,United States of America attended 1 of last 3 Digital Trade dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-08-02,Average 9.0 economies represented (last 3 Supply Chain Connectivity dialogues),baseline,≈43% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Canada,2025-08-02,Canada attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chile,2025-08-02,Chile attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chinese Taipei,2025-08-02,Chinese Taipei attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Japan,2025-08-02,Japan attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Malaysia,2025-08-02,Malaysia attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Other,2025-08-02,Other attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Peru,2025-08-02,Peru attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Republic of Korea,2025-08-02,Republic of Korea attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,United States of America,2025-08-02,United States of America attended 1 of last 3 Supply Chain Connectivity dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-07-31,Average 8.0 economies represented (last 3 rec8X4hhBa5cOnk18 dialogues),pessimistic,≈38% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Australia,2025-07-31,Australia attended 1 of last 3 rec8X4hhBa5cOnk18 dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chinese Taipei,2025-07-31,Chinese Taipei attended 1 of last 3 rec8X4hhBa5cOnk18 dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Malaysia,2025-07-31,Malaysia attended 1 of last 3 rec8X4hhBa5cOnk18 dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Papua New Guinea,2025-07-31,Papua New Guinea attended 1 of last 3 rec8X4hhBa5cOnk18 dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Republic of Korea,2025-07-31,Republic of Korea attended 1 of last 3 rec8X4hhBa5cOnk18 dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Thailand,2025-07-31,Thailand attended 1 of last 3 rec8X4hhBa5cOnk18 dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,The Philippines,2025-07-31,The Philippines attended 1 of last 3 rec8X4hhBa5cOnk18 dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,United States of America,2025-07-31,United States of America attended 1 of last 3 rec8X4hhBa5cOnk18 dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-08-08,Average 13.0 economies represented (last 3 recIze3I0sDtjtxap dialogues),baseline,≈62% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Australia,2025-08-08,Australia attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Brunei Darussalam,2025-08-08,Brunei Darussalam attended 1 of last 3 recIze3I0sDtjtxap dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Canada,2025-08-08,Canada attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chile,2025-08-08,Chile attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chinese Taipei,2025-08-08,Chinese Taipei attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,"Hong Kong, China",2025-08-08,"Hong Kong, China attended 1 of last 3 recIze3I0sDtjtxap dialogues",pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Indonesia,2025-08-08,Indonesia attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Japan,2025-08-08,Japan attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Malaysia,2025-08-08,Malaysia attended 1 of last 3 recIze3I0sDtjtxap dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,New Zealand,2025-08-08,New Zealand attended 1 of last 3 recIze3I0sDtjtxap dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Other,2025-08-08,Other attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,People's Republic of China,2025-08-08,People's Republic of China attended 1 of last 3 recIze3I0sDtjtxap dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Peru,2025-08-08,Peru attended 1 of last 3 recIze3I0sDtjtxap dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Republic of Korea,2025-08-05,Republic of Korea attended 1 of last 3 recIze3I0sDtjtxap dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Singapore,2025-08-05,Singapore attended 1 of last 3 recIze3I0sDtjtxap dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Thailand,2025-08-08,Thailand attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,The Philippines,2025-08-08,The Philippines attended 2 of last 3 recIze3I0sDtjtxap dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-07-30,Average 7.3 economies represented (last 3 recO6Wye9q46CaYxb dialogues),pessimistic,≈35% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Australia,2025-07-28,Australia attended 2 of last 3 recO6Wye9q46CaYxb dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Canada,2025-07-28,Canada attended 2 of last 3 recO6Wye9q46CaYxb dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chinese Taipei,2025-07-30,Chinese Taipei attended 1 of last 3 recO6Wye9q46CaYxb dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Indonesia,2025-07-27,Indonesia attended 1 of last 3 recO6Wye9q46CaYxb dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Malaysia,2025-07-28,Malaysia attended 2 of last 3 recO6Wye9q46CaYxb dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,New Zealand,2025-07-27,New Zealand attended 1 of last 3 recO6Wye9q46CaYxb dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Other,2025-07-28,Other attended 2 of last 3 recO6Wye9q46CaYxb dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Papua New Guinea,2025-07-27,Papua New Guinea attended 1 of last 3 recO6Wye9q46CaYxb dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,People's Republic of China,2025-07-28,People's Republic of China attended 2 of last 3 recO6Wye9q46CaYxb dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Republic of Korea,2025-07-27,Republic of Korea attended 1 of last 3 recO6Wye9q46CaYxb dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Singapore,2025-07-27,Singapore attended 1 of last 3 recO6Wye9q46CaYxb dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Thailand,2025-07-30,Thailand attended 3 of last 3 recO6Wye9q46CaYxb dialogues,optimistic,100% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,The Philippines,2025-07-27,The Philippines attended 1 of last 3 recO6Wye9q46CaYxb dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,United States of America,2025-07-30,United States of America attended 2 of last 3 recO6Wye9q46CaYxb dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Viet Nam,2025-07-27,Viet Nam attended 1 of last 3 recO6Wye9q46CaYxb dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-08-02,Average 11.0 economies represented (last 3 reckuD4pDTWtZesJN dialogues),baseline,≈52% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chile,2025-08-02,Chile attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chinese Taipei,2025-08-02,Chinese Taipei attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,"Hong Kong, China",2025-08-02,"Hong Kong, China attended 1 of last 3 reckuD4pDTWtZesJN dialogues",pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Indonesia,2025-08-02,Indonesia attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Japan,2025-08-02,Japan attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Other,2025-08-02,Other attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Papua New Guinea,2025-08-02,Papua New Guinea attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Peru,2025-08-02,Peru attended 1 of last 3 reckuD4pDTWtZesJN dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Thailand,2025-08-02,Thailand attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,The Philippines,2025-08-02,The Philippines attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,United States of America,2025-08-02,United States of America attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Viet Nam,2025-08-02,Viet Nam attended 2 of last 3 reckuD4pDTWtZesJN dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-07-29,Average 11.3 economies represented (last 3 recqvqMEpTfZTKevx dialogues),baseline,≈54% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Australia,2025-07-28,Australia attended 1 of last 3 recqvqMEpTfZTKevx dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Canada,2025-07-28,Canada attended 1 of last 3 recqvqMEpTfZTKevx dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chile,2025-07-29,Chile attended 2 of last 3 recqvqMEpTfZTKevx dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Indonesia,2025-07-29,Indonesia attended 2 of last 3 recqvqMEpTfZTKevx dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Malaysia,2025-07-29,Malaysia attended 3 of last 3 recqvqMEpTfZTKevx dialogues,optimistic,100% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Mexico,2025-07-29,Mexico attended 2 of last 3 recqvqMEpTfZTKevx dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Other,2025-07-29,Other attended 2 of last 3 recqvqMEpTfZTKevx dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,People's Republic of China,2025-07-29,People's Republic of China attended 3 of last 3 recqvqMEpTfZTKevx dialogues,optimistic,100% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Peru,2025-07-29,Peru attended 3 of last 3 recqvqMEpTfZTKevx dialogues,optimistic,100% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Republic of Korea,2025-07-29,Republic of Korea attended 3 of last 3 recqvqMEpTfZTKevx dialogues,optimistic,100% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Singapore,2025-07-29,Singapore attended 2 of last 3 recqvqMEpTfZTKevx dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Thailand,2025-07-29,Thailand attended 2 of last 3 recqvqMEpTfZTKevx dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,The Philippines,2025-07-29,The Philippines attended 2 of last 3 recqvqMEpTfZTKevx dialogues,baseline,67% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,United States of America,2025-07-29,United States of America attended 3 of last 3 recqvqMEpTfZTKevx dialogues,optimistic,100% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Viet Nam,2025-07-29,Viet Nam attended 3 of last 3 recqvqMEpTfZTKevx dialogues,optimistic,100% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,APEC,2025-08-09,Average 8.0 economies represented (last 3 recx8jdfEcebA5nAS dialogues),pessimistic,≈38% of APEC economies participated,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Australia,2025-08-09,Australia attended 1 of last 3 recx8jdfEcebA5nAS dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Canada,2025-08-09,Canada attended 1 of last 3 recx8jdfEcebA5nAS dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Chile,2025-08-09,Chile attended 1 of last 3 recx8jdfEcebA5nAS dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Indonesia,2025-08-09,Indonesia attended 1 of last 3 recx8jdfEcebA5nAS dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Other,2025-08-09,Other attended 1 of last 3 recx8jdfEcebA5nAS dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Papua New Guinea,2025-08-09,Papua New Guinea attended 1 of last 3 recx8jdfEcebA5nAS dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,Thailand,2025-08-09,Thailand attended 1 of last 3 recx8jdfEcebA5nAS dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,attendance,The Philippines,2025-08-09,The Philippines attended 1 of last 3 recx8jdfEcebA5nAS dialogues,pessimistic,33% attendance rate,attendance_assumption.csv
-Political and institutional continuity,attendance,,2025-08-06,Attended 2 of last 3 events,baseline, attended 2/3 most recent APEC events,attendance_continuity_assumption.csv
-Political and institutional continuity,attendance,APEC (aggregate),2025-08-06,"On average, economies attended 2.0/3 recent events",baseline,Aggregate continuity measure across APEC economies,attendance_continuity_assumption.csv
-Stakeholder alignment with U.S. focus areas,feedback,APEC (aggregate),2025-09-03,0% reported knowledge gain,pessimistic,Derived from Feedback Form responses (Knowledge Gain),feedback_assumption.csv
-Stakeholder alignment with U.S. focus areas,feedback,APEC (aggregate),2025-09-03,0% reported application intent,pessimistic,Derived from Feedback Form responses (Application Intent),feedback_assumption.csv
-Stakeholder alignment with U.S. focus areas,feedback,APEC (aggregate),2025-09-03,0% reported sharing intent,pessimistic,Derived from Feedback Form responses (Sharing Intent),feedback_assumption.csv
-Stakeholder alignment with U.S. focus areas,feedback,APEC (aggregate),2025-09-03,Composite score across feedback signals = 0%,pessimistic,"Average of knowledge, application, and sharing intent",feedback_assumption.csv
-Policy and regulatory openness,feedback,APEC (aggregate),2025-09-03,0% intend to apply recommendations,pessimistic,Feedback from policy dialogue/meeting participants (Application Intent),feedback_policy_assumption.csv
-Policy and regulatory openness,feedback,APEC (aggregate),2025-09-03,0% intend to share recommendations,pessimistic,Feedback from policy dialogue/meeting participants (Sharing Intent),feedback_policy_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_assumption.csv
+,,,,,,,attendance_continuity_assumption.csv
+,,,,,,,attendance_continuity_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
+,,,,,,,feedback_policy_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Wed, 03 Sep 2025 03:12:20 +0000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Stakeholder alignment with U.S. focus areas', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",baseline,Derived from media monitoring / risk signals,risk_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Wed, 03 Sep 2025 03:12:20 +0000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Political and institutional continuity', 'Scenario': 'Pessimistic', 'Justification': 'coup', 'Signal Strength': 'High'}",pessimistic,Derived from media monitoring / risk signals,risk_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Wed, 03 Sep 2025 03:12:20 +0000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Supply chain and trade flow resilience', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",baseline,Derived from media monitoring / risk signals,risk_assumption.csv
@@ -1720,5 +1869,8 @@ Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Tue, 02
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Tue, 02 Sep 2025 18:59:24 +1000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Political and institutional continuity', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",optimistic,Derived from media monitoring / risk signals,risk_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Tue, 02 Sep 2025 18:59:24 +1000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Supply chain and trade flow resilience', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",baseline,Derived from media monitoring / risk signals,risk_assumption.csv
 Political and institutional continuity,media_monitor,Unknown,,"{'Date': 'Tue, 02 Sep 2025 18:59:24 +1000', 'Economy': 'Unknown', 'Workstream': 'Uncategorized', 'Assumption': 'Private sector and stakeholder engagement', 'Scenario': 'Baseline', 'Justification': 'No signal keywords detected.', 'Signal Strength': 'Low'}",baseline,Derived from media monitoring / risk signals,risk_assumption.csv
-Policy and regulatory openness,policy_reform,,,Unspecified Reform reform = ,baseline,,policy_reform_assumption.csv
-Private sector cost-share commitments sustained,cost_share,APEC (aggregate),2025-09-03,"$0 from 0 firms across 0 economies (FY Unknown, Home Economy only)",pessimistic,Aggregate private sector resources recorded in OT5,cost_share_assumption.csv
+,,,,,,,policy_reform_assumption.csv
+,,,,,,,policy_reform_assumption.csv
+,,,,,,,policy_reform_assumption.csv
+,,,,,,,policy_reform_assumption.csv
+,,,,,,,cost_share_assumption.csv
