@@ -112,9 +112,9 @@ def main():
 
     # === 4. APEC aggregate continuity ===
     avg_attended = economy_stats["Events_Attended"].mean() if not economy_stats.empty else 0
-    if avg_attended >= 2.5:
+    if avg_attended >= 1.8:
         agg_status = "optimistic"
-    elif avg_attended >= 1.5:
+    elif avg_attended >= 0.9:
         agg_status = "baseline"
     else:
         agg_status = "pessimistic"
@@ -126,7 +126,7 @@ def main():
         "Date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
         "Signal": f"On average, economies attended {avg_attended:.1f}/3 recent events",
         "Status": agg_status,
-        "Notes": "Thresholds: ≥2.5 optimistic, ≥1.5 baseline, <1.5 pessimistic"
+        "Notes": "Thresholds: ≥1.8 optimistic (≥60%), 0.9–1.7 baseline (30–59%), <0.9 pessimistic (<30%)"
     })
 
     # === 5. Export ===
@@ -137,3 +137,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
