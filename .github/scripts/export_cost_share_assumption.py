@@ -15,15 +15,11 @@ def fetch_ot5():
     records, offset = [], None
 
     while True:
-        params = {}
-        if VIEW_ID:
-            params["view"] = VIEW_ID
+        params = {"view": VIEW_ID} if VIEW_ID else {}
         if offset:
             params["offset"] = offset
 
         resp = requests.get(url, headers=headers, params=params)
-        print("DEBUG response:", resp.status_code, resp.text[:200])
-
         if resp.status_code != 200:
             raise RuntimeError(f"Airtable API error {resp.status_code}: {resp.text}")
 
@@ -45,11 +41,9 @@ def fetch_ot5():
 
     return pd.DataFrame(records)
 
-
-# === Load data from Airtable ===
+# === Load and clean ===
 df = fetch_ot5()
 
-# === Clean Amount field ===
 def parse_amount(x):
     if pd.isna(x):
         return 0.0
@@ -60,11 +54,10 @@ def parse_amount(x):
 
 df["Amount_clean"] = df["Amount"].apply(parse_amount)
 
-# === Filter Home Economy only ===
-if "Type" in df.columns:
-    df = df[df["Type"].str.contains("Home", case=False, na=False)]
+# Filter Home Economy only
+df = df[df["Type"].str.contains("Home", case=False, na=False)] if "Type" in df.columns else df
 
-# === Pick latest fiscal year ===
+# Pick latest FY
 if "Fiscal Year" in df.columns and not df["Fiscal Year"].dropna().empty:
     latest_fy = df["Fiscal Year"].dropna().max()
     df_latest = df[df["Fiscal Year"] == latest_fy]
@@ -72,7 +65,7 @@ else:
     latest_fy = "Unknown"
     df_latest = df
 
-# === Classification rules (absolute thresholds for host-only) ===
+# === Classification rules ===
 def classify(total, econ_count, firm_count):
     """Classify cost-share signal based on host contributions only."""
     if total >= 5000 and econ_count >= 2 and firm_count >= 2:
@@ -84,10 +77,11 @@ def classify(total, econ_count, firm_count):
 
 rows = []
 
-# === Aggregate APEC-wide signal ===
+# === Aggregate ===
 total_amount = df_latest["Amount_clean"].sum()
 economies_count = df_latest["Economy"].nunique()
 firms_count = df_latest["Firm"].nunique()
+agg_status = classify(total_amount, economies_count, firms_count)
 
 rows.append({
     "Assumption": "Responsible local ownership",
@@ -97,11 +91,12 @@ rows.append({
     "Level": "Aggregate",
     "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
     "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Home Economy only)",
-    "Status": classify(total_amount, economies_count, firms_count),
-    "Notes": "Home Economy cost-share only (excludes USG and third-party). Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline"
+    "Status": agg_status,
+    "Confidence Index": total_amount,
+    "Notes": "Host-economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline."
 })
 
-# === Economy-level signals ===
+# === Economy-level ===
 for econ, g in df_latest.groupby("Economy"):
     econ_total = g["Amount_clean"].sum()
     econ_firms = g["Firm"].nunique()
@@ -116,10 +111,11 @@ for econ, g in df_latest.groupby("Economy"):
         "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
         "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Home Economy only)",
         "Status": scenario_econ,
-        "Notes": "Home Economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline"
+        "Confidence Index": econ_total,
+        "Notes": "Host-economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline."
     })
 
-# === Workstream-level signals ===
+# === Workstream-level ===
 if "Workstream" in df_latest.columns:
     for ws, g in df_latest.groupby("Workstream"):
         ws_total = g["Amount_clean"].sum()
@@ -136,11 +132,12 @@ if "Workstream" in df_latest.columns:
             "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
             "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Home Economy only)",
             "Status": scenario_ws,
-            "Notes": "Home Economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline"
+            "Confidence Index": ws_total,
+            "Notes": "Host-economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline."
         })
 
 # === Export ===
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
-print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows)")
+print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows))")
 
