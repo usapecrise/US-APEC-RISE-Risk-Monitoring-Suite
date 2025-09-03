@@ -75,7 +75,7 @@ def main():
             "Signal": str(signal_text),
             "Status": status,
             "Confidence Score": score,
-            "Notes": "Derived from media monitoring / risk signals"
+            "Notes": "Signals classified from media keywords/phrases. Confidence Score shows strength. Thresholds: Optimistic ≥1, Baseline 0, Pessimistic ≤-1"
         })
 
     if records:
