@@ -107,7 +107,7 @@ def main():
             "Date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
             "Signal": signal,
             "Status": status,
-            "Notes": f"{economy} attended {attended}/3 most recent APEC events"
+            "Notes": "Thresholds: Optimistic ≥1.8/3 events attended (~60%+), Baseline 0.9–1.7 (~30–59%), Pessimistic <0.9 (<30%)"
         })
 
     # === 4. APEC aggregate continuity ===
