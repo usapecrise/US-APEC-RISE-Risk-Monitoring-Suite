@@ -92,8 +92,8 @@ if not df.empty:
     economies_present = last3["Economy"].mean()
     pct = (economies_present / 21) * 100
     scenario = (
-        "optimistic" if pct >= 75 else
-        "baseline" if pct >= 40 else
+        "optimistic" if pct >= 60 else
+        "baseline" if pct >= 30 else
         "pessimistic"
     )
 
@@ -128,8 +128,8 @@ if not df.empty:
         economies_present_ws = last3_ws["Economy"].mean()
         pct_ws = (economies_present_ws / 21) * 100
         scenario_ws = (
-            "optimistic" if pct_ws >= 75 else
-            "baseline" if pct_ws >= 40 else
+            "optimistic" if pct_ws >= 67 else
+            "baseline" if pct_ws >= 33 else
             "pessimistic"
         )
 
