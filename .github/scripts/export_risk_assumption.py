@@ -5,6 +5,7 @@ import re
 INPUT_FILE = "risk_signals.csv"
 OUTPUT_FILE = "risk_assumption.csv"
 
+# ── CLASSIFICATION ─────────────────────────────────────
 def classify_scenario(text: str):
     """Keyword/phrase-based classification of media/risk signals with confidence score."""
     text = str(text).lower()
@@ -47,6 +48,18 @@ def classify_scenario(text: str):
 
     return status, score
 
+
+def classify_percentage(pct: float) -> str:
+    """Classify percentage thresholds for summaries."""
+    if pct >= 60:
+        return "optimistic"
+    elif pct >= 30:
+        return "baseline"
+    else:
+        return "pessimistic"
+
+
+# ── MAIN ───────────────────────────────────────────────
 def main():
     if not os.path.exists(INPUT_FILE):
         print(f"⚠️ No input file found at {INPUT_FILE}")
@@ -58,8 +71,11 @@ def main():
         return
 
     records = []
+
+    # === 1. Signal-level rows ===
     for _, row in df.iterrows():
         economy = row.get("economy", "Unknown")
+        workstream = row.get("workstream", "Unspecified") if "workstream" in df.columns else "Unspecified"
         date = pd.to_datetime(row.get("date", ""), errors="coerce")
         date_str = date.strftime("%Y-%m-%d") if not pd.isna(date) else ""
 
@@ -71,19 +87,85 @@ def main():
             "Assumption": "Political and institutional continuity",
             "Monitoring Tool": "Media Monitor",
             "Economy": economy,
+            "Workstream": workstream,
+            "Level": "Signal",
             "Date": date_str,
             "Signal": str(signal_text),
             "Status": status,
             "Confidence Score": score,
-            "Notes": "Signals classified from media keywords/phrases. Confidence Score shows strength. Thresholds: Optimistic ≥1, Baseline 0, Pessimistic ≤-1"
+            "Notes": "Individual signal classified from media/risk keywords. Confidence Score shows strength (positive=optimistic, negative=pessimistic)."
         })
 
-    if records:
-        out_df = pd.DataFrame(records)
-        out_df.to_csv(OUTPUT_FILE, index=False)
-        print(f"✅ Risk assumption status saved → {OUTPUT_FILE} ({len(records)} rows)")
-    else:
-        print("⚠️ No valid risk signals found")
+    # === 2. Economy-level summaries ===
+    if "economy" in df.columns:
+        for econ, subset in df.groupby("economy"):
+            total = len(subset)
+            if total == 0:
+                continue
+            optimistic_count = subset["signal"].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+            pct_opt = (optimistic_count / total) * 100
+            econ_status = classify_percentage(pct_opt)
+
+            records.append({
+                "Assumption": "Political and institutional continuity",
+                "Monitoring Tool": "Media Monitor",
+                "Economy": econ,
+                "Workstream": "All",
+                "Level": "Economy",
+                "Date": df["date"].max() if "date" in df.columns else "",
+                "Signal": f"{pct_opt:.0f}% of signals optimistic",
+                "Status": econ_status,
+                "Confidence Score": "",
+                "Notes": "Summary classification by economy. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+            })
+
+    # === 3. Workstream-level summaries ===
+    if "workstream" in df.columns:
+        for ws, subset in df.groupby("workstream"):
+            total = len(subset)
+            if total == 0:
+                continue
+            optimistic_count = subset["signal"].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+            pct_opt = (optimistic_count / total) * 100
+            ws_status = classify_percentage(pct_opt)
+
+            records.append({
+                "Assumption": "Political and institutional continuity",
+                "Monitoring Tool": "Media Monitor",
+                "Economy": "APEC (aggregate)",
+                "Workstream": ws if ws else "Unspecified",
+                "Level": "Workstream",
+                "Date": df["date"].max() if "date" in df.columns else "",
+                "Signal": f"{pct_opt:.0f}% of signals optimistic",
+                "Status": ws_status,
+                "Confidence Score": "",
+                "Notes": "Summary classification by workstream. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+            })
+
+    # === 4. APEC aggregate summary ===
+    total_signals = len(df)
+    optimistic_count = df["signal"].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+    pct_opt = (optimistic_count / total_signals) * 100 if total_signals > 0 else 0
+    agg_status = classify_percentage(pct_opt)
+
+    records.append({
+        "Assumption": "Political and institutional continuity",
+        "Monitoring Tool": "Media Monitor",
+        "Economy": "APEC (aggregate)",
+        "Workstream": "All",
+        "Level": "Aggregate",
+        "Date": df["date"].max() if "date" in df.columns else "",
+        "Signal": f"{pct_opt:.0f}% of signals optimistic",
+        "Status": agg_status,
+        "Confidence Score": "",
+        "Notes": "Aggregate classification across APEC. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+    })
+
+    # === Export ===
+    out_df = pd.DataFrame(records)
+    out_df.to_csv(OUTPUT_FILE, index=False)
+    print(f"✅ Risk assumption saved → {OUTPUT_FILE} ({len(out_df)} rows)")
+
 
 if __name__ == "__main__":
     main()
