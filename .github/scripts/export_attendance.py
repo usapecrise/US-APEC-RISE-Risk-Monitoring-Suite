@@ -131,7 +131,7 @@ for ws, g in df.groupby("Workstream"):
             "Signal": f"{econ} attended {attended_count}/3 {ws} dialogues",
             "Status": status_econ,
             "Confidence Index 1 (Percent)": round(pct_attended, 1),
-            "Confidence Index 2 (Count)": attended_count,
+            "Confidence Index 2 (Breadth)": attended_count,
             "Notes": "Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%."
         })
 
