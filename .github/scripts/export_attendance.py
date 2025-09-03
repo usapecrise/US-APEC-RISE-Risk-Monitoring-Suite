@@ -106,7 +106,7 @@ if not df.empty:
         "Date": last3["Workshop Date"].max().strftime("%Y-%m-%d"),
         "Signal": f"Average {economies_present:.1f} economies represented (last 3 dialogues)",
         "Status": scenario,
-        "Notes": f"≈{pct:.0f}% of APEC economies participated"
+        "Notes": "Thresholds: Optimistic ≥60% of APEC economies represented, Baseline 30–59%, Pessimistic <30% (last 3 dialogues)"
     })
 
     # --- Workstream breakdown ---
