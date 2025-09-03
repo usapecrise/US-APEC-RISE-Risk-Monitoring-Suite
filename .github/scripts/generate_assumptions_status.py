@@ -21,6 +21,10 @@ def main():
     for file in INPUT_FILES:
         try:
             df = pd.read_csv(file)
+
+            # ✅ normalize column names to lowercase and strip spaces
+            df.columns = [c.strip().lower() for c in df.columns]
+
             if not df.empty:
                 df["source_file"] = file  # keep traceability
                 dfs.append(df)
@@ -39,7 +43,7 @@ def main():
 
     merged = pd.concat(dfs, ignore_index=True)
 
-    # Standardize columns (fill missing if some file is off-schema)
+    # ✅ enforce required columns
     required_cols = ["assumption","monitoring_tool","economy","date","signal","status","notes"]
     for col in required_cols:
         if col not in merged.columns:
@@ -47,7 +51,7 @@ def main():
 
     merged = merged[required_cols + ["source_file"]]
 
-    # === Validation check ===
+    # ✅ validation check
     missing = [f for f in INPUT_FILES if f not in row_counts or row_counts[f] in (0, None)]
     if missing:
         raise ValueError(f"❌ Missing or empty assumption files in merged output: {missing}")
@@ -58,7 +62,7 @@ def main():
     merged.to_csv(OUTPUT_FILE, index=False)
     print(f"✅ Unified assumptions file saved → {OUTPUT_FILE} ({len(merged)} rows)")
 
-    # === Row-count summary ===
+    # === Row-count summary by file ===
     print("\n📊 Row count by source file:")
     for f, count in row_counts.items():
         if count is None:
@@ -66,6 +70,12 @@ def main():
         else:
             print(f"  {f}: {count} rows")
 
+    # === Row-count summary by assumption + status ===
+    if "assumption" in merged.columns and "status" in merged.columns:
+        print("\n📊 Row count by assumption and status:")
+        summary = merged.groupby(["assumption", "status"]).size().reset_index(name="count")
+        for _, row in summary.iterrows():
+            print(f"  {row['assumption']} | {row['status']}: {row['count']} rows")
+
 if __name__ == "__main__":
     main()
-
