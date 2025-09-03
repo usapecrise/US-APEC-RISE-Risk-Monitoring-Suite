@@ -51,6 +51,9 @@ def main():
         print("⚠️ Feedback table is empty")
         return
 
+    # Normalize text responses
+    df = df.applymap(lambda x: str(x).strip().lower() if pd.notnull(x) else x)
+
     # Normalize date
     if "Date" in df.columns:
         df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
@@ -58,39 +61,69 @@ def main():
     else:
         last_date = pd.Timestamp.today().strftime("%Y-%m-%d")
 
-    records = []
+    # Mapping dictionaries
+    relevance_map = {
+        "not at all relevant": 0,
+        "slightly relevant": 25,
+        "somewhat relevant": 50,
+        "considerably relevant": 75,
+        "greatly relevant": 100
+    }
+    knowledge_map = {
+        "no increase at all": 0,
+        "slightly increased": 25,
+        "somewhat increased": 50,
+        "considerably increased": 75,
+        "greatly increased": 100
+    }
+    apply_map = {
+        "yes: i expect to incorporate them routinely in my day-to-day tasks": 100,
+        "somewhat: i may apply them occasionally when circumstances warrant": 50,
+        "no: i do not foresee any practical use in my current role": 0
+    }
+    share_map = {
+        "yes: i intend to actively share with colleagues or my network": 100,
+        "somewhat: i may share in appropriate settings if relevant": 50,
+        "not at this time: i do not currently have plans to share": 0
+    }
 
-    # --- 1. Individual signals ---
-    for col, label in [
-        ("Knowledge Gain", "knowledge gain"),
-        ("Application Intent", "application intent"),
-        ("Sharing Intent", "sharing intent"),
+    records = []
+    scores = []
+
+    for col, label, mapping in [
+        ("Relevance to Work", "relevance to work", relevance_map),
+        ("Knowledge Gain", "knowledge gain", knowledge_map),
+        ("Application Intent", "application intent", apply_map),
+        ("Sharing Intent", "sharing intent", share_map)
     ]:
         if col in df.columns:
-            yes_rate = (df[col].astype(str).str.strip().str.lower() == "yes").mean() * 100
-            scenario = classify_scenario(yes_rate)
-            records.append({
-                "assumption": "Stakeholder alignment with U.S. focus areas",
-                "monitoring_tool": "feedback",
-                "economy": "APEC (aggregate)",
-                "date": last_date,
-                "signal": f"{yes_rate:.0f}% reported {label}",
-                "status": scenario,
-                "notes": f"Derived from Feedback Form responses ({col})"
-            })
+            mapped = df[col].map(mapping).dropna()
+            if not mapped.empty:
+                avg_score = mapped.mean()
+                scores.append(avg_score)
+                scenario = classify_scenario(avg_score)
+                records.append({
+                    "Assumption": "Stakeholder alignment with U.S. focus areas",
+                    "Monitoring Tool": "Feedback",
+                    "Economy": "APEC (aggregate)",
+                    "Date": last_date,
+                    "Signal": f"{avg_score:.0f}% average {label}",
+                    "Status": scenario,
+                    "Notes": f"Derived from Feedback Form responses ({col})"
+                })
 
-    # --- 2. Composite signal ---
-    if records:
-        avg_rate = sum([float(r["signal"].split("%")[0]) for r in records]) / len(records)
+    # Composite across all signals
+    if scores:
+        avg_rate = sum(scores) / len(scores)
         composite_scenario = classify_scenario(avg_rate)
         records.append({
-            "assumption": "Stakeholder alignment with U.S. focus areas",
-            "monitoring_tool": "feedback",
-            "economy": "APEC (aggregate)",
-            "date": last_date,
-            "signal": f"Composite score across feedback signals = {avg_rate:.0f}%",
-            "status": composite_scenario,
-            "notes": "Average of knowledge, application, and sharing intent"
+            "Assumption": "Stakeholder alignment with U.S. focus areas",
+            "Monitoring Tool": "Feedback",
+            "Economy": "APEC (aggregate)",
+            "Date": last_date,
+            "Signal": f"Composite feedback score = {avg_rate:.0f}%",
+            "Status": composite_scenario,
+            "Notes": "Average of relevance, knowledge, application, and sharing intent"
         })
 
     if records:
