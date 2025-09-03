@@ -10,7 +10,6 @@ def classify_scenario(text: str):
     """Keyword/phrase-based classification of media/risk signals with confidence score."""
     text = str(text).lower()
 
-    # Pessimistic keywords/phrases
     pessimistic_patterns = [
         r"\bresignation\b", r"\bresigned\b", r"\bstep(ped)? down\b",
         r"\boustered?\b", r"\bdismissed\b", r"\bsacked\b", r"\bremoved from office\b",
@@ -20,7 +19,6 @@ def classify_scenario(text: str):
         r"\bdeadlock\b", r"\bgridlock\b", r"\bblocked reform\b", r"\bstalled reform\b"
     ]
 
-    # Optimistic keywords/phrases
     optimistic_patterns = [
         r"\bstability\b", r"\bstable\b", r"\bcontinuity\b", r"\bsmooth transition\b",
         r"\bcooperation\b", r"\bcollaboration\b", r"\bpartnership\b", r"\balignment\b",
@@ -33,20 +31,13 @@ def classify_scenario(text: str):
     optimistic_hits = sum(bool(re.search(pat, text)) for pat in optimistic_patterns)
 
     if pessimistic_hits > optimistic_hits:
-        status = "pessimistic"
-        score = -pessimistic_hits   # negative = pessimistic strength
+        return "pessimistic", -pessimistic_hits
     elif optimistic_hits > pessimistic_hits:
-        status = "optimistic"
-        score = optimistic_hits     # positive = optimistic strength
+        return "optimistic", optimistic_hits
     elif pessimistic_hits == optimistic_hits == 0:
-        status = "baseline"
-        score = 0
+        return "baseline", 0
     else:
-        # tie case
-        status = "baseline"
-        score = optimistic_hits - pessimistic_hits
-
-    return status, score
+        return "baseline", optimistic_hits - pessimistic_hits
 
 
 def classify_percentage(pct: float) -> str:
@@ -78,7 +69,6 @@ def main():
         workstream = row.get("workstream", "Unspecified") if "workstream" in df.columns else "Unspecified"
         date = pd.to_datetime(row.get("date", ""), errors="coerce")
         date_str = date.strftime("%Y-%m-%d") if not pd.isna(date) else ""
-
         signal_text = row.get("signal", "")
 
         status, score = classify_scenario(signal_text)
@@ -92,8 +82,8 @@ def main():
             "Date": date_str,
             "Signal": str(signal_text),
             "Status": status,
-            "Confidence Score": score,
-            "Notes": "Individual signal classified from media/risk keywords. Confidence Score shows strength (positive=optimistic, negative=pessimistic)."
+            "Confidence Index": score,
+            "Notes": "Individual signal classified from media/risk keywords. Confidence Index shows strength (positive=optimistic, negative=pessimistic)."
         })
 
     # === 2. Economy-level summaries ===
@@ -115,8 +105,8 @@ def main():
                 "Date": df["date"].max() if "date" in df.columns else "",
                 "Signal": f"{pct_opt:.0f}% of signals optimistic",
                 "Status": econ_status,
-                "Confidence Score": "",
-                "Notes": "Summary classification by economy. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+                "Confidence Index": pct_opt,
+                "Notes": "Economy-level summary. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
             })
 
     # === 3. Workstream-level summaries ===
@@ -138,8 +128,8 @@ def main():
                 "Date": df["date"].max() if "date" in df.columns else "",
                 "Signal": f"{pct_opt:.0f}% of signals optimistic",
                 "Status": ws_status,
-                "Confidence Score": "",
-                "Notes": "Summary classification by workstream. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+                "Confidence Index": pct_opt,
+                "Notes": "Workstream-level summary. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
             })
 
     # === 4. APEC aggregate summary ===
@@ -157,8 +147,8 @@ def main():
         "Date": df["date"].max() if "date" in df.columns else "",
         "Signal": f"{pct_opt:.0f}% of signals optimistic",
         "Status": agg_status,
-        "Confidence Score": "",
-        "Notes": "Aggregate classification across APEC. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+        "Confidence Index": pct_opt,
+        "Notes": "Aggregate summary. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
     })
 
     # === Export ===
@@ -169,4 +159,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
