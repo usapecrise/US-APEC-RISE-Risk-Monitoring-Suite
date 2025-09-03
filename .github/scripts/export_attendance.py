@@ -98,15 +98,15 @@ if not df.empty:
     )
 
     rows.append({
-        "assumption": "Stakeholder alignment with U.S. focus areas",
-        "monitoring_tool": "attendance",
-        "economy": "APEC",
-        "workstream": "All",
-        "level": "aggregate",
-        "date": last3["Workshop Date"].max().strftime("%Y-%m-%d"),
-        "signal": f"Average {economies_present:.1f} economies represented (last 3 dialogues)",
-        "status": scenario,
-        "notes": f"≈{pct:.0f}% of APEC economies participated"
+        "Assumption": "Stakeholder alignment with U.S. focus areas",
+        "Monitoring_tool": "attendance",
+        "Economy": "APEC",
+        "Workstream": "All",
+        "Level": "aggregate",
+        "Date": last3["Workshop Date"].max().strftime("%Y-%m-%d"),
+        "Signal": f"Average {economies_present:.1f} economies represented (last 3 dialogues)",
+        "Status": scenario,
+        "Notes": f"≈{pct:.0f}% of APEC economies participated"
     })
 
     # --- Workstream breakdown ---
@@ -134,15 +134,15 @@ if not df.empty:
         )
 
         rows.append({
-            "assumption": "Stakeholder alignment with U.S. focus areas",
-            "monitoring_tool": "attendance",
-            "economy": "APEC",
-            "workstream": ws,
-            "level": "workstream",
-            "date": last3_ws["Workshop Date"].max().strftime("%Y-%m-%d"),
-            "signal": f"Average {economies_present_ws:.1f} economies represented (last 3 {ws} dialogues)",
-            "status": scenario_ws,
-            "notes": f"≈{pct_ws:.0f}% of APEC economies participated"
+            "Assumption": "Stakeholder alignment with U.S. focus areas",
+            "Monitoring_tool": "attendance",
+            "Economy": "APEC",
+            "Workstream": ws,
+            "Level": "workstream",
+            "Date": last3_ws["Workshop Date"].max().strftime("%Y-%m-%d"),
+            "Signal": f"Average {economies_present_ws:.1f} economies represented (last 3 {ws} dialogues)",
+            "Status": scenario_ws,
+            "Notes": f"≈{pct_ws:.0f}% of APEC economies participated"
         })
 
         # --- Economy-level breakdown ---
@@ -167,15 +167,15 @@ if not df.empty:
             )
 
             rows.append({
-                "assumption": "Stakeholder alignment with U.S. focus areas",
-                "monitoring_tool": "attendance",
-                "economy": econ,
-                "workstream": ws,
-                "level": "economy",
-                "date": last3_econ_ws["Workshop Date"].max().strftime("%Y-%m-%d"),
-                "signal": f"{econ} attended {attended_count} of last 3 {ws} dialogues",
-                "status": scenario_econ,
-                "notes": f"{pct_attended:.0f}% attendance rate"
+                "Assumption": "Stakeholder alignment with U.S. focus areas",
+                "Monitoring_tool": "attendance",
+                "Economy": econ,
+                "Workstream": ws,
+                "Level": "economy",
+                "Date": last3_econ_ws["Workshop Date"].max().strftime("%Y-%m-%d"),
+                "Signal": f"{econ} attended {attended_count} of last 3 {ws} dialogues",
+                "Status": scenario_econ,
+                "Notes": f"{pct_attended:.0f}% attendance rate"
             })
 
     attendance_status = pd.DataFrame(rows)
