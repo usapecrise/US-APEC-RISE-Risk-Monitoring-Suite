@@ -92,8 +92,9 @@ rows.append({
     "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
     "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Home Economy only)",
     "Status": agg_status,
-    "Confidence Index": total_amount,
-    "Notes": "Host-economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline."
+    "Confidence Index 1 (Amount)": total_amount,
+    "Confidence Index 2 (Breadth)": firms_count + economies_count,
+    "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline."
 })
 
 # === Economy-level ===
@@ -111,8 +112,9 @@ for econ, g in df_latest.groupby("Economy"):
         "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
         "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Home Economy only)",
         "Status": scenario_econ,
-        "Confidence Index": econ_total,
-        "Notes": "Host-economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline."
+        "Confidence Index 1 (Amount)": econ_total,
+        "Confidence Index 2 (Breadth)": econ_firms,
+        "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = # firms contributing."
     })
 
 # === Workstream-level ===
@@ -132,12 +134,12 @@ if "Workstream" in df_latest.columns:
             "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
             "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Home Economy only)",
             "Status": scenario_ws,
-            "Confidence Index": ws_total,
-            "Notes": "Host-economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline."
+            "Confidence Index 1 (Amount)": ws_total,
+            "Confidence Index 2 (Breadth)": ws_firms + ws_econs,
+            "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing."
         })
 
 # === Export ===
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows))")
-
