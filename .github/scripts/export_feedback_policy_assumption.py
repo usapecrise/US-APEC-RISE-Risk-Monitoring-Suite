@@ -88,52 +88,60 @@ def main():
     }
 
     records = []
-    scores = []
 
-    # ── Application Intent ───────────────────────────────
-    if "Application Intent" in policy_df.columns:
-        app_scores = policy_df["Application Intent"].map(apply_map).dropna()
-        if not app_scores.empty:
-            avg_app = app_scores.mean()
-            scores.append(avg_app)
+    # === Helper function for scoring ===
+    def process_scores(subset, econ_label):
+        scores = []
+        # Application
+        if "Application Intent" in subset.columns:
+            vals = subset["Application Intent"].map(apply_map).dropna()
+            if not vals.empty:
+                avg = vals.mean()
+                scores.append(avg)
+                records.append({
+                    "Assumption": "Policy and regulatory openness",
+                    "Monitoring Tool": "Feedback",
+                    "Economy": econ_label,
+                    "Date": last_date,
+                    "Signal": f"{avg:.0f}% average application intent",
+                    "Status": classify_status(avg),
+                    "Notes": "Feedback from policy dialogue/meeting participants (Application Intent)"
+                })
+        # Sharing
+        if "Sharing Intent" in subset.columns:
+            vals = subset["Sharing Intent"].map(share_map).dropna()
+            if not vals.empty:
+                avg = vals.mean()
+                scores.append(avg)
+                records.append({
+                    "Assumption": "Policy and regulatory openness",
+                    "Monitoring Tool": "Feedback",
+                    "Economy": econ_label,
+                    "Date": last_date,
+                    "Signal": f"{avg:.0f}% average sharing intent",
+                    "Status": classify_status(avg),
+                    "Notes": "Feedback from policy dialogue/meeting participants (Sharing Intent)"
+                })
+        # Composite
+        if scores:
+            comp = sum(scores) / len(scores)
             records.append({
                 "Assumption": "Policy and regulatory openness",
                 "Monitoring Tool": "Feedback",
-                "Economy": "APEC (aggregate)",
+                "Economy": econ_label,
                 "Date": last_date,
-                "Signal": f"{avg_app:.0f}% average application intent",
-                "Status": classify_status(avg_app),
-                "Notes": "Feedback from policy dialogue/meeting participants (Application Intent)"
+                "Signal": f"Composite feedback score = {comp:.0f}%",
+                "Status": classify_status(comp),
+                "Notes": "Average of application and sharing intent (policy dialogues/meetings)"
             })
 
-    # ── Sharing Intent ──────────────────────────────────
-    if "Sharing Intent" in policy_df.columns:
-        share_scores = policy_df["Sharing Intent"].map(share_map).dropna()
-        if not share_scores.empty:
-            avg_share = share_scores.mean()
-            scores.append(avg_share)
-            records.append({
-                "Assumption": "Policy and regulatory openness",
-                "Monitoring Tool": "Feedback",
-                "Economy": "APEC (aggregate)",
-                "Date": last_date,
-                "Signal": f"{avg_share:.0f}% average sharing intent",
-                "Status": classify_status(avg_share),
-                "Notes": "Feedback from policy dialogue/meeting participants (Sharing Intent)"
-            })
+    # === 1. APEC aggregate ===
+    process_scores(policy_df, "APEC (aggregate)")
 
-    # ── Composite Row ───────────────────────────────────
-    if scores:
-        composite_score = sum(scores) / len(scores)
-        records.append({
-            "Assumption": "Policy and regulatory openness",
-            "Monitoring Tool": "Feedback",
-            "Economy": "APEC (aggregate)",
-            "Date": last_date,
-            "Signal": f"Composite feedback score = {composite_score:.0f}%",
-            "Status": classify_status(composite_score),
-            "Notes": "Average of application and sharing intent (policy dialogues/meetings)"
-        })
+    # === 2. Economy-level breakdown ===
+    if "Economy" in policy_df.columns:
+        for econ, subset in policy_df.groupby("Economy"):
+            process_scores(subset, econ)
 
     # ── Save Output ─────────────────────────────────────
     if records:
