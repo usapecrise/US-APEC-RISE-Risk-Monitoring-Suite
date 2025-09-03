@@ -82,8 +82,9 @@ def main():
             "Date": date_str,
             "Signal": str(signal_text),
             "Status": status,
-            "Confidence Index": score,
-            "Notes": "Individual signal classified from media/risk keywords. Confidence Index shows strength (positive=optimistic, negative=pessimistic)."
+            "Confidence Index 1 (Percent)": score,   # positive = optimistic hits, negative = pessimistic hits
+            "Confidence Index 2 (Breadth)": 1,      # each row = 1 signal
+            "Notes": "Signal-level classification. CI1 = keyword hits (positive=optimistic, negative=pessimistic). CI2 = 1 (single signal)."
         })
 
     # === 2. Economy-level summaries ===
@@ -102,11 +103,12 @@ def main():
                 "Economy": econ,
                 "Workstream": "All",
                 "Level": "Economy",
-                "Date": df["date"].max() if "date" in df.columns else "",
+                "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d") if "date" in df.columns else "",
                 "Signal": f"{pct_opt:.0f}% of signals optimistic",
                 "Status": econ_status,
-                "Confidence Index": pct_opt,
-                "Notes": "Economy-level summary. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+                "Confidence Index 1 (Percent)": round(pct_opt, 1),
+                "Confidence Index 2 (Breadth)": total,
+                "Notes": "Economy-level summary. CI1 = % optimistic signals. CI2 = number of signals reviewed."
             })
 
     # === 3. Workstream-level summaries ===
@@ -125,11 +127,12 @@ def main():
                 "Economy": "APEC (aggregate)",
                 "Workstream": ws if ws else "Unspecified",
                 "Level": "Workstream",
-                "Date": df["date"].max() if "date" in df.columns else "",
+                "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d") if "date" in df.columns else "",
                 "Signal": f"{pct_opt:.0f}% of signals optimistic",
                 "Status": ws_status,
-                "Confidence Index": pct_opt,
-                "Notes": "Workstream-level summary. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+                "Confidence Index 1 (Percent)": round(pct_opt, 1),
+                "Confidence Index 2 (Breadth)": total,
+                "Notes": "Workstream-level summary. CI1 = % optimistic signals. CI2 = number of signals reviewed."
             })
 
     # === 4. APEC aggregate summary ===
@@ -144,11 +147,12 @@ def main():
         "Economy": "APEC (aggregate)",
         "Workstream": "All",
         "Level": "Aggregate",
-        "Date": df["date"].max() if "date" in df.columns else "",
+        "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d") if "date" in df.columns else "",
         "Signal": f"{pct_opt:.0f}% of signals optimistic",
         "Status": agg_status,
-        "Confidence Index": pct_opt,
-        "Notes": "Aggregate summary. Thresholds: Optimistic ≥60% of signals positive; Baseline 30–59%; Pessimistic <30%."
+        "Confidence Index 1 (Percent)": round(pct_opt, 1),
+        "Confidence Index 2 (Breadth)": total_signals,
+        "Notes": "Aggregate summary. CI1 = % optimistic signals. CI2 = number of signals reviewed."
     })
 
     # === Export ===
@@ -159,3 +163,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
