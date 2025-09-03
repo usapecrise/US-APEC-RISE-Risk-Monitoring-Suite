@@ -12,10 +12,10 @@ VIEW_NAME = 'Grid view'
 OUTPUT_FILE = "feedback_assumption.csv"
 
 def classify_scenario(pct: float) -> str:
-    """Apply scenario thresholds based on % positive responses."""
-    if pct >= 75:
+    """Apply scenario thresholds (aligned with attendance)."""
+    if pct >= 60:
         return "optimistic"
-    elif pct >= 40:
+    elif pct >= 30:
         return "baseline"
     else:
         return "pessimistic"
