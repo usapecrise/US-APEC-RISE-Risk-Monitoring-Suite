@@ -100,7 +100,7 @@ if not df.empty:
     rows.append({
         "Assumption": "Stakeholder alignment with U.S. focus areas",
         "Monitoring_tool": "attendance",
-        "Economy": "APEC",
+        "Economy": "APEC (aggregate)",
         "Workstream": "All",
         "Level": "aggregate",
         "Date": last3["Workshop Date"].max().strftime("%Y-%m-%d"),
@@ -136,7 +136,7 @@ if not df.empty:
         rows.append({
             "Assumption": "Stakeholder alignment with U.S. focus areas",
             "Monitoring_tool": "attendance",
-            "Economy": "APEC",
+            "Economy": "APEC (aggregate)",
             "Workstream": ws,
             "Level": "workstream",
             "Date": last3_ws["Workshop Date"].max().strftime("%Y-%m-%d"),
