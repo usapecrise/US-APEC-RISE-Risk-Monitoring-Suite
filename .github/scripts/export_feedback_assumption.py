@@ -12,33 +12,23 @@ OUTPUT_FILE = "feedback_assumption.csv"
 
 # ── FUNCTIONS ───────────────────────────────────────────
 def fetch_airtable():
-    """Fetch all records from Airtable and return as DataFrame."""
     url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
     headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
     records, offset = [], None
-
     while True:
         params = {"view": VIEW_NAME}
         if offset:
             params["offset"] = offset
         resp = requests.get(url, headers=headers, params=params)
         data = resp.json()
-
-        if "records" not in data:
-            print(f"⚠️ Error fetching Airtable: {data}")
-            break
-
-        records.extend(data["records"])
+        records.extend(data.get("records", []))
         offset = data.get("offset")
         if not offset:
             break
-
-    rows = [r.get("fields", {}) for r in records]
-    return pd.DataFrame(rows)
+    return pd.DataFrame([r.get("fields", {}) for r in records])
 
 
 def classify_status(score: float) -> str:
-    """Apply scenario thresholds (aligned with attendance)."""
     if score >= 60:
         return "optimistic"
     elif score >= 30:
@@ -54,11 +44,10 @@ def main():
         return
 
     # Normalize date
-    if "Date" in df.columns:
-        df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-        last_date = df["Date"].max().strftime("%Y-%m-%d")
-    else:
-        last_date = pd.Timestamp.today().strftime("%Y-%m-%d")
+    last_date = (
+        pd.to_datetime(df["Date"], errors="coerce").max().strftime("%Y-%m-%d")
+        if "Date" in df.columns else pd.Timestamp.today().strftime("%Y-%m-%d")
+    )
 
     # Normalize responses
     df = df.applymap(lambda x: str(x).strip().lower() if pd.notnull(x) else x)
@@ -91,73 +80,36 @@ def main():
 
     records = []
 
-    # === Helper function for scoring ===
-    def process_scores(subset, econ_label):
+    # === Helper function ===
+    def process_scores(subset, econ_label, level):
         scores = []
 
-        # Relevance
-        if "Relevance to Work" in subset.columns:
-            vals = subset["Relevance to Work"].map(relevance_map).dropna()
-            if not vals.empty:
-                avg = vals.mean()
-                scores.append(avg)
-                records.append({
-                    "Assumption": "Stakeholder alignment with U.S. focus areas",
-                    "Monitoring Tool": "Feedback",
-                    "Economy": econ_label,
-                    "Date": last_date,
-                    "Signal": f"{avg:.0f}% average relevance",
-                    "Status": classify_status(avg),
-                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
-                })
+        def add_record(col, label, mapping):
+            if col in subset.columns:
+                vals = subset[col].map(mapping).dropna()
+                if not vals.empty:
+                    avg = vals.mean()
+                    n = vals.count()
+                    scores.append(avg)
+                    records.append({
+                        "Assumption": "Stakeholder alignment with U.S. focus areas",
+                        "Monitoring Tool": "Feedback",
+                        "Economy": econ_label,
+                        "Workstream": "All",
+                        "Level": level,
+                        "Date": last_date,
+                        "Signal": f"{avg:.0f}% average {label}",
+                        "Status": classify_status(avg),
+                        "Confidence Index 1 (Percent)": round(avg, 1),
+                        "Confidence Index 2 (Responses)": int(n),
+                        "Notes": f"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
+                    })
 
-        # Knowledge
-        if "Knowledge Gain" in subset.columns:
-            vals = subset["Knowledge Gain"].map(knowledge_map).dropna()
-            if not vals.empty:
-                avg = vals.mean()
-                scores.append(avg)
-                records.append({
-                    "Assumption": "Stakeholder alignment with U.S. focus areas",
-                    "Monitoring Tool": "Feedback",
-                    "Economy": econ_label,
-                    "Date": last_date,
-                    "Signal": f"{avg:.0f}% average knowledge gain",
-                    "Status": classify_status(avg),
-                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
-                })
-
-        # Application
-        if "Application Intent" in subset.columns:
-            vals = subset["Application Intent"].map(apply_map).dropna()
-            if not vals.empty:
-                avg = vals.mean()
-                scores.append(avg)
-                records.append({
-                    "Assumption": "Stakeholder alignment with U.S. focus areas",
-                    "Monitoring Tool": "Feedback",
-                    "Economy": econ_label,
-                    "Date": last_date,
-                    "Signal": f"{avg:.0f}% average application intent",
-                    "Status": classify_status(avg),
-                    "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
-                })
-
-        # Sharing
-        if "Sharing Intent" in subset.columns:
-            vals = subset["Sharing Intent"].map(share_map).dropna()
-            if not vals.empty:
-                avg = vals.mean()
-                scores.append(avg)
-                records.append({
-                    "Assumption": "Stakeholder alignment with U.S. focus areas",
-                    "Monitoring Tool": "Feedback",
-                    "Economy": econ_label,
-                    "Date": last_date,
-                    "Signal": f"{avg:.0f}% average sharing intent",
-                    "Status": classify_status(avg),
-                    "Notes":b"Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
-                })
+        # Individual signals
+        add_record("Relevance to Work", "relevance", relevance_map)
+        add_record("Knowledge Gain", "knowledge gain", knowledge_map)
+        add_record("Application Intent", "application intent", apply_map)
+        add_record("Sharing Intent", "sharing intent", share_map)
 
         # Composite
         if scores:
@@ -166,29 +118,29 @@ def main():
                 "Assumption": "Stakeholder alignment with U.S. focus areas",
                 "Monitoring Tool": "Feedback",
                 "Economy": econ_label,
+                "Workstream": "All",
+                "Level": level,
                 "Date": last_date,
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
-                "Notes": "Responses scored on 0–100 scale (Yes=100, Somewhat=50, No=0). Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%"
+                "Confidence Index 1 (Percent)": round(comp, 1),
+                "Confidence Index 2 (Responses)": int(len(scores)),
+                "Notes": "Composite of relevance, knowledge, application, and sharing scores."
             })
 
     # === 1. APEC aggregate ===
-    process_scores(df, "APEC (aggregate)")
+    process_scores(df, "APEC (aggregate)", "Aggregate")
 
     # === 2. Economy-level breakdown ===
     if "Economy" in df.columns:
         for econ, subset in df.groupby("Economy"):
-            process_scores(subset, econ)
+            process_scores(subset, econ, "Economy")
 
-    # ── Save Output ─────────────────────────────────────
-    if records:
-        out_df = pd.DataFrame(records)
-        out_df.to_csv(OUTPUT_FILE, index=False)
-        print(f"✅ Feedback (stakeholder alignment) assumption saved → {OUTPUT_FILE} ({len(records)} rows)")
-    else:
-        print("⚠️ No valid feedback signals found")
+    # Save output
+    out_df = pd.DataFrame(records)
+    out_df.to_csv(OUTPUT_FILE, index=False)
+    print(f"✅ Feedback assumption saved → {OUTPUT_FILE} ({len(out_df)} rows)")
 
 
-# ── MAIN ───────────────────────────────────────────────
 if __name__ == "__main__":
     main()
