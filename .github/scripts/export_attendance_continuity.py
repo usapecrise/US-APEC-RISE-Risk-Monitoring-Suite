@@ -1,4 +1,4 @@
-import os 
+import os
 import requests
 import pandas as pd
 
@@ -8,8 +8,7 @@ BASE_ID = "app0Ljjhrp3lTTpTO"
 TABLES = {
     "Other Sign-Ins (Meetings/Dialogues)": "tbl6qMYkcIzkl8q7D"
 }
-VIEW_ID = None  # or replace with your "viw..." if you want to filter by view
-
+VIEW_ID = None  # optional
 
 def fetch_table(table_label, table_id):
     """Fetch all records from an Airtable table by ID."""
@@ -18,15 +17,11 @@ def fetch_table(table_label, table_id):
     records, offset = [], None
 
     while True:
-        params = {}
-        if VIEW_ID:
-            params["view"] = VIEW_ID
+        params, offset = ({"view": VIEW_ID} if VIEW_ID else {}), offset
         if offset:
             params["offset"] = offset
 
         resp = requests.get(url, headers=headers, params=params)
-        print("DEBUG response for", table_label, ":", resp.status_code, resp.text[:200])
-
         if resp.status_code != 200:
             raise RuntimeError(f"Airtable API error {resp.status_code} for {table_label}: {resp.text}")
 
@@ -48,14 +43,27 @@ def fetch_table(table_label, table_id):
     return pd.DataFrame(records)
 
 
-def classify_economy(attended):
+def classify_economy(attended: int):
     """Classify economy continuity status based on attendance out of 3."""
     if attended == 3:
-        return "optimistic", "Consistently attended last 3 events"
+        return "optimistic", 100
     elif attended == 2:
-        return "baseline", "Attended 2 of last 3 events"
+        return "baseline", 67
+    elif attended == 1:
+        return "baseline", 33
     else:
-        return "pessimistic", "Missed 2+ recent events"
+        return "pessimistic", 0
+
+
+def classify_percentage(avg_attended: float):
+    """Classify aggregate % thresholds."""
+    pct = (avg_attended / 3) * 100
+    if pct >= 60:
+        return "optimistic", pct
+    elif pct >= 30:
+        return "baseline", pct
+    else:
+        return "pessimistic", pct
 
 
 def main():
@@ -66,17 +74,13 @@ def main():
     if df.empty:
         print("⚠️ No attendance data found, writing empty continuity file")
         pd.DataFrame(columns=[
-            "Assumption","Monitoring Tool","Economy","Date","Signal","Status","Notes"
+            "Assumption","Monitoring Tool","Economy","Workstream","Level","Date","Signal","Status","Confidence Index","Notes"
         ]).to_csv("attendance_continuity_assumption.csv", index=False)
         return
 
-    # Normalize dates and economy field
+    # Normalize
     df["Workshop Date"] = pd.to_datetime(df["Workshop Date"], errors="coerce")
-    df["Economy"] = df["Economy"].apply(
-        lambda x: "; ".join(x) if isinstance(x, list) else str(x)
-    )
-
-    # Create Workshop Key (Workshop + Date)
+    df["Economy"] = df["Economy"].apply(lambda x: "; ".join(x) if isinstance(x, list) else str(x))
     df["Workshop Key"] = df["Workshop"].astype(str) + " | " + df["Workshop Date"].astype(str)
 
     # === 2. Identify last 3 events ===
@@ -98,35 +102,36 @@ def main():
     for _, row in economy_stats.iterrows():
         economy = row["Economy"]
         attended = row["Events_Attended"]
-        status, signal = classify_economy(attended)
+        status, confidence = classify_economy(attended)
 
         records.append({
             "Assumption": "Political and institutional continuity",
             "Monitoring Tool": "Attendance",
             "Economy": economy,
+            "Workstream": "All",
+            "Level": "Economy",
             "Date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
-            "Signal": signal,
+            "Signal": f"{economy} attended {attended}/3 most recent events",
             "Status": status,
-            "Notes": "Thresholds: Optimistic ≥1.8/3 events attended (~60%+), Baseline 0.9–1.7 (~30–59%), Pessimistic <0.9 (<30%)"
+            "Confidence Index": confidence,
+            "Notes": "Thresholds: Optimistic ≥67% (2–3/3 attended), Baseline 33% (1/3), Pessimistic 0%."
         })
 
     # === 4. APEC aggregate continuity ===
     avg_attended = economy_stats["Events_Attended"].mean() if not economy_stats.empty else 0
-    if avg_attended >= 1.8:
-        agg_status = "optimistic"
-    elif avg_attended >= 0.9:
-        agg_status = "baseline"
-    else:
-        agg_status = "pessimistic"
+    agg_status, agg_confidence = classify_percentage(avg_attended)
 
     records.append({
         "Assumption": "Political and institutional continuity",
         "Monitoring Tool": "Attendance",
         "Economy": "APEC (aggregate)",
+        "Workstream": "All",
+        "Level": "Aggregate",
         "Date": last3_df["Workshop Date"].max().strftime("%Y-%m-%d"),
         "Signal": f"On average, economies attended {avg_attended:.1f}/3 recent events",
         "Status": agg_status,
-        "Notes": "Thresholds: ≥1.8 optimistic (≥60%), 0.9–1.7 baseline (30–59%), <0.9 pessimistic (<30%)"
+        "Confidence Index": round(agg_confidence, 1),
+        "Notes": "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
     })
 
     # === 5. Export ===
