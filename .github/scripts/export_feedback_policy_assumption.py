@@ -88,36 +88,52 @@ def main():
     }
 
     records = []
+    scores = []
 
     # ── Application Intent ───────────────────────────────
     if "Application Intent" in policy_df.columns:
-        scores = policy_df["Application Intent"].map(apply_map).dropna()
-        if not scores.empty:
-            avg_score = scores.mean()
-            records.append({
-                "Assumption": "Policy and regulatory openness",
-                "Monitoring Tool": "Feedback",
-                "Economy": "APEC (aggregate)",   # refine if Economy field exists
-                "Date": last_date,
-                "Signal": f"{avg_score:.0f}% average application intent",
-                "Status": classify_status(avg_score),
-                "Notes": "Feedback from policy dialogue/meeting participants (Application Intent)"
-            })
-
-    # ── Sharing Intent ──────────────────────────────────
-    if "Sharing Intent" in policy_df.columns:
-        scores = policy_df["Sharing Intent"].map(share_map).dropna()
-        if not scores.empty:
-            avg_score = scores.mean()
+        app_scores = policy_df["Application Intent"].map(apply_map).dropna()
+        if not app_scores.empty:
+            avg_app = app_scores.mean()
+            scores.append(avg_app)
             records.append({
                 "Assumption": "Policy and regulatory openness",
                 "Monitoring Tool": "Feedback",
                 "Economy": "APEC (aggregate)",
                 "Date": last_date,
-                "Signal": f"{avg_score:.0f}% average sharing intent",
-                "Status": classify_status(avg_score),
+                "Signal": f"{avg_app:.0f}% average application intent",
+                "Status": classify_status(avg_app),
+                "Notes": "Feedback from policy dialogue/meeting participants (Application Intent)"
+            })
+
+    # ── Sharing Intent ──────────────────────────────────
+    if "Sharing Intent" in policy_df.columns:
+        share_scores = policy_df["Sharing Intent"].map(share_map).dropna()
+        if not share_scores.empty:
+            avg_share = share_scores.mean()
+            scores.append(avg_share)
+            records.append({
+                "Assumption": "Policy and regulatory openness",
+                "Monitoring Tool": "Feedback",
+                "Economy": "APEC (aggregate)",
+                "Date": last_date,
+                "Signal": f"{avg_share:.0f}% average sharing intent",
+                "Status": classify_status(avg_share),
                 "Notes": "Feedback from policy dialogue/meeting participants (Sharing Intent)"
             })
+
+    # ── Composite Row ───────────────────────────────────
+    if scores:
+        composite_score = sum(scores) / len(scores)
+        records.append({
+            "Assumption": "Policy and regulatory openness",
+            "Monitoring Tool": "Feedback",
+            "Economy": "APEC (aggregate)",
+            "Date": last_date,
+            "Signal": f"Composite feedback score = {composite_score:.0f}%",
+            "Status": classify_status(composite_score),
+            "Notes": "Average of application and sharing intent (policy dialogues/meetings)"
+        })
 
     # ── Save Output ─────────────────────────────────────
     if records:
@@ -131,4 +147,3 @@ def main():
 # ── MAIN ───────────────────────────────────────────────
 if __name__ == "__main__":
     main()
-
