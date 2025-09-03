@@ -138,4 +138,3 @@ for ws, g in df.groupby("Workstream"):
 attendance_status = pd.DataFrame(rows)
 attendance_status.to_csv("attendance_assumption.csv", index=False)
 print(f"✅ Attendance assumption saved → attendance_assumption.csv ({len(rows)} rows))")
-
