@@ -45,6 +45,7 @@ def fetch_ot5():
 
     return pd.DataFrame(records)
 
+
 # === Load data from Airtable ===
 df = fetch_ot5()
 
@@ -71,8 +72,9 @@ else:
     latest_fy = "Unknown"
     df_latest = df
 
-# === Classification rules (lower thresholds) ===
+# === Classification rules (absolute thresholds for host-only) ===
 def classify(total, econ_count, firm_count):
+    """Classify cost-share signal based on host contributions only."""
     if total >= 5000 and econ_count >= 2 and firm_count >= 2:
         return "optimistic"
     elif total >= 1000 and econ_count >= 1 and firm_count >= 1:
@@ -88,15 +90,15 @@ economies_count = df_latest["Economy"].nunique()
 firms_count = df_latest["Firm"].nunique()
 
 rows.append({
-    "assumption": "Private sector cost-share commitments sustained",
-    "monitoring_tool": "cost_share",
-    "economy": "APEC (aggregate)",
-    "workstream": "All",
-    "level": "aggregate",
-    "date": pd.Timestamp.today().strftime("%Y-%m-%d"),
-    "signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Home Economy only)",
-    "status": classify(total_amount, economies_count, firms_count),
-    "notes": "Aggregate private sector resources recorded in OT5"
+    "Assumption": "Responsible local ownership",
+    "Monitoring Tool": "Cost-share",
+    "Economy": "APEC (aggregate)",
+    "Workstream": "All",
+    "Level": "Aggregate",
+    "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
+    "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Home Economy only)",
+    "Status": classify(total_amount, economies_count, firms_count),
+    "Notes": "Home Economy cost-share only (excludes USG and third-party). Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline"
 })
 
 # === Economy-level signals ===
@@ -106,15 +108,15 @@ for econ, g in df_latest.groupby("Economy"):
     scenario_econ = classify(econ_total, 1 if econ else 0, econ_firms)
 
     rows.append({
-        "assumption": "Private sector cost-share commitments sustained",
-        "monitoring_tool": "cost_share",
-        "economy": econ,
-        "workstream": "All",
-        "level": "economy",
-        "date": pd.Timestamp.today().strftime("%Y-%m-%d"),
-        "signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Home Economy)",
-        "status": scenario_econ,
-        "notes": "Economy-specific private sector resources recorded in OT5"
+        "Assumption": "Responsible local ownership",
+        "Monitoring Tool": "Cost-share",
+        "Economy": econ,
+        "Workstream": "All",
+        "Level": "Economy",
+        "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
+        "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Home Economy only)",
+        "Status": scenario_econ,
+        "Notes": "Home Economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline"
     })
 
 # === Workstream-level signals ===
@@ -126,18 +128,19 @@ if "Workstream" in df_latest.columns:
         scenario_ws = classify(ws_total, ws_econs, ws_firms)
 
         rows.append({
-            "assumption": "Private sector cost-share commitments sustained",
-            "monitoring_tool": "cost_share",
-            "economy": "APEC (aggregate)",
-            "workstream": ws,
-            "level": "workstream",
-            "date": pd.Timestamp.today().strftime("%Y-%m-%d"),
-            "signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Home Economy only)",
-            "status": scenario_ws,
-            "notes": "Workstream-specific private sector resources recorded in OT5"
+            "Assumption": "Responsible local ownership",
+            "Monitoring Tool": "Cost-share",
+            "Economy": "APEC (aggregate)",
+            "Workstream": ws,
+            "Level": "Workstream",
+            "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
+            "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Home Economy only)",
+            "Status": scenario_ws,
+            "Notes": "Home Economy cost-share only. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline"
         })
 
 # === Export ===
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows)")
+
