@@ -1,5 +1,4 @@
 import pandas as pd
-import glob
 
 OUTPUT_FILE = "assumptions_status.csv"
 
@@ -17,16 +16,21 @@ INPUT_FILES = [
 
 def main():
     dfs = []
+    row_counts = {}
+
     for file in INPUT_FILES:
         try:
             df = pd.read_csv(file)
             if not df.empty:
                 df["source_file"] = file  # keep traceability
                 dfs.append(df)
+                row_counts[file] = len(df)
                 print(f"✅ Loaded {file} ({len(df)} rows)")
             else:
+                row_counts[file] = 0
                 print(f"⚠️ {file} is empty, skipping")
         except FileNotFoundError:
+            row_counts[file] = None
             print(f"⚠️ {file} not found, skipping")
 
     if not dfs:
@@ -43,8 +47,25 @@ def main():
 
     merged = merged[required_cols + ["source_file"]]
 
+    # === Validation check ===
+    missing = [f for f in INPUT_FILES if f not in row_counts or row_counts[f] in (0, None)]
+    if missing:
+        raise ValueError(f"❌ Missing or empty assumption files in merged output: {missing}")
+    else:
+        print("✅ All assumption files present in merged output")
+
+    # === Export ===
     merged.to_csv(OUTPUT_FILE, index=False)
     print(f"✅ Unified assumptions file saved → {OUTPUT_FILE} ({len(merged)} rows)")
 
+    # === Row-count summary ===
+    print("\n📊 Row count by source file:")
+    for f, count in row_counts.items():
+        if count is None:
+            print(f"  {f}: not found")
+        else:
+            print(f"  {f}: {count} rows")
+
 if __name__ == "__main__":
     main()
+
