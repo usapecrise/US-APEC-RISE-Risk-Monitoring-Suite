@@ -44,7 +44,6 @@ EXTRACT_NAME_MAP = {
     "sentiment_summary.csv": "Sentiment Summary Extract",
     "top_phrases.csv": "Top Phrases Extract",
     "risk_signals.csv": "Risk Signals Extract",
-    "assumptions_status.csv": "Assumptions Status Extract",
     "sentiment_by_question.csv": "Sentiment By Question",
     "risk_assumption.csv": "Risk Assumptions",
     "policy_reform_assumption.csv": "Policy Reform Assumptions",
