@@ -35,13 +35,13 @@ def main():
         status = classify_scenario(signal_text)
 
         records.append({
-            "assumption": "Political and institutional continuity",
-            "monitoring_tool": "media_monitor",
-            "economy": economy,
-            "date": date,
-            "signal": str(signal_text),
-            "status": status,
-            "notes": "Derived from media monitoring / risk signals"
+            "Assumption": "Political and institutional continuity",
+            "Monitoring_tool": "media_monitor",
+            "Economy": economy,
+            "Date": date,
+            "Signal": str(signal_text),
+            "Status": status,
+            "Notes": "Derived from media monitoring / risk signals"
         })
 
     if records:
