@@ -97,6 +97,17 @@ for record in main_records:
         else:
             fields[f"{field_name} (Name)"] = "Unknown"
 
+    # Handle Sector multi-select (plain text, not linked)
+    sector_values = fields.get('Sector', [])
+    if isinstance(sector_values, str):
+        sector_values = [sector_values]
+    elif not isinstance(sector_values, list):
+        sector_values = []
+    if sector_values:
+        fields['Sector (Name)'] = ", ".join(sector_values)
+    else:
+        fields['Sector (Name)'] = "Unknown"
+
     fields['Last Updated'] = timestamp
     fields['Indicator ID'] = 'OT1'
 
@@ -142,3 +153,4 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         print("⚠️ No OT1 records found — writing header only.")
 
 print(f"✅ Export complete: {output_file}")
+
