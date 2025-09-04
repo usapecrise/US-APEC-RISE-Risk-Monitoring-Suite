@@ -125,6 +125,8 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         'Organization',
         'Workstream',
         'Workstream (Name)',
+        'Sector',
+        'Sector (Name)',
         'Last Updated'
     ]
 
