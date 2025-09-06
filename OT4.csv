@@ -1,16 +1,16 @@
 Firm (Name),Indicator ID,Economy (Name),Workstream (Name),Fiscal Year,PSE Origin,PSE Size,PSE Type,Timestamp
-Akin Gump,OT4,U.S.,TBT,FY25,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022471Z
-Amazon,OT4,U.S.,Cloud Computing,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022491Z
-American Chemistry Council,OT4,U.S.,FTAAP,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-05T16:49:56.022497Z
-American Chemistry Council,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-05T16:49:56.022499Z
-Consultores Internacionales Ansley    ,OT4,Mexico,TBT,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022507Z
-Boeing,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022511Z
-Codit,OT4,U.S.,Cloud Computing,FY25,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022515Z
-Coupang,OT4,U.S.,Unknown,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022518Z
-Crowell & Moring LLP,OT4,U.S.,Cloud Computing,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022522Z
-Davidson Technologies,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022526Z
-Dow,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022529Z
-Information Technology Industry Council,OT4,U.S.,Services,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-05T16:49:56.022533Z
-SAE Industry Technologies Consortia,OT4,U.S.,Digital Standards,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-05T16:49:56.022536Z
-Stendard ,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-05T16:49:56.022540Z
-United States Council for International Business ,OT4,U.S.,FTAAP,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-05T16:49:56.022543Z
+Akin Gump,OT4,U.S.,TBT,FY25,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.403944Z
+Amazon,OT4,U.S.,Cloud Computing,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.403962Z
+American Chemistry Council,OT4,U.S.,FTAAP,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-06T07:08:07.403967Z
+American Chemistry Council,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-06T07:08:07.403969Z
+Consultores Internacionales Ansley    ,OT4,Mexico,TBT,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.403978Z
+Boeing,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.403982Z
+Codit,OT4,U.S.,Cloud Computing,FY25,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.403986Z
+Coupang,OT4,U.S.,Unknown,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.403989Z
+Crowell & Moring LLP,OT4,U.S.,Cloud Computing,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.403993Z
+Davidson Technologies,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.403996Z
+Dow,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.404000Z
+Information Technology Industry Council,OT4,U.S.,Services,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-06T07:08:07.404003Z
+SAE Industry Technologies Consortia,OT4,U.S.,Digital Standards,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-06T07:08:07.404007Z
+Stendard ,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-06T07:08:07.404010Z
+United States Council for International Business ,OT4,U.S.,FTAAP,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-06T07:08:07.404013Z
