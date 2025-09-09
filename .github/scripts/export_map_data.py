@@ -4,19 +4,19 @@ import os
 from urllib.parse import quote
 from datetime import datetime
 
-# Airtable credentials and config
+# Airtable credentials
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'Map Data'   # 👈 your table
+MAIN_TABLE = 'Map Data'   # your main table
 VIEW_NAME = 'Grid view'   # or None if you want all records
 
-# Linked table names (if Map Data links out)
+# Linked table configs
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List'
 }
 
-# Display fields from linked tables
+# Fields to pull from linked tables
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream'
@@ -24,7 +24,7 @@ DISPLAY_FIELDS = {
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-# Helper: fetch all records from a table
+# --- Helper: fetch all records from a table ---
 def fetch_all_records(table, view=None):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
     if view:
@@ -65,17 +65,20 @@ if __name__ == "__main__":
     main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
     print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
-    # Step 3: Replace linked IDs + add metrics
+    # Step 3: Resolve linked IDs → names, add metrics
     timestamp = datetime.utcnow().isoformat()
     for record in main_records:
         fields = record['fields']
         for field_name in LINKED_TABLES.keys():
             linked_ids = fields.get(field_name, [])
             if isinstance(linked_ids, list):
-                readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
+                readable_names = [
+                    linked_id_maps[field_name].get(id, 'Unknown')
+                    for id in linked_ids
+                ]
                 fields[f"{field_name} (Name)"] = ", ".join(readable_names)
                 fields[f"{field_name} Count"] = len(readable_names)
-        fields['Activity Count'] = 1  # useful metric for Tableau
+        fields['Activity Count'] = 1
         fields['Last Updated'] = timestamp
 
     # Step 4: Export to CSV
