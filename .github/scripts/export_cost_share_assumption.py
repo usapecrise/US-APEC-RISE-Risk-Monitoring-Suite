@@ -1,6 +1,7 @@
 import os
 import requests
 import pandas as pd
+import datetime
 
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
@@ -66,11 +67,30 @@ else:
     df_latest = df
 
 # === Classification rules ===
-def classify(total, econ_count, firm_count):
-    """Classify cost-share signal based on host contributions only."""
-    if total >= 5000 and econ_count >= 2 and firm_count >= 2:
+def classify_with_time(total, econ_count, firm_count, latest_fy):
+    """Classify cost-share signal with early-year buffer + scaled thresholds."""
+    today = datetime.date.today()
+    try:
+        fy_year = int(latest_fy)
+    except:
+        fy_year = today.year
+
+    # Adjust FY start depending on your org (here assume Jan 1; change if Oct 1 is correct)
+    fy_start = datetime.date(fy_year, 1, 1)
+    months_into_fy = (today.year - fy_start.year) * 12 + (today.month - fy_start.month)
+    progress = max(1, months_into_fy) / 12  # scale 1–12 months into a fraction
+
+    # Early-year buffer: first 3 months never pessimistic
+    if months_into_fy < 3 and total == 0:
+        return "baseline"
+
+    # Scaled thresholds
+    threshold_opt = 5000 * progress
+    threshold_base = 1000 * progress
+
+    if total >= threshold_opt and econ_count >= 2 and firm_count >= 2:
         return "optimistic"
-    elif total >= 1000 and econ_count >= 1 and firm_count >= 1:
+    elif total >= threshold_base and econ_count >= 1 and firm_count >= 1:
         return "baseline"
     else:
         return "pessimistic"
@@ -81,7 +101,7 @@ rows = []
 total_amount = df_latest["Amount_clean"].sum()
 economies_count = df_latest["Economy"].nunique()
 firms_count = df_latest["Firm"].nunique()
-agg_status = classify(total_amount, economies_count, firms_count)
+agg_status = classify_with_time(total_amount, economies_count, firms_count, latest_fy)
 
 rows.append({
     "Assumption": "Responsible local ownership",
@@ -94,14 +114,14 @@ rows.append({
     "Status": agg_status,
     "Confidence Index 1 (Amount)": total_amount,
     "Confidence Index 2 (Breadth)": firms_count + economies_count,
-    "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds: Optimistic ≥$5,000 from ≥2 firms across ≥2 economies; Baseline ≥$1,000 from ≥1 firm; Pessimistic < baseline."
+    "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
 })
 
 # === Economy-level ===
 for econ, g in df_latest.groupby("Economy"):
     econ_total = g["Amount_clean"].sum()
     econ_firms = g["Firm"].nunique()
-    scenario_econ = classify(econ_total, 1 if econ else 0, econ_firms)
+    scenario_econ = classify_with_time(econ_total, 1 if econ else 0, econ_firms, latest_fy)
 
     rows.append({
         "Assumption": "Responsible local ownership",
@@ -123,7 +143,7 @@ if "Workstream" in df_latest.columns:
         ws_total = g["Amount_clean"].sum()
         ws_econs = g["Economy"].nunique()
         ws_firms = g["Firm"].nunique()
-        scenario_ws = classify(ws_total, ws_econs, ws_firms)
+        scenario_ws = classify_with_time(ws_total, ws_econs, ws_firms, latest_fy)
 
         rows.append({
             "Assumption": "Responsible local ownership",
@@ -136,10 +156,11 @@ if "Workstream" in df_latest.columns:
             "Status": scenario_ws,
             "Confidence Index 1 (Amount)": ws_total,
             "Confidence Index 2 (Breadth)": ws_firms + ws_econs,
-            "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing."
+            "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
         })
 
 # === Export ===
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows))")
+
