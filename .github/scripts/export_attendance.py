@@ -12,6 +12,7 @@ TABLES = {
 }
 VIEW_ID = None
 
+
 def fetch_table(table_label, table_id):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{table_id}"
     headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -39,6 +40,13 @@ def fetch_table(table_label, table_id):
         if not offset:
             break
     return pd.DataFrame(records)
+
+
+def safe_format_date(series):
+    """Return YYYY-MM-DD if series has valid dates, else empty string."""
+    max_date = pd.to_datetime(series, errors="coerce").max()
+    return max_date.strftime("%Y-%m-%d") if pd.notna(max_date) else ""
+
 
 # === Main ===
 dfs = [fetch_table(label, tid) for label, tid in TABLES.items()]
@@ -69,7 +77,7 @@ rows.append({
     "Economy": "APEC (aggregate)",
     "Workstream": "All",
     "Level": "Aggregate",
-    "Date": last3["Workshop Date"].max().strftime("%Y-%m-%d"),
+    "Date": safe_format_date(last3["Workshop Date"]),
     "Signal": f"Average {economies_present:.1f} economies represented (last 3 dialogues)",
     "Status": status,
     "Confidence Index 1 (Percent)": round(pct, 1),
@@ -98,7 +106,7 @@ for ws, g in df.groupby("Workstream"):
         "Economy": "APEC (aggregate)",
         "Workstream": ws,
         "Level": "Workstream",
-        "Date": last3_ws["Workshop Date"].max().strftime("%Y-%m-%d"),
+        "Date": safe_format_date(last3_ws["Workshop Date"]),
         "Signal": f"Average {economies_present_ws:.1f} economies represented (last 3 {ws} dialogues)",
         "Status": status_ws,
         "Confidence Index 1 (Percent)": round(pct_ws, 1),
@@ -127,7 +135,7 @@ for ws, g in df.groupby("Workstream"):
             "Economy": econ,
             "Workstream": ws,
             "Level": "Economy",
-            "Date": last3_econ_ws["Workshop Date"].max().strftime("%Y-%m-%d"),
+            "Date": safe_format_date(last3_econ_ws["Workshop Date"]),
             "Signal": f"{econ} attended {attended_count}/3 {ws} dialogues",
             "Status": status_econ,
             "Confidence Index 1 (Percent)": round(pct_attended, 1),
@@ -138,3 +146,4 @@ for ws, g in df.groupby("Workstream"):
 attendance_status = pd.DataFrame(rows)
 attendance_status.to_csv("attendance_assumption.csv", index=False)
 print(f"✅ Attendance assumption saved → attendance_assumption.csv ({len(rows)} rows))")
+
