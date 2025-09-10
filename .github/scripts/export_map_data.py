@@ -81,6 +81,9 @@ if __name__ == "__main__":
                 fields[f"{field_name} (Name)"] = ", ".join(readable_names)
                 fields[f"{field_name} Count"] = len(readable_names)
 
+        # Ensure Start Date is always present
+        fields['Start Date'] = fields.get('Start Date', None)
+
         # --- Add Metric Value ---
         if 'Participants' in fields and isinstance(fields['Participants'], (int, float)):
             fields['Metric Value'] = fields['Participants']
@@ -94,19 +97,28 @@ if __name__ == "__main__":
         fields['Activity Count'] = 1
         fields['Last Updated'] = timestamp
 
-    # Step 4: Export to CSV
+    # Step 4: Define expected fields (fixed schema for Tableau)
+    expected_fields = [
+        "Activity Title", "Activity Type",
+        "Economy (Name)", "Economy Count",
+        "Workstream (Name)", "Workstream Count",
+        "City", "Latitude", "Longitude",
+        "Start Date",
+        "# Participants", "# Outputs Delivered",
+        "Metric Value", "Activity Count",
+        "Last Updated", "Deliverable / Notes"
+    ]
+
+    # Step 5: Export to CSV with fixed headers
     output_file = 'Map_Data.csv'
     with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-        if main_records:
-            all_fieldnames = set()
-            for rec in main_records:
-                all_fieldnames.update(rec['fields'].keys())
-            fieldnames = list(all_fieldnames)
-
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            for rec in main_records:
-                writer.writerow(rec['fields'])
+        writer = csv.DictWriter(csvfile, fieldnames=expected_fields)
+        writer.writeheader()
+        for rec in main_records:
+            row = {}
+            for f in expected_fields:
+                row[f] = rec['fields'].get(f, "")
+            writer.writerow(row)
 
     print(f"✅ Export complete: {output_file}")
 
