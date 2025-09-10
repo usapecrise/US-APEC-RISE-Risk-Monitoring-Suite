@@ -7,16 +7,16 @@ from datetime import datetime
 # Airtable credentials
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'Map Data'   # your main table
-VIEW_NAME = 'Grid view'   # or None if you want all records
+MAIN_TABLE = 'Map Data'
+VIEW_NAME = 'Grid view'
 
-# Linked table configs
+# Linked tables (key = field name in Map Data, value = table name in Airtable)
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List'
 }
 
-# Fields to pull from linked tables
+# Which field to display from each linked table
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream'
@@ -24,8 +24,8 @@ DISPLAY_FIELDS = {
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-# --- Helper: fetch all records from a table ---
 def fetch_all_records(table, view=None):
+    """Fetch all records from an Airtable table"""
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
     if view:
         url += f"?view={quote(view)}"
@@ -61,14 +61,16 @@ if __name__ == "__main__":
         }
         linked_id_maps[field] = id_to_display
 
-    # Step 2: Fetch main Map Data records
+    # Step 2: Fetch Map Data records
     main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
     print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
-    # Step 3: Resolve linked IDs → names, add metrics
+    # Step 3: Resolve linked IDs → names, add helper fields
     timestamp = datetime.utcnow().isoformat()
     for record in main_records:
         fields = record['fields']
+
+        # Flatten linked fields
         for field_name in LINKED_TABLES.keys():
             linked_ids = fields.get(field_name, [])
             if isinstance(linked_ids, list):
@@ -78,6 +80,17 @@ if __name__ == "__main__":
                 ]
                 fields[f"{field_name} (Name)"] = ", ".join(readable_names)
                 fields[f"{field_name} Count"] = len(readable_names)
+
+        # --- Add Metric Value ---
+        if 'Participants' in fields and isinstance(fields['Participants'], (int, float)):
+            fields['Metric Value'] = fields['Participants']
+        elif '# Participants' in fields and isinstance(fields['# Participants'], (int, float)):
+            fields['Metric Value'] = fields['# Participants']
+        elif '# Outputs Delivered' in fields and isinstance(fields['# Outputs Delivered'], (int, float)):
+            fields['Metric Value'] = fields['# Outputs Delivered']
+        else:
+            fields['Metric Value'] = 1  # default
+
         fields['Activity Count'] = 1
         fields['Last Updated'] = timestamp
 
@@ -96,3 +109,4 @@ if __name__ == "__main__":
                 writer.writerow(rec['fields'])
 
     print(f"✅ Export complete: {output_file}")
+
