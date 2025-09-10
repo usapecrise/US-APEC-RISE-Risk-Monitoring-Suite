@@ -151,7 +151,7 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: |
-          python scripts/export_map_data.py
+          python .github/scripts/export_map_data.py
         
       - name: Generate Unified Assumptions Status CSV
         env:
