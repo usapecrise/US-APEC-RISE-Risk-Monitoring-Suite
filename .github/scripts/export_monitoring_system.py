@@ -29,9 +29,9 @@ def fetch_airtable_table():
             f = r.get("fields", {})
             records.append({
                 "Indicator": f.get("Indicator", ""),
-                "DataSource": f.get("Data Source", ""),
+                "Data Source": f.get("Data Source", ""),
                 "Disaggregates": f.get("Disaggregates", ""),
-                "DataFlow": f.get("Data Flow", "")
+                "Data Flow": f.get("Data Flow", "")
             })
 
         offset = data.get("offset")
