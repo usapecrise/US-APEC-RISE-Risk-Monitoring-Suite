@@ -35,13 +35,13 @@ def fetch_ot5():
                 return val
 
             records.append({
-                "Economy": flatten(f.get("economy", [])),
-                "Firm": flatten(f.get("firm", [])),
-                "Workstream": flatten(f.get("workstream", [])),
-                "Fiscal Year": f.get("fiscal year", ""),
-                "ResourceOrigin": f.get("resource origin", ""),
-                "Amount": f.get("amount", 0),
-                "Engagement": flatten(f.get("engagement", []))
+                "Economy": flatten(f.get("Economy", [])),
+                "Firm": flatten(f.get("Firm", [])),
+                "Workstream": flatten(f.get("Workstream", [])),
+                "Fiscal Year": f.get("Fiscal Year", ""),
+                "ResourceOrigin": f.get("Resource Origin", ""),
+                "Amount": f.get("Amount", 0),
+                "Engagement": flatten(f.get("Engagement", []))
             })
 
         offset = data.get("offset")
