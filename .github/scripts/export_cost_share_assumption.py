@@ -69,11 +69,12 @@ df = fetch_ot5()
 print("🔍 Raw Airtable preview (first 5 rows):")
 print(df.head(5).to_dict(orient="records"))
 print("🔍 Columns returned:", df.columns.tolist())
-print("🔍 Row count before Host-Country filter:", len(df))
+print("🔍 Row count before Host Country filter:", len(df))
 
-# ✅ Filter only Host-Country based
-df = df[df["ResourceOrigin"].str.contains("Host-Country", case=False, na=False)]
-print("🔍 Row count after Host-Country filter:", len(df))
+# ✅ Filter only Host Country-based
+valid_origins = ["Host Country-based"]
+df = df[df["ResourceOrigin"].isin(valid_origins)]
+print("🔍 Row count after Host Country filter:", len(df))
 
 # Pick latest FY
 if "Fiscal Year" in df.columns and not df["Fiscal Year"].dropna().empty:
@@ -130,11 +131,11 @@ rows.append({
     "Workstream": "All",
     "Level": "Aggregate",
     "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
-    "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Host-Country based only)",
+    "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Host Country-based only)",
     "Status": agg_status,
     "Confidence Index 1 (Amount)": total_amount,
     "Confidence Index 2 (Breadth)": firms_count + economies_count,
-    "Notes": "Host-country cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
+    "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
 })
 
 # Economy level
@@ -150,11 +151,11 @@ for econ, g in df_latest.groupby("Economy"):
         "Workstream": "All",
         "Level": "Economy",
         "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
-        "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Host-Country based only)",
+        "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Host Country-based only)",
         "Status": scenario_econ,
         "Confidence Index 1 (Amount)": econ_total,
         "Confidence Index 2 (Breadth)": econ_firms,
-        "Notes": "Host-country cost-share only. CI1 = $ amount; CI2 = # firms contributing."
+        "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing."
     })
 
 # Workstream level
@@ -172,14 +173,15 @@ if "Workstream" in df_latest.columns:
             "Workstream": ws,
             "Level": "Workstream",
             "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
-            "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Host-Country based only)",
+            "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Host Country-based only)",
             "Status": scenario_ws,
             "Confidence Index 1 (Amount)": ws_total,
             "Confidence Index 2 (Breadth)": ws_firms + ws_econs,
-            "Notes": "Host-country cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
+            "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
         })
 
 # Export
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows))")
+
