@@ -59,14 +59,21 @@ def fetch_ot5():
             return 0.0
     df["Amount_clean"] = df["Amount"].apply(parse_amount)
 
-    # ✅ Filter only Host-Country based
-    df = df[df["ResourceOrigin"].str.contains("Host-Country", case=False, na=False)]
-
     return df
 
 
 # === Load data ===
 df = fetch_ot5()
+
+# === Debug logging ===
+print("🔍 Raw Airtable preview (first 5 rows):")
+print(df.head(5).to_dict(orient="records"))
+print("🔍 Columns returned:", df.columns.tolist())
+print("🔍 Row count before Host-Country filter:", len(df))
+
+# ✅ Filter only Host-Country based
+df = df[df["ResourceOrigin"].str.contains("Host-Country", case=False, na=False)]
+print("🔍 Row count after Host-Country filter:", len(df))
 
 # Pick latest FY
 if "Fiscal Year" in df.columns and not df["Fiscal Year"].dropna().empty:
@@ -176,5 +183,3 @@ if "Workstream" in df_latest.columns:
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows))")
-
-
