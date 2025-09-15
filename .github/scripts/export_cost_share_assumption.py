@@ -28,7 +28,6 @@ def fetch_ot5():
         for r in data.get("records", []):
             f = r.get("fields", {})
 
-            # flatten linked record lists
             def flatten(val):
                 if isinstance(val, list):
                     return ", ".join(val)
@@ -61,14 +60,21 @@ def fetch_ot5():
 
     return df
 
+# === Helpers for unique counting ===
+def split_ids(series):
+    """Return unique linked record IDs across rows."""
+    values = set()
+    for val in series.dropna():
+        if isinstance(val, str):
+            for v in val.split(","):
+                values.add(v.strip())
+    return values
 
 # === Load data ===
 df = fetch_ot5()
 
-# === Debug logging ===
 print("🔍 Raw Airtable preview (first 5 rows):")
 print(df.head(5).to_dict(orient="records"))
-print("🔍 Columns returned:", df.columns.tolist())
 print("🔍 Row count before Host Country filter:", len(df))
 
 # ✅ Filter only Host Country-based
@@ -84,26 +90,21 @@ else:
     latest_fy = "Unknown"
     df_latest = df
 
-
 # === Classification rules ===
 def classify_with_time(total, econ_count, firm_count, latest_fy):
-    """Classify cost-share signal with early-year buffer + scaled thresholds."""
     today = datetime.date.today()
     try:
         fy_year = int(latest_fy)
     except:
         fy_year = today.year
 
-    # Adjust FY start (assuming Jan 1; switch to Oct 1 if fiscal year = US FY)
     fy_start = datetime.date(fy_year, 1, 1)
     months_into_fy = (today.year - fy_start.year) * 12 + (today.month - fy_start.month)
-    progress = max(1, months_into_fy) / 12  # scale 1–12 months into fraction
+    progress = max(1, months_into_fy) / 12
 
-    # Early-year buffer: first 3 months never pessimistic
     if months_into_fy < 3 and total == 0:
         return "baseline"
 
-    # Scaled thresholds
     threshold_opt = 5000 * progress
     threshold_base = 1000 * progress
 
@@ -114,14 +115,13 @@ def classify_with_time(total, econ_count, firm_count, latest_fy):
     else:
         return "pessimistic"
 
-
 # === Build outputs ===
 rows = []
 
 # Aggregate level
 total_amount = df_latest["Amount_clean"].sum()
-economies_count = df_latest["Economy"].nunique()
-firms_count = df_latest["Firm"].nunique()
+economies_count = len(split_ids(df_latest["Economy"]))
+firms_count = len(split_ids(df_latest["Firm"]))
 agg_status = classify_with_time(total_amount, economies_count, firms_count, latest_fy)
 
 rows.append({
@@ -134,14 +134,14 @@ rows.append({
     "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Host Country-based only)",
     "Status": agg_status,
     "Confidence Index 1 (Amount)": total_amount,
-    "Confidence Index 2 (Breadth)": firms_count + economies_count,
-    "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
+    "Confidence Index 2 (Breadth)": firms_count,   # ✅ now just # firms
+    "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Economies tracked separately in Signal."
 })
 
 # Economy level
 for econ, g in df_latest.groupby("Economy"):
     econ_total = g["Amount_clean"].sum()
-    econ_firms = g["Firm"].nunique()
+    econ_firms = len(split_ids(g["Firm"]))
     scenario_econ = classify_with_time(econ_total, 1 if econ else 0, econ_firms, latest_fy)
 
     rows.append({
@@ -162,8 +162,8 @@ for econ, g in df_latest.groupby("Economy"):
 if "Workstream" in df_latest.columns:
     for ws, g in df_latest.groupby("Workstream"):
         ws_total = g["Amount_clean"].sum()
-        ws_econs = g["Economy"].nunique()
-        ws_firms = g["Firm"].nunique()
+        ws_firms = len(split_ids(g["Firm"]))
+        ws_econs = len(split_ids(g["Economy"]))
         scenario_ws = classify_with_time(ws_total, ws_econs, ws_firms, latest_fy)
 
         rows.append({
@@ -176,12 +176,11 @@ if "Workstream" in df_latest.columns:
             "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Host Country-based only)",
             "Status": scenario_ws,
             "Confidence Index 1 (Amount)": ws_total,
-            "Confidence Index 2 (Breadth)": ws_firms + ws_econs,
-            "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
+            "Confidence Index 2 (Breadth)": ws_firms,
+            "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Economies tracked separately in Signal."
         })
 
 # Export
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows))")
-
