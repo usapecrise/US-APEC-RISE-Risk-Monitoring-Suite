@@ -6,7 +6,7 @@ import datetime
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "app0Ljjhrp3lTTpTO"
-TABLE_ID = "OT5 Private Sector Resources"
+TABLE_ID = "tblpb71OXvUUyJTVF"
 VIEW_ID = "Grid view"
 
 def fetch_ot5():
