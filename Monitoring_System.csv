@@ -4,7 +4,7 @@ OC4: Market Growth,Survey data or structured feedback forms,Business size; suppo
 OT2: Joint Engagements,Engagement logs; agendas; meeting notes,U.S. Foreign Assistance Objective(s); PSE modality; economy; workstream,
 OC7: Barrier Resolution,Program records; reform logs; action plans,Economy; barrier type; adaptive action type; workstream,
 OT5: Resource Leverage,Formal agreements; co-financing documentation; letters of commitment,U.S. Foreign Assistance Objective(s); resource type; origin of private sector resources; economy; workstream,
-OT1: Training Hours,Attendance records and agendas,Economy; workstream; sex; participant type,Captured by technical teams via Jotform > automatically analyzed in Airtable AttendanceRegister.
+OT1: Training Hours,Attendance records and agendas,Economy; workstream; sex; participant type,Captured by technical teams via Jotform → automatically analyzed in Airtable Attendance Register.
 OC3: Reform Alignment,Official APEC documents; program reports; confirmations,Economy; workstream; type (policy/practice),
 OT4: Firm Engagements,Engagement logs; agendas; meeting notes,PSE type; PSE origin; PSE size; economy; workstream,
 OT3: Policy Citations,Official APEC documents; program reports; confirmations,Workstream; communication type,
