@@ -6,7 +6,7 @@ import datetime
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "app0Ljjhrp3lTTpTO"
-TABLE_ID = "tblpb71OXvUUyJTVF"
+TABLE_ID = "tblpb71OXvUUyJTVF"   # Cost-share (OT5) table ID
 VIEW_ID = "Grid view"
 
 def fetch_ot5():
@@ -27,36 +27,46 @@ def fetch_ot5():
         data = resp.json()
         for r in data.get("records", []):
             f = r.get("fields", {})
+
+            # flatten linked record lists
+            def flatten(val):
+                if isinstance(val, list):
+                    return ", ".join(val)
+                return val
+
             records.append({
-                "Economy": f.get("Economy", ""),
-                "Firm": f.get("Firm", ""),
-                "Workstream": f.get("Workstream", ""),
-                "Fiscal Year": f.get("Fiscal Year", ""),
-                "Type": f.get("Type", ""),
-                "Amount": f.get("Amount", 0)
+                "Economy": flatten(f.get("economy", [])),
+                "Firm": flatten(f.get("firm", [])),
+                "Workstream": flatten(f.get("workstream", [])),
+                "Fiscal Year": f.get("fiscal year", ""),
+                "ResourceOrigin": f.get("resource origin", ""),
+                "Amount": f.get("amount", 0),
+                "Engagement": flatten(f.get("engagement", []))
             })
 
         offset = data.get("offset")
         if not offset:
             break
 
-    return pd.DataFrame(records)
+    df = pd.DataFrame(records)
 
-# === Load and clean ===
+    # Clean amounts
+    def parse_amount(x):
+        if pd.isna(x): return 0.0
+        try:
+            return float(str(x).replace("$", "").replace(",", ""))
+        except:
+            return 0.0
+    df["Amount_clean"] = df["Amount"].apply(parse_amount)
+
+    # ✅ Filter only Host-Country based
+    df = df[df["ResourceOrigin"].str.contains("Host-Country", case=False, na=False)]
+
+    return df
+
+
+# === Load data ===
 df = fetch_ot5()
-
-def parse_amount(x):
-    if pd.isna(x):
-        return 0.0
-    try:
-        return float(str(x).replace("$", "").replace(",", ""))
-    except:
-        return 0.0
-
-df["Amount_clean"] = df["Amount"].apply(parse_amount)
-
-# Filter Home Economy only
-df = df[df["Type"].str.contains("Home", case=False, na=False)] if "Type" in df.columns else df
 
 # Pick latest FY
 if "Fiscal Year" in df.columns and not df["Fiscal Year"].dropna().empty:
@@ -65,6 +75,7 @@ if "Fiscal Year" in df.columns and not df["Fiscal Year"].dropna().empty:
 else:
     latest_fy = "Unknown"
     df_latest = df
+
 
 # === Classification rules ===
 def classify_with_time(total, econ_count, firm_count, latest_fy):
@@ -75,10 +86,10 @@ def classify_with_time(total, econ_count, firm_count, latest_fy):
     except:
         fy_year = today.year
 
-    # Adjust FY start depending on your org (here assume Jan 1; change if Oct 1 is correct)
+    # Adjust FY start (assuming Jan 1; switch to Oct 1 if fiscal year = US FY)
     fy_start = datetime.date(fy_year, 1, 1)
     months_into_fy = (today.year - fy_start.year) * 12 + (today.month - fy_start.month)
-    progress = max(1, months_into_fy) / 12  # scale 1–12 months into a fraction
+    progress = max(1, months_into_fy) / 12  # scale 1–12 months into fraction
 
     # Early-year buffer: first 3 months never pessimistic
     if months_into_fy < 3 and total == 0:
@@ -95,9 +106,11 @@ def classify_with_time(total, econ_count, firm_count, latest_fy):
     else:
         return "pessimistic"
 
+
+# === Build outputs ===
 rows = []
 
-# === Aggregate ===
+# Aggregate level
 total_amount = df_latest["Amount_clean"].sum()
 economies_count = df_latest["Economy"].nunique()
 firms_count = df_latest["Firm"].nunique()
@@ -110,14 +123,14 @@ rows.append({
     "Workstream": "All",
     "Level": "Aggregate",
     "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
-    "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Home Economy only)",
+    "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Host-Country based only)",
     "Status": agg_status,
     "Confidence Index 1 (Amount)": total_amount,
     "Confidence Index 2 (Breadth)": firms_count + economies_count,
-    "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
+    "Notes": "Host-country cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
 })
 
-# === Economy-level ===
+# Economy level
 for econ, g in df_latest.groupby("Economy"):
     econ_total = g["Amount_clean"].sum()
     econ_firms = g["Firm"].nunique()
@@ -130,14 +143,14 @@ for econ, g in df_latest.groupby("Economy"):
         "Workstream": "All",
         "Level": "Economy",
         "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
-        "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Home Economy only)",
+        "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Host-Country based only)",
         "Status": scenario_econ,
         "Confidence Index 1 (Amount)": econ_total,
         "Confidence Index 2 (Breadth)": econ_firms,
-        "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = # firms contributing."
+        "Notes": "Host-country cost-share only. CI1 = $ amount; CI2 = # firms contributing."
     })
 
-# === Workstream-level ===
+# Workstream level
 if "Workstream" in df_latest.columns:
     for ws, g in df_latest.groupby("Workstream"):
         ws_total = g["Amount_clean"].sum()
@@ -152,15 +165,16 @@ if "Workstream" in df_latest.columns:
             "Workstream": ws,
             "Level": "Workstream",
             "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
-            "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Home Economy only)",
+            "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Host-Country based only)",
             "Status": scenario_ws,
             "Confidence Index 1 (Amount)": ws_total,
             "Confidence Index 2 (Breadth)": ws_firms + ws_econs,
-            "Notes": "Host-economy cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
+            "Notes": "Host-country cost-share only. CI1 = $ amount; CI2 = firms + economies contributing. Thresholds scale with FY progress; early months buffered."
         })
 
-# === Export ===
+# Export
 assumption_df = pd.DataFrame(rows)
 assumption_df.to_csv("cost_share_assumption.csv", index=False)
 print(f"✅ Cost-share assumption saved → cost_share_assumption.csv ({len(rows)} rows))")
+
 
