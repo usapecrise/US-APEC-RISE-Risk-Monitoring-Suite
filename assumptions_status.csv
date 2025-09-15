@@ -1,7 +1,5 @@
 assumption,monitoring_tool,economy,date,signal,status,notes,source_file
 Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-08-09,Average 13.0 economies represented (last 3 dialogues),optimistic,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,,APEC (aggregate),,Average 1.0 economies represented (last 3  dialogues),pessimistic,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
-Stakeholder alignment with U.S. focus areas,,,, attended 1/3  dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
 Stakeholder alignment with U.S. focus areas,,APEC (aggregate),2025-08-06,Average 16.0 economies represented (last 3 Digital Trade dialogues),optimistic,"Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies.",attendance_assumption.csv
 Stakeholder alignment with U.S. focus areas,,Australia,2025-08-06,Australia attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
 Stakeholder alignment with U.S. focus areas,,Brunei Darussalam,2025-08-06,Brunei Darussalam attended 1/3 Digital Trade dialogues,pessimistic,"Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%.",attendance_assumption.csv
