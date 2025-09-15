@@ -55,7 +55,8 @@ EXTRACT_NAME_MAP = {
     "attendance_continuity_assumption.csv": "Attendance Continuity Assumption",
     "attendance_assumption.csv": "Attendance Assumption",
     "assumptions_status.csv": "Assumptions Status",
-    "Map_Data.csv": "Activity Footprint"
+    "Map_Data.csv": "Activity Footprint",
+    "Monitoring_System.csv": Monitoring System"
 }
 
 # ── CONVERT CSV TO HYPER ───────────────────────────────
