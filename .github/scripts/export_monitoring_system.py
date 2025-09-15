@@ -6,8 +6,8 @@ import tableauserverclient as TSC
 
 # Airtable config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
-BASE_ID = "appXXXXXXXXXXXXXX"   # replace with your Airtable Base ID
-TABLE_ID = "tblXXXXXXXXXXXXXX"  # replace with your Airtable Table ID
+BASE_ID = "app0Ljjhrp3lTTpTO"
+TABLE_ID = "tblUWje5Fyvh5sNqu"
 
 def fetch_airtable_table():
     url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_ID}"
