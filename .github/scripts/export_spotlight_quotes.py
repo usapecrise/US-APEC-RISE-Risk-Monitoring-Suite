@@ -3,7 +3,7 @@ import re
 import language_tool_python
 
 # === CONFIG ===
-INPUT_FILE = "Feedback Form Entries-Grid view (4).csv"
+INPUT_FILE = "Feedback_Form_Data_Long.csv"   # ✅ use the exported long-format file
 OUTPUT_FILE = "spotlight_quotes.csv"
 MAX_LEN = 250   # truncate to fit Tableau box
 
@@ -29,12 +29,13 @@ def clean_text(x):
     return x
 
 for col in QUOTE_COLUMNS:
-    df[col] = df[col].apply(clean_text)
+    if col in df.columns:   # ✅ safeguard in case column missing
+        df[col] = df[col].apply(clean_text)
 
 # === 4. Melt to long format ===
 quotes_long = df.melt(
     id_vars=["Organization", "Economy"],
-    value_vars=QUOTE_COLUMNS,
+    value_vars=[c for c in QUOTE_COLUMNS if c in df.columns],
     var_name="QuoteType",
     value_name="Quote"
 )
