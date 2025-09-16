@@ -27,6 +27,12 @@ jobs:
            pip install -r requirements.txt
            python -m nltk.downloader wordnet omw-1.4
 
+      # 👇 Run Workshop Master List BEFORE OT1
+      - name: Run Workshop Master List export script
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_Workshop_Master_List.py
+
       - name: Run OT1 export script
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
@@ -91,11 +97,6 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_KPI_Targets.py
-
-      - name: Run Workshop Master List export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_Workshop_Master_List.py
 
       - name: Run Feedback Form Data export script
         env:
@@ -185,8 +186,10 @@ jobs:
             feedback_assumption.csv attendance_continuity_assumption.csv policy_reform_assumption.csv \
             cost_share_assumption.csv assumptions_status.csv feedback_policy_assumption.csv \
             risk_assumption.csv attendance_assumption.csv attendance_records.csv Map_Data.csv \
-            Monitoring_System.csv person_hours.csv person_hours_by_workshop.csv person_hours_by_sex.csv \
-            person_hours_by_sector.csv person_hours_by_economy.csv person_hours_totals_combined.csv
+            Monitoring_System.csv \
+            person_hours.csv person_hours_by_workshop.csv person_hours_by_sex.csv \
+            person_hours_by_sector.csv person_hours_by_economy.csv person_hours_totals_combined.csv \
+            person_hours_totals.csv
         
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
