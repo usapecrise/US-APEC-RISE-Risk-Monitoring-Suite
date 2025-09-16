@@ -68,18 +68,12 @@ for field, table_name in LINKED_TABLES.items():
 
 # Step 2: Workshop master records (normalized keys)
 workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
-
-# 🔎 Debug: show what Airtable is actually returning
-print("🔎 First 3 Workshop Master records (raw fields):")
-for rec in workshop_master_records[:3]:
-    print(rec['fields'])
-
-# Build the map
 workshop_master_map = {
     normalize(rec['fields'].get('Workshop', 'Unknown')): {
         "City": rec['fields'].get('City', 'Unknown'),
-        "# of Days": rec['fields'].get('# of Days', 0),
-        "Total Agenda Hours": rec['fields'].get('Total Agenda Hours', 0)
+        "# of Days": rec['fields'].get('# of days', 0),  # lowercase d
+        "Total Agenda Hours": rec['fields'].get('Total Agenda Hours', 0),
+        "Fiscal Year": rec['fields'].get('Fiscal Year', 'Unknown')
     }
     for rec in workshop_master_records
 }
@@ -88,10 +82,6 @@ print("🔎 Workshop Master keys (sample):", list(workshop_master_map.keys())[:1
 # Step 3: OT1 sign-in records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
-
-print("🔎 First 3 OT1 Workshop field values:")
-for rec in main_records[:3]:
-    print(rec['fields'].get('Workshop'))
 
 # Step 4: Enrich OT1 rows
 timestamp = datetime.utcnow().isoformat()
@@ -114,6 +104,15 @@ for record in main_records:
     fields['Workshop City'] = wm_info.get("City", "Unknown")
     fields['# of Days'] = wm_info.get("# of Days", 0)
     fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
+    fields['Fiscal Year'] = wm_info.get("Fiscal Year", "Unknown")
+
+    # Sector enrichment
+    sector_values = fields.get('Sector', [])
+    if isinstance(sector_values, str):
+        sector_values = [sector_values]
+    elif not isinstance(sector_values, list):
+        sector_values = []
+    fields['Sector (Name)'] = ", ".join(sector_values) if sector_values else "Unknown"
 
     fields['Last Updated'] = timestamp
     fields['Indicator ID'] = 'OT1'
@@ -135,6 +134,7 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         'Workshop City',
         '# of Days',
         'Total Agenda Hours',
+        'Fiscal Year',
         'Last Updated'
     ]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -145,3 +145,30 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             filtered_row = {key: flatten(row.get(key)) for key in fieldnames}
             writer.writerow(filtered_row)
 print(f"✅ Export complete: {output_file}")
+
+# Step 6: Calculate Person-Hours
+ot1_df = pd.read_csv("OT1.csv")
+ot1_df["Workshop Date"] = pd.to_datetime(ot1_df.get("Workshop Date"), errors="coerce")
+
+# Fiscal Quarter (US FY: Oct–Sep)
+def fiscal_quarter(date):
+    if pd.isna(date):
+        return "Unknown"
+    month, year = date.month, date.year
+    if month >= 10: fy, q = year + 1, "Q1"
+    elif month >= 7: fy, q = year, "Q4"
+    elif month >= 4: fy, q = year, "Q3"
+    else: fy, q = year, "Q2"
+    return f"FY{fy}-{q}"
+
+if "Workshop Date" in ot1_df.columns:
+    ot1_df["Fiscal Quarter"] = ot1_df["Workshop Date"].apply(fiscal_quarter)
+else:
+    ot1_df["Fiscal Quarter"] = "Unknown"
+
+attendance = (
+    ot1_df.groupby(["Workshop"])["Workshop"].count().reset_index(name="Attendance")
+)
+
+print("🔎 Sample of enriched OT1 data:")
+print(ot1_df.head())
