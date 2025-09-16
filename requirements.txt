@@ -6,3 +6,4 @@ nltk
 vaderSentiment
 tableauhyperapi
 tableauserverclient
+language-tool-python
