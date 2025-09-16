@@ -3,23 +3,25 @@ import csv
 import os
 from urllib.parse import quote
 from datetime import datetime
+import pandas as pd
 
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'OT1 Sign-Ins (Workshops)'
+WORKSHOP_MASTER_TABLE = 'Workshop Master List'
 VIEW_NAME = 'Grid view'
 
 # Linked table names and display fields
 LINKED_TABLES = {
     'Workstream': 'Workstream Reference List',
     'Workshop': 'Workshop Reference List',
-    'Economy': 'Economy Reference List'  # Used for both 'Economy' and 'Guest Economy'
+    'Economy': 'Economy Reference List'
 }
 
 DISPLAY_FIELDS = {
     'Workstream': 'Workstream',
-    'Workshop': 'Workshop',  # Change to 'Title' if needed
+    'Workshop': 'Workshop',
     'Economy': 'Economy'
 }
 
@@ -62,16 +64,27 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
 
-# Step 2: Fetch OT1 Sign-In records
+# Step 2: Fetch Workshop Master records
+workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
+workshop_master_map = {
+    rec['id']: {
+        "City": rec['fields'].get('City', 'Unknown'),
+        "# of Days": rec['fields'].get('# of Days', 0),
+        "Total Agenda Hours": rec['fields'].get('Total Agenda Hours', 0)
+    }
+    for rec in workshop_master_records
+}
+
+# Step 3: Fetch OT1 Sign-In records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
-# Step 3: Enrich each record with readable linked values and timestamp
+# Step 4: Enrich OT1 rows
 timestamp = datetime.utcnow().isoformat()
 for record in main_records:
     fields = record['fields']
 
-    # Custom: Handle Economy or Guest Economy fallback
+    # Economy fallback
     economy_ids = fields.get('Economy') or fields.get('Guest Economy') or []
     if isinstance(economy_ids, str):
         economy_ids = [economy_ids]
@@ -81,7 +94,7 @@ for record in main_records:
     else:
         fields['Economy (Name)'] = "Unknown"
 
-    # Enrich other linked fields
+    # Workshop and Workstream enrichment
     for field_name in ['Workshop', 'Workstream']:
         raw_value = fields.get(field_name)
         if isinstance(raw_value, str):
@@ -97,21 +110,32 @@ for record in main_records:
         else:
             fields[f"{field_name} (Name)"] = "Unknown"
 
-    # Handle Sector multi-select (plain text, not linked)
+    # Add workshop master info
+    workshop_ids = fields.get('Workshop', [])
+    if isinstance(workshop_ids, str):
+        workshop_ids = [workshop_ids]
+    if workshop_ids:
+        wm_info = workshop_master_map.get(workshop_ids[0], {})
+        fields['Workshop City'] = wm_info.get("City", "Unknown")
+        fields['# of Days'] = wm_info.get("# of Days", 0)
+        fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
+    else:
+        fields['Workshop City'] = "Unknown"
+        fields['# of Days'] = 0
+        fields['Total Agenda Hours'] = 0
+
+    # Sector handling
     sector_values = fields.get('Sector', [])
     if isinstance(sector_values, str):
         sector_values = [sector_values]
     elif not isinstance(sector_values, list):
         sector_values = []
-    if sector_values:
-        fields['Sector (Name)'] = ", ".join(sector_values)
-    else:
-        fields['Sector (Name)'] = "Unknown"
+    fields['Sector (Name)'] = ", ".join(sector_values) if sector_values else "Unknown"
 
     fields['Last Updated'] = timestamp
     fields['Indicator ID'] = 'OT1'
 
-# Helper to flatten all values for clean CSV export
+# Helper to flatten values
 def flatten(value):
     if isinstance(value, list):
         return ", ".join(str(v) for v in value)
@@ -119,7 +143,7 @@ def flatten(value):
         return "Unknown"
     return str(value)
 
-# Step 4: Export to CSV
+# Step 5: Export enriched OT1 to OT1.csv
 output_file = 'OT1.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = [
@@ -138,7 +162,9 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         'Workstream (Name)',
         'Sector',
         'Sector (Name)',
-        'City',
+        'Workshop City',
+        '# of Days',
+        'Total Agenda Hours',
         'Last Updated'
     ]
 
@@ -155,3 +181,54 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
 
 print(f"✅ Export complete: {output_file}")
 
+# Step 6: Load OT1.csv and calculate Person-Hours
+ot1_df = pd.read_csv("OT1.csv")
+
+# Ensure proper dtypes
+ot1_df["Workshop Date"] = pd.to_datetime(ot1_df["Workshop Date"], errors="coerce")
+
+# --- Days attended per participant-workshop ---
+attendance = (
+    ot1_df.groupby(["Workshop (Name)", "Email Address"])["Workshop Date"]
+    .nunique()
+    .reset_index(name="Days Attended")
+)
+
+# Merge back
+merged = pd.merge(
+    ot1_df,
+    attendance,
+    on=["Workshop (Name)", "Email Address"],
+    how="left"
+)
+
+# Full attendance flag
+merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of Days"]).astype(int)
+
+# Person-Hours
+merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
+
+# --- Aggregate into tidy disaggregation ---
+tidy = (
+    merged.groupby(
+        ["Economy (Name)", "Workshop City", "Workshop (Name)", "Sex", "Sector (Name)", "Workstream (Name)"],
+        dropna=False
+    )["Person-Hours"]
+    .sum()
+    .reset_index()
+)
+
+tidy.rename(columns={
+    "Economy (Name)": "Economy",
+    "Workshop City": "City",
+    "Workshop (Name)": "Workshop",
+    "Sector (Name)": "Sector",
+    "Workstream (Name)": "Workstream"
+}, inplace=True)
+
+# Step 7: Export tidy file
+tidy_file = "person_hours.csv"
+tidy.to_csv(tidy_file, index=False)
+
+print(f"✅ Export complete: {tidy_file}")
+print(tidy.head())
