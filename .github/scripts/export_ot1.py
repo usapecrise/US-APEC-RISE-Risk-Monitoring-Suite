@@ -1,194 +1,331 @@
-name: Export KPI Data to GitHub
+import requests
+import csv
+import os
+from urllib.parse import quote
+from datetime import datetime
+import pandas as pd
 
-on:
-  schedule:
-    - cron: "0 7 * * *"    # every day at 07:00 UTC
-  workflow_dispatch:
+# Airtable credentials and config
+AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
+BASE_ID = "app0Ljjhrp3lTTpTO"
+MAIN_TABLE = "OT1 Sign-Ins (Workshops)"
+WORKSHOP_MASTER_TABLE = "Workshop Reference List"
+VIEW_NAME = "Grid view"
 
-permissions:
-  contents: write
+# Linked tables
+LINKED_TABLES = {
+    "Workstream": "Workstream Reference List",
+    "Workshop": "Workshop Reference List",
+    "Economy": "Economy Reference List"
+}
 
-jobs:
-  export-kpis:
-    runs-on: ubuntu-latest
+DISPLAY_FIELDS = {
+    "Workstream": "Workstream",
+    "Workshop": "Workshop",
+    "Economy": "Economy"
+}
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-          
-      - name: Install dependencies
-        run: |
-           python -m pip install --upgrade pip
-           pip install -r requirements.txt
-           python -m nltk.downloader wordnet omw-1.4
 
-      - name: Run OT1 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_ot1.py
+# --- Helper: Fetch all records ---
+def fetch_all_records(table, view=None):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
+    if view:
+        url += f"?view={quote(view)}"
+    all_records, offset = [], None
 
-      - name: Run OT2 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_ot2.py
+    while True:
+        params = {}
+        if offset:
+            params["offset"] = offset
+        response = requests.get(url, headers=headers, params=params).json()
 
-      - name: Run OT3 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_ot3.py
+        if "records" not in response:
+            print(f"❌ Error fetching {table}:", response)
+            break
 
-      - name: Run OT4 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_ot4.py
+        all_records.extend(response["records"])
+        offset = response.get("offset")
+        if not offset:
+            break
 
-      - name: Run OT5 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_ot5.py
+    print(f"✅ Fetched {len(all_records)} records from '{table}'")
+    return all_records
 
-      - name: Run OC1 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc1.py
 
-      - name: Run OC2 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc2.py
+# --- Step 1: Build lookup maps for linked fields ---
+linked_id_maps = {}
+for field, table_name in LINKED_TABLES.items():
+    records = fetch_all_records(table_name)
+    display_field = DISPLAY_FIELDS[field]
+    id_to_display = {
+        rec["id"]: rec["fields"].get(display_field, "Unknown")
+        for rec in records
+    }
+    linked_id_maps[field] = id_to_display
 
-      - name: Run OC3 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc3.py
+# --- Step 2: Workshop Master records ---
+workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
+workshop_master_map = {
+    rec["fields"].get("Workshop", "Unknown"): {
+        "City": rec["fields"].get("City", "Unknown"),
+        "# of Days": rec["fields"].get("# of days", 0),
+        "Total Agenda Hours": rec["fields"].get("Total Agenda Hours", 0),
+        "Fiscal Year": rec["fields"].get("Fiscal Year", "Unknown"),
+    }
+    for rec in workshop_master_records
+}
+print("🔎 First 3 Workshop Master records (raw fields):")
+for rec in workshop_master_records[:3]:
+    print(rec["fields"])
 
-      - name: Run OC4 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc4.py
+# --- Step 3: OT1 sign-in records ---
+main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
+print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
-      - name: Run OC5 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc5.py
+# --- Step 4: Enrich OT1 rows ---
+timestamp = datetime.utcnow().isoformat()
+for record in main_records:
+    fields = record["fields"]
 
-      - name: Run OC6 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc6.py
+    # Economy enrichment
+    economy_ids = fields.get("Economy") or fields.get("Guest Economy") or []
+    if isinstance(economy_ids, str):
+        economy_ids = [economy_ids]
+    if isinstance(economy_ids, list) and economy_ids:
+        readable_economies = [
+            linked_id_maps["Economy"].get(eid, "Unknown") for eid in economy_ids
+        ]
+        fields["Economy (Name)"] = ", ".join(readable_economies)
+    else:
+        fields["Economy (Name)"] = "Unknown"
 
-      - name: Run OC7 export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_oc7.py
+    # Workshop & Workstream enrichment
+    for field_name in ["Workshop", "Workstream"]:
+        raw_value = fields.get(field_name)
+        if isinstance(raw_value, str):
+            linked_ids = [raw_value]
+        elif isinstance(raw_value, list):
+            linked_ids = raw_value
+        else:
+            linked_ids = []
 
-      - name: Run KPI Targets export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_KPI_Targets.py
+        if linked_ids:
+            readable_names = [
+                linked_id_maps[field_name].get(id, "Unknown") for id in linked_ids
+            ]
+            fields[f"{field_name} (Name)"] = ", ".join(readable_names)
+        else:
+            fields[f"{field_name} (Name)"] = "Unknown"
 
-      - name: Run Workshop Master List export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_Workshop_Master_List.py
+    # Attach workshop master info by Workshop Name
+    workshop_name = fields.get("Workshop (Name)", "Unknown")
+    wm_info = workshop_master_map.get(workshop_name, {})
+    fields["Workshop City"] = wm_info.get("City", "Unknown")
+    fields["# of Days"] = wm_info.get("# of Days", 0)
+    fields["Total Agenda Hours"] = wm_info.get("Total Agenda Hours", 0)
+    fields["Fiscal Year"] = wm_info.get("Fiscal Year", "Unknown")
 
-      - name: Run Feedback Form Data export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_Feedback_Form_Data.py
+    # Sector enrichment
+    sector_values = fields.get("Sector", [])
+    if isinstance(sector_values, str):
+        sector_values = [sector_values]
+    elif not isinstance(sector_values, list):
+        sector_values = []
+    fields["Sector (Name)"] = ", ".join(sector_values) if sector_values else "Unknown"
 
-      - name: Run Attendance export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_attendance.py
-        
-      - name: Generate Word Frequency & Sentiment CSVs
-        env:
-           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/preprocess_feedback.py
+    fields["Last Updated"] = timestamp
+    fields["Indicator ID"] = "OT1"
 
-      - name: Run Stakeholder Reference List export script (wide + long)
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_Stakeholder_Reference_List.py
 
-      - name: Run Feedback Assumption export script
-        env:
-           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_feedback_assumption.py
+# --- Flatten helper ---
+def flatten(value):
+    if isinstance(value, list):
+        return ", ".join(str(v) for v in value)
+    if value in [None, ""]:
+        return "Unknown"
+    return str(value)
 
-      - name: Run Risk Assumption export script
-        env:
-           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_risk_assumption.py
 
-      - name: Run Attendance Continuity export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_attendance_continuity.py
+# --- Step 5: Export OT1.csv ---
+output_file = "OT1.csv"
+with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
+    fieldnames = [
+        "Indicator ID",
+        "Workshop",
+        "Workshop (Name)",
+        "Workshop Date",
+        "Email Address",
+        "Sex",
+        "Economy",
+        "Economy (Name)",
+        "Fiscal Year",
+        "Other Economy",
+        "Organization",
+        "Workstream",
+        "Workstream (Name)",
+        "Sector",
+        "Sector (Name)",
+        "Workshop City",
+        "# of Days",
+        "Total Agenda Hours",
+        "Last Updated",
+    ]
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for rec in main_records:
+        row = rec["fields"]
+        filtered_row = {key: flatten(row.get(key)) for key in fieldnames}
+        writer.writerow(filtered_row)
 
-      - name: Run Policy Reform Assumption export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_policy_reform_assumption.py
+print(f"✅ Export complete: {output_file}")
 
-      - name: Run Feedback Policy Assumption export
-        env:
-         AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_feedback_policy_assumption.py
 
-      - name: Run Cost Share Assumption export script
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/export_cost_share_assumption.py
+# --- Step 6: Person-Hours calculation ---
+ot1_df = pd.read_csv("OT1.csv")
+ot1_df["Workshop Date"] = pd.to_datetime(ot1_df["Workshop Date"], errors="coerce")
 
-      - name: Run Map Data export
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_map_data.py
 
-      - name: Run Monitoring System export
-        env:
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_monitoring_system.py
-        
-      - name: Generate Unified Assumptions Status CSV
-        env:
-         AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: python .github/scripts/generate_assumptions_status.py
+# Fiscal Quarter (US FY: Oct–Sep)
+def fiscal_quarter(date):
+    if pd.isna(date):
+        return "Unknown"
+    month, year = date.month, date.year
+    if month >= 10:
+        fy, q = year + 1, "Q1"
+    elif month >= 7:
+        fy, q = year, "Q4"
+    elif month >= 4:
+        fy, q = year, "Q3"
+    else:
+        fy, q = year, "Q2"
+    return f"FY{fy}-{q}"
 
-      - name: Commit and push KPI CSVs
-        env:
-          GIT_AUTHOR_NAME: github-actions[bot]
-          GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com
-          GIT_COMMITTER_NAME: github-actions[bot]
-          GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
-        run: |
-          set -e
-          git config user.name  "$GIT_AUTHOR_NAME"
-          git config user.email "$GIT_AUTHOR_EMAIL"
 
-          git add \
-            OT1.csv OT2.csv OT3.csv OT4.csv OT5.csv \
-            OC1.csv OC2.csv OC3.csv OC4.csv OC5.csv OC6.csv OC7.csv \
-            KPI_Targets.csv Workshop_Master_List.csv Feedback_Form_Data.csv \
-            Stakeholder_Reference_List.csv Stakeholder_Reference_List_long.csv \
-            Feedback_Form_Data_Long.csv word_frequency.csv word_frequency_detailed.csv \
-            sentiment_summary.csv sentiment_by_question.csv top_phrases.csv attendance_records.csv \
-            feedback_assumption.csv attendance_continuity_assumption.csv policy_reform_assumption.csv \
-            cost_share_assumption.csv assumptions_status.csv feedback_policy_assumption.csv \
-            risk_assumption.csv attendance_assumption.csv attendance_records.csv Map_Data.csv \
-            Monitoring_System.csv person_hours.csv
-        
-          timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
+ot1_df["Fiscal Quarter"] = ot1_df["Workshop Date"].apply(fiscal_quarter)
 
-          # 🚨 Always overwrite remote branch with generated CSVs
-          git push origin HEAD:${{ github.ref_name }} --force
+# Days attended per participant-workshop
+attendance = (
+    ot1_df.groupby(["Workshop (Name)", "Email Address"])["Workshop Date"]
+    .nunique()
+    .reset_index(name="Days Attended")
+)
+
+merged = pd.merge(ot1_df, attendance, on=["Workshop (Name)", "Email Address"], how="left")
+merged["Full Attendance Flag"] = (
+    merged["Days Attended"] == merged["# of Days"]
+).astype(int)
+merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
+
+# --- Step 7: Disaggregated outputs ---
+# (1) Detailed tidy disaggregation
+tidy = (
+    merged.groupby(
+        [
+            "Fiscal Year",
+            "Fiscal Quarter",
+            "Economy (Name)",
+            "Workshop City",
+            "Workshop (Name)",
+            "Sex",
+            "Sector (Name)",
+            "Workstream (Name)",
+        ],
+        dropna=False,
+    )["Person-Hours"]
+    .sum()
+    .reset_index()
+)
+
+tidy.rename(
+    columns={
+        "Economy (Name)": "Economy",
+        "Workshop City": "City",
+        "Workshop (Name)": "Workshop",
+        "Sector (Name)": "Sector",
+        "Workstream (Name)": "Workstream",
+    },
+    inplace=True,
+)
+
+tidy.to_csv("person_hours.csv", index=False)
+print("✅ Export complete: person_hours.csv")
+
+# (2) Workshop-level summary
+workshop_totals = (
+    merged.groupby(
+        ["Fiscal Year", "Fiscal Quarter", "Workshop (Name)", "Economy (Name)", "Workshop City"],
+        dropna=False,
+    )["Person-Hours"]
+    .sum()
+    .reset_index()
+)
+
+workshop_totals.rename(
+    columns={
+        "Workshop (Name)": "Workshop",
+        "Economy (Name)": "Economy",
+        "Workshop City": "City",
+    },
+    inplace=True,
+)
+workshop_totals.to_csv("person_hours_by_workshop.csv", index=False)
+print("✅ Export complete: person_hours_by_workshop.csv")
+
+# (3) By sex
+sex_totals = merged.groupby("Sex")["Person-Hours"].sum().reset_index()
+sex_totals.to_csv("person_hours_by_sex.csv", index=False)
+print("✅ Export complete: person_hours_by_sex.csv")
+
+# (4) By sector
+sector_totals = merged.groupby("Sector (Name)")["Person-Hours"].sum().reset_index()
+sector_totals.rename(columns={"Sector (Name)": "Sector"}, inplace=True)
+sector_totals.to_csv("person_hours_by_sector.csv", index=False)
+print("✅ Export complete: person_hours_by_sector.csv")
+
+# (5) By economy
+economy_totals = merged.groupby("Economy (Name)")["Person-Hours"].sum().reset_index()
+economy_totals.rename(columns={"Economy (Name)": "Economy"}, inplace=True)
+economy_totals.to_csv("person_hours_by_economy.csv", index=False)
+print("✅ Export complete: person_hours_by_economy.csv")
+
+# (6) Totals combined
+totals_combined = []
+
+fy_totals = merged.groupby("Fiscal Year")["Person-Hours"].sum().reset_index()
+for _, row in fy_totals.iterrows():
+    totals_combined.append(
+        {"Dimension": "Fiscal Year", "Category": row["Fiscal Year"], "Person-Hours": row["Person-Hours"]}
+    )
+
+fyq_totals = (
+    merged.groupby(["Fiscal Year", "Fiscal Quarter"])["Person-Hours"].sum().reset_index()
+)
+for _, row in fyq_totals.iterrows():
+    totals_combined.append(
+        {
+            "Dimension": "Fiscal Quarter",
+            "Category": f"{row['Fiscal Year']} - {row['Fiscal Quarter']}",
+            "Person-Hours": row["Person-Hours"],
+        }
+    )
+
+sex_totals = merged.groupby("Sex")["Person-Hours"].sum().reset_index()
+for _, row in sex_totals.iterrows():
+    totals_combined.append({"Dimension": "Sex", "Category": row["Sex"], "Person-Hours": row["Person-Hours"]})
+
+sector_totals = merged.groupby("Sector (Name)")["Person-Hours"].sum().reset_index()
+for _, row in sector_totals.iterrows():
+    totals_combined.append(
+        {"Dimension": "Sector", "Category": row["Sector (Name)"], "Person-Hours": row["Person-Hours"]}
+    )
+
+economy_totals = merged.groupby("Economy (Name)")["Person-Hours"].sum().reset_index()
+for _, row in economy_totals.iterrows():
+    totals_combined.append(
+        {"Dimension": "Economy", "Category": row["Economy (Name)"], "Person-Hours": row["Person-Hours"]}
+    )
+
+pd.DataFrame(totals_combined).to_csv("person_hours_totals_combined.csv", index=False)
+print("✅ Export complete: person_hours_totals_combined.csv")
