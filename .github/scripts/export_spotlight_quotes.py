@@ -1,16 +1,24 @@
 import pandas as pd
 import re
-import language_tool_python
+import openai
+import os
 
 # === CONFIG ===
 INPUT_FILE = "Feedback_Form_Data_Long.csv"
 OUTPUT_FILE = "spotlight_quotes.csv"
 MAX_LEN = 250
 
+# === Set up OpenAI ===
+# Make sure OPENAI_API_KEY is stored in GitHub Secrets and available in env
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 # === 1. Load feedback entries ===
 df = pd.read_csv(INPUT_FILE)
 
-# === 2. Identify open-ended columns ===
+# === 2. Drop non-APEC economies ===
+apec_only = df[df["Economy"] != "Other"].copy()
+
+# === 3. Identify open-ended columns ===
 QUOTE_COLUMNS = [
     "Application Examples",
     "Potential Barriers",
@@ -18,7 +26,7 @@ QUOTE_COLUMNS = [
     "Suggested Improvements"
 ]
 
-# === 3. Cleanup function ===
+# === 4. Clean text ===
 def clean_text(x):
     if pd.isna(x):
         return None
@@ -29,36 +37,50 @@ def clean_text(x):
     return x
 
 for col in QUOTE_COLUMNS:
-    if col in df.columns:
-        df[col] = df[col].apply(clean_text)
+    if col in apec_only.columns:
+        apec_only[col] = apec_only[col].apply(clean_text)
 
-# === 4. Melt to long format ===
-quotes_long = df.melt(
+# === 5. Melt into long format ===
+quotes_long = apec_only.melt(
     id_vars=["Workshop Title", "Organization", "Economy"],
-    value_vars=[c for c in QUOTE_COLUMNS if c in df.columns],
+    value_vars=[c for c in QUOTE_COLUMNS if c in apec_only.columns],
     var_name="QuoteType",
     value_name="Quote"
-)
-quotes_long = quotes_long.dropna(subset=["Quote"]).reset_index(drop=True)
+).dropna(subset=["Quote"]).reset_index(drop=True)
 
-# === 5. Deduplicate quotes (within each workshop) ===
+# === 6. Deduplicate within workshop ===
 quotes_long = quotes_long.drop_duplicates(
     subset=["Workshop Title", "Quote"]
 ).reset_index(drop=True)
 
-# === 6. Grammar correction ===
-tool = language_tool_python.LanguageTool('en-US')
+# === 7. Rewrite quotes with OpenAI ===
+def rewrite_quote(text):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4o-mini",
+            messages=[{
+                "role": "user",
+                "content": (
+                    "Rewrite the following workshop feedback as a polished, "
+                    "concise quote in natural English, suitable for display "
+                    "in a stakeholder-facing report. Keep the original meaning, "
+                    "limit to 2 sentences:\n\n" + text
+                )
+            }],
+            temperature=0.5
+        )
+        polished = response["choices"][0]["message"]["content"].strip()
+        # Ensure ending punctuation
+        if polished and polished[-1] not in ".!?":
+            polished += "."
+        return polished
+    except Exception as e:
+        print(f"⚠️ OpenAI rewrite failed: {e}")
+        return text  # fallback to raw
 
-def polish_quote(text):
-    matches = tool.check(text)
-    corrected = language_tool_python.utils.correct(text, matches)
-    if corrected and corrected[-1] not in ".!?":
-        corrected += "."
-    return corrected
+quotes_long["Quote"] = quotes_long["Quote"].apply(rewrite_quote)
 
-quotes_long["Quote"] = quotes_long["Quote"].apply(polish_quote)
-
-# === 7. Select up to 5 quotes per workshop ===
+# === 8. Select up to 5 quotes per workshop ===
 def shorten(text, max_len=MAX_LEN):
     if len(text) > max_len:
         return text[:max_len].rsplit(" ", 1)[0] + "..."
@@ -68,13 +90,13 @@ quotes_long["Score"] = quotes_long["Quote"].str.len()
 
 spotlight_all = []
 for workshop, group in quotes_long.groupby("Workshop Title"):
-    # Prefer diversity across categories
     selected = []
-    for cat in ["Application Examples", "Potential Barriers", "Sharing Examples", "Suggested Improvements"]:
+    # Take 1 per category if possible
+    for cat in QUOTE_COLUMNS:
         subset = group[group["QuoteType"] == cat]
         if not subset.empty:
             selected.append(subset.sort_values("Score", ascending=False).iloc[0])
-    # Fill remaining slots with other unique top-scoring quotes
+    # Fill up to 5
     if len(selected) < 5:
         extra = group.sort_values("Score", ascending=False)
         for _, row in extra.iterrows():
@@ -82,7 +104,7 @@ for workshop, group in quotes_long.groupby("Workshop Title"):
                 break
             if row["Quote"] not in [s["Quote"] for s in selected]:
                 selected.append(row)
-    # Convert back to DataFrame
+    # Format output
     workshop_quotes = pd.DataFrame(selected).reset_index(drop=True)
     workshop_quotes["Order"] = workshop_quotes.index + 1
     workshop_quotes["Quote"] = workshop_quotes["Quote"].apply(lambda x: shorten(x, MAX_LEN))
@@ -90,9 +112,9 @@ for workshop, group in quotes_long.groupby("Workshop Title"):
 
 spotlight = pd.concat(spotlight_all, ignore_index=True)
 
-# === 8. Export ===
+# === 9. Export ===
 spotlight = spotlight[["Workshop Title", "Order", "Quote", "Organization", "Economy"]]
 spotlight.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
 
-print("✅ Exported Spotlight Quotes per workshop to", OUTPUT_FILE)
+print("✅ Exported polished Spotlight Quotes (APEC only) to", OUTPUT_FILE)
 print(spotlight.head(15))
