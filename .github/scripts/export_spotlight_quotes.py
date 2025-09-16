@@ -8,16 +8,16 @@ INPUT_FILE = "Feedback_Form_Data_Long.csv"
 OUTPUT_FILE = "spotlight_quotes.csv"
 MAX_LEN = 250
 
-# === Set up OpenAI ===
+# === OpenAI setup ===
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # === 1. Load feedback entries ===
 df = pd.read_csv(INPUT_FILE)
 
-# === 2. Drop non-APEC economies ===
+# === 2. Keep only APEC economies ===
 apec_only = df[df["Economy"] != "Other"].copy()
 
-# === 3. Identify open-ended columns ===
+# === 3. Open-ended response columns ===
 QUOTE_COLUMNS = [
     "Application Examples",
     "Potential Barriers",
@@ -47,7 +47,7 @@ quotes_long = apec_only.melt(
     value_name="Quote"
 ).dropna(subset=["Quote"]).reset_index(drop=True)
 
-# === 6. Deduplicate within workshop ===
+# === 6. Deduplicate (within each workshop) ===
 quotes_long = quotes_long.drop_duplicates(
     subset=["Workshop Title", "Quote"]
 ).reset_index(drop=True)
@@ -61,24 +61,28 @@ def rewrite_quote(text):
                 "role": "user",
                 "content": (
                     "Rewrite the following workshop feedback as a polished, "
-                    "concise quote in natural English, suitable for display "
-                    "in a stakeholder-facing report. Keep the original meaning, "
-                    "limit to 2 sentences:\n\n" + text
+                    "concise quote in natural, professional English. "
+                    "Fix grammar, spelling, and capitalization issues. "
+                    "Keep the meaning, and make it suitable for a stakeholder-facing report. "
+                    "Limit to 2 sentences, preferably in first person:\n\n" + text
                 )
             }],
-            temperature=0.5
+            temperature=0.4
         )
         polished = response["choices"][0]["message"]["content"].strip()
+        # Ensure capitalization + ending punctuation
+        if polished and polished[0].islower():
+            polished = polished[0].upper() + polished[1:]
         if polished and polished[-1] not in ".!?":
             polished += "."
         return polished
     except Exception as e:
         print(f"⚠️ OpenAI rewrite failed: {e}")
-        return text  # fallback
+        return text  # fallback to original
 
 quotes_long["Quote"] = quotes_long["Quote"].apply(rewrite_quote)
 
-# === 8. Select up to 5 quotes per workshop (no duplicates, no padding) ===
+# === 8. Select up to 5 per workshop (no padding, prefer diversity) ===
 def shorten(text, max_len=MAX_LEN):
     if len(text) > max_len:
         return text[:max_len].rsplit(" ", 1)[0] + "..."
@@ -89,12 +93,12 @@ quotes_long["Score"] = quotes_long["Quote"].str.len()
 spotlight_all = []
 for workshop, group in quotes_long.groupby("Workshop Title"):
     selected = []
-    # Try to grab 1 per category
+    # 1 per category if available
     for cat in QUOTE_COLUMNS:
         subset = group[group["QuoteType"] == cat]
         if not subset.empty:
             selected.append(subset.sort_values("Score", ascending=False).iloc[0])
-    # Fill up to 5 max
+    # Fill up to 5 with best remaining
     if len(selected) < 5:
         extra = group.sort_values("Score", ascending=False)
         for _, row in extra.iterrows():
@@ -102,7 +106,7 @@ for workshop, group in quotes_long.groupby("Workshop Title"):
                 break
             if row["Quote"] not in [s["Quote"] for s in selected]:
                 selected.append(row)
-    # Limit to actual available quotes (don’t pad/duplicate)
+    # Format output (≤ actual available, no duplicates)
     workshop_quotes = pd.DataFrame(selected).drop_duplicates(subset=["Quote"]).reset_index(drop=True)
     workshop_quotes["Order"] = workshop_quotes.index + 1
     workshop_quotes["Quote"] = workshop_quotes["Quote"].apply(lambda x: shorten(x, MAX_LEN))
