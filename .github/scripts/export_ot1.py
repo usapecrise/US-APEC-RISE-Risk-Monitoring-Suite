@@ -27,31 +27,33 @@ DISPLAY_FIELDS = {
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-# Fetch all records from an Airtable table
+# Helper: fetch all records from Airtable
 def fetch_all_records(table, view=None):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
     if view:
         url += f"?view={quote(view)}"
     all_records = []
     offset = None
-
     while True:
         params = {}
         if offset:
             params['offset'] = offset
         response = requests.get(url, headers=headers, params=params).json()
-
         if 'records' not in response:
             print(f"❌ Error fetching {table}:", response)
             break
-
         all_records.extend(response['records'])
         offset = response.get('offset')
         if not offset:
             break
-
     print(f"✅ Fetched {len(all_records)} records from '{table}'")
     return all_records
+
+# Normalize function for safe joins
+def normalize(text):
+    if not isinstance(text, str):
+        return "unknown"
+    return text.strip().lower()
 
 # Step 1: Build lookup maps
 linked_id_maps = {}
@@ -64,16 +66,17 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
 
-# Step 2: Workshop master records
+# Step 2: Workshop master records (normalized keys)
 workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
 workshop_master_map = {
-    rec['fields'].get('Workshop', 'Unknown'): {
+    normalize(rec['fields'].get('Workshop', 'Unknown')): {
         "City": rec['fields'].get('City', 'Unknown'),
         "# of Days": rec['fields'].get('# of Days', 0),
         "Total Agenda Hours": rec['fields'].get('Total Agenda Hours', 0)
     }
     for rec in workshop_master_records
 }
+print("🔎 Workshop Master keys (sample):", list(workshop_master_map.keys())[:10])
 
 # Step 3: OT1 sign-in records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
@@ -83,6 +86,10 @@ print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 timestamp = datetime.utcnow().isoformat()
 for record in main_records:
     fields = record['fields']
+
+    # Debug: show some OT1 workshop names
+    if "Workshop" in fields:
+        print("OT1 Workshop sample:", fields["Workshop"])
 
     # Economy enrichment
     economy_ids = fields.get('Economy') or fields.get('Guest Economy') or []
@@ -94,7 +101,7 @@ for record in main_records:
     else:
         fields['Economy (Name)'] = "Unknown"
 
-    # Workshop & Workstream enrichment
+    # Workshop & Workstream enrichment (linked fields)
     for field_name in ['Workshop', 'Workstream']:
         raw_value = fields.get(field_name)
         if isinstance(raw_value, str):
@@ -103,16 +110,15 @@ for record in main_records:
             linked_ids = raw_value
         else:
             linked_ids = []
-
         if linked_ids:
             readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
             fields[f"{field_name} (Name)"] = ", ".join(readable_names)
         else:
             fields[f"{field_name} (Name)"] = "Unknown"
 
-    # Attach workshop master info
-    workshop_name = fields.get("Workshop (Name)", "Unknown")
-    wm_info = workshop_master_map.get(workshop_name, {})
+    # Attach workshop master info using normalized Workshop text
+    workshop_name = fields.get("Workshop", "Unknown")
+    wm_info = workshop_master_map.get(normalize(workshop_name), {})
     fields['Workshop City'] = wm_info.get("City", "Unknown")
     fields['# of Days'] = wm_info.get("# of Days", 0)
     fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
@@ -212,73 +218,3 @@ tidy.rename(columns={
 }, inplace=True)
 tidy.to_csv("person_hours.csv", index=False)
 print("✅ Export complete: person_hours.csv")
-
-# --- Workshop-level summary ---
-workshop_totals = (
-    merged.groupby(
-        ["Fiscal Year", "Fiscal Quarter", "Workshop (Name)", "Economy (Name)", "Workshop City"],
-        dropna=False
-    )["Person-Hours"].sum().reset_index()
-)
-workshop_totals.rename(columns={
-    "Workshop (Name)": "Workshop",
-    "Economy (Name)": "Economy",
-    "Workshop City": "City"
-}, inplace=True)
-workshop_totals["Level"] = "Workshop"
-workshop_totals["Dimension"] = "Workshop"
-
-# --- Build totals ---
-grand_totals = []
-
-# Fiscal Year totals
-fy_totals = workshop_totals.groupby("Fiscal Year")["Person-Hours"].sum().reset_index()
-for _, row in fy_totals.iterrows():
-    grand_totals.append({
-        "Fiscal Year": row["Fiscal Year"],
-        "Fiscal Quarter": "All Quarters",
-        "Workshop": "All Workshops",
-        "Economy": "All",
-        "City": "All",
-        "Person-Hours": row["Person-Hours"],
-        "Level": "Fiscal Year Total",
-        "Dimension": "Year"
-    })
-
-# Fiscal Year + Quarter totals
-fyq_totals = workshop_totals.groupby(["Fiscal Year", "Fiscal Quarter"])["Person-Hours"].sum().reset_index()
-for _, row in fyq_totals.iterrows():
-    grand_totals.append({
-        "Fiscal Year": row["Fiscal Year"],
-        "Fiscal Quarter": row["Fiscal Quarter"],
-        "Workshop": "All Workshops",
-        "Economy": "All",
-        "City": "All",
-        "Person-Hours": row["Person-Hours"],
-        "Level": "Fiscal Quarter Total",
-        "Dimension": "Quarter"
-    })
-
-# Overall total
-grand_totals.append({
-    "Fiscal Year": "All",
-    "Fiscal Quarter": "All Quarters",
-    "Workshop": "All Workshops",
-    "Economy": "All",
-    "City": "All",
-    "Person-Hours": workshop_totals["Person-Hours"].sum(),
-    "Level": "Grand Total",
-    "Dimension": "Overall"
-})
-
-grand_df = pd.DataFrame(grand_totals)
-
-# Save workshop-level (with totals)
-workshop_with_totals = pd.concat([workshop_totals, grand_df], ignore_index=True)
-workshop_with_totals.to_csv("person_hours_by_workshop.csv", index=False)
-print("✅ Export complete: person_hours_by_workshop.csv")
-
-# Save totals-only
-grand_df.to_csv("person_hours_totals.csv", index=False)
-print("✅ Export complete: person_hours_totals.csv")
-print(grand_df.tail(10))
