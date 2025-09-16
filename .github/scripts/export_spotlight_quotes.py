@@ -3,9 +3,9 @@ import re
 import language_tool_python
 
 # === CONFIG ===
-INPUT_FILE = "Feedback_Form_Data_Long.csv"   # ✅ your feedback export
+INPUT_FILE = "Feedback_Form_Data_Long.csv"
 OUTPUT_FILE = "spotlight_quotes.csv"
-MAX_LEN = 250   # truncate to fit Tableau box
+MAX_LEN = 250
 
 # === 1. Load feedback entries ===
 df = pd.read_csv(INPUT_FILE)
@@ -18,7 +18,7 @@ QUOTE_COLUMNS = [
     "Suggested Improvements"
 ]
 
-# === 3. Basic cleanup ===
+# === 3. Cleanup function ===
 def clean_text(x):
     if pd.isna(x):
         return None
@@ -41,7 +41,12 @@ quotes_long = df.melt(
 )
 quotes_long = quotes_long.dropna(subset=["Quote"]).reset_index(drop=True)
 
-# === 5. Grammar correction with LanguageTool ===
+# === 5. Deduplicate quotes (within each workshop) ===
+quotes_long = quotes_long.drop_duplicates(
+    subset=["Workshop Title", "Quote"]
+).reset_index(drop=True)
+
+# === 6. Grammar correction ===
 tool = language_tool_python.LanguageTool('en-US')
 
 def polish_quote(text):
@@ -53,7 +58,7 @@ def polish_quote(text):
 
 quotes_long["Quote"] = quotes_long["Quote"].apply(polish_quote)
 
-# === 6. Select Top 5 per Workshop ===
+# === 7. Select up to 5 quotes per workshop ===
 def shorten(text, max_len=MAX_LEN):
     if len(text) > max_len:
         return text[:max_len].rsplit(" ", 1)[0] + "..."
@@ -63,17 +68,31 @@ quotes_long["Score"] = quotes_long["Quote"].str.len()
 
 spotlight_all = []
 for workshop, group in quotes_long.groupby("Workshop Title"):
-    top5 = group.sort_values("Score", ascending=False).head(5).copy()
-    top5 = top5.reset_index(drop=True)
-    top5["Order"] = top5.index + 1
-    top5["Quote"] = top5["Quote"].apply(lambda x: shorten(x, MAX_LEN))
-    spotlight_all.append(top5)
+    # Prefer diversity across categories
+    selected = []
+    for cat in ["Application Examples", "Potential Barriers", "Sharing Examples", "Suggested Improvements"]:
+        subset = group[group["QuoteType"] == cat]
+        if not subset.empty:
+            selected.append(subset.sort_values("Score", ascending=False).iloc[0])
+    # Fill remaining slots with other unique top-scoring quotes
+    if len(selected) < 5:
+        extra = group.sort_values("Score", ascending=False)
+        for _, row in extra.iterrows():
+            if len(selected) >= 5:
+                break
+            if row["Quote"] not in [s["Quote"] for s in selected]:
+                selected.append(row)
+    # Convert back to DataFrame
+    workshop_quotes = pd.DataFrame(selected).reset_index(drop=True)
+    workshop_quotes["Order"] = workshop_quotes.index + 1
+    workshop_quotes["Quote"] = workshop_quotes["Quote"].apply(lambda x: shorten(x, MAX_LEN))
+    spotlight_all.append(workshop_quotes)
 
 spotlight = pd.concat(spotlight_all, ignore_index=True)
 
-# === 7. Export ===
+# === 8. Export ===
 spotlight = spotlight[["Workshop Title", "Order", "Quote", "Organization", "Economy"]]
 spotlight.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
 
 print("✅ Exported Spotlight Quotes per workshop to", OUTPUT_FILE)
-print(spotlight.head(15))  # preview first 3 workshops × 5 quotes
+print(spotlight.head(15))
