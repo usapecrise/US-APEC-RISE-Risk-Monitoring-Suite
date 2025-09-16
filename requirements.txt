@@ -7,3 +7,4 @@ vaderSentiment
 tableauhyperapi
 tableauserverclient
 language-tool-python
+openai
