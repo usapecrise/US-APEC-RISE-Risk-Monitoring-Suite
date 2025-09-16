@@ -68,6 +68,13 @@ for field, table_name in LINKED_TABLES.items():
 
 # Step 2: Workshop master records (normalized keys)
 workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
+
+# 🔎 Debug: show what Airtable is actually returning
+print("🔎 First 3 Workshop Master records (raw fields):")
+for rec in workshop_master_records[:3]:
+    print(rec['fields'])
+
+# Build the map
 workshop_master_map = {
     normalize(rec['fields'].get('Workshop', 'Unknown')): {
         "City": rec['fields'].get('City', 'Unknown'),
@@ -82,14 +89,14 @@ print("🔎 Workshop Master keys (sample):", list(workshop_master_map.keys())[:1
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
+print("🔎 First 3 OT1 Workshop field values:")
+for rec in main_records[:3]:
+    print(rec['fields'].get('Workshop'))
+
 # Step 4: Enrich OT1 rows
 timestamp = datetime.utcnow().isoformat()
 for record in main_records:
     fields = record['fields']
-
-    # Debug: show some OT1 workshop names
-    if "Workshop" in fields:
-        print("OT1 Workshop sample:", fields["Workshop"])
 
     # Economy enrichment
     economy_ids = fields.get('Economy') or fields.get('Guest Economy') or []
@@ -101,35 +108,12 @@ for record in main_records:
     else:
         fields['Economy (Name)'] = "Unknown"
 
-    # Workshop & Workstream enrichment (linked fields)
-    for field_name in ['Workshop', 'Workstream']:
-        raw_value = fields.get(field_name)
-        if isinstance(raw_value, str):
-            linked_ids = [raw_value]
-        elif isinstance(raw_value, list):
-            linked_ids = raw_value
-        else:
-            linked_ids = []
-        if linked_ids:
-            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
-            fields[f"{field_name} (Name)"] = ", ".join(readable_names)
-        else:
-            fields[f"{field_name} (Name)"] = "Unknown"
-
     # Attach workshop master info using normalized Workshop text
     workshop_name = fields.get("Workshop", "Unknown")
     wm_info = workshop_master_map.get(normalize(workshop_name), {})
     fields['Workshop City'] = wm_info.get("City", "Unknown")
     fields['# of Days'] = wm_info.get("# of Days", 0)
     fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
-
-    # Sector enrichment
-    sector_values = fields.get('Sector', [])
-    if isinstance(sector_values, str):
-        sector_values = [sector_values]
-    elif not isinstance(sector_values, list):
-        sector_values = []
-    fields['Sector (Name)'] = ", ".join(sector_values) if sector_values else "Unknown"
 
     fields['Last Updated'] = timestamp
     fields['Indicator ID'] = 'OT1'
@@ -148,19 +132,6 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = [
         'Indicator ID',
         'Workshop',
-        'Workshop (Name)',
-        'Workshop Date',
-        'Email Address',
-        'Sex',
-        'Economy',
-        'Economy (Name)',
-        'Fiscal Year',
-        'Other Economy',
-        'Organization',
-        'Workstream',
-        'Workstream (Name)',
-        'Sector',
-        'Sector (Name)',
         'Workshop City',
         '# of Days',
         'Total Agenda Hours',
@@ -174,47 +145,3 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             filtered_row = {key: flatten(row.get(key)) for key in fieldnames}
             writer.writerow(filtered_row)
 print(f"✅ Export complete: {output_file}")
-
-# Step 6: Calculate Person-Hours
-ot1_df = pd.read_csv("OT1.csv")
-ot1_df["Workshop Date"] = pd.to_datetime(ot1_df["Workshop Date"], errors="coerce")
-
-# Fiscal Quarter (US FY: Oct–Sep)
-def fiscal_quarter(date):
-    if pd.isna(date):
-        return "Unknown"
-    month, year = date.month, date.year
-    if month >= 10: fy, q = year + 1, "Q1"
-    elif month >= 7: fy, q = year, "Q4"
-    elif month >= 4: fy, q = year, "Q3"
-    else: fy, q = year, "Q2"
-    return f"FY{fy}-{q}"
-
-ot1_df["Fiscal Quarter"] = ot1_df["Workshop Date"].apply(fiscal_quarter)
-
-attendance = (
-    ot1_df.groupby(["Workshop", "Email Address"])["Workshop Date"]
-    .nunique()
-    .reset_index(name="Days Attended")
-)
-merged = pd.merge(ot1_df, attendance, on=["Workshop", "Email Address"], how="left")
-merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of Days"]).astype(int)
-merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
-
-# --- Tidy disaggregation ---
-tidy = (
-    merged.groupby(
-        ["Fiscal Year", "Fiscal Quarter", "Economy (Name)", "Workshop City",
-         "Workshop (Name)", "Sex", "Sector (Name)", "Workstream (Name)"],
-        dropna=False
-    )["Person-Hours"].sum().reset_index()
-)
-tidy.rename(columns={
-    "Economy (Name)": "Economy",
-    "Workshop City": "City",
-    "Workshop (Name)": "Workshop",
-    "Sector (Name)": "Sector",
-    "Workstream (Name)": "Workstream"
-}, inplace=True)
-tidy.to_csv("person_hours.csv", index=False)
-print("✅ Export complete: person_hours.csv")
