@@ -98,23 +98,36 @@ for record in main_records:
     readable_ws = [linked_id_maps['Workstream'].get(wid, 'Unknown') for wid in workstream_ids] if workstream_ids else []
     fields["Workstream (Name)"] = ", ".join(readable_ws) if readable_ws else "Unknown"
 
-    # Attach Workshop Master info (using linked record ID)
+    # Attach Workshop Master info (ID lookup + fallback to text match)
     workshop_ids = fields.get("Workshop", [])
     if isinstance(workshop_ids, str):
         workshop_ids = [workshop_ids]
+
+    wm_info = {}
     if workshop_ids:
         wm_info = workshop_master_map.get(workshop_ids[0], {})
-        fields['Workshop (Name)'] = wm_info.get("Workshop", "Unknown")
-        fields['Workshop City'] = wm_info.get("City", "Unknown")
-        fields['# of days'] = wm_info.get("# of days", 0)
-        fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
-        fields['Fiscal Year'] = wm_info.get("Fiscal Year", "Unknown")
-    else:
-        fields['Workshop (Name)'] = "Unknown"
-        fields['Workshop City'] = "Unknown"
-        fields['# of days'] = 0
-        fields['Total Agenda Hours'] = 0
-        fields['Fiscal Year'] = "Unknown"
+
+    if not wm_info:
+        # fallback by name
+        workshop_name = fields.get("Workshop", "")
+        if isinstance(workshop_name, list):
+            workshop_name = workshop_name[0]
+        for rec in workshop_master_records:
+            if rec["fields"].get("Workshop","").lower() == str(workshop_name).lower():
+                wm_info = {
+                    "Workshop": rec["fields"].get("Workshop","Unknown"),
+                    "City": rec["fields"].get("City","Unknown"),
+                    "# of days": rec["fields"].get("# of days",0),
+                    "Total Agenda Hours": rec["fields"].get("Total Agenda Hours",0),
+                    "Fiscal Year": rec["fields"].get("Fiscal Year","Unknown"),
+                }
+                break
+
+    fields['Workshop (Name)'] = wm_info.get("Workshop", "Unknown")
+    fields['Workshop City'] = wm_info.get("City", "Unknown")
+    fields['# of days'] = wm_info.get("# of days", 0)
+    fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
+    fields['Fiscal Year'] = wm_info.get("Fiscal Year", "Unknown")
 
     # Sector
     sector_vals = fields.get('Sector', [])
@@ -147,7 +160,6 @@ print(f"✅ Export complete: {output_file}")
 ot1_df = pd.read_csv("OT1.csv")
 ot1_df["Workshop Date"] = pd.to_datetime(ot1_df["Workshop Date"], errors="coerce")
 
-# Fiscal quarter (US FY Oct–Sep)
 def fiscal_quarter(date):
     if pd.isna(date): return "Unknown"
     month, year = date.month, date.year
@@ -163,16 +175,13 @@ attendance = (
     .nunique().reset_index(name="Days Attended")
 )
 merged = pd.merge(ot1_df, attendance, on=["Workshop","Email Address"], how="left")
-
-# Debug: check workshop/date/attendance before person-hours
-print("🔍 Debug Attendance Preview:")
-print(merged[["Workshop","Workshop (Name)","Email Address","Workshop Date","Days Attended","# of days","Total Agenda Hours"]].head(10))
-
 merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of days"]).astype(int)
 merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
 
+print("🔍 Debug Attendance Preview:")
+print(merged[["Workshop","Email Address","Days Attended","# of days","Total Agenda Hours","Full Attendance Flag","Person-Hours"]].head(10))
+
 # ---------------------- Step 5: Outputs ----------------------
-# Tidy disaggregation
 tidy = (
     merged.groupby(
         ["Fiscal Year","Fiscal Quarter","Economy (Name)","Workshop City",
