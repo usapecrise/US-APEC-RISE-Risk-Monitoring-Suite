@@ -165,6 +165,10 @@ jobs:
          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/generate_assumptions_status.py
 
+      # 👇 NEW: Run Spotlight Quotes export script
+      - name: Run Spotlight Quotes export script
+        run: python .github/scripts/export_spotlight_quotes.py
+
       - name: Commit and push KPI CSVs
         env:
           GIT_AUTHOR_NAME: github-actions[bot]
@@ -187,10 +191,10 @@ jobs:
             cost_share_assumption.csv assumptions_status.csv feedback_policy_assumption.csv \
             risk_assumption.csv attendance_assumption.csv attendance_records.csv Map_Data.csv \
             Monitoring_System.csv person_hours.csv person_hours_by_workshop.csv person_hours_by_sex.csv \
-            person_hours_by_sector.csv person_hours_by_economy.csv person_hours_totals_combined.csv
-        
+            person_hours_by_sector.csv person_hours_by_economy.csv person_hours_totals_combined.csv \
+            spotlight_quotes.csv   # 👈 added here
+
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
 
-          # 🚨 Always overwrite remote branch with generated CSVs
           git push origin HEAD:${{ github.ref_name }} --force
