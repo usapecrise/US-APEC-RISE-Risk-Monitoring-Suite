@@ -64,10 +64,10 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
 
-# Step 2: Fetch Workshop Master records (contains # of Days + Agenda Hours)
+# Step 2: Fetch Workshop Master records
 workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
 
-# Map keyed by Workshop Name (not record ID)
+# Map keyed by Workshop Name
 workshop_master_map = {
     rec['fields'].get('Workshop', 'Unknown'): {
         "City": rec['fields'].get('City', 'Unknown'),
@@ -180,6 +180,29 @@ print(f"✅ Export complete: {output_file}")
 ot1_df = pd.read_csv("OT1.csv")
 ot1_df["Workshop Date"] = pd.to_datetime(ot1_df["Workshop Date"], errors="coerce")
 
+# --- Add Fiscal Quarter (US FY: Oct-Sep) ---
+def fiscal_quarter(date):
+    if pd.isna(date):
+        return "Unknown"
+    month = date.month
+    year = date.year
+    # Shift FY: Oct-Dec belong to next FY
+    if month >= 10:  # Oct, Nov, Dec
+        fy = year + 1
+        q = "Q1"
+    elif month >= 7:  # Jul-Sep
+        fy = year
+        q = "Q4"
+    elif month >= 4:  # Apr-Jun
+        fy = year
+        q = "Q3"
+    else:  # Jan-Mar
+        fy = year
+        q = "Q2"
+    return f"FY{fy}-{q}"
+
+ot1_df["Fiscal Quarter"] = ot1_df["Workshop Date"].apply(fiscal_quarter)
+
 # Days attended per participant-workshop
 attendance = (
     ot1_df.groupby(["Workshop", "Email Address"])["Workshop Date"]
@@ -199,10 +222,11 @@ merged = pd.merge(
 merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of Days"]).astype(int)
 merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
 
-# Aggregate into tidy disaggregation
+# --- Disaggregated tidy dataset ---
 tidy = (
     merged.groupby(
-        ["Economy (Name)", "Workshop City", "Workshop (Name)", "Sex", "Sector (Name)", "Workstream (Name)"],
+        ["Fiscal Year", "Fiscal Quarter", "Economy (Name)", "Workshop City",
+         "Workshop (Name)", "Sex", "Sector (Name)", "Workstream (Name)"],
         dropna=False
     )["Person-Hours"]
     .sum()
@@ -217,9 +241,39 @@ tidy.rename(columns={
     "Workstream (Name)": "Workstream"
 }, inplace=True)
 
-# Step 7: Export tidy file
 tidy_file = "person_hours.csv"
 tidy.to_csv(tidy_file, index=False)
-
 print(f"✅ Export complete: {tidy_file}")
-print(tidy.head())
+
+# --- Workshop-level summary ---
+workshop_totals = (
+    merged.groupby(
+        ["Fiscal Year", "Fiscal Quarter", "Workshop (Name)", "Economy (Name)", "Workshop City"],
+        dropna=False
+    )["Person-Hours"]
+    .sum()
+    .reset_index()
+)
+
+workshop_totals.rename(columns={
+    "Workshop (Name)": "Workshop",
+    "Economy (Name)": "Economy",
+    "Workshop City": "City"
+}, inplace=True)
+
+# Add grand total row
+grand_total = pd.DataFrame([{
+    "Fiscal Year": "All",
+    "Fiscal Quarter": "All Quarters",
+    "Workshop": "All Workshops",
+    "Economy": "All",
+    "City": "All",
+    "Person-Hours": workshop_totals["Person-Hours"].sum()
+}])
+
+workshop_totals = pd.concat([workshop_totals, grand_total], ignore_index=True)
+
+workshop_file = "person_hours_by_workshop.csv"
+workshop_totals.to_csv(workshop_file, index=False)
+print(f"✅ Export complete: {workshop_file}")
+print(workshop_totals.tail())
