@@ -65,7 +65,7 @@ workshop_master_map = {
     rec["id"]: {
         "Workshop": rec["fields"].get("Workshop", "Unknown"),
         "City": rec["fields"].get("City", "Unknown"),
-        "# of Days": rec["fields"].get("# of days", 0),
+        "# of days": rec["fields"].get("# of days", 0),
         "Total Agenda Hours": rec["fields"].get("Total Agenda Hours", 0),
         "Fiscal Year": rec["fields"].get("Fiscal Year", "Unknown"),
     }
@@ -106,13 +106,13 @@ for record in main_records:
         wm_info = workshop_master_map.get(workshop_ids[0], {})
         fields['Workshop (Name)'] = wm_info.get("Workshop", "Unknown")
         fields['Workshop City'] = wm_info.get("City", "Unknown")
-        fields['# of Days'] = wm_info.get("# of Days", 0)
+        fields['# of days'] = wm_info.get("# of days", 0)
         fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
         fields['Fiscal Year'] = wm_info.get("Fiscal Year", "Unknown")
     else:
         fields['Workshop (Name)'] = "Unknown"
         fields['Workshop City'] = "Unknown"
-        fields['# of Days'] = 0
+        fields['# of days'] = 0
         fields['Total Agenda Hours'] = 0
         fields['Fiscal Year'] = "Unknown"
 
@@ -133,7 +133,7 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = [
         'Indicator ID','Workshop','Workshop (Name)','Workshop Date','Email Address','Sex',
         'Economy','Economy (Name)','Fiscal Year','Other Economy','Organization','Workstream',
-        'Workstream (Name)','Sector','Sector (Name)','Workshop City','# of Days',
+        'Workstream (Name)','Sector','Sector (Name)','Workshop City','# of days',
         'Total Agenda Hours','Last Updated'
     ]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -163,7 +163,7 @@ attendance = (
     .nunique().reset_index(name="Days Attended")
 )
 merged = pd.merge(ot1_df, attendance, on=["Workshop","Email Address"], how="left")
-merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of Days"]).astype(int)
+merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of days"]).astype(int)
 merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
 
 # ---------------------- Step 5: Outputs ----------------------
