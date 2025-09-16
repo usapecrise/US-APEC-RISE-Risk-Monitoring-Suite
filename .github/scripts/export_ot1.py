@@ -9,7 +9,7 @@ import pandas as pd
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'OT1 Sign-Ins (Workshops)'
-WORKSHOP_MASTER_TABLE = 'Workshop Reference List'
+WORKSHOP_MASTER_TABLE = 'Workshop Reference List'   # contains # of Days + Agenda Hours
 VIEW_NAME = 'Grid view'
 
 # Linked table names and display fields
@@ -64,10 +64,12 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
 
-# Step 2: Fetch Workshop Master records
+# Step 2: Fetch Workshop Master records (contains # of Days + Agenda Hours)
 workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
+
+# Map keyed by Workshop Name (not record ID)
 workshop_master_map = {
-    rec['id']: {
+    rec['fields'].get('Workshop', 'Unknown'): {
         "City": rec['fields'].get('City', 'Unknown'),
         "# of Days": rec['fields'].get('# of Days', 0),
         "Total Agenda Hours": rec['fields'].get('Total Agenda Hours', 0)
@@ -110,19 +112,12 @@ for record in main_records:
         else:
             fields[f"{field_name} (Name)"] = "Unknown"
 
-    # Add workshop master info
-    workshop_ids = fields.get('Workshop', [])
-    if isinstance(workshop_ids, str):
-        workshop_ids = [workshop_ids]
-    if workshop_ids:
-        wm_info = workshop_master_map.get(workshop_ids[0], {})
-        fields['Workshop City'] = wm_info.get("City", "Unknown")
-        fields['# of Days'] = wm_info.get("# of Days", 0)
-        fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
-    else:
-        fields['Workshop City'] = "Unknown"
-        fields['# of Days'] = 0
-        fields['Total Agenda Hours'] = 0
+    # Attach Workshop Master info (by Workshop Name)
+    workshop_name = fields.get("Workshop (Name)", "Unknown")
+    wm_info = workshop_master_map.get(workshop_name, {})
+    fields['Workshop City'] = wm_info.get("City", "Unknown")
+    fields['# of Days'] = wm_info.get("# of Days", 0)
+    fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
 
     # Sector handling
     sector_values = fields.get('Sector', [])
@@ -183,13 +178,11 @@ print(f"✅ Export complete: {output_file}")
 
 # Step 6: Load OT1.csv and calculate Person-Hours
 ot1_df = pd.read_csv("OT1.csv")
-
-# Ensure proper dtypes
 ot1_df["Workshop Date"] = pd.to_datetime(ot1_df["Workshop Date"], errors="coerce")
 
-# --- Days attended per participant-workshop ---
+# Days attended per participant-workshop
 attendance = (
-    ot1_df.groupby(["Workshop (Name)", "Email Address"])["Workshop Date"]
+    ot1_df.groupby(["Workshop", "Email Address"])["Workshop Date"]
     .nunique()
     .reset_index(name="Days Attended")
 )
@@ -198,17 +191,15 @@ attendance = (
 merged = pd.merge(
     ot1_df,
     attendance,
-    on=["Workshop (Name)", "Email Address"],
+    on=["Workshop", "Email Address"],
     how="left"
 )
 
-# Full attendance flag
+# Full attendance flag + Person-Hours
 merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of Days"]).astype(int)
-
-# Person-Hours
 merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
 
-# --- Aggregate into tidy disaggregation ---
+# Aggregate into tidy disaggregation
 tidy = (
     merged.groupby(
         ["Economy (Name)", "Workshop City", "Workshop (Name)", "Sex", "Sector (Name)", "Workstream (Name)"],
