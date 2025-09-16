@@ -1,44 +1,44 @@
 Fiscal Year,Fiscal Quarter,Economy,City,Workshop,Sex,Sector,Workstream,Person-Hours
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Academia,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Academia,TBT,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,Cloud Computing,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,Digital Standards,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,FTAAP,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,TBT,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,Trade Data,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Intergovernmental,Digital Standards,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Intergovernmental,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Multilateral,FTAAP,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Non-Profit,Digital Standards,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Non-Profit,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Non-Profit,TBT,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Private Sector,Cloud Computing,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Private Sector,FTAAP,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Private Sector,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Think Tank,Cloud Computing,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Academia,Cloud Computing,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Academia,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Academia,TBT,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,Cloud Computing,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,Digital Standards,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,FTAAP,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,TBT,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,Trade Data,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Intergovernmental,FTAAP,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Intergovernmental,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Intergovernmental,TBT,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Intergovernmental,Trade Data,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,NGO,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Non-Profit,Cloud Computing,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Non-Profit,Digital Standards,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Non-Profit,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Non-Profit,TBT,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,Cloud Computing,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,Digital Standards,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,FTAAP,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,TBT,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Think Tank,Services,0
-FY25,FY2025-Q4,Unknown,Unknown,Unknown,Prefer not to answer,Government,TBT,0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Academia,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Academia,TBT,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,Cloud Computing,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,Digital Standards,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,FTAAP,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,TBT,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Government,Trade Data,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Intergovernmental,Digital Standards,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Intergovernmental,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Multilateral,FTAAP,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Non-Profit,Digital Standards,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Non-Profit,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Non-Profit,TBT,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Private Sector,Cloud Computing,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Private Sector,FTAAP,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Private Sector,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Female,Think Tank,Cloud Computing,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Academia,Cloud Computing,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Academia,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Academia,TBT,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,Cloud Computing,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,Digital Standards,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,FTAAP,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,TBT,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Government,Trade Data,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Intergovernmental,FTAAP,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Intergovernmental,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Intergovernmental,TBT,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Intergovernmental,Trade Data,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,NGO,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Non-Profit,Cloud Computing,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Non-Profit,Digital Standards,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Non-Profit,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Non-Profit,TBT,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,Cloud Computing,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,Digital Standards,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,FTAAP,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Private Sector,TBT,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Male,Think Tank,Services,0.0
+FY25,FY2025-Q4,Unknown,Unknown,Unknown,Prefer not to answer,Government,TBT,0.0
