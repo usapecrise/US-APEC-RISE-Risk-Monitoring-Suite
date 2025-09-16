@@ -1,23 +1,23 @@
 Firm (Name),Indicator ID,Economy (Name),Workstream (Name),Fiscal Year,PSE Origin,PSE Size,PSE Type,Timestamp
-Akin Gump,OT4,U.S.,TBT,FY25,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264743Z
-Amazon,OT4,U.S.,Cloud Computing,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264757Z
-American Chemistry Council,OT4,U.S.,FTAAP,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:11:05.264762Z
-American Chemistry Council,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:11:05.264764Z
-Consultores Internacionales Ansley    ,OT4,Mexico,TBT,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264767Z
-Boeing,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264771Z
-Codit,OT4,U.S.,Cloud Computing,FY25,Host Country-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264775Z
-Coupang,OT4,U.S.,Unknown,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264778Z
-Crowell & Moring LLP,OT4,U.S.,Cloud Computing,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264782Z
-Davidson Technologies,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264785Z
-Dow,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264789Z
-Information Technology Industry Council,OT4,U.S.,Services,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:11:05.264796Z
-SAE Industry Technologies Consortia,OT4,U.S.,Digital Standards,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:11:05.264800Z
-Stendard ,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264803Z
-United States Council for International Business ,OT4,U.S.,FTAAP,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:11:05.264807Z
-Federation of Thai Industries,OT4,Thailand,Digital Standards,FY25,Third Country-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:11:05.264811Z
-Specialized Bicycle,OT4,U.S.,TBT,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264814Z
-Walmart,OT4,U.S.,TBT,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264818Z
-Access Partnership,OT4,Singapore,Cloud Computing,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264821Z
-Nextrade Group,OT4,U.S.,Cloud Computing,FY25,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264825Z
-Wilmer Cutler Pickering Hale and Dorr LLP,OT4,U.S.,FTAAP,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:11:05.264828Z
-Unknown,OT4,Unknown,Unknown,Unknown,,,,2025-09-16T17:11:05.264832Z
+Akin Gump,OT4,U.S.,TBT,FY25,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961730Z
+Amazon,OT4,U.S.,Cloud Computing,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961747Z
+American Chemistry Council,OT4,U.S.,FTAAP,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:20:22.961752Z
+American Chemistry Council,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:20:22.961754Z
+Consultores Internacionales Ansley    ,OT4,Mexico,TBT,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961758Z
+Boeing,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961761Z
+Codit,OT4,U.S.,Cloud Computing,FY25,Host Country-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961765Z
+Coupang,OT4,U.S.,Unknown,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961768Z
+Crowell & Moring LLP,OT4,U.S.,Cloud Computing,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961772Z
+Davidson Technologies,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961776Z
+Dow,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961779Z
+Information Technology Industry Council,OT4,U.S.,Services,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:20:22.961786Z
+SAE Industry Technologies Consortia,OT4,U.S.,Digital Standards,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:20:22.961790Z
+Stendard ,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961794Z
+United States Council for International Business ,OT4,U.S.,FTAAP,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:20:22.961797Z
+Federation of Thai Industries,OT4,Thailand,Digital Standards,FY25,Third Country-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2025-09-16T17:20:22.961800Z
+Specialized Bicycle,OT4,U.S.,TBT,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961804Z
+Walmart,OT4,U.S.,TBT,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961808Z
+Access Partnership,OT4,Singapore,Cloud Computing,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961815Z
+Nextrade Group,OT4,U.S.,Cloud Computing,FY25,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961818Z
+Wilmer Cutler Pickering Hale and Dorr LLP,OT4,U.S.,FTAAP,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2025-09-16T17:20:22.961822Z
+Unknown,OT4,Unknown,Unknown,Unknown,,,,2025-09-16T17:20:22.961825Z
