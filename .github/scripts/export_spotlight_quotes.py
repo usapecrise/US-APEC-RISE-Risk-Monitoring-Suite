@@ -1,15 +1,15 @@
 import pandas as pd
 import re
-import openai
 import os
+from openai import OpenAI
 
 # === CONFIG ===
 INPUT_FILE = "Feedback_Form_Data_Long.csv"
 OUTPUT_FILE = "spotlight_quotes.csv"
 MAX_LEN = 250
 
-# === OpenAI setup ===
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# === OpenAI client ===
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # === 1. Load feedback entries ===
 df = pd.read_csv(INPUT_FILE)
@@ -55,7 +55,7 @@ quotes_long = quotes_long.drop_duplicates(
 # === 7. Rewrite quotes with OpenAI ===
 def rewrite_quote(text):
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{
                 "role": "user",
@@ -69,8 +69,8 @@ def rewrite_quote(text):
             }],
             temperature=0.4
         )
-        polished = response["choices"][0]["message"]["content"].strip()
-        # Ensure capitalization + ending punctuation
+        polished = response.choices[0].message.content.strip()
+        # Ensure capitalization + punctuation
         if polished and polished[0].islower():
             polished = polished[0].upper() + polished[1:]
         if polished and polished[-1] not in ".!?":
@@ -78,7 +78,7 @@ def rewrite_quote(text):
         return polished
     except Exception as e:
         print(f"⚠️ OpenAI rewrite failed: {e}")
-        return text  # fallback to original
+        return text  # fallback
 
 quotes_long["Quote"] = quotes_long["Quote"].apply(rewrite_quote)
 
