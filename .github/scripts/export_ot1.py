@@ -12,12 +12,11 @@ MAIN_TABLE = 'OT1 Sign-Ins (Workshops)'
 WORKSHOP_MASTER_TABLE = 'Workshop Reference List'
 VIEW_NAME = 'Grid view'
 
-# Linked reference tables (non-critical for hours but enriches names)
+# Linked reference tables (for names only, optional)
 LINKED_TABLES = {
     'Workstream': 'Workstream Reference List',
     'Economy': 'Economy Reference List'
 }
-
 DISPLAY_FIELDS = {
     'Workstream': 'Workstream',
     'Economy': 'Economy'
@@ -25,13 +24,14 @@ DISPLAY_FIELDS = {
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-# Helper: fetch all records from a table
+# ----------------------------
+# Fetch all records from Airtable
+# ----------------------------
 def fetch_all_records(table, view=None):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
     if view:
         url += f"?view={quote(view)}"
-    all_records = []
-    offset = None
+    all_records, offset = [], None
     while True:
         params = {}
         if offset:
@@ -47,13 +47,9 @@ def fetch_all_records(table, view=None):
     print(f"✅ Fetched {len(all_records)} records from '{table}'")
     return all_records
 
-# Normalize helper
-def normalize_name(name):
-    if not isinstance(name, str):
-        return "unknown"
-    return name.strip().lower()
-
+# ----------------------------
 # Step 1: Build lookup maps for linked fields
+# ----------------------------
 linked_id_maps = {}
 for field, table_name in LINKED_TABLES.items():
     records = fetch_all_records(table_name)
@@ -64,10 +60,13 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
 
-# Step 2: Workshop master records
+# ----------------------------
+# Step 2: Workshop Master Map (keyed by Record ID)
+# ----------------------------
 workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
 workshop_master_map = {
-    normalize_name(rec['fields'].get('Workshop', '')): {
+    rec['id']: {
+        "Workshop": rec['fields'].get('Workshop', 'Unknown'),
         "City": rec['fields'].get('City', 'Unknown'),
         "# of Days": rec['fields'].get('# of days', 0),
         "Total Agenda Hours": rec['fields'].get('Total Agenda Hours', 0),
@@ -75,13 +74,17 @@ workshop_master_map = {
     }
     for rec in workshop_master_records
 }
-print("🔎 Example Workshop Master Keys:", list(workshop_master_map.keys())[:5])
+print("🔎 Example Workshop Master IDs:", list(workshop_master_map.keys())[:5])
 
-# Step 3: OT1 sign-in records
+# ----------------------------
+# Step 3: Fetch OT1 sign-in records
+# ----------------------------
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
+# ----------------------------
 # Step 4: Enrich OT1 rows
+# ----------------------------
 timestamp = datetime.utcnow().isoformat()
 for record in main_records:
     fields = record['fields']
@@ -97,26 +100,33 @@ for record in main_records:
         fields['Economy (Name)'] = "Unknown"
 
     # Workstream enrichment
-    raw_value = fields.get('Workstream')
-    if isinstance(raw_value, str):
-        linked_ids = [raw_value]
-    elif isinstance(raw_value, list):
-        linked_ids = raw_value
+    workstream_ids = fields.get('Workstream', [])
+    if isinstance(workstream_ids, str):
+        workstream_ids = [workstream_ids]
+    if workstream_ids:
+        readable = [linked_id_maps['Workstream'].get(i, 'Unknown') for i in workstream_ids]
+        fields['Workstream (Name)'] = ", ".join(readable)
     else:
-        linked_ids = []
-    if linked_ids:
-        readable_names = [linked_id_maps['Workstream'].get(id, 'Unknown') for id in linked_ids]
-        fields["Workstream (Name)"] = ", ".join(readable_names)
-    else:
-        fields["Workstream (Name)"] = "Unknown"
+        fields['Workstream (Name)'] = "Unknown"
 
-    # Attach workshop master info (via normalized text join)
-    workshop_name = normalize_name(fields.get("Workshop (Name)", ""))
-    wm_info = workshop_master_map.get(workshop_name, {})
-    fields["Workshop City"] = wm_info.get("City", "Unknown")
-    fields["# of Days"] = wm_info.get("# of Days", 0)
-    fields["Total Agenda Hours"] = wm_info.get("Total Agenda Hours", 0)
-    fields["Fiscal Year"] = wm_info.get("Fiscal Year", "Unknown")
+    # Attach Workshop Master info (via Record ID)
+    workshop_ids = fields.get("Workshop", [])
+    if isinstance(workshop_ids, str):
+        workshop_ids = [workshop_ids]
+
+    if workshop_ids:
+        wm_info = workshop_master_map.get(workshop_ids[0], {})
+        fields["Workshop (Name)"] = wm_info.get("Workshop", "Unknown")
+        fields["Workshop City"] = wm_info.get("City", "Unknown")
+        fields["# of Days"] = wm_info.get("# of Days", 0)
+        fields["Total Agenda Hours"] = wm_info.get("Total Agenda Hours", 0)
+        fields["Fiscal Year"] = wm_info.get("Fiscal Year", "Unknown")
+    else:
+        fields["Workshop (Name)"] = "Unknown"
+        fields["Workshop City"] = "Unknown"
+        fields["# of Days"] = 0
+        fields["Total Agenda Hours"] = 0
+        fields["Fiscal Year"] = "Unknown"
 
     # Sector enrichment
     sector_values = fields.get('Sector', [])
@@ -137,7 +147,9 @@ def flatten(value):
         return "Unknown"
     return str(value)
 
+# ----------------------------
 # Step 5: Export OT1.csv
+# ----------------------------
 output_file = 'OT1.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = [
@@ -154,7 +166,9 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         writer.writerow(filtered_row)
 print(f"✅ Export complete: {output_file}")
 
+# ----------------------------
 # Step 6: Calculate Person-Hours
+# ----------------------------
 ot1_df = pd.read_csv("OT1.csv")
 ot1_df["Workshop Date"] = pd.to_datetime(ot1_df["Workshop Date"], errors="coerce")
 
@@ -181,7 +195,9 @@ merged = pd.merge(ot1_df, attendance, on=["Workshop (Name)", "Email Address"], h
 merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of Days"]).astype(int)
 merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
 
-# --- Tidy disaggregation ---
+# ----------------------------
+# Step 7: Export tidy person-hours
+# ----------------------------
 tidy = (
     merged.groupby(
         ["Fiscal Year", "Fiscal Quarter", "Economy (Name)", "Workshop City",
@@ -199,4 +215,3 @@ tidy.rename(columns={
 tidy.to_csv("person_hours.csv", index=False)
 print("✅ Export complete: person_hours.csv")
 print("🔎 Preview:\n", tidy.head())
-
