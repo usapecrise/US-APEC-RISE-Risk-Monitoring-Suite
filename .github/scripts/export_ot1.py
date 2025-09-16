@@ -9,7 +9,7 @@ import pandas as pd
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'OT1 Sign-Ins (Workshops)'
-WORKSHOP_MASTER_TABLE = 'Workshop Reference List'   # contains # of Days + Agenda Hours
+WORKSHOP_MASTER_TABLE = 'Workshop Reference List'
 VIEW_NAME = 'Grid view'
 
 # Linked table names and display fields
@@ -53,7 +53,7 @@ def fetch_all_records(table, view=None):
     print(f"✅ Fetched {len(all_records)} records from '{table}'")
     return all_records
 
-# Step 1: Build lookup maps for linked fields
+# Step 1: Build lookup maps
 linked_id_maps = {}
 for field, table_name in LINKED_TABLES.items():
     records = fetch_all_records(table_name)
@@ -64,10 +64,8 @@ for field, table_name in LINKED_TABLES.items():
     }
     linked_id_maps[field] = id_to_display
 
-# Step 2: Fetch Workshop Master records
+# Step 2: Workshop master records
 workshop_master_records = fetch_all_records(WORKSHOP_MASTER_TABLE)
-
-# Map keyed by Workshop Name
 workshop_master_map = {
     rec['fields'].get('Workshop', 'Unknown'): {
         "City": rec['fields'].get('City', 'Unknown'),
@@ -77,7 +75,7 @@ workshop_master_map = {
     for rec in workshop_master_records
 }
 
-# Step 3: Fetch OT1 Sign-In records
+# Step 3: OT1 sign-in records
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
 
@@ -86,7 +84,7 @@ timestamp = datetime.utcnow().isoformat()
 for record in main_records:
     fields = record['fields']
 
-    # Economy fallback
+    # Economy enrichment
     economy_ids = fields.get('Economy') or fields.get('Guest Economy') or []
     if isinstance(economy_ids, str):
         economy_ids = [economy_ids]
@@ -96,7 +94,7 @@ for record in main_records:
     else:
         fields['Economy (Name)'] = "Unknown"
 
-    # Workshop and Workstream enrichment
+    # Workshop & Workstream enrichment
     for field_name in ['Workshop', 'Workstream']:
         raw_value = fields.get(field_name)
         if isinstance(raw_value, str):
@@ -112,14 +110,14 @@ for record in main_records:
         else:
             fields[f"{field_name} (Name)"] = "Unknown"
 
-    # Attach Workshop Master info (by Workshop Name)
+    # Attach workshop master info
     workshop_name = fields.get("Workshop (Name)", "Unknown")
     wm_info = workshop_master_map.get(workshop_name, {})
     fields['Workshop City'] = wm_info.get("City", "Unknown")
     fields['# of Days'] = wm_info.get("# of Days", 0)
     fields['Total Agenda Hours'] = wm_info.get("Total Agenda Hours", 0)
 
-    # Sector handling
+    # Sector enrichment
     sector_values = fields.get('Sector', [])
     if isinstance(sector_values, str):
         sector_values = [sector_values]
@@ -130,7 +128,7 @@ for record in main_records:
     fields['Last Updated'] = timestamp
     fields['Indicator ID'] = 'OT1'
 
-# Helper to flatten values
+# Flatten helper
 def flatten(value):
     if isinstance(value, list):
         return ", ".join(str(v) for v in value)
@@ -138,7 +136,7 @@ def flatten(value):
         return "Unknown"
     return str(value)
 
-# Step 5: Export enriched OT1 to OT1.csv
+# Step 5: Export OT1.csv
 output_file = 'OT1.csv'
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = [
@@ -162,77 +160,49 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         'Total Agenda Hours',
         'Last Updated'
     ]
-
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
-
     if main_records:
         for rec in main_records:
             row = rec['fields']
             filtered_row = {key: flatten(row.get(key)) for key in fieldnames}
             writer.writerow(filtered_row)
-    else:
-        print("⚠️ No OT1 records found — writing header only.")
-
 print(f"✅ Export complete: {output_file}")
 
-# Step 6: Load OT1.csv and calculate Person-Hours
+# Step 6: Calculate Person-Hours
 ot1_df = pd.read_csv("OT1.csv")
 ot1_df["Workshop Date"] = pd.to_datetime(ot1_df["Workshop Date"], errors="coerce")
 
-# --- Add Fiscal Quarter (US FY: Oct-Sep) ---
+# Fiscal Quarter (US FY: Oct–Sep)
 def fiscal_quarter(date):
     if pd.isna(date):
         return "Unknown"
-    month = date.month
-    year = date.year
-    # Shift FY: Oct-Dec belong to next FY
-    if month >= 10:  # Oct, Nov, Dec
-        fy = year + 1
-        q = "Q1"
-    elif month >= 7:  # Jul-Sep
-        fy = year
-        q = "Q4"
-    elif month >= 4:  # Apr-Jun
-        fy = year
-        q = "Q3"
-    else:  # Jan-Mar
-        fy = year
-        q = "Q2"
+    month, year = date.month, date.year
+    if month >= 10: fy, q = year + 1, "Q1"
+    elif month >= 7: fy, q = year, "Q4"
+    elif month >= 4: fy, q = year, "Q3"
+    else: fy, q = year, "Q2"
     return f"FY{fy}-{q}"
 
 ot1_df["Fiscal Quarter"] = ot1_df["Workshop Date"].apply(fiscal_quarter)
 
-# Days attended per participant-workshop
 attendance = (
     ot1_df.groupby(["Workshop", "Email Address"])["Workshop Date"]
     .nunique()
     .reset_index(name="Days Attended")
 )
-
-# Merge back
-merged = pd.merge(
-    ot1_df,
-    attendance,
-    on=["Workshop", "Email Address"],
-    how="left"
-)
-
-# Full attendance flag + Person-Hours
+merged = pd.merge(ot1_df, attendance, on=["Workshop", "Email Address"], how="left")
 merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of Days"]).astype(int)
 merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
 
-# --- Disaggregated tidy dataset ---
+# --- Tidy disaggregation ---
 tidy = (
     merged.groupby(
         ["Fiscal Year", "Fiscal Quarter", "Economy (Name)", "Workshop City",
          "Workshop (Name)", "Sex", "Sector (Name)", "Workstream (Name)"],
         dropna=False
-    )["Person-Hours"]
-    .sum()
-    .reset_index()
+    )["Person-Hours"].sum().reset_index()
 )
-
 tidy.rename(columns={
     "Economy (Name)": "Economy",
     "Workshop City": "City",
@@ -240,40 +210,75 @@ tidy.rename(columns={
     "Sector (Name)": "Sector",
     "Workstream (Name)": "Workstream"
 }, inplace=True)
-
-tidy_file = "person_hours.csv"
-tidy.to_csv(tidy_file, index=False)
-print(f"✅ Export complete: {tidy_file}")
+tidy.to_csv("person_hours.csv", index=False)
+print("✅ Export complete: person_hours.csv")
 
 # --- Workshop-level summary ---
 workshop_totals = (
     merged.groupby(
         ["Fiscal Year", "Fiscal Quarter", "Workshop (Name)", "Economy (Name)", "Workshop City"],
         dropna=False
-    )["Person-Hours"]
-    .sum()
-    .reset_index()
+    )["Person-Hours"].sum().reset_index()
 )
-
 workshop_totals.rename(columns={
     "Workshop (Name)": "Workshop",
     "Economy (Name)": "Economy",
     "Workshop City": "City"
 }, inplace=True)
+workshop_totals["Level"] = "Workshop"
+workshop_totals["Dimension"] = "Workshop"
 
-# Add grand total row
-grand_total = pd.DataFrame([{
+# --- Build totals ---
+grand_totals = []
+
+# Fiscal Year totals
+fy_totals = workshop_totals.groupby("Fiscal Year")["Person-Hours"].sum().reset_index()
+for _, row in fy_totals.iterrows():
+    grand_totals.append({
+        "Fiscal Year": row["Fiscal Year"],
+        "Fiscal Quarter": "All Quarters",
+        "Workshop": "All Workshops",
+        "Economy": "All",
+        "City": "All",
+        "Person-Hours": row["Person-Hours"],
+        "Level": "Fiscal Year Total",
+        "Dimension": "Year"
+    })
+
+# Fiscal Year + Quarter totals
+fyq_totals = workshop_totals.groupby(["Fiscal Year", "Fiscal Quarter"])["Person-Hours"].sum().reset_index()
+for _, row in fyq_totals.iterrows():
+    grand_totals.append({
+        "Fiscal Year": row["Fiscal Year"],
+        "Fiscal Quarter": row["Fiscal Quarter"],
+        "Workshop": "All Workshops",
+        "Economy": "All",
+        "City": "All",
+        "Person-Hours": row["Person-Hours"],
+        "Level": "Fiscal Quarter Total",
+        "Dimension": "Quarter"
+    })
+
+# Overall total
+grand_totals.append({
     "Fiscal Year": "All",
     "Fiscal Quarter": "All Quarters",
     "Workshop": "All Workshops",
     "Economy": "All",
     "City": "All",
-    "Person-Hours": workshop_totals["Person-Hours"].sum()
-}])
+    "Person-Hours": workshop_totals["Person-Hours"].sum(),
+    "Level": "Grand Total",
+    "Dimension": "Overall"
+})
 
-workshop_totals = pd.concat([workshop_totals, grand_total], ignore_index=True)
+grand_df = pd.DataFrame(grand_totals)
 
-workshop_file = "person_hours_by_workshop.csv"
-workshop_totals.to_csv(workshop_file, index=False)
-print(f"✅ Export complete: {workshop_file}")
-print(workshop_totals.tail())
+# Save workshop-level (with totals)
+workshop_with_totals = pd.concat([workshop_totals, grand_df], ignore_index=True)
+workshop_with_totals.to_csv("person_hours_by_workshop.csv", index=False)
+print("✅ Export complete: person_hours_by_workshop.csv")
+
+# Save totals-only
+grand_df.to_csv("person_hours_totals.csv", index=False)
+print("✅ Export complete: person_hours_totals.csv")
+print(grand_df.tail(10))
