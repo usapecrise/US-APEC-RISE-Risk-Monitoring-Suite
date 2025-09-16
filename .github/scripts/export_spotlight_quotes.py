@@ -9,7 +9,6 @@ OUTPUT_FILE = "spotlight_quotes.csv"
 MAX_LEN = 250
 
 # === Set up OpenAI ===
-# Make sure OPENAI_API_KEY is stored in GitHub Secrets and available in env
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # === 1. Load feedback entries ===
@@ -70,17 +69,16 @@ def rewrite_quote(text):
             temperature=0.5
         )
         polished = response["choices"][0]["message"]["content"].strip()
-        # Ensure ending punctuation
         if polished and polished[-1] not in ".!?":
             polished += "."
         return polished
     except Exception as e:
         print(f"⚠️ OpenAI rewrite failed: {e}")
-        return text  # fallback to raw
+        return text  # fallback
 
 quotes_long["Quote"] = quotes_long["Quote"].apply(rewrite_quote)
 
-# === 8. Select up to 5 quotes per workshop ===
+# === 8. Select up to 5 quotes per workshop (no duplicates, no padding) ===
 def shorten(text, max_len=MAX_LEN):
     if len(text) > max_len:
         return text[:max_len].rsplit(" ", 1)[0] + "..."
@@ -91,12 +89,12 @@ quotes_long["Score"] = quotes_long["Quote"].str.len()
 spotlight_all = []
 for workshop, group in quotes_long.groupby("Workshop Title"):
     selected = []
-    # Take 1 per category if possible
+    # Try to grab 1 per category
     for cat in QUOTE_COLUMNS:
         subset = group[group["QuoteType"] == cat]
         if not subset.empty:
             selected.append(subset.sort_values("Score", ascending=False).iloc[0])
-    # Fill up to 5
+    # Fill up to 5 max
     if len(selected) < 5:
         extra = group.sort_values("Score", ascending=False)
         for _, row in extra.iterrows():
@@ -104,8 +102,8 @@ for workshop, group in quotes_long.groupby("Workshop Title"):
                 break
             if row["Quote"] not in [s["Quote"] for s in selected]:
                 selected.append(row)
-    # Format output
-    workshop_quotes = pd.DataFrame(selected).reset_index(drop=True)
+    # Limit to actual available quotes (don’t pad/duplicate)
+    workshop_quotes = pd.DataFrame(selected).drop_duplicates(subset=["Quote"]).reset_index(drop=True)
     workshop_quotes["Order"] = workshop_quotes.index + 1
     workshop_quotes["Quote"] = workshop_quotes["Quote"].apply(lambda x: shorten(x, MAX_LEN))
     spotlight_all.append(workshop_quotes)
@@ -116,5 +114,5 @@ spotlight = pd.concat(spotlight_all, ignore_index=True)
 spotlight = spotlight[["Workshop Title", "Order", "Quote", "Organization", "Economy"]]
 spotlight.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
 
-print("✅ Exported polished Spotlight Quotes (APEC only) to", OUTPUT_FILE)
+print("✅ Exported polished Spotlight Quotes (APEC only, ≤5 each) to", OUTPUT_FILE)
 print(spotlight.head(15))
