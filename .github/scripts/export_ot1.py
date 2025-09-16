@@ -9,7 +9,7 @@ import pandas as pd
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
 MAIN_TABLE = 'OT1 Sign-Ins (Workshops)'
-WORKSHOP_MASTER_TABLE = 'Workshop Master List'
+WORKSHOP_MASTER_TABLE = 'Workshop Reference List'
 VIEW_NAME = 'Grid view'
 
 # Linked table names and display fields
