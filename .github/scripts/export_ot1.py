@@ -163,6 +163,11 @@ attendance = (
     .nunique().reset_index(name="Days Attended")
 )
 merged = pd.merge(ot1_df, attendance, on=["Workshop","Email Address"], how="left")
+
+# Debug: check workshop/date/attendance before person-hours
+print("🔍 Debug Attendance Preview:")
+print(merged[["Workshop","Workshop (Name)","Email Address","Workshop Date","Days Attended","# of days","Total Agenda Hours"]].head(10))
+
 merged["Full Attendance Flag"] = (merged["Days Attended"] == merged["# of days"]).astype(int)
 merged["Person-Hours"] = merged["Full Attendance Flag"] * merged["Total Agenda Hours"]
 
