@@ -7,7 +7,7 @@ Export Stakeholder Reference List (wide + long) for Tableau.
 - Resolves linked fields in the main table:
     * "Economy Reference List" -> names from "Economy Reference List" (display: "Economy")
     * "Workstream"             -> names from "Workstream Reference List" (display: "Workstream")
-    * "Engagement"             -> names from "Workshop Reference List" (display: "Workshop")
+    * "Engagement"             -> linked to "Workshop Reference List" (display: "Workshop" primary field)
     * "Engagement ID"          -> linked to "Workshop Reference List" (display: "Engagement ID")
 
 - Outputs:
@@ -36,7 +36,7 @@ VIEW_NAME   = "Grid view"
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
-    "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop"},       # 👈 fixed
+    "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop"},       # primary field
     "Engagement ID":          {"table": "Workshop Reference List",  "display": "Engagement ID"},
 }
 
@@ -76,12 +76,25 @@ linked_id_maps = {}
 for field, cfg in LINKED_CONFIG.items():
     recs = fetch_all_records(cfg["table"])
     linked_id_maps[field] = {}
+
     for r in recs:
         fields = r.get("fields", {})
-        # Handle multi-select (list of strings) properly
-        val = fields.get(cfg["display"], "Unknown")
+
+        # Try the configured display field (e.g., "Workshop" or "Engagement ID")
+        val = fields.get(cfg["display"])
+
+        # Fallback: Airtable often uses "Name" for primary field
+        if not val:
+            val = fields.get("Name")
+
+        # Last fallback: record ID
+        if not val:
+            val = r.get("id", "Unknown")
+
+        # Handle multi-select
         if isinstance(val, list):
             val = "|".join(val)
+
         linked_id_maps[field][r["id"]] = val
 
 # ==============================
@@ -109,15 +122,15 @@ for rec in main_records:
     # Split lists for normalization (long format)
     ws_list  = [s.strip() for s in fields.get("Workstream_List", "").split("|") if s.strip()] or [""]
     ec_list  = [s.strip() for s in fields.get("Economy_List", "").split("|") if s.strip()] or [""]
-    wk_list  = [s.strip() for s in fields.get("Workshop_List", "").split("|") if s.strip()] or [""]   # 👈 fixed to Workshop_List
+    wk_list  = [s.strip() for s in fields.get("Workshop_List", "").split("|") if s.strip()] or [""]
     eid_list = [s.strip() for s in fields.get("Engagement ID_List", "").split("|") if s.strip()] or [""]
 
     for ws, ec, wk, eid in product(ws_list, ec_list, wk_list, eid_list):
         row = dict(fields)
-        row["Workstream_Single"]    = ws
-        row["Economy_Single"]       = ec
-        row["Workshop_Single"]      = wk
-        row["Engagement_ID_Single"] = eid
+        row["Workstream_Single"]      = ws
+        row["Economy_Single"]         = ec
+        row["Workshop_Single"]        = wk
+        row["Engagement_ID_Single"]   = eid
         long_rows.append(row)
 
 # ==============================
