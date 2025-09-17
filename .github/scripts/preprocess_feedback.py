@@ -37,7 +37,7 @@ STOPWORDS = set([
 ])
 
 lemmatizer = WordNetLemmatizer()
-analyzer = SentimentIntensityAnalyzer()
+classifier = TextClassifier.load("sentiment")  # Flair sentiment model
 
 # ----------------------------
 # Helpers
@@ -55,16 +55,21 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str) -> str:
-    """Sentiment for open-text responses"""
+    """Sentiment for open-text responses using Flair"""
     if not text or text.strip() == "":
         return "Neutral"
-    score = analyzer.polarity_scores(text)["compound"]
-    if score > 0.05:
-        return "Positive"
-    elif score < -0.05:
-        return "Negative"
-    else:
+
+    sentence = Sentence(text)
+    classifier.predict(sentence)
+    label = sentence.labels[0]
+
+    # Flair gives "POSITIVE" or "NEGATIVE" with a confidence score
+    if label.score < 0.6:   # threshold for neutrality
         return "Neutral"
+    elif label.value == "POSITIVE":
+        return "Positive"
+    else:
+        return "Negative"
 
 def map_structured_sentiment(question, response):
     mappings = {
@@ -156,7 +161,7 @@ def preprocess_feedback():
     if phrase_records:
         df_phrases = pd.DataFrame(phrase_records, columns=["Phrase", "Source"])
         df_phrases_count = df_phrases.groupby("Phrase").size().reset_index(name="Frequency")
-        df_phrases_top = df_phrases_count.sort_values(by="Frequency", ascending=False).head(20)  # top 20 phrases
+        df_phrases_top = df_phrases_count.sort_values(by="Frequency", ascending=False).head(20)
         df_phrases_top.to_csv(OUTPUT_FILE_PHRASES, index=False)
 
     # Sentiment summary
