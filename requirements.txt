@@ -3,8 +3,7 @@ pandas
 numpy
 requests
 nltk
-vaderSentiment
+flair
 tableauhyperapi
 tableauserverclient
 language-tool-python
-openai
