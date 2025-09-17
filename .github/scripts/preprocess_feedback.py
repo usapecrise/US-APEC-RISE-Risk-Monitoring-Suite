@@ -13,7 +13,7 @@ OUTPUT_FILE_TOTAL = "word_frequency.csv"
 OUTPUT_FILE_DETAILED = "word_frequency_detailed.csv"
 OUTPUT_FILE_SENTIMENT = "sentiment_summary.csv"
 OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"
-OUTPUT_FILE_PHRASES = "top_phrases.csv"   # NEW
+OUTPUT_FILE_PHRASES = "top_phrases.csv" 
 
 TEXT_FIELDS = {
     "Suggested Improvements": "Improvements",
@@ -26,7 +26,6 @@ STRUCTURED_FIELDS = {
     "To what extent was this training relevant to your field of work?": "relevance",
     "To what extent did this training increase your knowledge in the topic area?": "knowledge",
     "Do you intend to directly apply workshop outcomes in your work?": "application",
-    "Did the U.S. technical assistance help address real-world challenges in your economy or sector?": "challenges",
     "Do you plan to share what you learned with others in your organization or professional network?": "sharing"
 }
 
