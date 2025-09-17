@@ -2,7 +2,8 @@ import pandas as pd
 import re, string
 from nltk.stem import WordNetLemmatizer
 from nltk.util import ngrams
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from flair.models import TextClassifier
+from flair.data import Sentence
 
 # ----------------------------
 # CONFIG
