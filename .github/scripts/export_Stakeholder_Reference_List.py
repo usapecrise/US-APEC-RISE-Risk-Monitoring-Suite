@@ -7,13 +7,12 @@ Export Stakeholder Reference List (wide + long) for Tableau.
 - Resolves linked fields in the main table:
     * "Economy Reference List" -> names from "Economy Reference List" (display: "Economy")
     * "Workstream"             -> names from "Workstream Reference List" (display: "Workstream")
-    * "Workshop"               -> titles from "Workshop Reference List" (display: "Workshop")
-    * "Engagement ID"          -> IDs from "Workshop Reference List" (display: "Engagement ID")
-    * "Engagement"             -> names from "Workshop Reference List" (display: "Engagement Name")
+    * "Engagement"             -> names from "Workshop Reference List" (display: "Workshop")
+    * "Engagement ID"          -> linked to "Workshop Reference List" (display: "Engagement ID")
 
 - Outputs:
     Stakeholder_Reference_List.csv          (wide, human-friendly)
-    Stakeholder_Reference_List_long.csv     (normalized: Workstream × Economy × Workshop × Engagement ID × Engagement Name)
+    Stakeholder_Reference_List_long.csv     (normalized: Workstream × Economy × Workshop × Engagement ID)
 """
 
 import os, sys, csv, time, requests
@@ -37,9 +36,8 @@ VIEW_NAME   = "Grid view"
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
-    "Workshop":               {"table": "Workshop Reference List",  "display": "Workshop"},
+    "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop"},       # 👈 fixed
     "Engagement ID":          {"table": "Workshop Reference List",  "display": "Engagement ID"},
-    "Engagement":             {"table": "Workshop Reference List",  "display": "Engagement Name"},  # 👈 added
 }
 
 WIDE_OUT = "Stakeholder_Reference_List.csv"
@@ -77,9 +75,14 @@ def join_pipe(vals):
 linked_id_maps = {}
 for field, cfg in LINKED_CONFIG.items():
     recs = fetch_all_records(cfg["table"])
-    linked_id_maps[field] = {
-        r["id"]: r.get("fields", {}).get(cfg["display"], "Unknown") for r in recs
-    }
+    linked_id_maps[field] = {}
+    for r in recs:
+        fields = r.get("fields", {})
+        # Handle multi-select (list of strings) properly
+        val = fields.get(cfg["display"], "Unknown")
+        if isinstance(val, list):
+            val = "|".join(val)
+        linked_id_maps[field][r["id"]] = val
 
 # ==============================
 # Fetch main table
@@ -104,19 +107,17 @@ for rec in main_records:
     wide_rows.append(fields)
 
     # Split lists for normalization (long format)
-    ws_list = [s.strip() for s in fields.get("Workstream_List", "").split("|") if s.strip()] or [""]
-    ec_list = [s.strip() for s in fields.get("Economy_List", "").split("|") if s.strip()] or [""]
-    wk_list = [s.strip() for s in fields.get("Workshop_List", "").split("|") if s.strip()] or [""]
+    ws_list  = [s.strip() for s in fields.get("Workstream_List", "").split("|") if s.strip()] or [""]
+    ec_list  = [s.strip() for s in fields.get("Economy_List", "").split("|") if s.strip()] or [""]
+    wk_list  = [s.strip() for s in fields.get("Workshop_List", "").split("|") if s.strip()] or [""]   # 👈 fixed to Workshop_List
     eid_list = [s.strip() for s in fields.get("Engagement ID_List", "").split("|") if s.strip()] or [""]
-    en_list  = [s.strip() for s in fields.get("Engagement Name_List", "").split("|") if s.strip()] or [""]
 
-    for ws, ec, wk, eid, en in product(ws_list, ec_list, wk_list, eid_list, en_list):
+    for ws, ec, wk, eid in product(ws_list, ec_list, wk_list, eid_list):
         row = dict(fields)
-        row["Workstream_Single"]      = ws
-        row["Economy_Single"]         = ec
-        row["Workshop_Single"]        = wk
-        row["Engagement_ID_Single"]   = eid
-        row["Engagement_Name_Single"] = en
+        row["Workstream_Single"]    = ws
+        row["Economy_Single"]       = ec
+        row["Workshop_Single"]      = wk
+        row["Engagement_ID_Single"] = eid
         long_rows.append(row)
 
 # ==============================
