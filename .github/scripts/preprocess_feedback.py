@@ -18,8 +18,7 @@ TEXT_FIELDS = {
     "Suggested Improvements": "Improvements",
     "Sharing Examples": "Sharing",
     "Potential Barriers": "Barriers",
-    "Application Examples": "Applications",
-    "Do you have any suggestions to improve future workshops (e.g., content, format, duration, facilitation, or follow-up)?": "Future Workshop Suggestions"
+    "Application Examples": "Applications"
 }
 
 STRUCTURED_FIELDS = {
