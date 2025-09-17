@@ -62,8 +62,7 @@ def get_sentiment(text: str) -> str:
     classifier.predict(sentence)
     label = sentence.labels[0]
 
-    # Flair gives "POSITIVE" or "NEGATIVE" with a confidence score
-    if label.score < 0.6:   # threshold for neutrality
+    if label.score < 0.6:
         return "Neutral"
     elif label.value == "POSITIVE":
         return "Positive"
@@ -109,6 +108,7 @@ def map_structured_sentiment(question, response):
 # ----------------------------
 def preprocess_feedback():
     df = pd.read_csv(INPUT_FILE)
+    print(f"📥 Loaded input file with {len(df)} rows and {len(df.columns)} columns")
 
     records = []
     phrase_records = []
@@ -122,6 +122,7 @@ def preprocess_feedback():
                 sent = map_structured_sentiment(qtype, resp)
                 sentiment_records.append(sent)
                 by_question_records.append((qtype.capitalize(), sent))
+    print(f"✅ Processed structured fields → {len(sentiment_records)} sentiment records so far")
 
     # Open-text analysis
     for col, source in TEXT_FIELDS.items():
@@ -144,6 +145,7 @@ def preprocess_feedback():
                     for gram in ngrams(words, n):
                         phrase = " ".join(gram)
                         phrase_records.append((phrase, source))
+    print(f"📝 Word records: {len(records)}, Phrase records: {len(phrase_records)}, Sentiment records: {len(sentiment_records)}")
 
     # Word frequency outputs
     if records:
@@ -155,28 +157,41 @@ def preprocess_feedback():
 
         df_total_only.to_csv(OUTPUT_FILE_TOTAL, index=False)
         df_detailed.to_csv(OUTPUT_FILE_DETAILED, index=False)
+        print(f"📊 Saved word frequencies → {OUTPUT_FILE_TOTAL}, {OUTPUT_FILE_DETAILED}")
+    else:
+        print("⚠️ No word records found, skipping word frequency export")
 
-    # Phrase frequency output (NEW)
+    # Phrase frequency output
     if phrase_records:
         df_phrases = pd.DataFrame(phrase_records, columns=["Phrase", "Source"])
         df_phrases_count = df_phrases.groupby("Phrase").size().reset_index(name="Frequency")
         df_phrases_top = df_phrases_count.sort_values(by="Frequency", ascending=False).head(20)
         df_phrases_top.to_csv(OUTPUT_FILE_PHRASES, index=False)
+        print(f"📊 Saved top phrases → {OUTPUT_FILE_PHRASES}")
+    else:
+        print("⚠️ No phrase records found, skipping phrase export")
 
     # Sentiment summary
-    df_sentiment = pd.Series(sentiment_records).value_counts().reset_index()
-    df_sentiment.columns = ["Sentiment", "Count"]
-    df_sentiment.to_csv(OUTPUT_FILE_SENTIMENT, index=False)
+    if sentiment_records:
+        df_sentiment = pd.Series(sentiment_records).value_counts().reset_index()
+        df_sentiment.columns = ["Sentiment", "Count"]
+        df_sentiment.to_csv(OUTPUT_FILE_SENTIMENT, index=False)
+        print(f"📊 Saved sentiment summary → {OUTPUT_FILE_SENTIMENT}")
+    else:
+        print("⚠️ No sentiment records found, skipping sentiment summary")
 
     # Sentiment by question
-    df_byq = pd.DataFrame(by_question_records, columns=["Question", "Sentiment"])
-    df_byq_summary = df_byq.value_counts().reset_index(name="Count")
-    df_byq_pct = df_byq.groupby("Question")["Sentiment"].value_counts(normalize=True).mul(100).reset_index(name="Percent")
-    df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"])
-    df_final.to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
+    if by_question_records:
+        df_byq = pd.DataFrame(by_question_records, columns=["Question", "Sentiment"])
+        df_byq_summary = df_byq.value_counts().reset_index(name="Count")
+        df_byq_pct = df_byq.groupby("Question")["Sentiment"].value_counts(normalize=True).mul(100).reset_index(name="Percent")
+        df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"])
+        df_final.to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
+        print(f"📊 Saved sentiment by question → {OUTPUT_FILE_SENTIMENT_BYQ}")
+    else:
+        print("⚠️ No by-question sentiment records found, skipping export")
 
     print("✅ Preprocessing complete")
-    print(f"Saved {OUTPUT_FILE_TOTAL}, {OUTPUT_FILE_DETAILED}, {OUTPUT_FILE_PHRASES}, {OUTPUT_FILE_SENTIMENT}, {OUTPUT_FILE_SENTIMENT_BYQ}")
 
 if __name__ == "__main__":
     preprocess_feedback()
