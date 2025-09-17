@@ -7,7 +7,7 @@ Export Stakeholder Reference List (wide + long) for Tableau.
 - Resolves linked fields in the main table:
     * "Economy Reference List" -> names from "Economy Reference List" (display: "Economy")
     * "Workstream"             -> names from "Workstream Reference List" (display: "Workstream")
-    * "Engagement"             -> linked to "Workshop Reference List" (display: "Workshop Title")
+    * "Engagement"             -> linked to "Workshop Reference List" (display: "Workshop")
     * "Engagement ID"          -> linked to "Workshop Reference List" (display: "Engagement ID")
 
 - Outputs:
@@ -36,7 +36,7 @@ VIEW_NAME   = "Grid view"
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
-    "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop Title"},
+    "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop"},
     "Engagement ID":          {"table": "Workshop Reference List",  "display": "Engagement ID"},
 }
 
