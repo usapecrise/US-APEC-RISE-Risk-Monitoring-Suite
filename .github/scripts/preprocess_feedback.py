@@ -37,7 +37,6 @@ OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"
 OUTPUT_FILE_PHRASES = "top_phrases.csv" 
 
 TEXT_FIELDS = {
-    "Suggested Improvements": "Improvements",
     "Sharing Examples": "Sharing",
     "Potential Barriers": "Barriers",
     "Application Examples": "Applications"
