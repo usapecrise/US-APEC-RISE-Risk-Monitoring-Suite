@@ -38,7 +38,6 @@ OUTPUT_FILE_PHRASES = "top_phrases.csv"
 
 TEXT_FIELDS = {
     "Sharing Examples": "Sharing",
-    "Potential Barriers": "Barriers",
     "Application Examples": "Applications"
 }
 
