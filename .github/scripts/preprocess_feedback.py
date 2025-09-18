@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Row-based survey version)
------------------------------------------------------
+Feedback Analysis Pipeline (No Barriers/Improvements + Normalized Labels)
+-------------------------------------------------------------------------
 1. Handles Airtable-style exports where data is in "Question" + "Response" columns
 2. Cleans open-text
 3. Word + phrase frequency analysis
@@ -42,7 +42,7 @@ STOPWORDS = set([
 
 lemmatizer = WordNetLemmatizer()
 
-# Load Hugging Face pipeline
+# Load Hugging Face 3-class sentiment pipeline
 sentiment_pipeline = pipeline(
     "sentiment-analysis",
     model="cardiffnlp/twitter-roberta-base-sentiment-latest"
@@ -144,20 +144,34 @@ def preprocess_feedback():
             sentiment_records.append(sent)
             by_question_records.append(("Sharing", sent))
 
-        # Open-text questions
-        elif "examples" in qtext or "improvements" in qtext or "barriers" in qtext:
+        # Open-text: ONLY Sharing + Application examples
+        elif "sharing examples" in qtext:
             cleaned = clean_text(resp)
             words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
 
             sentiment = get_sentiment(resp)
             sentiment_records.append(sentiment)
-            by_question_records.append((qtext.title(), sentiment))
+            by_question_records.append(("Sharing (Open Text)", sentiment))
 
             for word in words:
-                records.append((word, qtext.title()))
+                records.append((word, "Sharing (Open Text)"))
             for n in [2, 3]:
                 for gram in ngrams(words, n):
-                    phrase_records.append((" ".join(gram), qtext.title()))
+                    phrase_records.append((" ".join(gram), "Sharing (Open Text)"))
+
+        elif "application examples" in qtext:
+            cleaned = clean_text(resp)
+            words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
+
+            sentiment = get_sentiment(resp)
+            sentiment_records.append(sentiment)
+            by_question_records.append(("Applications (Open Text)", sentiment))
+
+            for word in words:
+                records.append((word, "Applications (Open Text)"))
+            for n in [2, 3]:
+                for gram in ngrams(words, n):
+                    phrase_records.append((" ".join(gram), "Applications (Open Text)"))
 
     # Word frequency
     if records:
