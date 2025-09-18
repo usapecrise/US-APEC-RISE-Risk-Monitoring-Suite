@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Hugging Face version, refined)
+Feedback Analysis Pipeline (Hugging Face 3-class version)
 ---------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
-3. Sentiment analysis using Hugging Face DistilBERT
-   - Thresholds skewed optimistic:
-     * POSITIVE if score >= 0.50
-     * NEGATIVE if score >= 0.25
-     * else Neutral
+3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
+   - LABEL_0 = Negative
+   - LABEL_1 = Neutral
+   - LABEL_2 = Positive
 4. Structured question mapping (normalized to Positive/Neutral/Negative)
 5. Exports:
    - word_frequency.csv
@@ -56,10 +55,10 @@ STOPWORDS = set([
 
 lemmatizer = WordNetLemmatizer()
 
-# Load Hugging Face pipeline with pinned model
+# Load Hugging Face 3-class sentiment pipeline
 sentiment_pipeline = pipeline(
     "sentiment-analysis",
-    model="distilbert/distilbert-base-uncased-finetuned-sst-2-english"
+    model="cardiffnlp/twitter-roberta-base-sentiment-latest"
 )
 
 # ----------------------------
@@ -78,19 +77,20 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str) -> str:
-    """Sentiment using Hugging Face with optimistic thresholds"""
+    """Sentiment using CardiffNLP 3-class model"""
     if not text or text.strip() == "":
         return "Neutral"
+
     result = sentiment_pipeline(text[:512])[0]  # truncate long text
     label = result["label"]
-    score = result["score"]
 
-    if label == "POSITIVE" and score >= 0.50:
-        return "Positive"
-    elif label == "NEGATIVE" and score >= 0.25:
-        return "Negative"
-    else:
-        return "Neutral"
+    # Cardiff model labels
+    label_map = {
+        "LABEL_0": "Negative",
+        "LABEL_1": "Neutral",
+        "LABEL_2": "Positive"
+    }
+    return label_map.get(label, "Neutral")
 
 def map_structured_sentiment(question, response):
     mappings = {
@@ -110,17 +110,12 @@ def map_structured_sentiment(question, response):
         },
         "application": {
             "Yes: I expect to incorporate them routinely in my day-to-day tasks": "Positive",
-            "Somewhat: I may apply them occasionally when circumstances warrant": "Positive",
+            "Somewhat: I may apply them occasionally when circumstances warrant": "Neutral",
             "No: I do not foresee any practical use in my current role": "Negative"
-        },
-        "challenges": {
-            "Yes: It directly addressed key challenges in a meaningful way": "Positive",
-            "Somewhat: It addressed some relevant challenges, but not comprehensively": "Positive",
-            "No: It did not substantially address the main challenges we are facing": "Negative"
         },
         "sharing": {
             "Yes: I intend to actively share with colleagues or my network": "Positive",
-            "Somewhat: I may share in appropriate settings if relevant": "Positive",
+            "Somewhat: I may share in appropriate settings if relevant": "Neutral",
             "Not at this time: I do not currently have plans to share": "Negative"
         }
     }
