@@ -1,1540 +1,756 @@
 Word,Source,Frequency,TotalFrequency
-share,Improvements,8,137
-share,Sharing (Open Text),56,137
-share,Barriers,4,137
-share,Applications (Open Text),69,137
-policy,Applications (Open Text),43,64
-policy,Barriers,14,64
-policy,Improvements,1,64
-policy,Sharing (Open Text),6,64
-workshop,Improvements,28,63
-workshop,Sharing (Open Text),16,63
-workshop,Applications (Open Text),16,63
-workshop,Barriers,3,63
-team,Improvements,3,61
-team,Sharing (Open Text),10,61
-team,Applications (Open Text),47,61
-team,Barriers,1,61
-work,Applications (Open Text),19,41
-work,Barriers,9,41
-work,Improvements,11,41
-work,Sharing (Open Text),2,41
-resource,Sharing (Open Text),3,37
-resource,Barriers,34,37
-lack,Barriers,36,36
-need,Barriers,30,34
-need,Applications (Open Text),1,34
-need,Improvements,3,34
-discussion,Improvements,10,33
-report,Sharing (Open Text),29,33
-discussion,Sharing (Open Text),15,33
-discussion,Applications (Open Text),8,33
-report,Barriers,1,33
-report,Applications (Open Text),3,33
-inform,Applications (Open Text),28,30
-support,Barriers,25,30
-support,Sharing (Open Text),1,30
-support,Applications (Open Text),4,30
+share,Applications (Open Text),69,125
+share,Sharing (Open Text),56,125
+team,Applications (Open Text),47,57
+team,Sharing (Open Text),10,57
+policy,Applications (Open Text),43,49
+policy,Sharing (Open Text),6,49
+workshop,Sharing (Open Text),16,32
+workshop,Applications (Open Text),16,32
+report,Applications (Open Text),3,32
+report,Sharing (Open Text),29,32
 inform,Sharing (Open Text),2,30
-limit,Barriers,29,29
+inform,Applications (Open Text),28,30
 colleague,Sharing (Open Text),17,29
 colleague,Applications (Open Text),12,29
-standard,Sharing (Open Text),5,26
-standard,Improvements,7,26
-standard,Barriers,3,26
-standard,Applications (Open Text),11,26
-use,Improvements,1,26
-use,Applications (Open Text),20,26
-use,Sharing (Open Text),5,26
-session,Sharing (Open Text),16,26
-session,Applications (Open Text),4,26
-session,Improvements,6,26
-recommendation,Sharing (Open Text),1,25
-time,Barriers,6,25
-time,Improvements,19,25
-recommendation,Barriers,1,25
-recommendation,Applications (Open Text),23,25
-other,Improvements,4,24
-other,Sharing (Open Text),6,24
-other,Barriers,4,24
-other,Applications (Open Text),10,24
-data,Barriers,6,23
-data,Improvements,3,23
-data,Sharing (Open Text),1,23
-data,Applications (Open Text),13,23
-good,Barriers,2,23
-good,Applications (Open Text),5,23
-good,Improvements,16,23
-knowledge,Barriers,5,22
-knowledge,Applications (Open Text),5,22
-knowledge,Improvements,1,22
-knowledge,Sharing (Open Text),11,22
-apec,Sharing (Open Text),4,21
-apec,Barriers,4,21
-apec,Improvements,6,21
-apec,Applications (Open Text),7,21
-economy,Barriers,6,20
-economy,Applications (Open Text),9,20
-digital,Applications (Open Text),9,20
-digital,Barriers,1,20
-economy,Sharing (Open Text),2,20
-economy,Improvements,3,20
-digital,Sharing (Open Text),5,20
-digital,Improvements,5,20
-meet,Sharing (Open Text),10,19
-some,Barriers,4,19
-learn,Applications (Open Text),5,19
-learn,Barriers,2,19
-some,Improvements,7,19
-some,Applications (Open Text),6,19
-learn,Sharing (Open Text),9,19
-learn,Improvements,3,19
-some,Sharing (Open Text),2,19
-meet,Improvements,6,19
-meet,Applications (Open Text),2,19
-meet,Barriers,1,19
-trade,Improvements,2,18
-authority,Improvements,1,18
-trade,Applications (Open Text),11,18
-trade,Sharing (Open Text),4,18
-authority,Barriers,17,18
-trade,Barriers,1,18
-process,Barriers,2,17
-process,Sharing (Open Text),2,17
-process,Improvements,1,17
-process,Applications (Open Text),12,17
-presentation,Sharing (Open Text),10,17
-update,Applications (Open Text),15,17
-presentation,Improvements,7,17
+use,Applications (Open Text),20,25
+use,Sharing (Open Text),5,25
+recommendation,Applications (Open Text),23,24
+recommendation,Sharing (Open Text),1,24
+discussion,Applications (Open Text),8,23
+discussion,Sharing (Open Text),15,23
+work,Sharing (Open Text),2,21
+work,Applications (Open Text),19,21
+session,Applications (Open Text),4,20
+session,Sharing (Open Text),16,20
 update,Sharing (Open Text),2,17
-internal,Barriers,1,16
-information,Applications (Open Text),5,16
-internal,Applications (Open Text),9,16
-internal,Sharing (Open Text),6,16
-information,Barriers,2,16
-great,Improvements,15,16
-great,Applications (Open Text),1,16
-negotiation,Applications (Open Text),12,16
-negotiation,Improvements,1,16
-information,Improvements,4,16
-information,Sharing (Open Text),5,16
-negotiation,Sharing (Open Text),3,16
-ria,Sharing (Open Text),3,14
-well,Sharing (Open Text),1,14
-well,Improvements,9,14
-ria,Improvements,1,14
-topic,Barriers,2,14
-topic,Applications (Open Text),4,14
-topic,Improvements,6,14
-topic,Sharing (Open Text),2,14
-follow,Sharing (Open Text),1,14
-follow,Improvements,12,14
-follow,Applications (Open Text),1,14
-well,Applications (Open Text),4,14
-through,Applications (Open Text),3,14
-through,Barriers,1,14
-through,Improvements,1,14
-through,Sharing (Open Text),9,14
-ria,Barriers,3,14
-ria,Applications (Open Text),7,14
-during,Applications (Open Text),4,13
+update,Applications (Open Text),15,17
+other,Sharing (Open Text),6,16
+other,Applications (Open Text),10,16
+standard,Applications (Open Text),11,16
+standard,Sharing (Open Text),5,16
+knowledge,Sharing (Open Text),11,16
+knowledge,Applications (Open Text),5,16
+trade,Sharing (Open Text),4,15
+trade,Applications (Open Text),11,15
+negotiation,Applications (Open Text),12,15
+negotiation,Sharing (Open Text),3,15
+internal,Applications (Open Text),9,15
+internal,Sharing (Open Text),6,15
+digital,Applications (Open Text),9,14
+digital,Sharing (Open Text),5,14
+learn,Sharing (Open Text),9,14
+learn,Applications (Open Text),5,14
+process,Applications (Open Text),12,14
+process,Sharing (Open Text),2,14
+data,Applications (Open Text),13,14
+data,Sharing (Open Text),1,14
 tool,Applications (Open Text),12,13
 tool,Sharing (Open Text),1,13
-would,Applications (Open Text),3,13
-would,Barriers,2,13
-during,Sharing (Open Text),6,13
-would,Improvements,8,13
-during,Improvements,3,13
-day,Improvements,10,12
-government,Improvements,2,12
-apply,Improvements,1,12
-apply,Applications (Open Text),10,12
-apply,Barriers,1,12
-technical,Barriers,5,12
-provide,Barriers,1,12
-provide,Applications (Open Text),4,12
-technical,Sharing (Open Text),2,12
-government,Applications (Open Text),3,12
-government,Barriers,5,12
-day,Sharing (Open Text),2,12
-technical,Applications (Open Text),5,12
-government,Sharing (Open Text),2,12
-how,Sharing (Open Text),3,12
-how,Improvements,4,12
-how,Barriers,1,12
-nothing,Barriers,10,12
-nothing,Improvements,2,12
-provide,Improvements,5,12
-provide,Sharing (Open Text),2,12
-how,Applications (Open Text),4,12
-service,Sharing (Open Text),1,11
-collaboration,Applications (Open Text),3,11
-collaboration,Improvements,1,11
-collaboration,Sharing (Open Text),6,11
-service,Barriers,3,11
-collaboration,Barriers,1,11
-service,Applications (Open Text),7,11
-into,Improvements,4,11
-material,Applications (Open Text),2,11
-material,Sharing (Open Text),6,11
-material,Improvements,3,11
-into,Applications (Open Text),4,11
-into,Sharing (Open Text),3,11
-none,Barriers,2,10
-should,Improvements,10,10
-key,Improvements,3,10
-capacity,Applications (Open Text),1,10
-capacity,Barriers,8,10
-case,Improvements,9,10
-case,Applications (Open Text),1,10
-relevant,Applications (Open Text),5,10
+meet,Sharing (Open Text),10,12
+meet,Applications (Open Text),2,12
+through,Sharing (Open Text),9,12
+through,Applications (Open Text),3,12
+apec,Sharing (Open Text),4,11
+apec,Applications (Open Text),7,11
+economy,Applications (Open Text),9,11
+economy,Sharing (Open Text),2,11
+apply,Applications (Open Text),10,10
+ria,Applications (Open Text),7,10
+information,Sharing (Open Text),5,10
+information,Applications (Open Text),5,10
+ria,Sharing (Open Text),3,10
+presentation,Sharing (Open Text),10,10
+during,Applications (Open Text),4,10
+during,Sharing (Open Text),6,10
 meeting,Sharing (Open Text),10,10
-future,Improvements,1,10
-future,Sharing (Open Text),1,10
-future,Applications (Open Text),7,10
-future,Barriers,1,10
-could,Applications (Open Text),1,10
-could,Improvements,7,10
-could,Sharing (Open Text),1,10
-could,Barriers,1,10
-none,Improvements,8,10
-capacity,Sharing (Open Text),1,10
-relevant,Improvements,2,10
-relevant,Sharing (Open Text),3,10
-key,Sharing (Open Text),5,10
-key,Applications (Open Text),2,10
-include,Barriers,2,9
-better,Improvements,5,9
-build,Applications (Open Text),1,9
-research,Barriers,1,9
-research,Sharing (Open Text),1,9
-development,Sharing (Open Text),1,9
-better,Applications (Open Text),4,9
-example,Barriers,3,9
-example,Improvements,4,9
-member,Applications (Open Text),3,9
-exercise,Applications (Open Text),2,9
-exercise,Improvements,6,9
-make,Sharing (Open Text),2,9
-make,Applications (Open Text),3,9
-make,Barriers,2,9
-make,Improvements,2,9
-member,Sharing (Open Text),4,9
-member,Improvements,2,9
-include,Sharing (Open Text),2,9
-include,Improvements,4,9
-build,Barriers,6,9
-industry,Applications (Open Text),5,9
 insight,Sharing (Open Text),4,9
-include,Applications (Open Text),1,9
-example,Applications (Open Text),1,9
-development,Applications (Open Text),7,9
-development,Improvements,1,9
-practice,Improvements,3,9
-practice,Barriers,1,9
-implement,Barriers,4,9
-implement,Sharing (Open Text),2,9
-implement,Applications (Open Text),3,9
-exercise,Sharing (Open Text),1,9
-example,Sharing (Open Text),1,9
-research,Applications (Open Text),7,9
-also,Improvements,4,9
-practice,Applications (Open Text),5,9
-also,Applications (Open Text),5,9
+collaboration,Sharing (Open Text),6,9
+collaboration,Applications (Open Text),3,9
 insight,Applications (Open Text),5,9
-build,Sharing (Open Text),2,9
-industry,Barriers,1,9
-industry,Improvements,2,9
-industry,Sharing (Open Text),1,9
-group,Barriers,2,8
-group,Improvements,6,8
-roo,Applications (Open Text),5,8
-understand,Improvements,3,8
-understand,Applications (Open Text),5,8
-about,Sharing (Open Text),1,8
-about,Barriers,2,8
-about,Improvements,4,8
-organization,Sharing (Open Text),2,8
-organization,Applications (Open Text),3,8
-organization,Improvements,3,8
-duration,Improvements,8,8
-about,Applications (Open Text),1,8
-roo,Barriers,1,8
-train,Barriers,2,8
-train,Sharing (Open Text),4,8
-train,Applications (Open Text),2,8
-roo,Sharing (Open Text),1,8
-roo,Improvements,1,8
-expert,Barriers,4,8
-specific,Barriers,1,8
-expert,Improvements,4,8
-sector,Improvements,1,8
-specific,Applications (Open Text),1,8
-specific,Improvements,6,8
-sector,Sharing (Open Text),1,8
-sector,Applications (Open Text),4,8
-sector,Barriers,2,8
-what,Barriers,1,7
-what,Applications (Open Text),2,7
-back,Applications (Open Text),1,7
-do,Improvements,5,7
-regard,Improvements,3,7
-regard,Applications (Open Text),3,7
-do,Sharing (Open Text),2,7
-back,Sharing (Open Text),2,7
-back,Improvements,4,7
-regulation,Improvements,1,7
-incorporate,Applications (Open Text),5,7
-agency,Sharing (Open Text),1,7
-regard,Sharing (Open Text),1,7
-what,Sharing (Open Text),4,7
-agency,Applications (Open Text),3,7
-agency,Barriers,3,7
-regulation,Applications (Open Text),4,7
-regulation,Barriers,2,7
-one,Barriers,2,7
-one,Improvements,5,7
-experience,Barriers,1,7
-current,Barriers,5,7
-coordination,Applications (Open Text),1,7
-experience,Improvements,1,7
-current,Sharing (Open Text),1,7
-already,Sharing (Open Text),2,7
-already,Improvements,5,7
-experience,Applications (Open Text),2,7
-ftas,Improvements,4,7
-fta,Applications (Open Text),4,7
-ftas,Applications (Open Text),3,7
-fta,Sharing (Open Text),1,7
-fta,Improvements,2,7
-might,Improvements,5,7
-might,Barriers,2,7
-thank,Improvements,7,7
-coordination,Sharing (Open Text),2,7
-useful,Sharing (Open Text),2,7
-useful,Improvements,2,7
+some,Sharing (Open Text),2,8
+material,Sharing (Open Text),6,8
+material,Applications (Open Text),2,8
+relevant,Applications (Open Text),5,8
+research,Sharing (Open Text),1,8
+development,Applications (Open Text),7,8
+development,Sharing (Open Text),1,8
+relevant,Sharing (Open Text),3,8
+service,Sharing (Open Text),1,8
+service,Applications (Open Text),7,8
+some,Applications (Open Text),6,8
+research,Applications (Open Text),7,8
+future,Applications (Open Text),7,8
+future,Sharing (Open Text),1,8
+technical,Sharing (Open Text),2,7
+technical,Applications (Open Text),5,7
 incorporate,Sharing (Open Text),2,7
-useful,Applications (Open Text),3,7
-experience,Sharing (Open Text),3,7
-coordination,Barriers,4,7
-current,Improvements,1,7
-idea,Applications (Open Text),4,6
-plan,Improvements,1,6
-plan,Sharing (Open Text),2,6
-consider,Improvements,3,6
-concept,Barriers,1,6
-next,Improvements,6,6
-format,Improvements,6,6
-draft,Applications (Open Text),4,6
-draft,Improvements,1,6
-all,Barriers,1,6
-all,Improvements,3,6
-draft,Sharing (Open Text),1,6
-across,Improvements,1,6
-consider,Barriers,1,6
-benefit,Applications (Open Text),1,6
-be,Improvements,3,6
-be,Applications (Open Text),3,6
-may,Improvements,2,6
-may,Sharing (Open Text),1,6
-may,Applications (Open Text),1,6
-may,Barriers,2,6
-others,Sharing (Open Text),1,6
-prepare,Sharing (Open Text),3,6
-outcome,Applications (Open Text),5,6
-others,Improvements,2,6
-prepare,Improvements,1,6
-prepare,Applications (Open Text),2,6
+key,Applications (Open Text),2,7
+key,Sharing (Open Text),5,7
+incorporate,Applications (Open Text),5,7
+member,Sharing (Open Text),4,7
+into,Sharing (Open Text),3,7
+into,Applications (Open Text),4,7
+how,Sharing (Open Text),3,7
+how,Applications (Open Text),4,7
+member,Applications (Open Text),3,7
+industry,Applications (Open Text),5,6
 initiative,Sharing (Open Text),3,6
 initiative,Applications (Open Text),3,6
-conduct,Barriers,1,6
-conduct,Improvements,1,6
-content,Improvements,6,6
-conduct,Applications (Open Text),1,6
-concept,Improvements,3,6
-concept,Sharing (Open Text),2,6
-conduct,Sharing (Open Text),3,6
-consider,Applications (Open Text),2,6
-tbt,Improvements,3,6
-take,Sharing (Open Text),1,6
-take,Barriers,1,6
-take,Applications (Open Text),4,6
-stakeholder,Applications (Open Text),1,6
-tbt,Sharing (Open Text),1,6
-excellent,Improvements,6,6
-tbt,Applications (Open Text),2,6
-benefit,Barriers,1,6
-benefit,Improvements,2,6
-involve,Applications (Open Text),3,6
-benefit,Sharing (Open Text),2,6
-others,Barriers,2,6
-others,Applications (Open Text),1,6
-event,Applications (Open Text),1,6
-involve,Improvements,3,6
-event,Improvements,2,6
-such,Applications (Open Text),1,6
-different,Improvements,4,6
-such,Sharing (Open Text),1,6
+industry,Sharing (Open Text),1,6
+train,Sharing (Open Text),4,6
+topic,Sharing (Open Text),2,6
+topic,Applications (Open Text),4,6
+roo,Applications (Open Text),5,6
+roo,Sharing (Open Text),1,6
+what,Sharing (Open Text),4,6
+what,Applications (Open Text),2,6
 daily,Applications (Open Text),6,6
-different,Sharing (Open Text),1,6
-such,Improvements,4,6
+outcome,Applications (Open Text),5,6
+provide,Sharing (Open Text),2,6
+provide,Applications (Open Text),4,6
+train,Applications (Open Text),2,6
 outcome,Sharing (Open Text),1,6
-stakeholder,Barriers,1,6
-stakeholder,Improvements,1,6
-stakeholder,Sharing (Open Text),3,6
-develop,Applications (Open Text),5,6
-develop,Improvements,1,6
-different,Barriers,1,6
-event,Sharing (Open Text),3,6
-across,Barriers,3,6
-idea,Sharing (Open Text),1,6
-across,Applications (Open Text),2,6
-analysis,Applications (Open Text),5,6
-plan,Applications (Open Text),3,6
-all,Applications (Open Text),2,6
-analysis,Barriers,1,6
-you,Improvements,6,6
-idea,Improvements,1,6
-within,Applications (Open Text),1,5
-point,Barriers,1,5
-point,Applications (Open Text),1,5
-discus,Applications (Open Text),1,5
-engagement,Applications (Open Text),2,5
-point,Improvements,1,5
-point,Sharing (Open Text),2,5
-study,Improvements,3,5
-study,Sharing (Open Text),1,5
-study,Applications (Open Text),1,5
-it,Sharing (Open Text),1,5
-engagement,Barriers,2,5
-summary,Sharing (Open Text),5,5
-discus,Sharing (Open Text),3,5
-discus,Improvements,1,5
-it,Improvements,3,5
-relevance,Sharing (Open Text),1,5
-relevance,Barriers,1,5
-relevance,Applications (Open Text),3,5
-public,Sharing (Open Text),1,5
-country,Applications (Open Text),2,5
-country,Improvements,2,5
-level,Barriers,2,5
-limitation,Barriers,5,5
-custom,Barriers,2,5
-level,Sharing (Open Text),2,5
-level,Improvements,1,5
-reform,Sharing (Open Text),1,5
-department,Applications (Open Text),4,5
-speaker,Applications (Open Text),2,5
-department,Barriers,1,5
-speaker,Improvements,3,5
-reform,Applications (Open Text),3,5
-reform,Barriers,1,5
-engagement,Sharing (Open Text),1,5
-country,Barriers,1,5
-continue,Improvements,2,5
-international,Sharing (Open Text),2,5
-psr,Applications (Open Text),2,5
-psr,Barriers,2,5
-psr,Improvements,1,5
-public,Applications (Open Text),2,5
-public,Barriers,2,5
-international,Improvements,1,5
-interactive,Improvements,5,5
-international,Applications (Open Text),1,5
-international,Barriers,1,5
-it,Applications (Open Text),1,5
-custom,Applications (Open Text),3,5
-which,Barriers,2,5
-origin,Sharing (Open Text),1,5
-participant,Improvements,4,5
-scope,Improvements,2,5
-within,Sharing (Open Text),3,5
-within,Barriers,1,5
-when,Applications (Open Text),3,5
-when,Improvements,1,5
-which,Applications (Open Text),1,5
-when,Sharing (Open Text),1,5
-rule,Barriers,1,5
-participant,Applications (Open Text),1,5
-rule,Improvements,3,5
-scope,Barriers,3,5
-approach,Barriers,3,5
-rule,Applications (Open Text),1,5
-have,Applications (Open Text),3,5
-approach,Applications (Open Text),2,5
-further,Improvements,2,5
-require,Improvements,1,5
-implementation,Applications (Open Text),1,5
-implementation,Barriers,2,5
-implementation,Improvements,1,5
-implementation,Sharing (Open Text),1,5
+experience,Sharing (Open Text),3,5
 have,Sharing (Open Text),2,5
-which,Sharing (Open Text),2,5
-origin,Improvements,2,5
-further,Applications (Open Text),1,5
-network,Improvements,1,5
-network,Sharing (Open Text),3,5
-principle,Applications (Open Text),2,5
-further,Barriers,2,5
-require,Applications (Open Text),1,5
-require,Barriers,3,5
-forum,Improvements,1,5
-forum,Sharing (Open Text),3,5
-national,Barriers,1,5
+develop,Applications (Open Text),5,5
+idea,Applications (Open Text),4,5
+experience,Applications (Open Text),2,5
+draft,Sharing (Open Text),1,5
+take,Applications (Open Text),4,5
+take,Sharing (Open Text),1,5
+understand,Applications (Open Text),5,5
+summary,Sharing (Open Text),5,5
+sector,Applications (Open Text),4,5
+also,Applications (Open Text),5,5
+useful,Sharing (Open Text),2,5
+useful,Applications (Open Text),3,5
+well,Applications (Open Text),4,5
+well,Sharing (Open Text),1,5
+analysis,Applications (Open Text),5,5
+sector,Sharing (Open Text),1,5
+implement,Sharing (Open Text),2,5
+support,Sharing (Open Text),1,5
+support,Applications (Open Text),4,5
 shape,Applications (Open Text),5,5
-forum,Applications (Open Text),1,5
-national,Sharing (Open Text),1,5
-principle,Improvements,2,5
-principle,Sharing (Open Text),1,5
+draft,Applications (Open Text),4,5
+fta,Sharing (Open Text),1,5
+practice,Applications (Open Text),5,5
+prepare,Applications (Open Text),2,5
+plan,Applications (Open Text),3,5
+plan,Sharing (Open Text),2,5
+prepare,Sharing (Open Text),3,5
 project,Applications (Open Text),5,5
-continue,Applications (Open Text),1,5
-continue,Barriers,2,5
-national,Applications (Open Text),3,5
-network,Applications (Open Text),1,5
-misalignment,Barriers,5,5
-followup,Sharing (Open Text),1,5
-followup,Improvements,4,5
-origin,Applications (Open Text),2,5
-panel,Improvements,4,5
-panel,Sharing (Open Text),1,5
+organization,Applications (Open Text),3,5
+organization,Sharing (Open Text),2,5
+make,Applications (Open Text),3,5
+make,Sharing (Open Text),2,5
+fta,Applications (Open Text),4,5
+implement,Applications (Open Text),3,5
+idea,Sharing (Open Text),1,5
+have,Applications (Open Text),3,5
+government,Sharing (Open Text),2,5
+good,Applications (Open Text),5,5
+government,Applications (Open Text),3,5
 replicate,Applications (Open Text),2,4
-replicate,Sharing (Open Text),2,4
-smart,Applications (Open Text),3,4
-smart,Improvements,1,4
-relate,Improvements,2,4
-issue,Improvements,1,4
-cti,Improvements,2,4
-issue,Sharing (Open Text),1,4
-cooperation,Applications (Open Text),3,4
-cross,Applications (Open Text),2,4
-reference,Applications (Open Text),3,4
-just,Improvements,1,4
-reference,Barriers,1,4
-etc,Improvements,2,4
-ktl,Sharing (Open Text),1,4
-management,Barriers,2,4
-management,Sharing (Open Text),2,4
-cooperation,Barriers,1,4
-issue,Barriers,1,4
-issue,Applications (Open Text),1,4
-line,Applications (Open Text),3,4
-takeaway,Improvements,1,4
-takeaway,Sharing (Open Text),3,4
-really,Applications (Open Text),1,4
-really,Improvements,3,4
-cross,Sharing (Open Text),1,4
-cross,Improvements,1,4
-cti,Applications (Open Text),2,4
-direction,Applications (Open Text),1,4
-regional,Applications (Open Text),4,4
-domestic,Improvements,1,4
-domestic,Barriers,1,4
-each,Improvements,4,4
-email,Sharing (Open Text),4,4
-activity,Applications (Open Text),1,4
-keep,Applications (Open Text),1,4
-keep,Improvements,3,4
-suggestion,Improvements,3,4
-suggestion,Barriers,1,4
-etc,Applications (Open Text),2,4
-relate,Applications (Open Text),1,4
-relate,Barriers,1,4
-wto,Improvements,1,4
-wto,Sharing (Open Text),1,4
-perhaps,Improvements,4,4
-domestic,Sharing (Open Text),2,4
-direction,Barriers,3,4
-ktl,Applications (Open Text),3,4
-just,Barriers,3,4
-line,Improvements,1,4
-focus,Improvements,3,4
-focus,Sharing (Open Text),1,4
-private,Applications (Open Text),1,4
-think,Applications (Open Text),1,4
-think,Barriers,3,4
-product,Improvements,1,4
-ministry,Applications (Open Text),2,4
-ministry,Improvements,1,4
-ministry,Sharing (Open Text),1,4
-product,Barriers,1,4
-product,Applications (Open Text),2,4
-organic,Applications (Open Text),2,4
-organic,Barriers,1,4
-opportunity,Barriers,1,4
-opportunity,Improvements,2,4
-opportunity,Applications (Open Text),1,4
-bag,Sharing (Open Text),2,4
-index,Sharing (Open Text),2,4
-bag,Applications (Open Text),2,4
-now,Barriers,1,4
-now,Applications (Open Text),1,4
-index,Applications (Open Text),1,4
-index,Improvements,1,4
-brown,Sharing (Open Text),2,4
-present,Barriers,1,4
-present,Improvements,1,4
-present,Sharing (Open Text),2,4
-now,Improvements,2,4
-official,Sharing (Open Text),1,4
-official,Applications (Open Text),2,4
-official,Barriers,1,4
-note,Sharing (Open Text),3,4
-brown,Applications (Open Text),2,4
-note,Applications (Open Text),1,4
-private,Barriers,1,4
-private,Sharing (Open Text),1,4
-private,Improvements,1,4
-try,Barriers,1,4
+stakeholder,Applications (Open Text),1,4
 cloud,Applications (Open Text),4,4
-try,Improvements,1,4
-try,Applications (Open Text),2,4
-improve,Improvements,1,4
-get,Applications (Open Text),1,4
-awareness,Applications (Open Text),2,4
-organic,Improvements,1,4
-organize,Improvements,4,4
-view,Sharing (Open Text),2,4
-help,Applications (Open Text),3,4
-guideline,Barriers,1,4
-view,Improvements,2,4
+replicate,Sharing (Open Text),2,4
+brown,Applications (Open Text),2,4
+agency,Applications (Open Text),3,4
+better,Applications (Open Text),4,4
+bag,Sharing (Open Text),2,4
+agency,Sharing (Open Text),1,4
+when,Applications (Open Text),3,4
+stakeholder,Sharing (Open Text),3,4
+brown,Sharing (Open Text),2,4
+bag,Applications (Open Text),2,4
+ktl,Applications (Open Text),3,4
+ktl,Sharing (Open Text),1,4
+note,Applications (Open Text),1,4
+note,Sharing (Open Text),3,4
+network,Applications (Open Text),1,4
+network,Sharing (Open Text),3,4
+national,Applications (Open Text),3,4
+national,Sharing (Open Text),1,4
+reform,Applications (Open Text),3,4
+relevance,Sharing (Open Text),1,4
+relevance,Applications (Open Text),3,4
+regulation,Applications (Open Text),4,4
+regional,Applications (Open Text),4,4
+regard,Sharing (Open Text),1,4
+conduct,Applications (Open Text),1,4
+conduct,Sharing (Open Text),3,4
+regard,Applications (Open Text),3,4
+reform,Sharing (Open Text),1,4
+department,Applications (Open Text),4,4
+discus,Sharing (Open Text),3,4
+discus,Applications (Open Text),1,4
+forum,Sharing (Open Text),3,4
 gain,Applications (Open Text),4,4
-best,Barriers,1,4
-best,Applications (Open Text),2,4
-get,Improvements,2,4
-get,Barriers,1,4
-best,Improvements,1,4
-awareness,Sharing (Open Text),1,4
-improve,Applications (Open Text),2,4
-practical,Barriers,1,4
-practical,Sharing (Open Text),1,4
-practical,Improvements,2,4
-awareness,Barriers,1,4
-please,Improvements,4,4
-role,Barriers,1,4
-role,Improvements,2,4
-guideline,Applications (Open Text),3,4
-role,Applications (Open Text),1,4
-improve,Sharing (Open Text),1,4
-help,Improvements,1,4
-human,Barriers,4,4
-wto,Applications (Open Text),2,4
-activity,Improvements,3,4
-adopt,Applications (Open Text),3,4
+forum,Applications (Open Text),1,4
+email,Sharing (Open Text),4,4
+event,Applications (Open Text),1,4
+event,Sharing (Open Text),3,4
+within,Sharing (Open Text),3,4
+within,Applications (Open Text),1,4
+when,Sharing (Open Text),1,4
 adopt,Sharing (Open Text),1,4
-advance,Improvements,4,4
-alignment,Barriers,2,3
-review,Applications (Open Text),2,3
-identify,Sharing (Open Text),1,3
-after,Sharing (Open Text),1,3
-after,Improvements,1,3
-after,Barriers,1,3
-perspective,Sharing (Open Text),1,3
-perspective,Improvements,1,3
-perspective,Applications (Open Text),1,3
-paper,Sharing (Open Text),1,3
-paper,Improvements,1,3
-paper,Applications (Open Text),1,3
-greater,Applications (Open Text),2,3
-hand,Improvements,3,3
-give,Sharing (Open Text),1,3
-give,Improvements,1,3
-area,Barriers,1,3
-available,Improvements,1,3
-available,Barriers,1,3
-available,Applications (Open Text),1,3
-review,Improvements,1,3
-guide,Sharing (Open Text),1,3
-guide,Applications (Open Text),2,3
-greater,Improvements,1,3
-area,Sharing (Open Text),1,3
-area,Improvements,1,3
-background,Barriers,1,3
-background,Applications (Open Text),2,3
-via,Sharing (Open Text),3,3
-uncitral,Improvements,1,3
-uncitral,Barriers,1,3
-office,Barriers,1,3
-bring,Improvements,2,3
-bring,Applications (Open Text),1,3
-change,Applications (Open Text),1,3
+adopt,Applications (Open Text),3,4
+which,Applications (Open Text),1,3
+which,Sharing (Open Text),2,3
+would,Applications (Open Text),3,3
+wto,Applications (Open Text),2,3
+wto,Sharing (Open Text),1,3
+engagement,Applications (Open Text),2,3
+engagement,Sharing (Open Text),1,3
 transformation,Applications (Open Text),3,3
-uncitral,Applications (Open Text),1,3
-set,Barriers,1,3
-set,Applications (Open Text),1,3
+exercise,Applications (Open Text),2,3
+exercise,Sharing (Open Text),1,3
+tbt,Sharing (Open Text),1,3
+awareness,Applications (Open Text),2,3
+back,Applications (Open Text),1,3
+awareness,Sharing (Open Text),1,3
+back,Sharing (Open Text),2,3
+tbt,Applications (Open Text),2,3
+takeaway,Sharing (Open Text),3,3
+especially,Applications (Open Text),3,3
+guide,Applications (Open Text),2,3
+index,Applications (Open Text),1,3
+smart,Applications (Open Text),3,3
+benefit,Sharing (Open Text),2,3
+be,Applications (Open Text),3,3
+benefit,Applications (Open Text),1,3
+echo,Sharing (Open Text),2,3
+include,Sharing (Open Text),2,3
+guidance,Sharing (Open Text),2,3
+ftas,Applications (Open Text),3,3
+seminar,Sharing (Open Text),3,3
+include,Applications (Open Text),1,3
+build,Sharing (Open Text),2,3
+resource,Sharing (Open Text),3,3
+build,Applications (Open Text),1,3
+guidance,Applications (Open Text),1,3
+echo,Applications (Open Text),1,3
+principle,Applications (Open Text),2,3
+principle,Sharing (Open Text),1,3
+collection,Applications (Open Text),3,3
+reference,Applications (Open Text),3,3
+help,Applications (Open Text),3,3
+guideline,Applications (Open Text),3,3
+guide,Sharing (Open Text),1,3
+cross,Applications (Open Text),2,3
+international,Sharing (Open Text),2,3
+index,Sharing (Open Text),2,3
 info,Applications (Open Text),3,3
+deal,Applications (Open Text),2,3
+deal,Sharing (Open Text),1,3
+debrief,Applications (Open Text),1,3
+debrief,Sharing (Open Text),2,3
 integration,Applications (Open Text),3,3
+consult,Applications (Open Text),2,3
 integrate,Sharing (Open Text),1,3
 integrate,Applications (Open Text),2,3
-input,Sharing (Open Text),1,3
 input,Applications (Open Text),2,3
-give,Applications (Open Text),1,3
-seminar,Sharing (Open Text),3,3
-section,Sharing (Open Text),2,3
-section,Improvements,1,3
-guidance,Sharing (Open Text),2,3
-guidance,Applications (Open Text),1,3
-nope,Improvements,3,3
-office,Sharing (Open Text),2,3
-collaborate,Applications (Open Text),2,3
-solve,Sharing (Open Text),1,3
-solve,Improvements,2,3
-focal,Applications (Open Text),1,3
-focal,Sharing (Open Text),1,3
-focal,Barriers,1,3
-set,Improvements,1,3
-collection,Applications (Open Text),3,3
-change,Barriers,2,3
-there,Improvements,1,3
-model,Sharing (Open Text),1,3
-model,Improvements,1,3
-model,Applications (Open Text),1,3
-collaborate,Barriers,1,3
-connect,Sharing (Open Text),1,3
-connect,Barriers,1,3
-explain,Sharing (Open Text),2,3
-explain,Improvements,1,3
-connect,Applications (Open Text),1,3
-method,Applications (Open Text),3,3
-consultation,Sharing (Open Text),1,3
-consultation,Barriers,1,3
-consultation,Applications (Open Text),1,3
+input,Sharing (Open Text),1,3
+custom,Applications (Open Text),3,3
+cross,Sharing (Open Text),1,3
 consult,Sharing (Open Text),1,3
-consult,Applications (Open Text),2,3
-there,Barriers,1,3
-there,Applications (Open Text),1,3
-their,Sharing (Open Text),1,3
-their,Improvements,1,3
-their,Barriers,1,3
-conversation,Sharing (Open Text),2,3
-job,Barriers,1,3
-enhance,Improvements,1,3
-enhance,Applications (Open Text),2,3
-explore,Sharing (Open Text),1,3
-explore,Improvements,1,3
-explore,Applications (Open Text),1,3
-conversation,Improvements,1,3
-course,Sharing (Open Text),1,3
-course,Improvements,1,3
-course,Barriers,1,3
-maybe,Improvements,3,3
-debrief,Sharing (Open Text),2,3
-debrief,Applications (Open Text),1,3
-deal,Sharing (Open Text),1,3
-deal,Applications (Open Text),2,3
-longer,Improvements,2,3
-still,Barriers,3,3
-especially,Applications (Open Text),3,3
-regulatory,Improvements,1,3
-regulatory,Applications (Open Text),2,3
-iso,Sharing (Open Text),1,3
-iso,Improvements,1,3
-iso,Applications (Open Text),1,3
-invite,Sharing (Open Text),1,3
-invite,Improvements,2,3
-job,Improvements,2,3
-longer,Barriers,1,3
-matter,Sharing (Open Text),1,3
-matter,Barriers,1,3
-matter,Applications (Open Text),1,3
-detail,Improvements,1,3
-detail,Barriers,2,3
-delegate,Improvements,3,3
-know,Barriers,1,3
-document,Sharing (Open Text),2,3
-document,Improvements,1,3
-echo,Sharing (Open Text),2,3
-echo,Applications (Open Text),1,3
-like,Improvements,3,3
-main,Sharing (Open Text),1,3
-main,Improvements,1,3
-main,Barriers,1,3
-subject,Improvements,1,3
-subject,Barriers,1,3
-subject,Applications (Open Text),1,3
-suggest,Sharing (Open Text),2,3
-suggest,Improvements,1,3
-know,Improvements,2,3
-identify,Improvements,1,3
-identify,Applications (Open Text),1,3
-helpful,Improvements,2,3
-helpful,Applications (Open Text),1,3
-application,Improvements,1,3
-alignment,Applications (Open Text),1,3
-participation,Sharing (Open Text),1,3
-participation,Improvements,2,3
-application,Sharing (Open Text),2,3
-advise,Applications (Open Text),2,3
-advise,Improvements,1,3
-advisory,Applications (Open Text),2,3
-advisory,Barriers,1,3
-who,Applications (Open Text),1,2
-additional,Improvements,2,2
-addition,Barriers,1,2
-allow,Applications (Open Text),1,2
-allow,Barriers,1,2
-amendment,Applications (Open Text),1,2
-possible,Barriers,1,2
-possible,Improvements,1,2
-part,Improvements,2,2
-agency’s,Sharing (Open Text),1,2
-agenda,Applications (Open Text),1,2
-agenda,Improvements,1,2
-align,Barriers,1,2
-align,Sharing (Open Text),1,2
-right,Improvements,2,2
-higher,Barriers,1,2
-higher,Sharing (Open Text),1,2
-host,Improvements,2,2
-who,Improvements,1,2
-strategic,Applications (Open Text),1,2
-strategic,Barriers,1,2
-strategy,Applications (Open Text),1,2
-strategy,Sharing (Open Text),1,2
-strengthen,Applications (Open Text),1,2
-strengthen,Barriers,1,2
-linkedin,Sharing (Open Text),2,2
-recommend,Applications (Open Text),2,2
-reflect,Improvements,1,2
-reflect,Sharing (Open Text),1,2
-dialogue,Applications (Open Text),1,2
-dialogue,Sharing (Open Text),1,2
-digitalization,Applications (Open Text),2,2
-direct,Sharing (Open Text),2,2
-directly,Applications (Open Text),1,2
-directly,Improvements,1,2
-distribution,Sharing (Open Text),2,2
-length,Improvements,2,2
-lesson,Sharing (Open Text),2,2
-sure,Barriers,2,2
-system,Applications (Open Text),2,2
-talk,Improvements,1,2
-everything,Improvements,2,2
-evidence,Applications (Open Text),2,2
-evolve,Barriers,1,2
-evolve,Improvements,1,2
-encourage,Applications (Open Text),1,2
-dive,Improvements,2,2
-division,Applications (Open Text),1,2
-division,Sharing (Open Text),1,2
-landscape,Applications (Open Text),2,2
-law,Barriers,1,2
-law,Improvements,1,2
-date,Barriers,1,2
-date,Improvements,1,2
-definition,Improvements,2,2
+involve,Applications (Open Text),3,3
+international,Applications (Open Text),1,3
+point,Applications (Open Text),1,3
+ministry,Sharing (Open Text),1,3
+official,Applications (Open Text),2,3
+official,Sharing (Open Text),1,3
+origin,Sharing (Open Text),1,3
+coordination,Applications (Open Text),1,3
+coordination,Sharing (Open Text),2,3
+via,Sharing (Open Text),3,3
+method,Applications (Open Text),3,3
+cooperation,Applications (Open Text),3,3
+ministry,Applications (Open Text),2,3
+origin,Applications (Open Text),2,3
+line,Applications (Open Text),3,3
+improve,Applications (Open Text),2,3
+improve,Sharing (Open Text),1,3
+public,Applications (Open Text),2,3
+point,Sharing (Open Text),2,3
+public,Sharing (Open Text),1,3
 supervisor,Sharing (Open Text),2,2
-many,Improvements,1,2
-question,Applications (Open Text),1,2
-question,Improvements,1,2
-real,Applications (Open Text),1,2
-real,Improvements,1,2
-special,Barriers,1,2
-structure,Improvements,2,2
-stuff,Improvements,2,2
-it’s,Barriers,1,2
-enough,Barriers,1,2
-enough,Improvements,1,2
-love,Improvements,2,2
-create,Sharing (Open Text),2,2
-medium,Sharing (Open Text),2,2
-psrs,Applications (Open Text),1,2
-psrs,Improvements,1,2
-many,Barriers,1,2
-exchange,Improvements,2,2
-exist,Applications (Open Text),1,2
-exist,Improvements,1,2
-feed,Sharing (Open Text),1,2
-encourage,Improvements,1,2
-engage,Applications (Open Text),1,2
-engage,Improvements,1,2
-it’s,Improvements,1,2
-i’m,Applications (Open Text),1,2
-i’m,Sharing (Open Text),1,2
-cooperate,Applications (Open Text),1,2
-cooperate,Sharing (Open Text),1,2
-talk,Sharing (Open Text),1,2
-task,Applications (Open Text),2,2
-tbd,Applications (Open Text),1,2
-tbd,Barriers,1,2
-contact,Applications (Open Text),1,2
-promote,Applications (Open Text),2,2
-proposal,Applications (Open Text),1,2
-proposal,Barriers,1,2
-provision,Improvements,1,2
-provision,Sharing (Open Text),1,2
-timely,Applications (Open Text),1,2
-timely,Improvements,1,2
-mention,Applications (Open Text),1,2
-mention,Sharing (Open Text),1,2
-produce,Improvements,1,2
-contact,Sharing (Open Text),1,2
-congrats,Improvements,2,2
-form,Sharing (Open Text),1,2
-formulation,Applications (Open Text),2,2
-short,Improvements,2,2
-simulation,Improvements,2,2
-site,Improvements,1,2
-site,Sharing (Open Text),1,2
-slightly,Barriers,1,2
-special,Improvements,1,2
-even,Applications (Open Text),1,2
-even,Improvements,1,2
-interagency,Barriers,1,2
-interagency,Sharing (Open Text),1,2
-interest,Applications (Open Text),1,2
-interest,Improvements,1,2
-connection,Barriers,1,2
-connection,Improvements,1,2
-consensus,Barriers,2,2
 term,Applications (Open Text),2,2
-than,Improvements,2,2
-negotiate,Applications (Open Text),1,2
-negotiate,Sharing (Open Text),1,2
-most,Applications (Open Text),1,2
-most,Sharing (Open Text),1,2
-move,Barriers,1,2
-move,Improvements,1,2
-too,Improvements,2,2
-top,Barriers,2,2
-they,Improvements,2,2
+etc,Applications (Open Text),2,2
+document,Sharing (Open Text),2,2
+agency’s,Applications (Open Text),1,2
+try,Applications (Open Text),2,2
 timber,Applications (Open Text),1,2
+focal,Applications (Open Text),1,2
 timber,Sharing (Open Text),1,2
-produce,Applications (Open Text),1,2
-near,Barriers,1,2
-near,Improvements,1,2
-collective,Applications (Open Text),1,2
-collective,Improvements,1,2
-collegues,Applications (Open Text),2,2
-communication,Improvements,1,2
-general,Applications (Open Text),1,2
-general,Improvements,1,2
-forward,Improvements,1,2
-forward,Sharing (Open Text),1,2
+focal,Sharing (Open Text),1,2
+enhance,Applications (Open Text),2,2
+example,Sharing (Open Text),1,2
+study,Applications (Open Text),1,2
+follow,Applications (Open Text),1,2
+give,Sharing (Open Text),1,2
+approach,Applications (Open Text),2,2
+application,Sharing (Open Text),2,2
+system,Applications (Open Text),2,2
+task,Applications (Open Text),2,2
+agency’s,Sharing (Open Text),1,2
+evidence,Applications (Open Text),2,2
+way,Applications (Open Text),1,2
+advisory,Applications (Open Text),2,2
+about,Applications (Open Text),1,2
+unit,Applications (Open Text),2,2
+example,Applications (Open Text),1,2
+way,Sharing (Open Text),1,2
+capacity,Sharing (Open Text),1,2
+certain,Applications (Open Text),2,2
+client,Applications (Open Text),2,2
+recommend,Applications (Open Text),2,2
+direct,Sharing (Open Text),2,2
+digitalization,Applications (Open Text),2,2
+result,Applications (Open Text),2,2
+review,Applications (Open Text),2,2
+gather,Sharing (Open Text),1,2
+social,Sharing (Open Text),2,2
+speaker,Applications (Open Text),2,2
+section,Sharing (Open Text),2,2
+identify,Applications (Open Text),1,2
+identify,Sharing (Open Text),1,2
+ill,Applications (Open Text),1,2
+greater,Applications (Open Text),2,2
+formulation,Applications (Open Text),2,2
+gather,Applications (Open Text),1,2
+gap,Applications (Open Text),2,2
+friend,Sharing (Open Text),1,2
+friend,Applications (Open Text),1,2
+form,Sharing (Open Text),1,2
+division,Applications (Open Text),1,2
+follow,Sharing (Open Text),1,2
+division,Sharing (Open Text),1,2
+do,Sharing (Open Text),2,2
+such,Applications (Open Text),1,2
+study,Sharing (Open Text),1,2
+such,Sharing (Open Text),1,2
+suggest,Sharing (Open Text),2,2
+capacity,Applications (Open Text),1,2
+distribution,Sharing (Open Text),2,2
+explain,Sharing (Open Text),2,2
+strategy,Sharing (Open Text),1,2
+strategy,Applications (Open Text),1,2
+best,Applications (Open Text),2,2
+background,Applications (Open Text),2,2
+explore,Sharing (Open Text),1,2
 feedback,Applications (Open Text),1,2
 feedback,Sharing (Open Text),1,2
-slightly,Improvements,1,2
-smaller,Improvements,2,2
-social,Sharing (Open Text),2,2
+explore,Applications (Open Text),1,2
+domestic,Sharing (Open Text),2,2
+give,Applications (Open Text),1,2
 form,Applications (Open Text),1,2
-communication,Sharing (Open Text),1,2
-chapter,Improvements,1,2
-classification,Applications (Open Text),1,2
-classification,Improvements,1,2
-client,Applications (Open Text),2,2
-code,Improvements,2,2
-nice,Improvements,2,2
-nil,Barriers,2,2
-chapter,Applications (Open Text),1,2
-budget,Barriers,2,2
-bureaucracy,Barriers,2,2
-business,Improvements,1,2
-business,Sharing (Open Text),1,2
-see,Improvements,2,2
-feed,Improvements,1,2
-trend,Improvements,2,2
-certain,Applications (Open Text),2,2
-challenge,Barriers,1,2
-challenge,Sharing (Open Text),1,2
-unit,Applications (Open Text),2,2
-upon,Barriers,1,2
-upon,Sharing (Open Text),1,2
-between,Applications (Open Text),1,2
-between,Barriers,1,2
-breakout,Improvements,2,2
-broader,Improvements,1,2
-previous,Improvements,1,2
-previous,Sharing (Open Text),1,2
-notice,Improvements,2,2
-obstacle,Applications (Open Text),2,2
-oecd,Applications (Open Text),1,2
-oecd,Sharing (Open Text),1,2
-usage,Barriers,1,2
-usage,Improvements,1,2
-value,Applications (Open Text),1,2
-value,Improvements,1,2
-before,Barriers,1,2
-before,Improvements,1,2
-only,Applications (Open Text),1,2
-only,Improvements,1,2
-opinion,Applications (Open Text),1,2
-opinion,Sharing (Open Text),1,2
+promote,Applications (Open Text),2,2
+psr,Applications (Open Text),2,2
+impact,Applications (Open Text),2,2
+dialogue,Applications (Open Text),1,2
+harmonization,Applications (Open Text),2,2
+connect,Sharing (Open Text),1,2
+connect,Applications (Open Text),1,2
+ill,Sharing (Open Text),1,2
+implementation,Applications (Open Text),1,2
+implementation,Sharing (Open Text),1,2
+importance,Applications (Open Text),1,2
+importance,Sharing (Open Text),1,2
+dialogue,Sharing (Open Text),1,2
+regulatory,Applications (Open Text),2,2
+concept,Sharing (Open Text),2,2
+collegues,Applications (Open Text),2,2
+private,Applications (Open Text),1,2
+private,Sharing (Open Text),1,2
+product,Applications (Open Text),2,2
+collaborate,Applications (Open Text),2,2
+paper,Sharing (Open Text),1,2
+paper,Applications (Open Text),1,2
+contact,Applications (Open Text),1,2
+consultation,Sharing (Open Text),1,2
+consultation,Applications (Open Text),1,2
+cti,Applications (Open Text),2,2
+day,Sharing (Open Text),2,2
+consider,Applications (Open Text),2,2
 preferential,Applications (Open Text),1,2
 preferential,Sharing (Open Text),1,2
 preparation,Applications (Open Text),1,2
 preparation,Sharing (Open Text),1,2
-version,Improvements,1,2
-visit,Applications (Open Text),1,2
-visit,Improvements,1,2
-way,Applications (Open Text),1,2
-way,Sharing (Open Text),1,2
-assist,Applications (Open Text),1,2
-assist,Improvements,1,2
-attend,Improvements,1,2
-attend,Sharing (Open Text),1,2
-attendance,Improvements,2,2
-audience,Improvements,2,2
-bandwidth,Barriers,2,2
-broader,Sharing (Open Text),1,2
-aspect,Barriers,1,2
-aspect,Improvements,1,2
-particular,Improvements,2,2
-particularly,Applications (Open Text),1,2
-particularly,Improvements,1,2
-partner,Improvements,1,2
-partner,Sharing (Open Text),1,2
-grp,Applications (Open Text),1,2
-grp,Barriers,1,2
-however,Improvements,2,2
-friend,Applications (Open Text),1,2
-friend,Sharing (Open Text),1,2
-infrastructure,Barriers,2,2
-increase,Applications (Open Text),1,2
-increase,Improvements,1,2
-representative,Improvements,2,2
-gap,Applications (Open Text),2,2
-gather,Applications (Open Text),1,2
-gather,Sharing (Open Text),1,2
-where,Applications (Open Text),1,2
-where,Improvements,1,2
-any,Improvements,2,2
-resouces,Barriers,2,2
-result,Applications (Open Text),2,2
-importance,Applications (Open Text),1,2
-importance,Sharing (Open Text),1,2
-harmonization,Applications (Open Text),2,2
-output,Applications (Open Text),1,2
-output,Improvements,1,2
-barrier,Barriers,2,2
-version,Applications (Open Text),1,2
-addition,Applications (Open Text),1,2
-amendment,Barriers,1,2
-agency’s,Applications (Open Text),1,2
-ill,Applications (Open Text),1,2
-ill,Sharing (Open Text),1,2
-impact,Applications (Open Text),2,2
-wider,Applications (Open Text),1,2
-wider,Improvements,1,2
-yes,Improvements,2,2
-add,Improvements,2,2
-😊🙏🏻,Improvements,1,1
-1st,Improvements,1,1
-a2c2,Improvements,1,1
-abac,Applications (Open Text),1,1
-able,Improvements,1,1
+present,Sharing (Open Text),2,2
+perspective,Applications (Open Text),1,2
+perspective,Sharing (Open Text),1,2
+landscape,Applications (Open Text),2,2
+issue,Applications (Open Text),1,2
+matter,Applications (Open Text),1,2
+management,Sharing (Open Text),2,2
+organic,Applications (Open Text),2,2
+i’m,Applications (Open Text),1,2
+it,Sharing (Open Text),1,2
+issue,Sharing (Open Text),1,2
+it,Applications (Open Text),1,2
+others,Applications (Open Text),1,2
+i’m,Sharing (Open Text),1,2
+opinion,Applications (Open Text),1,2
+opinion,Sharing (Open Text),1,2
+country,Applications (Open Text),2,2
+create,Sharing (Open Text),2,2
+iso,Sharing (Open Text),1,2
+iso,Applications (Open Text),1,2
+model,Applications (Open Text),1,2
+negotiate,Sharing (Open Text),1,2
+most,Sharing (Open Text),1,2
+negotiate,Applications (Open Text),1,2
+most,Applications (Open Text),1,2
+others,Sharing (Open Text),1,2
+level,Sharing (Open Text),2,2
+model,Sharing (Open Text),1,2
+oecd,Applications (Open Text),1,2
+obstacle,Applications (Open Text),2,2
+linkedin,Sharing (Open Text),2,2
+oecd,Sharing (Open Text),1,2
+cooperate,Applications (Open Text),1,2
+conversation,Sharing (Open Text),2,2
+lesson,Sharing (Open Text),2,2
+contact,Sharing (Open Text),1,2
+cooperate,Sharing (Open Text),1,2
+office,Sharing (Open Text),2,2
+could,Applications (Open Text),1,2
+could,Sharing (Open Text),1,2
+may,Sharing (Open Text),1,2
+medium,Sharing (Open Text),2,2
+matter,Sharing (Open Text),1,2
+may,Applications (Open Text),1,2
+mention,Sharing (Open Text),1,2
+mention,Applications (Open Text),1,2
+about,Sharing (Open Text),1,2
+view,Sharing (Open Text),2,2
+all,Applications (Open Text),2,2
+already,Sharing (Open Text),2,2
+advise,Applications (Open Text),2,2
+across,Applications (Open Text),2,2
+advocate,Applications (Open Text),1,1
 accession,Applications (Open Text),1,1
 account,Applications (Open Text),1,1
-acknowledge,Applications (Open Text),1,1
-active,Barriers,1,1
-workflow,Applications (Open Text),1,1
-applicable,Barriers,1,1
-applicability,Barriers,1,1
-apecwmber,Barriers,1,1
-answer,Improvements,1,1
-annualy,Sharing (Open Text),1,1
-anc,Sharing (Open Text),1,1
-welcome,Improvements,1,1
-week,Improvements,1,1
-assess,Applications (Open Text),1,1
-ask,Improvements,1,1
-asean,Applications (Open Text),1,1
-article,Improvements,1,1
-arrange,Improvements,1,1
-apsc,Sharing (Open Text),1,1
-approval,Sharing (Open Text),1,1
-appreciation,Improvements,1,1
-pathfinder,Improvements,1,1
-pas,Sharing (Open Text),1,1
-partnof,Barriers,1,1
-participate,Sharing (Open Text),1,1
-papua,Applications (Open Text),1,1
-practically,Sharing (Open Text),1,1
-practicality,Applications (Open Text),1,1
-ppt,Sharing (Open Text),1,1
-powerslides,Sharing (Open Text),1,1
-post,Sharing (Open Text),1,1
-possibel,Improvements,1,1
-positive,Applications (Open Text),1,1
-position,Applications (Open Text),1,1
-platform,Sharing (Open Text),1,1
-picture,Applications (Open Text),1,1
-philippine,Applications (Open Text),1,1
-november,Sharing (Open Text),1,1
-novelty,Barriers,1,1
-prework,Improvements,1,1
-order,Improvements,1,1
-option,Applications (Open Text),1,1
-opener,Barriers,1,1
-online,Improvements,1,1
-once,Sharing (Open Text),1,1
-organizer,Improvements,1,1
-organise,Improvements,1,1
-panelist,Improvements,1,1
-own,Applications (Open Text),1,1
-outside,Barriers,1,1
-out,Improvements,1,1
-ourganizing,Sharing (Open Text),1,1
-pecc,Applications (Open Text),1,1
-moderator,Improvements,1,1
-negotiator,Improvements,1,1
-negociate,Applications (Open Text),1,1
-neeed,Barriers,1,1
-navigate,Applications (Open Text),1,1
-procedure,Improvements,1,1
-problem,Sharing (Open Text),1,1
-priority,Barriers,1,1
-prioritize,Applications (Open Text),1,1
-prior,Improvements,1,1
-norhing,Barriers,1,1
-non,Barriers,1,1
-night,Improvements,1,1
-news,Barriers,1,1
-offer,Sharing (Open Text),1,1
-nto,Barriers,1,1
-meaningfull,Improvements,1,1
-mayinckude,Improvements,1,1
-mayhaps,Improvements,1,1
-prototypeplatform,Improvements,1,1
-propose,Improvements,1,1
-minute,Sharing (Open Text),1,1
-mind,Sharing (Open Text),1,1
-min,Improvements,1,1
-mgmt,Applications (Open Text),1,1
-methodology,Applications (Open Text),1,1
-nam,Barriers,1,1
-much,Improvements,1,1
-mouth,Sharing (Open Text),1,1
-monthly,Sharing (Open Text),1,1
-monitor,Applications (Open Text),1,1
-moment,Improvements,1,1
-quite,Improvements,1,1
-manpower,Barriers,1,1
-manner,Applications (Open Text),1,1
-mangement,Barriers,1,1
-mandate,Barriers,1,1
-manage,Barriers,1,1
-malaysia,Sharing (Open Text),1,1
-quantitative,Barriers,1,1
-quality,Applications (Open Text),1,1
-put,Improvements,1,1
-purview,Barriers,1,1
-purchase,Applications (Open Text),1,1
-publicprivate,Applications (Open Text),1,1
-publicly,Improvements,1,1
-publication,Applications (Open Text),1,1
-mechanism,Barriers,1,1
-less,Barriers,1,1
-maker,Improvements,1,1
-lunch,Sharing (Open Text),1,1
-lot,Improvements,1,1
-lose,Improvements,1,1
-look,Applications (Open Text),1,1
-long,Improvements,1,1
-reasonable,Sharing (Open Text),1,1
-reallife,Improvements,1,1
-readout,Sharing (Open Text),1,1
-readiness,Barriers,1,1
-read,Improvements,1,1
-reach,Barriers,1,1
-rather,Improvements,1,1
-rare,Improvements,1,1
-raise,Sharing (Open Text),1,1
-keynote,Improvements,1,1
-legal,Applications (Open Text),1,1
-learning,Applications (Open Text),1,1
-lean,Applications (Open Text),1,1
-lead,Barriers,1,1
-layout,Improvements,1,1
-laboratory,Sharing (Open Text),1,1
-reflection,Applications (Open Text),1,1
-refine,Applications (Open Text),1,1
-reco,Applications (Open Text),1,1
-reception,Improvements,1,1
-receive,Applications (Open Text),1,1
-link,Sharing (Open Text),1,1
-lie,Applications (Open Text),1,1
-leverage,Applications (Open Text),1,1
-let,Improvements,1,1
-isn’t,Barriers,1,1
-join,Improvements,1,1
-i’ve,Sharing (Open Text),1,1
-i’ll,Barriers,1,1
-i’d,Improvements,1,1
-ive,Sharing (Open Text),1,1
-itself,Improvements,1,1
-reinforce,Improvements,1,1
-reimagined,Improvements,1,1
-regulator,Barriers,1,1
-region,Barriers,1,1
-refresher,Improvements,1,1
-korean,Applications (Open Text),1,1
-korea,Sharing (Open Text),1,1
-knowledgeunderstanding,Applications (Open Text),1,1
-kind,Applications (Open Text),1,1
-influence,Improvements,1,1
-intentional,Applications (Open Text),1,1
-instrument,Improvements,1,1
-institutional,Barriers,1,1
-instance,Sharing (Open Text),1,1
-innovative,Applications (Open Text),1,1
-initial,Barriers,1,1
-inhouse,Sharing (Open Text),1,1
-represent,Improvements,1,1
-rep,Applications (Open Text),1,1
-rely,Barriers,1,1
-relationship,Applications (Open Text),1,1
-interntional,Improvements,1,1
-interaction,Improvements,1,1
-interacrive,Improvements,1,1
-isoiec,Applications (Open Text),1,1
-important,Improvements,1,1
-importand,Applications (Open Text),1,1
-return,Sharing (Open Text),1,1
-restriction,Barriers,1,1
-rest,Improvements,1,1
-resouce,Barriers,1,1
-request,Applications (Open Text),1,1
-indusrial,Barriers,1,1
-indonesia,Sharing (Open Text),1,1
-indepth,Improvements,1,1
-incredible,Improvements,1,1
-incountry,Sharing (Open Text),1,1
-incorporateintegrate,Applications (Open Text),1,1
-informinh,Applications (Open Text),1,1
-informative,Improvements,1,1
-informally,Sharing (Open Text),1,1
-highlight,Sharing (Open Text),1,1
-here,Applications (Open Text),1,1
-hence,Barriers,1,1
-ron,Improvements,1,1
-robin,Improvements,1,1
-roadmap,Applications (Open Text),1,1
-revision,Applications (Open Text),1,1
-revisiing,Applications (Open Text),1,1
-revenant,Applications (Open Text),1,1
-iec,Improvements,1,1
-ict,Barriers,1,1
-huddle,Barriers,1,1
-incharged,Sharing (Open Text),1,1
-incentive,Barriers,1,1
-improvement,Improvements,1,1
-impression,Improvements,1,1
-harmonize,Applications (Open Text),1,1
-happy,Improvements,1,1
-handle,Barriers,1,1
-hall,Sharing (Open Text),1,1
-half,Improvements,1,1
-gvc,Applications (Open Text),1,1
-guinea,Applications (Open Text),1,1
-sdo,Sharing (Open Text),1,1
-schedule,Improvements,1,1
-sandbox,Improvements,1,1
-sacrosanct,Improvements,1,1
-round,Improvements,1,1
-room,Improvements,1,1
-rool,Applications (Open Text),1,1
-hope,Improvements,1,1
-historical,Barriers,1,1
-goverment,Barriers,1,1
-gov,Sharing (Open Text),1,1
-go,Sharing (Open Text),1,1
-genuine,Barriers,1,1
-sequence,Barriers,1,1
-selffunded,Improvements,1,1
-select,Improvements,1,1
-seek,Applications (Open Text),1,1
-security,Barriers,1,1
-secondly,Applications (Open Text),1,1
-sdr,Applications (Open Text),1,1
-sdos,Improvements,1,1
-guest,Improvements,1,1
-groyps,Sharing (Open Text),1,1
-greatly,Improvements,1,1
-grap,Applications (Open Text),1,1
-shorten,Improvements,1,1
-formulate,Applications (Open Text),1,1
-force,Barriers,1,1
-foot,Barriers,1,1
-shall,Applications (Open Text),1,1
-settlement,Applications (Open Text),1,1
-sessiongroup,Improvements,1,1
-sessiom,Improvements,1,1
-fully,Barriers,1,1
-full,Barriers,1,1
-freely,Improvements,1,1
-framework,Improvements,1,1
-gear,Improvements,1,1
-fund,Improvements,1,1
-fun,Improvements,1,1
-governance,Improvements,1,1
-firstly,Applications (Open Text),1,1
-fine,Improvements,1,1
-finding,Sharing (Open Text),1,1
-find,Applications (Open Text),1,1
-final,Barriers,1,1
-file,Applications (Open Text),1,1
-field,Barriers,1,1
-few,Improvements,1,1
-feel,Improvements,1,1
-slide,Improvements,1,1
-single,Barriers,1,1
-simulator,Sharing (Open Text),1,1
-simple,Improvements,1,1
-similarly,Barriers,1,1
-similar,Improvements,1,1
-show,Applications (Open Text),1,1
-fast,Improvements,1,1
-far,Improvements,1,1
-familiar,Barriers,1,1
-facilitate,Applications (Open Text),1,1
-eye,Barriers,1,1
-extend,Improvements,1,1
-expreriences,Applications (Open Text),1,1
-experties,Barriers,1,1
-som,Sharing (Open Text),1,1
-solution,Barriers,1,1
-solicit,Improvements,1,1
-socialise,Improvements,1,1
-smes,Barriers,1,1
-small,Sharing (Open Text),1,1
-flow,Barriers,1,1
-flesh,Improvements,1,1
-equilibrium,Applications (Open Text),1,1
-everyones,Improvements,1,1
-ever,Applications (Open Text),1,1
-evangelization,Applications (Open Text),1,1
-evaluation,Applications (Open Text),1,1
-stage,Barriers,1,1
-sponsorship,Improvements,1,1
-spend,Improvements,1,1
-speakerpanels,Improvements,1,1
-speak,Improvements,1,1
-sometimes,Barriers,1,1
-something,Improvements,1,1
-expect,Improvements,1,1
-executive,Sharing (Open Text),1,1
-excercise,Improvements,1,1
-fastpaced,Barriers,1,1
-effort,Applications (Open Text),1,1
-education,Sharing (Open Text),1,1
-economical,Barriers,1,1
-economic,Applications (Open Text),1,1
-ease,Applications (Open Text),1,1
-early,Improvements,1,1
-stc,Applications (Open Text),1,1
-statistical,Barriers,1,1
-statistic,Applications (Open Text),1,1
-state,Improvements,1,1
-standardization,Barriers,1,1
-standardisation,Applications (Open Text),1,1
-stamdards,Applications (Open Text),1,1
-stakholders,Improvements,1,1
-establish,Improvements,1,1
-esp,Barriers,1,1
-earlier,Improvements,1,1
-dynamic,Improvements,1,1
-duplicate,Improvements,1,1
-dti,Barriers,1,1
-drive,Barriers,1,1
-drag,Barriers,1,1
-don’t,Barriers,1,1
-dont,Barriers,1,1
-stri,Barriers,1,1
-stretegic,Applications (Open Text),1,1
-streamline,Barriers,1,1
-strategize,Applications (Open Text),1,1
-stovepiping,Barriers,1,1
-enable,Applications (Open Text),1,1
-elsewhere,Applications (Open Text),1,1
-element,Improvements,1,1
-digilization,Applications (Open Text),1,1
-developer,Sharing (Open Text),1,1
-superior,Sharing (Open Text),1,1
-summarize,Sharing (Open Text),1,1
-sufficient,Barriers,1,1
-successful,Improvements,1,1
-submit,Sharing (Open Text),1,1
-discuasions,Sharing (Open Text),1,1
-discrimination,Barriers,1,1
-directorate,Applications (Open Text),1,1
-dinner,Improvements,1,1
-domestically,Barriers,1,1
-domectic,Barriers,1,1
-diversity,Sharing (Open Text),1,1
-diverse,Improvements,1,1
-dispute,Applications (Open Text),1,1
-debate,Applications (Open Text),1,1
-database,Barriers,1,1
-table,Applications (Open Text),1,1
-suppprt,Applications (Open Text),1,1
-supporg,Barriers,1,1
-supply,Improvements,1,1
-designation,Barriers,1,1
-design,Applications (Open Text),1,1
-depth,Improvements,1,1
-demonstration,Improvements,1,1
-demonstrate,Sharing (Open Text),1,1
-demo,Improvements,1,1
-deliver,Improvements,1,1
-deeper,Improvements,1,1
-deepen,Improvements,1,1
-deck,Sharing (Open Text),1,1
-continuous,Improvements,1,1
-coverage,Barriers,1,1
-cover,Sharing (Open Text),1,1
-cost,Barriers,1,1
-correlation,Applications (Open Text),1,1
-corporate,Barriers,1,1
-coperation,Sharing (Open Text),1,1
-teammate,Applications (Open Text),1,1
-teach,Improvements,1,1
-tangible,Applications (Open Text),1,1
-cut,Improvements,1,1
-customer,Applications (Open Text),1,1
-cureent,Applications (Open Text),1,1
-cumulation,Improvements,1,1
-coworkers,Sharing (Open Text),1,1
-decision,Applications (Open Text),1,1
-context,Applications (Open Text),1,1
-consultancy,Sharing (Open Text),1,1
-constantly,Barriers,1,1
-consortium,Sharing (Open Text),1,1
-theough,Sharing (Open Text),1,1
-thematic,Sharing (Open Text),1,1
-thailand,Applications (Open Text),1,1
-textbook,Applications (Open Text),1,1
-test,Sharing (Open Text),1,1
-tecommendation,Applications (Open Text),1,1
-technicaldetailed,Barriers,1,1
-coo,Barriers,1,1
-convergence,Applications (Open Text),1,1
-convene,Improvements,1,1
-contribute,Applications (Open Text),1,1
-contreys,Sharing (Open Text),1,1
-computeable,Applications (Open Text),1,1
-comprehensive,Improvements,1,1
-comply,Applications (Open Text),1,1
-completion,Barriers,1,1
-competency,Applications (Open Text),1,1
-comparison,Improvements,1,1
-compare,Improvements,1,1
-comparable,Improvements,1,1
-company,Improvements,1,1
-throgh,Sharing (Open Text),1,1
-thought,Applications (Open Text),1,1
-consistent,Applications (Open Text),1,1
-consideration,Applications (Open Text),1,1
-conscious,Applications (Open Text),1,1
-contingent,Barriers,1,1
-contingency,Barriers,1,1
-comment,Sharing (Open Text),1,1
-commend,Improvements,1,1
-come,Improvements,1,1
-collegee,Sharing (Open Text),1,1
-college,Applications (Open Text),1,1
-town,Sharing (Open Text),1,1
-towards,Sharing (Open Text),1,1
-totally,Improvements,1,1
-tor,Improvements,1,1
+timely,Applications (Open Text),1,1
 together,Sharing (Open Text),1,1
-today’s,Improvements,1,1
-title,Improvements,1,1
-time……,Barriers,1,1
-concrete,Improvements,1,1
-conclutions,Sharing (Open Text),1,1
-concern,Improvements,1,1
-carefully,Improvements,1,1
-career,Barriers,1,1
-capture,Applications (Open Text),1,1
-trump,Improvements,1,1
-trip,Sharing (Open Text),1,1
-transposition,Barriers,1,1
-translate,Barriers,1,1
-transition,Applications (Open Text),1,1
-tpr,Sharing (Open Text),1,1
-cod,Applications (Open Text),1,1
-closer,Improvements,1,1
-close,Applications (Open Text),1,1
-clear,Applications (Open Text),1,1
-class,Sharing (Open Text),1,1
-cite,Sharing (Open Text),1,1
-charge,Barriers,1,1
-bigger,Applications (Open Text),1,1
-big,Improvements,1,1
-beyond,Barriers,1,1
-uptake,Applications (Open Text),1,1
+towards,Sharing (Open Text),1,1
+town,Sharing (Open Text),1,1
+ever,Applications (Open Text),1,1
+executive,Sharing (Open Text),1,1
 upcoming,Sharing (Open Text),1,1
-up,Improvements,1,1
-under,Applications (Open Text),1,1
-canada,Sharing (Open Text),1,1
-calculation,Improvements,1,1
-cadmus,Improvements,1,1
-bureau,Sharing (Open Text),1,1
-channel,Sharing (Open Text),1,1
-chance,Improvements,1,1
-chain,Improvements,1,1
-catarc,Barriers,1,1
-casestudy,Improvements,1,1
-awarenesscapacity,Sharing (Open Text),1,1
-benchmark,Applications (Open Text),1,1
-believe,Improvements,1,1
-beakout,Improvements,1,1
-basic,Improvements,1,1
-vary,Improvements,1,1
-various,Applications (Open Text),1,1
-usually,Sharing (Open Text),1,1
-usual,Applications (Open Text),1,1
-usg,Sharing (Open Text),1,1
+upon,Sharing (Open Text),1,1
+uptake,Applications (Open Text),1,1
 usen,Applications (Open Text),1,1
-briefers,Sharing (Open Text),1,1
-brief,Sharing (Open Text),1,1
-bonus,Applications (Open Text),1,1
-body,Improvements,1,1
+usg,Sharing (Open Text),1,1
+after,Sharing (Open Text),1,1
+tpr,Sharing (Open Text),1,1
+transition,Applications (Open Text),1,1
+trip,Sharing (Open Text),1,1
+uncitral,Applications (Open Text),1,1
+context,Applications (Open Text),1,1
+continue,Applications (Open Text),1,1
+contreys,Sharing (Open Text),1,1
+contribute,Applications (Open Text),1,1
+convergence,Applications (Open Text),1,1
+coperation,Sharing (Open Text),1,1
+correlation,Applications (Open Text),1,1
+monitor,Applications (Open Text),1,1
+methodology,Applications (Open Text),1,1
+mgmt,Applications (Open Text),1,1
+education,Sharing (Open Text),1,1
+effort,Applications (Open Text),1,1
+elsewhere,Applications (Open Text),1,1
+enable,Applications (Open Text),1,1
+encourage,Applications (Open Text),1,1
+engage,Applications (Open Text),1,1
+own,Applications (Open Text),1,1
+monthly,Sharing (Open Text),1,1
+mouth,Sharing (Open Text),1,1
+navigate,Applications (Open Text),1,1
+need,Applications (Open Text),1,1
+negociate,Applications (Open Text),1,1
+mind,Sharing (Open Text),1,1
+minute,Sharing (Open Text),1,1
+learning,Applications (Open Text),1,1
+legal,Applications (Open Text),1,1
+leverage,Applications (Open Text),1,1
+lie,Applications (Open Text),1,1
+link,Sharing (Open Text),1,1
+november,Sharing (Open Text),1,1
+now,Applications (Open Text),1,1
+offer,Sharing (Open Text),1,1
+peersteam,Applications (Open Text),1,1
+philippine,Applications (Open Text),1,1
+once,Sharing (Open Text),1,1
+only,Applications (Open Text),1,1
+opportunity,Applications (Open Text),1,1
+option,Applications (Open Text),1,1
+look,Applications (Open Text),1,1
+lunch,Sharing (Open Text),1,1
+main,Sharing (Open Text),1,1
+malaysia,Sharing (Open Text),1,1
+manner,Applications (Open Text),1,1
+ive,Sharing (Open Text),1,1
+i’ve,Sharing (Open Text),1,1
+keep,Applications (Open Text),1,1
+ourganizing,Sharing (Open Text),1,1
+output,Applications (Open Text),1,1
+participation,Sharing (Open Text),1,1
+particularly,Applications (Open Text),1,1
+partner,Sharing (Open Text),1,1
+kind,Applications (Open Text),1,1
+knowledgeunderstanding,Applications (Open Text),1,1
+korea,Sharing (Open Text),1,1
+korean,Applications (Open Text),1,1
+laboratory,Sharing (Open Text),1,1
+lean,Applications (Open Text),1,1
+isoiec,Applications (Open Text),1,1
+course,Sharing (Open Text),1,1
+cover,Sharing (Open Text),1,1
+coworkers,Sharing (Open Text),1,1
+pas,Sharing (Open Text),1,1
+pecc,Applications (Open Text),1,1
+peccs,Applications (Open Text),1,1
+consideration,Applications (Open Text),1,1
+consistent,Applications (Open Text),1,1
+consortium,Sharing (Open Text),1,1
+cureent,Applications (Open Text),1,1
+current,Sharing (Open Text),1,1
+customer,Applications (Open Text),1,1
+informinh,Applications (Open Text),1,1
+inhouse,Sharing (Open Text),1,1
+innovative,Applications (Open Text),1,1
+instance,Sharing (Open Text),1,1
+consultancy,Sharing (Open Text),1,1
+platform,Sharing (Open Text),1,1
+panel,Sharing (Open Text),1,1
+papua,Applications (Open Text),1,1
+participant,Applications (Open Text),1,1
+participate,Sharing (Open Text),1,1
+post,Sharing (Open Text),1,1
+powerslides,Sharing (Open Text),1,1
+ppt,Sharing (Open Text),1,1
+practical,Sharing (Open Text),1,1
+intentional,Applications (Open Text),1,1
+interagency,Sharing (Open Text),1,1
+interest,Applications (Open Text),1,1
+invite,Sharing (Open Text),1,1
+indonesia,Sharing (Open Text),1,1
+debate,Applications (Open Text),1,1
+decision,Applications (Open Text),1,1
+practicality,Applications (Open Text),1,1
+practically,Sharing (Open Text),1,1
+picture,Applications (Open Text),1,1
+conclutions,Sharing (Open Text),1,1
+conscious,Applications (Open Text),1,1
+previous,Sharing (Open Text),1,1
+prioritize,Applications (Open Text),1,1
+problem,Sharing (Open Text),1,1
+produce,Applications (Open Text),1,1
+deck,Sharing (Open Text),1,1
+demonstrate,Sharing (Open Text),1,1
+design,Applications (Open Text),1,1
+developer,Sharing (Open Text),1,1
+informally,Sharing (Open Text),1,1
+importand,Applications (Open Text),1,1
+proposal,Applications (Open Text),1,1
+provision,Sharing (Open Text),1,1
+psrs,Applications (Open Text),1,1
+policiy,Applications (Open Text),1,1
+position,Applications (Open Text),1,1
+positive,Applications (Open Text),1,1
+reflect,Sharing (Open Text),1,1
+reflection,Applications (Open Text),1,1
+relate,Applications (Open Text),1,1
+relationship,Applications (Open Text),1,1
+publication,Applications (Open Text),1,1
+publicprivate,Applications (Open Text),1,1
+collective,Applications (Open Text),1,1
+college,Applications (Open Text),1,1
+collegee,Sharing (Open Text),1,1
+comment,Sharing (Open Text),1,1
+communication,Sharing (Open Text),1,1
+competency,Applications (Open Text),1,1
+comply,Applications (Open Text),1,1
+computeable,Applications (Open Text),1,1
+purchase,Applications (Open Text),1,1
+quality,Applications (Open Text),1,1
+raise,Sharing (Open Text),1,1
+readout,Sharing (Open Text),1,1
+real,Applications (Open Text),1,1
+really,Applications (Open Text),1,1
+reasonable,Sharing (Open Text),1,1
+receive,Applications (Open Text),1,1
+reco,Applications (Open Text),1,1
+incharged,Sharing (Open Text),1,1
+incorporateintegrate,Applications (Open Text),1,1
+incountry,Sharing (Open Text),1,1
+increase,Applications (Open Text),1,1
+guinea,Applications (Open Text),1,1
+gvc,Applications (Open Text),1,1
+hall,Sharing (Open Text),1,1
+harmonize,Applications (Open Text),1,1
+refine,Applications (Open Text),1,1
+sdr,Applications (Open Text),1,1
+secondly,Applications (Open Text),1,1
+rep,Applications (Open Text),1,1
+capture,Applications (Open Text),1,1
+case,Applications (Open Text),1,1
+challenge,Sharing (Open Text),1,1
+change,Applications (Open Text),1,1
+channel,Sharing (Open Text),1,1
+chapter,Applications (Open Text),1,1
+cite,Sharing (Open Text),1,1
+class,Sharing (Open Text),1,1
+classification,Applications (Open Text),1,1
+clear,Applications (Open Text),1,1
+close,Applications (Open Text),1,1
+cod,Applications (Open Text),1,1
+question,Applications (Open Text),1,1
+bring,Applications (Open Text),1,1
+broader,Sharing (Open Text),1,1
+bureau,Sharing (Open Text),1,1
+business,Sharing (Open Text),1,1
+canada,Sharing (Open Text),1,1
+request,Applications (Open Text),1,1
+require,Applications (Open Text),1,1
+return,Sharing (Open Text),1,1
+revenant,Applications (Open Text),1,1
+revisiing,Applications (Open Text),1,1
+revision,Applications (Open Text),1,1
+roadmap,Applications (Open Text),1,1
+role,Applications (Open Text),1,1
+rool,Applications (Open Text),1,1
+rule,Applications (Open Text),1,1
+sdo,Sharing (Open Text),1,1
+seek,Applications (Open Text),1,1
+between,Applications (Open Text),1,1
+bigger,Applications (Open Text),1,1
 boarder,Applications (Open Text),1,1
-appreciate,Barriers,1,1
-automatation,Barriers,1,1
-attendant,Improvements,1,1
-assessment,Applications (Open Text),1,1
-wco,Sharing (Open Text),1,1
-watch,Improvements,1,1
-wanna,Improvements,1,1
-vital,Barriers,1,1
-virtual,Improvements,1,1
-viet,Barriers,1,1
-verification,Improvements,1,1
+bonus,Applications (Open Text),1,1
+brief,Sharing (Open Text),1,1
+briefers,Sharing (Open Text),1,1
+helpful,Applications (Open Text),1,1
+here,Applications (Open Text),1,1
+higher,Sharing (Open Text),1,1
+highlight,Sharing (Open Text),1,1
+great,Applications (Open Text),1,1
+groyps,Sharing (Open Text),1,1
+grp,Applications (Open Text),1,1
+different,Sharing (Open Text),1,1
+digilization,Applications (Open Text),1,1
+show,Applications (Open Text),1,1
+simulator,Sharing (Open Text),1,1
+site,Sharing (Open Text),1,1
+small,Sharing (Open Text),1,1
+direction,Applications (Open Text),1,1
+directly,Applications (Open Text),1,1
+directorate,Applications (Open Text),1,1
+discuasions,Sharing (Open Text),1,1
+dispute,Applications (Open Text),1,1
+forward,Sharing (Open Text),1,1
+further,Applications (Open Text),1,1
+solve,Sharing (Open Text),1,1
+som,Sharing (Open Text),1,1
+specific,Applications (Open Text),1,1
+stamdards,Applications (Open Text),1,1
+standardisation,Applications (Open Text),1,1
+strategize,Applications (Open Text),1,1
+strengthen,Applications (Open Text),1,1
+stretegic,Applications (Open Text),1,1
+general,Applications (Open Text),1,1
+get,Applications (Open Text),1,1
+go,Sharing (Open Text),1,1
+gov,Sharing (Open Text),1,1
+grap,Applications (Open Text),1,1
+followup,Sharing (Open Text),1,1
+diversity,Sharing (Open Text),1,1
+subject,Applications (Open Text),1,1
+submit,Sharing (Open Text),1,1
+summarize,Sharing (Open Text),1,1
+set,Applications (Open Text),1,1
+settlement,Applications (Open Text),1,1
+shall,Applications (Open Text),1,1
+superior,Sharing (Open Text),1,1
+suppprt,Applications (Open Text),1,1
+available,Applications (Open Text),1,1
+awarenesscapacity,Sharing (Open Text),1,1
+ease,Applications (Open Text),1,1
+economic,Applications (Open Text),1,1
+formulate,Applications (Open Text),1,1
+exist,Applications (Open Text),1,1
+expreriences,Applications (Open Text),1,1
+facilitate,Applications (Open Text),1,1
+feed,Sharing (Open Text),1,1
 baseline,Applications (Open Text),1,1
-base,Improvements,1,1
-balance,Improvements,1,1
-awesome,Improvements,1,1
-awarenesssupport,Barriers,1,1
-workmin,Improvements,1,1
-your,Improvements,1,1
-word,Sharing (Open Text),1,1
-without,Improvements,1,1
-wisdom,Barriers,1,1
-window,Barriers,1,1
+benchmark,Applications (Open Text),1,1
+statistic,Applications (Open Text),1,1
+stc,Applications (Open Text),1,1
+strategic,Applications (Open Text),1,1
+even,Applications (Open Text),1,1
+anc,Sharing (Open Text),1,1
+annualy,Sharing (Open Text),1,1
+approval,Sharing (Open Text),1,1
+apsc,Sharing (Open Text),1,1
+area,Sharing (Open Text),1,1
+table,Applications (Open Text),1,1
+talk,Sharing (Open Text),1,1
+tangible,Applications (Open Text),1,1
+tbd,Applications (Open Text),1,1
+teammate,Applications (Open Text),1,1
+tecommendation,Applications (Open Text),1,1
+test,Sharing (Open Text),1,1
+textbook,Applications (Open Text),1,1
+thailand,Applications (Open Text),1,1
+their,Sharing (Open Text),1,1
+under,Applications (Open Text),1,1
+thematic,Sharing (Open Text),1,1
+theough,Sharing (Open Text),1,1
+there,Applications (Open Text),1,1
+think,Applications (Open Text),1,1
+thought,Applications (Open Text),1,1
+throgh,Sharing (Open Text),1,1
+analytical,Applications (Open Text),1,1
+file,Applications (Open Text),1,1
+find,Applications (Open Text),1,1
+finding,Sharing (Open Text),1,1
+firstly,Applications (Open Text),1,1
+focus,Sharing (Open Text),1,1
+equilibrium,Applications (Open Text),1,1
+evaluation,Applications (Open Text),1,1
+evangelization,Applications (Open Text),1,1
+acknowledge,Applications (Open Text),1,1
+where,Applications (Open Text),1,1
+yield,Applications (Open Text),1,1
+abac,Applications (Open Text),1,1
 while,Sharing (Open Text),1,1
-advocate,Applications (Open Text),1,1
+who,Applications (Open Text),1,1
+wider,Applications (Open Text),1,1
+word,Sharing (Open Text),1,1
+workflow,Applications (Open Text),1,1
+visit,Applications (Open Text),1,1
+wco,Sharing (Open Text),1,1
+asean,Applications (Open Text),1,1
+assess,Applications (Open Text),1,1
+assessment,Applications (Open Text),1,1
+assist,Applications (Open Text),1,1
+attend,Sharing (Open Text),1,1
+amendment,Applications (Open Text),1,1
+analyst,Applications (Open Text),1,1
+usual,Applications (Open Text),1,1
+usually,Sharing (Open Text),1,1
+value,Applications (Open Text),1,1
+various,Applications (Open Text),1,1
+version,Applications (Open Text),1,1
+agenda,Applications (Open Text),1,1
+align,Sharing (Open Text),1,1
+alignment,Applications (Open Text),1,1
+alive,Applications (Open Text),1,1
+allow,Applications (Open Text),1,1
 advice,Applications (Open Text),1,1
 adoption,Applications (Open Text),1,1
-actual,Improvements,1,1
-alive,Applications (Open Text),1,1
-afterwards,Improvements,1,1
-analytical,Applications (Open Text),1,1
-analyst,Applications (Open Text),1,1
-amend,Barriers,1,1
-pet,Improvements,1,1
-perfect,Improvements,1,1
-people,Barriers,1,1
-peersteam,Applications (Open Text),1,1
-peccs,Applications (Open Text),1,1
-pollination,Improvements,1,1
-politicisation,Barriers,1,1
-political,Barriers,1,1
-policymakers,Barriers,1,1
-policiy,Applications (Open Text),1,1
-png,Barriers,1,1
-plus,Improvements,1,1
-plenary,Improvements,1,1
-1on1,Improvements,1,1
-yield,Applications (Open Text),1,1
-year,Improvements,1,1
+addition,Applications (Open Text),1,1
+activity,Applications (Open Text),1,1
