@@ -3,7 +3,6 @@ pandas
 numpy
 requests
 nltk
-flair
 tableauhyperapi
 tableauserverclient
 language-tool-python
