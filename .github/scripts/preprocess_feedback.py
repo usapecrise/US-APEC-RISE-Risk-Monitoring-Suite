@@ -139,14 +139,14 @@ def map_structured_sentiment(question, response):
     mappings = {
         "Relevance to Work": {
             "Not at all relevant": "Negative",
-            "Slightly relevant": "Negative",
+            "Slightly relevant": "Neutral",
             "Somewhat relevant": "Neutral",
             "Considerably relevant": "Positive",
             "Greatly relevant": "Positive"
         },
         "Knowledge Gain": {
             "No increase at all": "Negative",
-            "Slightly increased": "Negative",
+            "Slightly increased": "Neutral",
             "Somewhat increased": "Neutral",
             "Considerably increased": "Positive",
             "Greatly increased": "Positive"
@@ -191,8 +191,6 @@ def preprocess_feedback():
     open_text_fields = {
         "Sharing Examples": "Sharing (Open Text)",
         "Application Examples": "Applications (Open Text)",
-        "Suggested Improvements": "Improvements",
-        "Potential Barriers": "Barriers"
     }
 
     for col, source in open_text_fields.items():
