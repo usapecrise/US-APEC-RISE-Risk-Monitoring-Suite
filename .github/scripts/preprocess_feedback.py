@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Optimistic 3-class version, softer Negatives)
-------------------------------------------------------------------------
+Feedback Analysis Pipeline (Balanced version)
+---------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
+   - Always assigns the strongest label (reduces "too Neutral")
    - Handles both LABEL_0/1/2 and NEGATIVE/NEUTRAL/POSITIVE labels
-   - Optimistic tilt: favors Positive unless Negative is clearly stronger
-   - Softer Negative threshold: ≥ 25% and stronger than Positive
 4. Structured question mapping (balanced: Somewhat → Neutral)
+   - Ensures Relevance, Knowledge, Application, Sharing appear in outputs
 5. Exports:
    - word_frequency.csv
    - word_frequency_detailed.csv
@@ -36,15 +36,15 @@ OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"
 OUTPUT_FILE_PHRASES = "top_phrases.csv" 
 
 TEXT_FIELDS = {
-    "Sharing Examples": "Sharing",
-    "Application Examples": "Applications"
+    "Sharing Examples": "Sharing (Open Text)",
+    "Application Examples": "Applications (Open Text)"
 }
 
 STRUCTURED_FIELDS = {
-    "To what extent was this training relevant to your field of work?": "relevance",
-    "To what extent did this training increase your knowledge in the topic area?": "knowledge",
-    "Do you intend to directly apply workshop outcomes in your work?": "application",
-    "Do you plan to share what you learned with others in your organization or professional network?": "sharing"
+    "To what extent was this training relevant to your field of work?": "Relevance",
+    "To what extent did this training increase your knowledge in the topic area?": "Knowledge",
+    "Do you intend to directly apply workshop outcomes in your work?": "Application",
+    "Do you plan to share what you learned with others in your organization or professional network?": "Sharing"
 }
 
 STOPWORDS = set([
@@ -77,7 +77,7 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str) -> str:
-    """Sentiment using CardiffNLP 3-class model with optimistic tilt"""
+    """Sentiment using CardiffNLP 3-class model (strongest label wins)"""
     if not text or text.strip() == "":
         return "Neutral"
 
@@ -94,43 +94,33 @@ def get_sentiment(text: str) -> str:
         elif label in ["LABEL_2", "POSITIVE"]:
             scores["Positive"] = r["score"]
 
-    pos = scores.get("Positive", 0.0)
-    neu = scores.get("Neutral", 0.0)
-    neg = scores.get("Negative", 0.0)
-
-    # Rule 1: Negative if at least 25% and stronger than Positive
-    if neg >= 0.25 and neg > pos:
-        return "Negative"
-
-    # Rule 2: Positive if at least 30% and stronger than Neutral
-    if pos >= 0.30 and pos >= neu:
-        return "Positive"
-
-    # Rule 3: Otherwise Neutral
+    # Pick whichever label has the highest probability
+    if scores:
+        return max(scores, key=scores.get)
     return "Neutral"
 
 def map_structured_sentiment(question, response):
     mappings = {
-        "relevance": {
+        "Relevance": {
             "Not at all relevant": "Negative",
             "Slightly relevant": "Negative",
             "Somewhat relevant": "Neutral",
             "Considerably relevant": "Positive",
             "Greatly relevant": "Positive"
         },
-        "knowledge": {
+        "Knowledge": {
             "No increase at all": "Negative",
             "Slightly increased": "Negative",
             "Somewhat increased": "Neutral",
             "Considerably increased": "Positive",
             "Greatly increased": "Positive"
         },
-        "application": {
+        "Application": {
             "Yes: I expect to incorporate them routinely in my day-to-day tasks": "Positive",
             "Somewhat: I may apply them occasionally when circumstances warrant": "Neutral",
             "No: I do not foresee any practical use in my current role": "Negative"
         },
-        "sharing": {
+        "Sharing": {
             "Yes: I intend to actively share with colleagues or my network": "Positive",
             "Somewhat: I may share in appropriate settings if relevant": "Neutral",
             "Not at this time: I do not currently have plans to share": "Negative"
@@ -155,7 +145,7 @@ def preprocess_feedback():
             for resp in df[col].dropna():
                 sent = map_structured_sentiment(qtype, resp)
                 sentiment_records.append(sent)
-                by_question_records.append((qtype.capitalize(), sent))
+                by_question_records.append((qtype, sent))  # keep friendly name
 
     # Open-text analysis
     for col, source in TEXT_FIELDS.items():
@@ -207,12 +197,20 @@ def preprocess_feedback():
     if by_question_records:
         df_byq = pd.DataFrame(by_question_records, columns=["Question", "Sentiment"])
         df_byq_summary = df_byq.value_counts().reset_index(name="Count")
-        df_byq_pct = df_byq.groupby("Question")["Sentiment"].value_counts(normalize=True).mul(100).reset_index(name="Percent")
+        df_byq_pct = (
+            df_byq.groupby("Question")["Sentiment"]
+            .value_counts(normalize=True)
+            .mul(100)
+            .reset_index(name="Percent")
+        )
         df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"])
         df_final.to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
 
     print("✅ Preprocessing complete")
-    print(f"Saved {OUTPUT_FILE_TOTAL}, {OUTPUT_FILE_DETAILED}, {OUTPUT_FILE_PHRASES}, {OUTPUT_FILE_SENTIMENT}, {OUTPUT_FILE_SENTIMENT_BYQ}")
+    print(
+        f"Saved {OUTPUT_FILE_TOTAL}, {OUTPUT_FILE_DETAILED}, {OUTPUT_FILE_PHRASES}, "
+        f"{OUTPUT_FILE_SENTIMENT}, {OUTPUT_FILE_SENTIMENT_BYQ}"
+    )
 
 if __name__ == "__main__":
     preprocess_feedback()
