@@ -2,25 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Optimistic Thresholds + Keyword Boost, Robust Results Handling)
-------------------------------------------------------------------------------------------
-1. Cleans feedback text
-2. Word + phrase frequency analysis
-3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
-   - Tunable thresholds:
-     * POSITIVE if score >= POS_THRESHOLD
-     * NEGATIVE if score >= NEG_THRESHOLD
-     * else Neutral
-   - Keyword boost for "helpful/clear/etc."
-   - Robust handling of pipeline output formats (dict / list / str)
-4. Structured question mapping (from `Question`/`Response` columns in long file)
-5. Exports:
-   - word_frequency.csv
-   - word_frequency_detailed.csv
-   - sentiment_summary.csv
-   - sentiment_by_question.csv
-   - sentiment_scores.csv   (NEW: includes raw scores per text)
-   - top_phrases.csv
+Feedback Analysis Pipeline (Wide + Long Integration)
+----------------------------------------------------
+- Wide file: Open-text sentiment (1 row per participant → avoids duplicates)
+- Long file: Structured Likert mapping
+- Sentiment analysis using CardiffNLP RoBERTa with thresholds + keyword boost
+- Exports:
+  - word_frequency.csv
+  - word_frequency_detailed.csv
+  - sentiment_summary.csv
+  - sentiment_by_question.csv
+  - sentiment_scores.csv
+  - top_phrases.csv
 """
 
 import pandas as pd
@@ -32,13 +25,15 @@ from transformers import pipeline
 # ----------------------------
 # CONFIG
 # ----------------------------
-INPUT_FILE = "Feedback_Form_Data_Long.csv"
+INPUT_FILE_LONG = "Feedback_Form_Data_Long.csv"
+INPUT_FILE_WIDE = "Feedback_Form_Data_Wide.csv"
+
 OUTPUT_FILE_TOTAL = "word_frequency.csv"
 OUTPUT_FILE_DETAILED = "word_frequency_detailed.csv"
 OUTPUT_FILE_SENTIMENT = "sentiment_summary.csv"
 OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"
 OUTPUT_FILE_PHRASES = "top_phrases.csv"
-OUTPUT_FILE_SCORES = "sentiment_scores.csv"  # NEW
+OUTPUT_FILE_SCORES = "sentiment_scores.csv"
 
 STOPWORDS = set([
     "the","was","very","and","me","to","i","a","but","more","new","them","my",
@@ -48,19 +43,23 @@ STOPWORDS = set([
 
 lemmatizer = WordNetLemmatizer()
 
-# Load Hugging Face 3-class sentiment pipeline
+# Load Hugging Face sentiment pipeline
 sentiment_pipeline = pipeline(
     "sentiment-analysis",
     model="cardiffnlp/twitter-roberta-base-sentiment-latest"
 )
 
 # ----------------------------
-# Tunable thresholds + keyword boost
+# Thresholds + keyword boost
 # ----------------------------
-POS_THRESHOLD = 0.40   # classify as Positive if >= this
-NEG_THRESHOLD = 0.30   # classify as Negative if >= this
+POS_THRESHOLD = 0.40
+NEG_THRESHOLD = 0.30
 
-POSITIVE_HINTS = {"useful", "helpful", "valuable", "good", "clear", "great", "effective", "relevant"}
+POSITIVE_HINTS = {
+    "useful", "helpful", "valuable", "good", "clear", "great", "effective", "relevant",
+    "apply", "applied", "implement", "implemented", "use", "using", "utilize", "practice",
+    "adopt", "adopted", "incorporate", "incorporated", "plan", "planned", "will"
+}
 NEGATIVE_HINTS = {"confusing", "poor", "bad", "difficult", "waste", "irrelevant", "unclear"}
 
 # ----------------------------
@@ -79,22 +78,17 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str):
-    """Sentiment using CardiffNLP 3-class model with optimistic thresholds + keyword boost.
-       Returns (sentiment_label, scores_dict)."""
+    """Sentiment with thresholds + keyword boost."""
     if not text or text.strip() == "":
         return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
 
     results = sentiment_pipeline(text[:512], top_k=None)
 
-    # Normalize format → always list of dicts
     if isinstance(results, dict):
         results = [results]
     elif isinstance(results, list) and isinstance(results[0], str):
         results = [{"label": lab, "score": 1.0} for lab in results]
-    elif isinstance(results, list) and isinstance(results[0], dict):
-        pass  # already fine
-    else:
-        # fallback
+    elif not (isinstance(results, list) and isinstance(results[0], dict)):
         results = [{"label": "NEUTRAL", "score": 1.0}]
 
     scores = {}
@@ -111,7 +105,6 @@ def get_sentiment(text: str):
     neg = scores.get("Negative", 0)
     neu = scores.get("Neutral", 0)
 
-    # Apply thresholds
     if pos >= POS_THRESHOLD:
         sentiment = "Positive"
     elif neg >= NEG_THRESHOLD:
@@ -119,7 +112,6 @@ def get_sentiment(text: str):
     else:
         sentiment = "Neutral"
 
-    # Keyword boost if Neutral
     if sentiment == "Neutral":
         tokens = set(clean_text(text).split())
         if tokens & POSITIVE_HINTS:
@@ -130,7 +122,7 @@ def get_sentiment(text: str):
     return sentiment, {"Positive": pos, "Negative": neg, "Neutral": neu}
 
 def map_structured_sentiment(question, response):
-    """Maps Likert-style responses into Positive/Neutral/Negative."""
+    """Maps Likert responses."""
     mappings = {
         "Relevance": {
             "Not at all relevant": "Negative",
@@ -168,18 +160,17 @@ def map_structured_sentiment(question, response):
 # Main Preprocess
 # ----------------------------
 def preprocess_feedback():
-    df = pd.read_csv(INPUT_FILE)
-    df.columns = df.columns.str.strip().str.lower()
+    df_long = pd.read_csv(INPUT_FILE_LONG)
+    df_long.columns = df_long.columns.str.strip().str.lower()
 
-    records = []
-    phrase_records = []
-    sentiment_records = []
-    by_question_records = []
-    score_records = []  # NEW
+    df_wide = pd.read_csv(INPUT_FILE_WIDE)
+    df_wide.columns = df_wide.columns.str.strip().str.lower()
 
-    # --- Structured sentiment ---
-    if "question" in df.columns and "response" in df.columns:
-        for _, row in df.iterrows():
+    records, phrase_records, sentiment_records, by_question_records, score_records = [], [], [], [], []
+
+    # --- Structured sentiment from LONG file ---
+    if "question" in df_long.columns and "response" in df_long.columns:
+        for _, row in df_long.iterrows():
             q = str(row["question"]).strip().lower()
             r = str(row["response"]).strip()
             if not q or not r:
@@ -202,15 +193,15 @@ def preprocess_feedback():
             sentiment_records.append(sent)
             by_question_records.append((qtype, sent))
 
-    # --- Open-text fields ---
+    # --- Open-text sentiment from WIDE file ---
     text_fields = {
         "sharing examples": "Sharing (Open Text)",
         "application examples": "Applications (Open Text)"
     }
 
     for col, source in text_fields.items():
-        if col in df.columns:
-            for text in df[col].dropna():
+        if col in df_wide.columns:
+            for _, text in df_wide[col].dropna().items():
                 cleaned = clean_text(text)
                 words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
 
@@ -227,23 +218,20 @@ def preprocess_feedback():
                         phrase = " ".join(gram)
                         phrase_records.append((phrase, source))
 
-    # --- Word frequency outputs ---
+    # --- Word frequency ---
     if records:
         df_words = pd.DataFrame(records, columns=["Word", "Source"])
         df_counts = df_words.groupby(["Word", "Source"]).size().reset_index(name="Frequency")
         df_total = df_words.groupby("Word").size().reset_index(name="TotalFrequency")
         df_detailed = pd.merge(df_counts, df_total, on="Word").sort_values(by="TotalFrequency", ascending=False)
-        df_total_only = df_total.sort_values(by="TotalFrequency", ascending=False)
-
-        df_total_only.to_csv(OUTPUT_FILE_TOTAL, index=False)
+        df_total.sort_values(by="TotalFrequency", ascending=False).to_csv(OUTPUT_FILE_TOTAL, index=False)
         df_detailed.to_csv(OUTPUT_FILE_DETAILED, index=False)
 
-    # --- Phrase frequency output ---
+    # --- Phrase frequency ---
     if phrase_records:
         df_phrases = pd.DataFrame(phrase_records, columns=["Phrase", "Source"])
         df_phrases_count = df_phrases.groupby("Phrase").size().reset_index(name="Frequency")
-        df_phrases_top = df_phrases_count.sort_values(by="Frequency", ascending=False).head(20)
-        df_phrases_top.to_csv(OUTPUT_FILE_PHRASES, index=False)
+        df_phrases_count.sort_values(by="Frequency", ascending=False).head(20).to_csv(OUTPUT_FILE_PHRASES, index=False)
 
     # --- Sentiment summary ---
     if sentiment_records:
@@ -261,10 +249,9 @@ def preprocess_feedback():
             .mul(100)
             .reset_index(name="Percent")
         )
-        df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"])
-        df_final.to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
+        pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"]).to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
 
-    # --- Sentiment scores (NEW) ---
+    # --- Sentiment scores ---
     if score_records:
         df_scores = pd.DataFrame(score_records, columns=["Source", "Text", "Sentiment", "PosScore", "NegScore", "NeuScore"])
         df_scores.to_csv(OUTPUT_FILE_SCORES, index=False)
