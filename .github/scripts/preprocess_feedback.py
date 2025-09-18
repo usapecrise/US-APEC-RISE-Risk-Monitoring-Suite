@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Hugging Face 3-class version)
----------------------------------------------------------
+Feedback Analysis Pipeline (Optimistic 3-class version)
+-------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
    - LABEL_0 = Negative
    - LABEL_1 = Neutral
    - LABEL_2 = Positive
-4. Structured question mapping (normalized to Positive/Neutral/Negative)
+   - Optimistic tilt: favors Positive unless Negative is clearly stronger
+4. Structured question mapping (balanced: Somewhat → Neutral)
 5. Exports:
    - word_frequency.csv
    - word_frequency_detailed.csv
@@ -77,20 +78,28 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str) -> str:
-    """Sentiment using CardiffNLP 3-class model"""
+    """Sentiment using CardiffNLP 3-class model with optimistic tilt"""
     if not text or text.strip() == "":
         return "Neutral"
 
-    result = sentiment_pipeline(text[:512])[0]  # truncate long text
-    label = result["label"]
+    # Get full probability scores
+    results = sentiment_pipeline(text[:512], return_all_scores=True)[0]
+    scores = {r["label"]: r["score"] for r in results}
 
-    # Cardiff model labels
-    label_map = {
-        "LABEL_0": "Negative",
-        "LABEL_1": "Neutral",
-        "LABEL_2": "Positive"
-    }
-    return label_map.get(label, "Neutral")
+    pos = scores.get("LABEL_2", 0.0)  # Positive
+    neu = scores.get("LABEL_1", 0.0)  # Neutral
+    neg = scores.get("LABEL_0", 0.0)  # Negative
+
+    # Rule 1: Strong Negative → Negative
+    if neg >= 0.35 and neg > pos:
+        return "Negative"
+
+    # Rule 2: Positive stronger than Neutral → Positive
+    if pos >= 0.30 and pos >= neu:
+        return "Positive"
+
+    # Rule 3: Otherwise, Neutral
+    return "Neutral"
 
 def map_structured_sentiment(question, response):
     mappings = {
