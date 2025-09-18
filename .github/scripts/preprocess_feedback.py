@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Optimistic Thresholds + Keyword Boost)
------------------------------------------------------------------
+Feedback Analysis Pipeline (Optimistic Thresholds + Keyword Boost, Robust Results Handling)
+------------------------------------------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
@@ -12,6 +12,7 @@ Feedback Analysis Pipeline (Optimistic Thresholds + Keyword Boost)
      * NEGATIVE if score >= NEG_THRESHOLD
      * else Neutral
    - Keyword boost for "helpful/clear/etc."
+   - Robust handling of pipeline output formats (dict / list / str)
 4. Structured question mapping (from `Question`/`Response` columns in long file)
 5. Exports:
    - word_frequency.csv
@@ -83,12 +84,32 @@ def get_sentiment(text: str):
     if not text or text.strip() == "":
         return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
 
-    results = sentiment_pipeline(text[:512], top_k=None)[0]
-    scores = {r["label"].upper(): r["score"] for r in results}
+    results = sentiment_pipeline(text[:512], top_k=None)
 
-    pos = scores.get("POSITIVE", scores.get("LABEL_2", 0))
-    neg = scores.get("NEGATIVE", scores.get("LABEL_0", 0))
-    neu = scores.get("NEUTRAL", scores.get("LABEL_1", 0))
+    # Normalize format → always list of dicts
+    if isinstance(results, dict):
+        results = [results]
+    elif isinstance(results, list) and isinstance(results[0], str):
+        results = [{"label": lab, "score": 1.0} for lab in results]
+    elif isinstance(results, list) and isinstance(results[0], dict):
+        pass  # already fine
+    else:
+        # fallback
+        results = [{"label": "NEUTRAL", "score": 1.0}]
+
+    scores = {}
+    for r in results:
+        label = str(r["label"]).upper()
+        if label in ["LABEL_0", "NEGATIVE"]:
+            scores["Negative"] = r["score"]
+        elif label in ["LABEL_1", "NEUTRAL"]:
+            scores["Neutral"] = r["score"]
+        elif label in ["LABEL_2", "POSITIVE"]:
+            scores["Positive"] = r["score"]
+
+    pos = scores.get("Positive", 0)
+    neg = scores.get("Negative", 0)
+    neu = scores.get("Neutral", 0)
 
     # Apply thresholds
     if pos >= POS_THRESHOLD:
