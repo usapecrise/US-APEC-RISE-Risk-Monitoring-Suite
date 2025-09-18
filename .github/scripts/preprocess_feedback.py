@@ -1,9 +1,30 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Feedback Analysis Pipeline (Hugging Face version)
+-------------------------------------------------
+1. Cleans feedback text
+2. Word + phrase frequency analysis
+3. Sentiment analysis using Hugging Face DistilBERT
+   - Thresholds skewed optimistic:
+     * POSITIVE if score >= 0.50
+     * NEGATIVE if score >= 0.25
+     * else Neutral
+4. Structured question mapping
+5. Exports:
+   - word_frequency.csv
+   - word_frequency_detailed.csv
+   - sentiment_summary.csv
+   - sentiment_by_question.csv
+   - top_phrases.csv
+"""
+
 import pandas as pd
 import re, string
 from nltk.stem import WordNetLemmatizer
 from nltk.util import ngrams
-from flair.models import TextClassifier
-from flair.data import Sentence
+from transformers import pipeline
 
 # ----------------------------
 # CONFIG
@@ -36,11 +57,9 @@ STOPWORDS = set([
 ])
 
 lemmatizer = WordNetLemmatizer()
-classifier = TextClassifier.load("sentiment")  # Flair sentiment model
 
-# Sentiment thresholds
-POS_THRESHOLD = 0.6
-NEG_THRESHOLD = 0.75   # stricter: fewer negatives
+# Load Hugging Face pipeline
+sentiment_pipeline = pipeline("sentiment-analysis")
 
 # ----------------------------
 # Helpers
@@ -58,17 +77,16 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str) -> str:
-    """Sentiment for open-text responses using Flair with dual thresholds"""
+    """Sentiment using Hugging Face with optimistic thresholds"""
     if not text or text.strip() == "":
         return "Neutral"
+    result = sentiment_pipeline(text[:512])[0]  # truncate long text
+    label = result["label"]
+    score = result["score"]
 
-    sentence = Sentence(text)
-    classifier.predict(sentence)
-    label = sentence.labels[0]
-
-    if label.value == "POSITIVE" and label.score >= POS_THRESHOLD:
+    if label == "POSITIVE" and score >= 0.50:
         return "Positive"
-    elif label.value == "NEGATIVE" and label.score >= NEG_THRESHOLD:
+    elif label == "NEGATIVE" and score >= 0.25:
         return "Negative"
     else:
         return "Neutral"
@@ -91,17 +109,17 @@ def map_structured_sentiment(question, response):
         },
         "application": {
             "Yes: I expect to incorporate them routinely in my day-to-day tasks": "Positive",
-            "Somewhat: I may apply them occasionally when circumstances warrant": "Neutral",
+            "Somewhat: I may apply them occasionally when circumstances warrant": "Positive",
             "No: I do not foresee any practical use in my current role": "Negative"
         },
         "challenges": {
             "Yes: It directly addressed key challenges in a meaningful way": "Positive",
-            "Somewhat: It addressed some relevant challenges, but not comprehensively": "Neutral",
+            "Somewhat: It addressed some relevant challenges, but not comprehensively": "Positive",
             "No: It did not substantially address the main challenges we are facing": "Negative"
         },
         "sharing": {
             "Yes: I intend to actively share with colleagues or my network": "Positive",
-            "Somewhat: I may share in appropriate settings if relevant": "Neutral",
+            "Somewhat: I may share in appropriate settings if relevant": "Positive",
             "Not at this time: I do not currently have plans to share": "Negative"
         }
     }
