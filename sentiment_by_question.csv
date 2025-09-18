@@ -1,3 +1,5 @@
 Question,Sentiment,Count,Percent
-Applications,Neutral,975,100.0
-Sharing,Neutral,830,100.0
+Applications,Neutral,890,91.28205128205128
+Sharing,Neutral,810,97.59036144578313
+Applications,Positive,85,8.717948717948717
+Sharing,Positive,20,2.4096385542168677
