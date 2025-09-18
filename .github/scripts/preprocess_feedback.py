@@ -2,16 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Wide-Column Version)
-------------------------------------------------
-1. Reads Airtable CSV with headers like:
-   'relevance to work', 'knowledge gain', 'application intent', 'sharing intent',
-   'application examples', 'sharing examples'
+Feedback Analysis Pipeline (Wide-Column Version, Safeguarded)
+-------------------------------------------------------------
+1. Reads Airtable CSV (wide format with question headers)
 2. Cleans text and analyzes word/phrase frequency
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
    - Strongest label wins
 4. Structured mapping for Relevance, Knowledge, Application, Sharing
-5. Exports:
+5. Skips barriers and improvements
+6. Guarantees sentiment_by_question.csv always has all 6 categories:
+   Relevance, Knowledge, Application, Sharing,
+   Applications (Open Text), Sharing (Open Text)
+7. Exports:
    - word_frequency.csv
    - word_frequency_detailed.csv
    - sentiment_summary.csv
@@ -182,6 +184,12 @@ def preprocess_feedback():
         df_sentiment.to_csv(OUTPUT_FILE_SENTIMENT, index=False)
 
     # Sentiment by question
+    expected_categories = [
+        "Relevance", "Knowledge", "Application", "Sharing",
+        "Applications (Open Text)", "Sharing (Open Text)"
+    ]
+    sentiments = ["Positive", "Neutral", "Negative"]
+
     if by_question_records:
         df_byq = pd.DataFrame(by_question_records, columns=["Question", "Sentiment"])
         df_byq_summary = df_byq.value_counts().reset_index(name="Count")
@@ -191,7 +199,12 @@ def preprocess_feedback():
             .mul(100)
             .reset_index(name="Percent")
         )
-        df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"])
+        df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"], how="outer")
+
+        # Ensure all categories exist
+        all_combos = pd.MultiIndex.from_product([expected_categories, sentiments], names=["Question","Sentiment"])
+        df_final = df_final.set_index(["Question","Sentiment"]).reindex(all_combos, fill_value=0).reset_index()
+
         df_final.to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
 
     print("✅ Preprocessing complete")
