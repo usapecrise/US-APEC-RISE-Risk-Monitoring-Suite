@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Balanced + Normalized Columns, fixed get_sentiment)
--------------------------------------------------------------------------------
+Feedback Analysis Pipeline (Long-format compatible)
+---------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
    - Always assigns the strongest label
-4. Structured question mapping (normalized column names so Relevance/Knowledge always appear)
+4. Structured question mapping (from `Question`/`Response` columns in long file)
 5. Exports:
    - word_frequency.csv
    - word_frequency_detailed.csv
@@ -69,7 +69,6 @@ def get_sentiment(text: str) -> str:
 
     results = sentiment_pipeline(text[:512], top_k=None)
 
-    # Handle both possible return formats
     if isinstance(results, list) and isinstance(results[0], list):
         results = results[0]
 
@@ -88,6 +87,7 @@ def get_sentiment(text: str) -> str:
     return "Neutral"
 
 def map_structured_sentiment(question, response):
+    """Maps Likert-style responses into Positive/Neutral/Negative."""
     mappings = {
         "Relevance": {
             "Not at all relevant": "Negative",
@@ -112,6 +112,11 @@ def map_structured_sentiment(question, response):
             "Yes: I intend to actively share with colleagues or my network": "Positive",
             "Somewhat: I may share in appropriate settings if relevant": "Neutral",
             "Not at this time: I do not currently have plans to share": "Negative"
+        },
+        "Challenges": {
+            "Yes: It directly addressed key challenges in a meaningful way": "Positive",
+            "Somewhat: It addressed some relevant challenges, but not comprehensively": "Neutral",
+            "No: It did not substantially address the main challenges we are facing": "Negative"
         }
     }
     return mappings.get(question, {}).get(response, "Neutral")
@@ -122,37 +127,46 @@ def map_structured_sentiment(question, response):
 def preprocess_feedback():
     df = pd.read_csv(INPUT_FILE)
 
-    # Normalize column names: lowercase, strip, remove '?'
-    df.columns = df.columns.str.strip().str.lower().str.replace(r"[?]", "", regex=True)
-
-    # Define fields after normalization (must match your Airtable export headers)
-    STRUCTURED_FIELDS = {
-        "relevance to work": "Relevance",
-        "knowledge gain": "Knowledge",
-        "application intent": "Application",
-        "sharing intent": "Sharing"
-    }
-
-    TEXT_FIELDS = {
-        "sharing examples": "Sharing (Open Text)",
-        "application examples": "Applications (Open Text)"
-    }
+    # Normalize column names
+    df.columns = df.columns.str.strip().str.lower()
 
     records = []
     phrase_records = []
     sentiment_records = []
     by_question_records = []
 
-    # Structured sentiment mapping
-    for col, qtype in STRUCTURED_FIELDS.items():
-        if col in df.columns:
-            for resp in df[col].dropna():
-                sent = map_structured_sentiment(qtype, resp)
-                sentiment_records.append(sent)
-                by_question_records.append((qtype, sent))
+    # --- Structured sentiment from Question/Response ---
+    if "question" in df.columns and "response" in df.columns:
+        for _, row in df.iterrows():
+            q = str(row["question"]).strip().lower()
+            r = str(row["response"]).strip()
+            if not q or not r:
+                continue
 
-    # Open-text analysis
-    for col, source in TEXT_FIELDS.items():
+            if "relevance" in q:
+                qtype = "Relevance"
+            elif "knowledge" in q:
+                qtype = "Knowledge"
+            elif "application intent" in q:
+                qtype = "Application"
+            elif "sharing intent" in q:
+                qtype = "Sharing"
+            elif "challenge" in q:
+                qtype = "Challenges"
+            else:
+                continue
+
+            sent = map_structured_sentiment(qtype, r)
+            sentiment_records.append(sent)
+            by_question_records.append((qtype, sent))
+
+    # --- Open-text fields ---
+    text_fields = {
+        "sharing examples": "Sharing (Open Text)",
+        "application examples": "Applications (Open Text)"
+    }
+
+    for col, source in text_fields.items():
         if col in df.columns:
             for text in df[col].dropna():
                 cleaned = clean_text(text)
@@ -170,7 +184,7 @@ def preprocess_feedback():
                         phrase = " ".join(gram)
                         phrase_records.append((phrase, source))
 
-    # Word frequency outputs
+    # --- Word frequency outputs ---
     if records:
         df_words = pd.DataFrame(records, columns=["Word", "Source"])
         df_counts = df_words.groupby(["Word", "Source"]).size().reset_index(name="Frequency")
@@ -181,20 +195,20 @@ def preprocess_feedback():
         df_total_only.to_csv(OUTPUT_FILE_TOTAL, index=False)
         df_detailed.to_csv(OUTPUT_FILE_DETAILED, index=False)
 
-    # Phrase frequency output
+    # --- Phrase frequency output ---
     if phrase_records:
         df_phrases = pd.DataFrame(phrase_records, columns=["Phrase", "Source"])
         df_phrases_count = df_phrases.groupby("Phrase").size().reset_index(name="Frequency")
         df_phrases_top = df_phrases_count.sort_values(by="Frequency", ascending=False).head(20)
         df_phrases_top.to_csv(OUTPUT_FILE_PHRASES, index=False)
 
-    # Sentiment summary
+    # --- Sentiment summary ---
     if sentiment_records:
         df_sentiment = pd.Series(sentiment_records).value_counts().reset_index()
         df_sentiment.columns = ["Sentiment", "Count"]
         df_sentiment.to_csv(OUTPUT_FILE_SENTIMENT, index=False)
 
-    # Sentiment by question
+    # --- Sentiment by question ---
     if by_question_records:
         df_byq = pd.DataFrame(by_question_records, columns=["Question", "Sentiment"])
         df_byq_summary = df_byq.value_counts().reset_index(name="Count")
