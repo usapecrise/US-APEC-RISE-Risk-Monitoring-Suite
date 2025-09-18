@@ -2,21 +2,23 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Optimistic Thresholds)
---------------------------------------------------
+Feedback Analysis Pipeline (Optimistic Thresholds + Keyword Boost)
+-----------------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
-   - Optimistic thresholds:
-     * POSITIVE if score >= 0.45
-     * NEGATIVE if score >= 0.25
+   - Tunable thresholds:
+     * POSITIVE if score >= POS_THRESHOLD
+     * NEGATIVE if score >= NEG_THRESHOLD
      * else Neutral
+   - Keyword boost for "helpful/clear/etc."
 4. Structured question mapping (from `Question`/`Response` columns in long file)
 5. Exports:
    - word_frequency.csv
    - word_frequency_detailed.csv
    - sentiment_summary.csv
    - sentiment_by_question.csv
+   - sentiment_scores.csv   (NEW: includes raw scores per text)
    - top_phrases.csv
 """
 
@@ -34,7 +36,8 @@ OUTPUT_FILE_TOTAL = "word_frequency.csv"
 OUTPUT_FILE_DETAILED = "word_frequency_detailed.csv"
 OUTPUT_FILE_SENTIMENT = "sentiment_summary.csv"
 OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"
-OUTPUT_FILE_PHRASES = "top_phrases.csv" 
+OUTPUT_FILE_PHRASES = "top_phrases.csv"
+OUTPUT_FILE_SCORES = "sentiment_scores.csv"  # NEW
 
 STOPWORDS = set([
     "the","was","very","and","me","to","i","a","but","more","new","them","my",
@@ -51,6 +54,15 @@ sentiment_pipeline = pipeline(
 )
 
 # ----------------------------
+# Tunable thresholds + keyword boost
+# ----------------------------
+POS_THRESHOLD = 0.40   # classify as Positive if >= this
+NEG_THRESHOLD = 0.30   # classify as Negative if >= this
+
+POSITIVE_HINTS = {"useful", "helpful", "valuable", "good", "clear", "great", "effective", "relevant"}
+NEGATIVE_HINTS = {"confusing", "poor", "bad", "difficult", "waste", "irrelevant", "unclear"}
+
+# ----------------------------
 # Helpers
 # ----------------------------
 def clean_text(text):
@@ -65,35 +77,36 @@ def normalize_word(word: str) -> str:
     word = lemmatizer.lemmatize(word, pos="n")
     return word
 
-def get_sentiment(text: str) -> str:
-    """Sentiment using CardiffNLP 3-class model with optimistic thresholds."""
+def get_sentiment(text: str):
+    """Sentiment using CardiffNLP 3-class model with optimistic thresholds + keyword boost.
+       Returns (sentiment_label, scores_dict)."""
     if not text or text.strip() == "":
-        return "Neutral"
+        return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
 
-    results = sentiment_pipeline(text[:512], top_k=None)
-    if isinstance(results, list) and isinstance(results[0], list):
-        results = results[0]
+    results = sentiment_pipeline(text[:512], top_k=None)[0]
+    scores = {r["label"].upper(): r["score"] for r in results}
 
-    # Find scores
-    scores = {}
-    for r in results:
-        label = str(r["label"]).upper()
-        if label in ["LABEL_0", "NEGATIVE"]:
-            scores["Negative"] = r["score"]
-        elif label in ["LABEL_1", "NEUTRAL"]:
-            scores["Neutral"] = r["score"]
-        elif label in ["LABEL_2", "POSITIVE"]:
-            scores["Positive"] = r["score"]
+    pos = scores.get("POSITIVE", scores.get("LABEL_2", 0))
+    neg = scores.get("NEGATIVE", scores.get("LABEL_0", 0))
+    neu = scores.get("NEUTRAL", scores.get("LABEL_1", 0))
 
-    if not scores:
-        return "Neutral"
+    # Apply thresholds
+    if pos >= POS_THRESHOLD:
+        sentiment = "Positive"
+    elif neg >= NEG_THRESHOLD:
+        sentiment = "Negative"
+    else:
+        sentiment = "Neutral"
 
-    # Apply optimistic thresholds
-    if "Positive" in scores and scores["Positive"] >= 0.45:
-        return "Positive"
-    if "Negative" in scores and scores["Negative"] >= 0.25:
-        return "Negative"
-    return "Neutral"
+    # Keyword boost if Neutral
+    if sentiment == "Neutral":
+        tokens = set(clean_text(text).split())
+        if tokens & POSITIVE_HINTS:
+            sentiment = "Positive"
+        elif tokens & NEGATIVE_HINTS:
+            sentiment = "Negative"
+
+    return sentiment, {"Positive": pos, "Negative": neg, "Neutral": neu}
 
 def map_structured_sentiment(question, response):
     """Maps Likert-style responses into Positive/Neutral/Negative."""
@@ -141,8 +154,9 @@ def preprocess_feedback():
     phrase_records = []
     sentiment_records = []
     by_question_records = []
+    score_records = []  # NEW
 
-    # --- Structured sentiment from Question/Response ---
+    # --- Structured sentiment ---
     if "question" in df.columns and "response" in df.columns:
         for _, row in df.iterrows():
             q = str(row["question"]).strip().lower()
@@ -179,9 +193,10 @@ def preprocess_feedback():
                 cleaned = clean_text(text)
                 words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
 
-                sentiment = get_sentiment(text)
+                sentiment, scores = get_sentiment(text)
                 sentiment_records.append(sentiment)
                 by_question_records.append((source, sentiment))
+                score_records.append((source, text, sentiment, scores["Positive"], scores["Negative"], scores["Neutral"]))
 
                 for word in words:
                     records.append((word, source))
@@ -228,10 +243,15 @@ def preprocess_feedback():
         df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"])
         df_final.to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
 
+    # --- Sentiment scores (NEW) ---
+    if score_records:
+        df_scores = pd.DataFrame(score_records, columns=["Source", "Text", "Sentiment", "PosScore", "NegScore", "NeuScore"])
+        df_scores.to_csv(OUTPUT_FILE_SCORES, index=False)
+
     print("✅ Preprocessing complete")
     print(
         f"Saved {OUTPUT_FILE_TOTAL}, {OUTPUT_FILE_DETAILED}, {OUTPUT_FILE_PHRASES}, "
-        f"{OUTPUT_FILE_SENTIMENT}, {OUTPUT_FILE_SENTIMENT_BYQ}"
+        f"{OUTPUT_FILE_SENTIMENT}, {OUTPUT_FILE_SENTIMENT_BYQ}, {OUTPUT_FILE_SCORES}"
     )
 
 if __name__ == "__main__":
