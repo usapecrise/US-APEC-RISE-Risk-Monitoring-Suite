@@ -2,15 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Balanced version)
----------------------------------------------
+Feedback Analysis Pipeline (Balanced + Normalized Columns)
+----------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
-   - Always assigns the strongest label (reduces "too Neutral")
-   - Handles both LABEL_0/1/2 and NEGATIVE/NEUTRAL/POSITIVE labels
-4. Structured question mapping (balanced: Somewhat → Neutral)
-   - Ensures Relevance, Knowledge, Application, Sharing appear in outputs
+   - Always assigns the strongest label
+4. Structured question mapping (normalized column names so Relevance/Knowledge always appear)
 5. Exports:
    - word_frequency.csv
    - word_frequency_detailed.csv
@@ -34,18 +32,6 @@ OUTPUT_FILE_DETAILED = "word_frequency_detailed.csv"
 OUTPUT_FILE_SENTIMENT = "sentiment_summary.csv"
 OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"
 OUTPUT_FILE_PHRASES = "top_phrases.csv" 
-
-TEXT_FIELDS = {
-    "Sharing Examples": "Sharing (Open Text)",
-    "Application Examples": "Applications (Open Text)"
-}
-
-STRUCTURED_FIELDS = {
-    "To what extent was this training relevant to your field of work?": "Relevance",
-    "To what extent did this training increase your knowledge in the topic area?": "Knowledge",
-    "Do you intend to directly apply workshop outcomes in your work?": "Application",
-    "Do you plan to share what you learned with others in your organization or professional network?": "Sharing"
-}
 
 STOPWORDS = set([
     "the","was","very","and","me","to","i","a","but","more","new","them","my",
@@ -83,7 +69,6 @@ def get_sentiment(text: str) -> str:
 
     results = sentiment_pipeline(text[:512], return_all_scores=True)[0]
 
-    # Handle both label formats
     scores = {}
     for r in results:
         label = r["label"].upper()
@@ -94,7 +79,6 @@ def get_sentiment(text: str) -> str:
         elif label in ["LABEL_2", "POSITIVE"]:
             scores["Positive"] = r["score"]
 
-    # Pick whichever label has the highest probability
     if scores:
         return max(scores, key=scores.get)
     return "Neutral"
@@ -134,6 +118,22 @@ def map_structured_sentiment(question, response):
 def preprocess_feedback():
     df = pd.read_csv(INPUT_FILE)
 
+    # Normalize column names: lowercase, strip, remove '?'
+    df.columns = df.columns.str.strip().str.lower().str.replace(r"[?]", "", regex=True)
+
+    # Define fields after normalization
+    STRUCTURED_FIELDS = {
+        "to what extent was this training relevant to your field of work": "Relevance",
+        "to what extent did this training increase your knowledge in the topic area": "Knowledge",
+        "do you intend to directly apply workshop outcomes in your work": "Application",
+        "do you plan to share what you learned with others in your organization or professional network": "Sharing"
+    }
+
+    TEXT_FIELDS = {
+        "sharing examples": "Sharing (Open Text)",
+        "application examples": "Applications (Open Text)"
+    }
+
     records = []
     phrase_records = []
     sentiment_records = []
@@ -145,7 +145,7 @@ def preprocess_feedback():
             for resp in df[col].dropna():
                 sent = map_structured_sentiment(qtype, resp)
                 sentiment_records.append(sent)
-                by_question_records.append((qtype, sent))  # keep friendly name
+                by_question_records.append((qtype, sent))
 
     # Open-text analysis
     for col, source in TEXT_FIELDS.items():
@@ -154,16 +154,13 @@ def preprocess_feedback():
                 cleaned = clean_text(text)
                 words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
 
-                # Sentiment
                 sentiment = get_sentiment(text)
                 sentiment_records.append(sentiment)
                 by_question_records.append((source, sentiment))
 
-                # Word-level frequencies
                 for word in words:
                     records.append((word, source))
 
-                # Phrase-level (bigrams/trigrams)
                 for n in [2, 3]:
                     for gram in ngrams(words, n):
                         phrase = " ".join(gram)
