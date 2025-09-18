@@ -2,12 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Long-format compatible)
----------------------------------------------------
+Feedback Analysis Pipeline (Optimistic Thresholds)
+--------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
-   - Always assigns the strongest label
+   - Optimistic thresholds:
+     * POSITIVE if score >= 0.45
+     * NEGATIVE if score >= 0.25
+     * else Neutral
 4. Structured question mapping (from `Question`/`Response` columns in long file)
 5. Exports:
    - word_frequency.csv
@@ -63,15 +66,15 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str) -> str:
-    """Sentiment using CardiffNLP 3-class model (strongest label wins)."""
+    """Sentiment using CardiffNLP 3-class model with optimistic thresholds."""
     if not text or text.strip() == "":
         return "Neutral"
 
     results = sentiment_pipeline(text[:512], top_k=None)
-
     if isinstance(results, list) and isinstance(results[0], list):
         results = results[0]
 
+    # Find scores
     scores = {}
     for r in results:
         label = str(r["label"]).upper()
@@ -82,8 +85,14 @@ def get_sentiment(text: str) -> str:
         elif label in ["LABEL_2", "POSITIVE"]:
             scores["Positive"] = r["score"]
 
-    if scores:
-        return max(scores, key=scores.get)
+    if not scores:
+        return "Neutral"
+
+    # Apply optimistic thresholds
+    if "Positive" in scores and scores["Positive"] >= 0.45:
+        return "Positive"
+    if "Negative" in scores and scores["Negative"] >= 0.25:
+        return "Negative"
     return "Neutral"
 
 def map_structured_sentiment(question, response):
@@ -126,8 +135,6 @@ def map_structured_sentiment(question, response):
 # ----------------------------
 def preprocess_feedback():
     df = pd.read_csv(INPUT_FILE)
-
-    # Normalize column names
     df.columns = df.columns.str.strip().str.lower()
 
     records = []
