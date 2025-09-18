@@ -1,756 +1,756 @@
 Word,Source,Frequency,TotalFrequency
-share,Applications,345,625
-share,Sharing,280,625
-team,Applications,235,285
-team,Sharing,50,285
-policy,Applications,215,245
-policy,Sharing,30,245
-workshop,Sharing,80,160
-workshop,Applications,80,160
-report,Applications,15,160
-report,Sharing,145,160
-inform,Sharing,10,150
-inform,Applications,140,150
-colleague,Sharing,85,145
-colleague,Applications,60,145
-use,Applications,100,125
-use,Sharing,25,125
-recommendation,Applications,115,120
-recommendation,Sharing,5,120
-discussion,Applications,40,115
-discussion,Sharing,75,115
-work,Sharing,10,105
-work,Applications,95,105
-session,Applications,20,100
-session,Sharing,80,100
-update,Sharing,10,85
-update,Applications,75,85
-other,Sharing,30,80
-other,Applications,50,80
-standard,Applications,55,80
-standard,Sharing,25,80
-knowledge,Sharing,55,80
-knowledge,Applications,25,80
-trade,Sharing,20,75
-trade,Applications,55,75
-negotiation,Applications,60,75
-negotiation,Sharing,15,75
-internal,Applications,45,75
-internal,Sharing,30,75
-digital,Applications,45,70
-digital,Sharing,25,70
-learn,Sharing,45,70
-learn,Applications,25,70
-process,Applications,60,70
-process,Sharing,10,70
-data,Applications,65,70
-data,Sharing,5,70
-tool,Applications,60,65
-tool,Sharing,5,65
-meet,Sharing,50,60
-meet,Applications,10,60
-through,Sharing,45,60
-through,Applications,15,60
-apec,Sharing,20,55
-apec,Applications,35,55
-economy,Applications,45,55
-economy,Sharing,10,55
-apply,Applications,50,50
-ria,Applications,35,50
-information,Sharing,25,50
-information,Applications,25,50
-ria,Sharing,15,50
-presentation,Sharing,50,50
-during,Applications,20,50
-during,Sharing,30,50
-meeting,Sharing,50,50
-insight,Sharing,20,45
-collaboration,Sharing,30,45
-collaboration,Applications,15,45
-insight,Applications,25,45
-some,Sharing,10,40
-material,Sharing,30,40
-material,Applications,10,40
-relevant,Applications,25,40
-research,Sharing,5,40
-development,Applications,35,40
-development,Sharing,5,40
-relevant,Sharing,15,40
-service,Sharing,5,40
-service,Applications,35,40
-some,Applications,30,40
-research,Applications,35,40
-future,Applications,35,40
-future,Sharing,5,40
-technical,Sharing,10,35
-technical,Applications,25,35
-incorporate,Sharing,10,35
-key,Applications,10,35
-key,Sharing,25,35
-incorporate,Applications,25,35
-member,Sharing,20,35
-into,Sharing,15,35
-into,Applications,20,35
-how,Sharing,15,35
-how,Applications,20,35
-member,Applications,15,35
-industry,Applications,25,30
-initiative,Sharing,15,30
-initiative,Applications,15,30
-industry,Sharing,5,30
-train,Sharing,20,30
-topic,Sharing,10,30
-topic,Applications,20,30
-roo,Applications,25,30
-roo,Sharing,5,30
-what,Sharing,20,30
-what,Applications,10,30
-daily,Applications,30,30
-outcome,Applications,25,30
-provide,Sharing,10,30
-provide,Applications,20,30
-train,Applications,10,30
-outcome,Sharing,5,30
-experience,Sharing,15,25
-have,Sharing,10,25
-develop,Applications,25,25
-idea,Applications,20,25
-experience,Applications,10,25
-draft,Sharing,5,25
-take,Applications,20,25
-take,Sharing,5,25
-understand,Applications,25,25
-summary,Sharing,25,25
-sector,Applications,20,25
-also,Applications,25,25
-useful,Sharing,10,25
-useful,Applications,15,25
-well,Applications,20,25
-well,Sharing,5,25
-analysis,Applications,25,25
-sector,Sharing,5,25
-implement,Sharing,10,25
-support,Sharing,5,25
-support,Applications,20,25
-shape,Applications,25,25
-draft,Applications,20,25
-fta,Sharing,5,25
-practice,Applications,25,25
-prepare,Applications,10,25
-plan,Applications,15,25
-plan,Sharing,10,25
-prepare,Sharing,15,25
-project,Applications,25,25
-organization,Applications,15,25
-organization,Sharing,10,25
-make,Applications,15,25
-make,Sharing,10,25
-fta,Applications,20,25
-implement,Applications,15,25
-idea,Sharing,5,25
-have,Applications,15,25
-government,Sharing,10,25
-good,Applications,25,25
-government,Applications,15,25
-replicate,Applications,10,20
-stakeholder,Applications,5,20
-cloud,Applications,20,20
-replicate,Sharing,10,20
-brown,Applications,10,20
-agency,Applications,15,20
-better,Applications,20,20
-bag,Sharing,10,20
-agency,Sharing,5,20
-when,Applications,15,20
-stakeholder,Sharing,15,20
-brown,Sharing,10,20
-bag,Applications,10,20
-ktl,Applications,15,20
-ktl,Sharing,5,20
-note,Applications,5,20
-note,Sharing,15,20
-network,Applications,5,20
-network,Sharing,15,20
-national,Applications,15,20
-national,Sharing,5,20
-reform,Applications,15,20
-relevance,Sharing,5,20
-relevance,Applications,15,20
-regulation,Applications,20,20
-regional,Applications,20,20
-regard,Sharing,5,20
-conduct,Applications,5,20
-conduct,Sharing,15,20
-regard,Applications,15,20
-reform,Sharing,5,20
-department,Applications,20,20
-discus,Sharing,15,20
-discus,Applications,5,20
-forum,Sharing,15,20
-gain,Applications,20,20
-forum,Applications,5,20
-email,Sharing,20,20
-event,Applications,5,20
-event,Sharing,15,20
-within,Sharing,15,20
-within,Applications,5,20
-when,Sharing,5,20
-adopt,Sharing,5,20
-adopt,Applications,15,20
-which,Applications,5,15
-which,Sharing,10,15
-would,Applications,15,15
-wto,Applications,10,15
-wto,Sharing,5,15
-engagement,Applications,10,15
-engagement,Sharing,5,15
-transformation,Applications,15,15
-exercise,Applications,10,15
-exercise,Sharing,5,15
-tbt,Sharing,5,15
-awareness,Applications,10,15
-back,Applications,5,15
-awareness,Sharing,5,15
-back,Sharing,10,15
-tbt,Applications,10,15
-takeaway,Sharing,15,15
-especially,Applications,15,15
-guide,Applications,10,15
-index,Applications,5,15
-smart,Applications,15,15
-benefit,Sharing,10,15
-be,Applications,15,15
-benefit,Applications,5,15
-echo,Sharing,10,15
-include,Sharing,10,15
-guidance,Sharing,10,15
-ftas,Applications,15,15
-seminar,Sharing,15,15
-include,Applications,5,15
-build,Sharing,10,15
-resource,Sharing,15,15
-build,Applications,5,15
-guidance,Applications,5,15
-echo,Applications,5,15
-principle,Applications,10,15
-principle,Sharing,5,15
-collection,Applications,15,15
-reference,Applications,15,15
-help,Applications,15,15
-guideline,Applications,15,15
-guide,Sharing,5,15
-cross,Applications,10,15
-international,Sharing,10,15
-index,Sharing,10,15
-info,Applications,15,15
-deal,Applications,10,15
-deal,Sharing,5,15
-debrief,Applications,5,15
-debrief,Sharing,10,15
-integration,Applications,15,15
-consult,Applications,10,15
-integrate,Sharing,5,15
-integrate,Applications,10,15
-input,Applications,10,15
-input,Sharing,5,15
-custom,Applications,15,15
-cross,Sharing,5,15
-consult,Sharing,5,15
-involve,Applications,15,15
-international,Applications,5,15
-point,Applications,5,15
-ministry,Sharing,5,15
-official,Applications,10,15
-official,Sharing,5,15
-origin,Sharing,5,15
-coordination,Applications,5,15
-coordination,Sharing,10,15
-via,Sharing,15,15
-method,Applications,15,15
-cooperation,Applications,15,15
-ministry,Applications,10,15
-origin,Applications,10,15
-line,Applications,15,15
-improve,Applications,10,15
-improve,Sharing,5,15
-public,Applications,10,15
-point,Sharing,10,15
-public,Sharing,5,15
-supervisor,Sharing,10,10
-term,Applications,10,10
-etc,Applications,10,10
-document,Sharing,10,10
-agency’s,Applications,5,10
-try,Applications,10,10
-timber,Applications,5,10
-focal,Applications,5,10
-timber,Sharing,5,10
-focal,Sharing,5,10
-enhance,Applications,10,10
-example,Sharing,5,10
-study,Applications,5,10
-follow,Applications,5,10
-give,Sharing,5,10
-approach,Applications,10,10
-application,Sharing,10,10
-system,Applications,10,10
-task,Applications,10,10
-agency’s,Sharing,5,10
-evidence,Applications,10,10
-way,Applications,5,10
-advisory,Applications,10,10
-about,Applications,5,10
-unit,Applications,10,10
-example,Applications,5,10
-way,Sharing,5,10
-capacity,Sharing,5,10
-certain,Applications,10,10
-client,Applications,10,10
-recommend,Applications,10,10
-direct,Sharing,10,10
-digitalization,Applications,10,10
-result,Applications,10,10
-review,Applications,10,10
-gather,Sharing,5,10
-social,Sharing,10,10
-speaker,Applications,10,10
-section,Sharing,10,10
-identify,Applications,5,10
-identify,Sharing,5,10
-ill,Applications,5,10
-greater,Applications,10,10
-formulation,Applications,10,10
-gather,Applications,5,10
-gap,Applications,10,10
-friend,Sharing,5,10
-friend,Applications,5,10
-form,Sharing,5,10
-division,Applications,5,10
-follow,Sharing,5,10
-division,Sharing,5,10
-do,Sharing,10,10
-such,Applications,5,10
-study,Sharing,5,10
-such,Sharing,5,10
-suggest,Sharing,10,10
-capacity,Applications,5,10
-distribution,Sharing,10,10
-explain,Sharing,10,10
-strategy,Sharing,5,10
-strategy,Applications,5,10
-best,Applications,10,10
-background,Applications,10,10
-explore,Sharing,5,10
-feedback,Applications,5,10
-feedback,Sharing,5,10
-explore,Applications,5,10
-domestic,Sharing,10,10
-give,Applications,5,10
-form,Applications,5,10
-promote,Applications,10,10
-psr,Applications,10,10
-impact,Applications,10,10
-dialogue,Applications,5,10
-harmonization,Applications,10,10
-connect,Sharing,5,10
-connect,Applications,5,10
-ill,Sharing,5,10
-implementation,Applications,5,10
-implementation,Sharing,5,10
-importance,Applications,5,10
-importance,Sharing,5,10
-dialogue,Sharing,5,10
-regulatory,Applications,10,10
-concept,Sharing,10,10
-collegues,Applications,10,10
-private,Applications,5,10
-private,Sharing,5,10
-product,Applications,10,10
-collaborate,Applications,10,10
-paper,Sharing,5,10
-paper,Applications,5,10
-contact,Applications,5,10
-consultation,Sharing,5,10
-consultation,Applications,5,10
-cti,Applications,10,10
-day,Sharing,10,10
-consider,Applications,10,10
-preferential,Applications,5,10
-preferential,Sharing,5,10
-preparation,Applications,5,10
-preparation,Sharing,5,10
-present,Sharing,10,10
-perspective,Applications,5,10
-perspective,Sharing,5,10
-landscape,Applications,10,10
-issue,Applications,5,10
-matter,Applications,5,10
-management,Sharing,10,10
-organic,Applications,10,10
-i’m,Applications,5,10
-it,Sharing,5,10
-issue,Sharing,5,10
-it,Applications,5,10
-others,Applications,5,10
-i’m,Sharing,5,10
-opinion,Applications,5,10
-opinion,Sharing,5,10
-country,Applications,10,10
-create,Sharing,10,10
-iso,Sharing,5,10
-iso,Applications,5,10
-model,Applications,5,10
-negotiate,Sharing,5,10
-most,Sharing,5,10
-negotiate,Applications,5,10
-most,Applications,5,10
-others,Sharing,5,10
-level,Sharing,10,10
-model,Sharing,5,10
-oecd,Applications,5,10
-obstacle,Applications,10,10
-linkedin,Sharing,10,10
-oecd,Sharing,5,10
-cooperate,Applications,5,10
-conversation,Sharing,10,10
-lesson,Sharing,10,10
-contact,Sharing,5,10
-cooperate,Sharing,5,10
-office,Sharing,10,10
-could,Applications,5,10
-could,Sharing,5,10
-may,Sharing,5,10
-medium,Sharing,10,10
-matter,Sharing,5,10
-may,Applications,5,10
-mention,Sharing,5,10
-mention,Applications,5,10
-about,Sharing,5,10
-view,Sharing,10,10
-all,Applications,10,10
-already,Sharing,10,10
-advise,Applications,10,10
-across,Applications,10,10
-advocate,Applications,5,5
-accession,Applications,5,5
-account,Applications,5,5
-timely,Applications,5,5
-together,Sharing,5,5
-towards,Sharing,5,5
-town,Sharing,5,5
-ever,Applications,5,5
-executive,Sharing,5,5
-upcoming,Sharing,5,5
-upon,Sharing,5,5
-uptake,Applications,5,5
-usen,Applications,5,5
-usg,Sharing,5,5
-after,Sharing,5,5
-tpr,Sharing,5,5
-transition,Applications,5,5
-trip,Sharing,5,5
-uncitral,Applications,5,5
-context,Applications,5,5
-continue,Applications,5,5
-contreys,Sharing,5,5
-contribute,Applications,5,5
-convergence,Applications,5,5
-coperation,Sharing,5,5
-correlation,Applications,5,5
-monitor,Applications,5,5
-methodology,Applications,5,5
-mgmt,Applications,5,5
-education,Sharing,5,5
-effort,Applications,5,5
-elsewhere,Applications,5,5
-enable,Applications,5,5
-encourage,Applications,5,5
-engage,Applications,5,5
-own,Applications,5,5
-monthly,Sharing,5,5
-mouth,Sharing,5,5
-navigate,Applications,5,5
-need,Applications,5,5
-negociate,Applications,5,5
-mind,Sharing,5,5
-minute,Sharing,5,5
-learning,Applications,5,5
-legal,Applications,5,5
-leverage,Applications,5,5
-lie,Applications,5,5
-link,Sharing,5,5
-november,Sharing,5,5
-now,Applications,5,5
-offer,Sharing,5,5
-peersteam,Applications,5,5
-philippine,Applications,5,5
-once,Sharing,5,5
-only,Applications,5,5
-opportunity,Applications,5,5
-option,Applications,5,5
-look,Applications,5,5
-lunch,Sharing,5,5
-main,Sharing,5,5
-malaysia,Sharing,5,5
-manner,Applications,5,5
-ive,Sharing,5,5
-i’ve,Sharing,5,5
-keep,Applications,5,5
-ourganizing,Sharing,5,5
-output,Applications,5,5
-participation,Sharing,5,5
-particularly,Applications,5,5
-partner,Sharing,5,5
-kind,Applications,5,5
-knowledgeunderstanding,Applications,5,5
-korea,Sharing,5,5
-korean,Applications,5,5
-laboratory,Sharing,5,5
-lean,Applications,5,5
-isoiec,Applications,5,5
-course,Sharing,5,5
-cover,Sharing,5,5
-coworkers,Sharing,5,5
-pas,Sharing,5,5
-pecc,Applications,5,5
-peccs,Applications,5,5
-consideration,Applications,5,5
-consistent,Applications,5,5
-consortium,Sharing,5,5
-cureent,Applications,5,5
-current,Sharing,5,5
-customer,Applications,5,5
-informinh,Applications,5,5
-inhouse,Sharing,5,5
-innovative,Applications,5,5
-instance,Sharing,5,5
-consultancy,Sharing,5,5
-platform,Sharing,5,5
-panel,Sharing,5,5
-papua,Applications,5,5
-participant,Applications,5,5
-participate,Sharing,5,5
-post,Sharing,5,5
-powerslides,Sharing,5,5
-ppt,Sharing,5,5
-practical,Sharing,5,5
-intentional,Applications,5,5
-interagency,Sharing,5,5
-interest,Applications,5,5
-invite,Sharing,5,5
-indonesia,Sharing,5,5
-debate,Applications,5,5
-decision,Applications,5,5
-practicality,Applications,5,5
-practically,Sharing,5,5
-picture,Applications,5,5
-conclutions,Sharing,5,5
-conscious,Applications,5,5
-previous,Sharing,5,5
-prioritize,Applications,5,5
-problem,Sharing,5,5
-produce,Applications,5,5
-deck,Sharing,5,5
-demonstrate,Sharing,5,5
-design,Applications,5,5
-developer,Sharing,5,5
-informally,Sharing,5,5
-importand,Applications,5,5
-proposal,Applications,5,5
-provision,Sharing,5,5
-psrs,Applications,5,5
-policiy,Applications,5,5
-position,Applications,5,5
-positive,Applications,5,5
-reflect,Sharing,5,5
-reflection,Applications,5,5
-relate,Applications,5,5
-relationship,Applications,5,5
-publication,Applications,5,5
-publicprivate,Applications,5,5
-collective,Applications,5,5
-college,Applications,5,5
-collegee,Sharing,5,5
-comment,Sharing,5,5
-communication,Sharing,5,5
-competency,Applications,5,5
-comply,Applications,5,5
-computeable,Applications,5,5
-purchase,Applications,5,5
-quality,Applications,5,5
-raise,Sharing,5,5
-readout,Sharing,5,5
-real,Applications,5,5
-really,Applications,5,5
-reasonable,Sharing,5,5
-receive,Applications,5,5
-reco,Applications,5,5
-incharged,Sharing,5,5
-incorporateintegrate,Applications,5,5
-incountry,Sharing,5,5
-increase,Applications,5,5
-guinea,Applications,5,5
-gvc,Applications,5,5
-hall,Sharing,5,5
-harmonize,Applications,5,5
-refine,Applications,5,5
-sdr,Applications,5,5
-secondly,Applications,5,5
-rep,Applications,5,5
-capture,Applications,5,5
-case,Applications,5,5
-challenge,Sharing,5,5
-change,Applications,5,5
-channel,Sharing,5,5
-chapter,Applications,5,5
-cite,Sharing,5,5
-class,Sharing,5,5
-classification,Applications,5,5
-clear,Applications,5,5
-close,Applications,5,5
-cod,Applications,5,5
-question,Applications,5,5
-bring,Applications,5,5
-broader,Sharing,5,5
-bureau,Sharing,5,5
-business,Sharing,5,5
-canada,Sharing,5,5
-request,Applications,5,5
-require,Applications,5,5
-return,Sharing,5,5
-revenant,Applications,5,5
-revisiing,Applications,5,5
-revision,Applications,5,5
-roadmap,Applications,5,5
-role,Applications,5,5
-rool,Applications,5,5
-rule,Applications,5,5
-sdo,Sharing,5,5
-seek,Applications,5,5
-between,Applications,5,5
-bigger,Applications,5,5
-boarder,Applications,5,5
-bonus,Applications,5,5
-brief,Sharing,5,5
-briefers,Sharing,5,5
-helpful,Applications,5,5
-here,Applications,5,5
-higher,Sharing,5,5
-highlight,Sharing,5,5
-great,Applications,5,5
-groyps,Sharing,5,5
-grp,Applications,5,5
-different,Sharing,5,5
-digilization,Applications,5,5
-show,Applications,5,5
-simulator,Sharing,5,5
-site,Sharing,5,5
-small,Sharing,5,5
-direction,Applications,5,5
-directly,Applications,5,5
-directorate,Applications,5,5
-discuasions,Sharing,5,5
-dispute,Applications,5,5
-forward,Sharing,5,5
-further,Applications,5,5
-solve,Sharing,5,5
-som,Sharing,5,5
-specific,Applications,5,5
-stamdards,Applications,5,5
-standardisation,Applications,5,5
-strategize,Applications,5,5
-strengthen,Applications,5,5
-stretegic,Applications,5,5
-general,Applications,5,5
-get,Applications,5,5
-go,Sharing,5,5
-gov,Sharing,5,5
-grap,Applications,5,5
-followup,Sharing,5,5
-diversity,Sharing,5,5
-subject,Applications,5,5
-submit,Sharing,5,5
-summarize,Sharing,5,5
-set,Applications,5,5
-settlement,Applications,5,5
-shall,Applications,5,5
-superior,Sharing,5,5
-suppprt,Applications,5,5
-available,Applications,5,5
-awarenesscapacity,Sharing,5,5
-ease,Applications,5,5
-economic,Applications,5,5
-formulate,Applications,5,5
-exist,Applications,5,5
-expreriences,Applications,5,5
-facilitate,Applications,5,5
-feed,Sharing,5,5
-baseline,Applications,5,5
-benchmark,Applications,5,5
-statistic,Applications,5,5
-stc,Applications,5,5
-strategic,Applications,5,5
-even,Applications,5,5
-anc,Sharing,5,5
-annualy,Sharing,5,5
-approval,Sharing,5,5
-apsc,Sharing,5,5
-area,Sharing,5,5
-table,Applications,5,5
-talk,Sharing,5,5
-tangible,Applications,5,5
-tbd,Applications,5,5
-teammate,Applications,5,5
-tecommendation,Applications,5,5
-test,Sharing,5,5
-textbook,Applications,5,5
-thailand,Applications,5,5
-their,Sharing,5,5
-under,Applications,5,5
-thematic,Sharing,5,5
-theough,Sharing,5,5
-there,Applications,5,5
-think,Applications,5,5
-thought,Applications,5,5
-throgh,Sharing,5,5
-analytical,Applications,5,5
-file,Applications,5,5
-find,Applications,5,5
-finding,Sharing,5,5
-firstly,Applications,5,5
-focus,Sharing,5,5
-equilibrium,Applications,5,5
-evaluation,Applications,5,5
-evangelization,Applications,5,5
-acknowledge,Applications,5,5
-where,Applications,5,5
-yield,Applications,5,5
-abac,Applications,5,5
-while,Sharing,5,5
-who,Applications,5,5
-wider,Applications,5,5
-word,Sharing,5,5
-workflow,Applications,5,5
-visit,Applications,5,5
-wco,Sharing,5,5
-asean,Applications,5,5
-assess,Applications,5,5
-assessment,Applications,5,5
-assist,Applications,5,5
-attend,Sharing,5,5
-amendment,Applications,5,5
-analyst,Applications,5,5
-usual,Applications,5,5
-usually,Sharing,5,5
-value,Applications,5,5
-various,Applications,5,5
-version,Applications,5,5
-agenda,Applications,5,5
-align,Sharing,5,5
-alignment,Applications,5,5
-alive,Applications,5,5
-allow,Applications,5,5
-advice,Applications,5,5
-adoption,Applications,5,5
-addition,Applications,5,5
-activity,Applications,5,5
+share,Applications (Open Text),345,625
+share,Sharing (Open Text),280,625
+team,Applications (Open Text),235,285
+team,Sharing (Open Text),50,285
+policy,Applications (Open Text),215,245
+policy,Sharing (Open Text),30,245
+workshop,Sharing (Open Text),80,160
+workshop,Applications (Open Text),80,160
+report,Applications (Open Text),15,160
+report,Sharing (Open Text),145,160
+inform,Sharing (Open Text),10,150
+inform,Applications (Open Text),140,150
+colleague,Sharing (Open Text),85,145
+colleague,Applications (Open Text),60,145
+use,Applications (Open Text),100,125
+use,Sharing (Open Text),25,125
+recommendation,Applications (Open Text),115,120
+recommendation,Sharing (Open Text),5,120
+discussion,Applications (Open Text),40,115
+discussion,Sharing (Open Text),75,115
+work,Sharing (Open Text),10,105
+work,Applications (Open Text),95,105
+session,Applications (Open Text),20,100
+session,Sharing (Open Text),80,100
+update,Sharing (Open Text),10,85
+update,Applications (Open Text),75,85
+other,Sharing (Open Text),30,80
+other,Applications (Open Text),50,80
+standard,Applications (Open Text),55,80
+standard,Sharing (Open Text),25,80
+knowledge,Sharing (Open Text),55,80
+knowledge,Applications (Open Text),25,80
+trade,Sharing (Open Text),20,75
+trade,Applications (Open Text),55,75
+negotiation,Applications (Open Text),60,75
+negotiation,Sharing (Open Text),15,75
+internal,Applications (Open Text),45,75
+internal,Sharing (Open Text),30,75
+digital,Applications (Open Text),45,70
+digital,Sharing (Open Text),25,70
+learn,Sharing (Open Text),45,70
+learn,Applications (Open Text),25,70
+process,Applications (Open Text),60,70
+process,Sharing (Open Text),10,70
+data,Applications (Open Text),65,70
+data,Sharing (Open Text),5,70
+tool,Applications (Open Text),60,65
+tool,Sharing (Open Text),5,65
+meet,Sharing (Open Text),50,60
+meet,Applications (Open Text),10,60
+through,Sharing (Open Text),45,60
+through,Applications (Open Text),15,60
+apec,Sharing (Open Text),20,55
+apec,Applications (Open Text),35,55
+economy,Applications (Open Text),45,55
+economy,Sharing (Open Text),10,55
+apply,Applications (Open Text),50,50
+ria,Applications (Open Text),35,50
+information,Sharing (Open Text),25,50
+information,Applications (Open Text),25,50
+ria,Sharing (Open Text),15,50
+presentation,Sharing (Open Text),50,50
+during,Applications (Open Text),20,50
+during,Sharing (Open Text),30,50
+meeting,Sharing (Open Text),50,50
+insight,Sharing (Open Text),20,45
+collaboration,Sharing (Open Text),30,45
+collaboration,Applications (Open Text),15,45
+insight,Applications (Open Text),25,45
+some,Sharing (Open Text),10,40
+material,Sharing (Open Text),30,40
+material,Applications (Open Text),10,40
+relevant,Applications (Open Text),25,40
+research,Sharing (Open Text),5,40
+development,Applications (Open Text),35,40
+development,Sharing (Open Text),5,40
+relevant,Sharing (Open Text),15,40
+service,Sharing (Open Text),5,40
+service,Applications (Open Text),35,40
+some,Applications (Open Text),30,40
+research,Applications (Open Text),35,40
+future,Applications (Open Text),35,40
+future,Sharing (Open Text),5,40
+technical,Sharing (Open Text),10,35
+technical,Applications (Open Text),25,35
+incorporate,Sharing (Open Text),10,35
+key,Applications (Open Text),10,35
+key,Sharing (Open Text),25,35
+incorporate,Applications (Open Text),25,35
+member,Sharing (Open Text),20,35
+into,Sharing (Open Text),15,35
+into,Applications (Open Text),20,35
+how,Sharing (Open Text),15,35
+how,Applications (Open Text),20,35
+member,Applications (Open Text),15,35
+industry,Applications (Open Text),25,30
+initiative,Sharing (Open Text),15,30
+initiative,Applications (Open Text),15,30
+industry,Sharing (Open Text),5,30
+train,Sharing (Open Text),20,30
+topic,Sharing (Open Text),10,30
+topic,Applications (Open Text),20,30
+roo,Applications (Open Text),25,30
+roo,Sharing (Open Text),5,30
+what,Sharing (Open Text),20,30
+what,Applications (Open Text),10,30
+daily,Applications (Open Text),30,30
+outcome,Applications (Open Text),25,30
+provide,Sharing (Open Text),10,30
+provide,Applications (Open Text),20,30
+train,Applications (Open Text),10,30
+outcome,Sharing (Open Text),5,30
+experience,Sharing (Open Text),15,25
+have,Sharing (Open Text),10,25
+develop,Applications (Open Text),25,25
+idea,Applications (Open Text),20,25
+experience,Applications (Open Text),10,25
+draft,Sharing (Open Text),5,25
+take,Applications (Open Text),20,25
+take,Sharing (Open Text),5,25
+understand,Applications (Open Text),25,25
+summary,Sharing (Open Text),25,25
+sector,Applications (Open Text),20,25
+also,Applications (Open Text),25,25
+useful,Sharing (Open Text),10,25
+useful,Applications (Open Text),15,25
+well,Applications (Open Text),20,25
+well,Sharing (Open Text),5,25
+analysis,Applications (Open Text),25,25
+sector,Sharing (Open Text),5,25
+implement,Sharing (Open Text),10,25
+support,Sharing (Open Text),5,25
+support,Applications (Open Text),20,25
+shape,Applications (Open Text),25,25
+draft,Applications (Open Text),20,25
+fta,Sharing (Open Text),5,25
+practice,Applications (Open Text),25,25
+prepare,Applications (Open Text),10,25
+plan,Applications (Open Text),15,25
+plan,Sharing (Open Text),10,25
+prepare,Sharing (Open Text),15,25
+project,Applications (Open Text),25,25
+organization,Applications (Open Text),15,25
+organization,Sharing (Open Text),10,25
+make,Applications (Open Text),15,25
+make,Sharing (Open Text),10,25
+fta,Applications (Open Text),20,25
+implement,Applications (Open Text),15,25
+idea,Sharing (Open Text),5,25
+have,Applications (Open Text),15,25
+government,Sharing (Open Text),10,25
+good,Applications (Open Text),25,25
+government,Applications (Open Text),15,25
+replicate,Applications (Open Text),10,20
+stakeholder,Applications (Open Text),5,20
+cloud,Applications (Open Text),20,20
+replicate,Sharing (Open Text),10,20
+brown,Applications (Open Text),10,20
+agency,Applications (Open Text),15,20
+better,Applications (Open Text),20,20
+bag,Sharing (Open Text),10,20
+agency,Sharing (Open Text),5,20
+when,Applications (Open Text),15,20
+stakeholder,Sharing (Open Text),15,20
+brown,Sharing (Open Text),10,20
+bag,Applications (Open Text),10,20
+ktl,Applications (Open Text),15,20
+ktl,Sharing (Open Text),5,20
+note,Applications (Open Text),5,20
+note,Sharing (Open Text),15,20
+network,Applications (Open Text),5,20
+network,Sharing (Open Text),15,20
+national,Applications (Open Text),15,20
+national,Sharing (Open Text),5,20
+reform,Applications (Open Text),15,20
+relevance,Sharing (Open Text),5,20
+relevance,Applications (Open Text),15,20
+regulation,Applications (Open Text),20,20
+regional,Applications (Open Text),20,20
+regard,Sharing (Open Text),5,20
+conduct,Applications (Open Text),5,20
+conduct,Sharing (Open Text),15,20
+regard,Applications (Open Text),15,20
+reform,Sharing (Open Text),5,20
+department,Applications (Open Text),20,20
+discus,Sharing (Open Text),15,20
+discus,Applications (Open Text),5,20
+forum,Sharing (Open Text),15,20
+gain,Applications (Open Text),20,20
+forum,Applications (Open Text),5,20
+email,Sharing (Open Text),20,20
+event,Applications (Open Text),5,20
+event,Sharing (Open Text),15,20
+within,Sharing (Open Text),15,20
+within,Applications (Open Text),5,20
+when,Sharing (Open Text),5,20
+adopt,Sharing (Open Text),5,20
+adopt,Applications (Open Text),15,20
+which,Applications (Open Text),5,15
+which,Sharing (Open Text),10,15
+would,Applications (Open Text),15,15
+wto,Applications (Open Text),10,15
+wto,Sharing (Open Text),5,15
+engagement,Applications (Open Text),10,15
+engagement,Sharing (Open Text),5,15
+transformation,Applications (Open Text),15,15
+exercise,Applications (Open Text),10,15
+exercise,Sharing (Open Text),5,15
+tbt,Sharing (Open Text),5,15
+awareness,Applications (Open Text),10,15
+back,Applications (Open Text),5,15
+awareness,Sharing (Open Text),5,15
+back,Sharing (Open Text),10,15
+tbt,Applications (Open Text),10,15
+takeaway,Sharing (Open Text),15,15
+especially,Applications (Open Text),15,15
+guide,Applications (Open Text),10,15
+index,Applications (Open Text),5,15
+smart,Applications (Open Text),15,15
+benefit,Sharing (Open Text),10,15
+be,Applications (Open Text),15,15
+benefit,Applications (Open Text),5,15
+echo,Sharing (Open Text),10,15
+include,Sharing (Open Text),10,15
+guidance,Sharing (Open Text),10,15
+ftas,Applications (Open Text),15,15
+seminar,Sharing (Open Text),15,15
+include,Applications (Open Text),5,15
+build,Sharing (Open Text),10,15
+resource,Sharing (Open Text),15,15
+build,Applications (Open Text),5,15
+guidance,Applications (Open Text),5,15
+echo,Applications (Open Text),5,15
+principle,Applications (Open Text),10,15
+principle,Sharing (Open Text),5,15
+collection,Applications (Open Text),15,15
+reference,Applications (Open Text),15,15
+help,Applications (Open Text),15,15
+guideline,Applications (Open Text),15,15
+guide,Sharing (Open Text),5,15
+cross,Applications (Open Text),10,15
+international,Sharing (Open Text),10,15
+index,Sharing (Open Text),10,15
+info,Applications (Open Text),15,15
+deal,Applications (Open Text),10,15
+deal,Sharing (Open Text),5,15
+debrief,Applications (Open Text),5,15
+debrief,Sharing (Open Text),10,15
+integration,Applications (Open Text),15,15
+consult,Applications (Open Text),10,15
+integrate,Sharing (Open Text),5,15
+integrate,Applications (Open Text),10,15
+input,Applications (Open Text),10,15
+input,Sharing (Open Text),5,15
+custom,Applications (Open Text),15,15
+cross,Sharing (Open Text),5,15
+consult,Sharing (Open Text),5,15
+involve,Applications (Open Text),15,15
+international,Applications (Open Text),5,15
+point,Applications (Open Text),5,15
+ministry,Sharing (Open Text),5,15
+official,Applications (Open Text),10,15
+official,Sharing (Open Text),5,15
+origin,Sharing (Open Text),5,15
+coordination,Applications (Open Text),5,15
+coordination,Sharing (Open Text),10,15
+via,Sharing (Open Text),15,15
+method,Applications (Open Text),15,15
+cooperation,Applications (Open Text),15,15
+ministry,Applications (Open Text),10,15
+origin,Applications (Open Text),10,15
+line,Applications (Open Text),15,15
+improve,Applications (Open Text),10,15
+improve,Sharing (Open Text),5,15
+public,Applications (Open Text),10,15
+point,Sharing (Open Text),10,15
+public,Sharing (Open Text),5,15
+supervisor,Sharing (Open Text),10,10
+term,Applications (Open Text),10,10
+etc,Applications (Open Text),10,10
+document,Sharing (Open Text),10,10
+agency’s,Applications (Open Text),5,10
+try,Applications (Open Text),10,10
+timber,Applications (Open Text),5,10
+focal,Applications (Open Text),5,10
+timber,Sharing (Open Text),5,10
+focal,Sharing (Open Text),5,10
+enhance,Applications (Open Text),10,10
+example,Sharing (Open Text),5,10
+study,Applications (Open Text),5,10
+follow,Applications (Open Text),5,10
+give,Sharing (Open Text),5,10
+approach,Applications (Open Text),10,10
+application,Sharing (Open Text),10,10
+system,Applications (Open Text),10,10
+task,Applications (Open Text),10,10
+agency’s,Sharing (Open Text),5,10
+evidence,Applications (Open Text),10,10
+way,Applications (Open Text),5,10
+advisory,Applications (Open Text),10,10
+about,Applications (Open Text),5,10
+unit,Applications (Open Text),10,10
+example,Applications (Open Text),5,10
+way,Sharing (Open Text),5,10
+capacity,Sharing (Open Text),5,10
+certain,Applications (Open Text),10,10
+client,Applications (Open Text),10,10
+recommend,Applications (Open Text),10,10
+direct,Sharing (Open Text),10,10
+digitalization,Applications (Open Text),10,10
+result,Applications (Open Text),10,10
+review,Applications (Open Text),10,10
+gather,Sharing (Open Text),5,10
+social,Sharing (Open Text),10,10
+speaker,Applications (Open Text),10,10
+section,Sharing (Open Text),10,10
+identify,Applications (Open Text),5,10
+identify,Sharing (Open Text),5,10
+ill,Applications (Open Text),5,10
+greater,Applications (Open Text),10,10
+formulation,Applications (Open Text),10,10
+gather,Applications (Open Text),5,10
+gap,Applications (Open Text),10,10
+friend,Sharing (Open Text),5,10
+friend,Applications (Open Text),5,10
+form,Sharing (Open Text),5,10
+division,Applications (Open Text),5,10
+follow,Sharing (Open Text),5,10
+division,Sharing (Open Text),5,10
+do,Sharing (Open Text),10,10
+such,Applications (Open Text),5,10
+study,Sharing (Open Text),5,10
+such,Sharing (Open Text),5,10
+suggest,Sharing (Open Text),10,10
+capacity,Applications (Open Text),5,10
+distribution,Sharing (Open Text),10,10
+explain,Sharing (Open Text),10,10
+strategy,Sharing (Open Text),5,10
+strategy,Applications (Open Text),5,10
+best,Applications (Open Text),10,10
+background,Applications (Open Text),10,10
+explore,Sharing (Open Text),5,10
+feedback,Applications (Open Text),5,10
+feedback,Sharing (Open Text),5,10
+explore,Applications (Open Text),5,10
+domestic,Sharing (Open Text),10,10
+give,Applications (Open Text),5,10
+form,Applications (Open Text),5,10
+promote,Applications (Open Text),10,10
+psr,Applications (Open Text),10,10
+impact,Applications (Open Text),10,10
+dialogue,Applications (Open Text),5,10
+harmonization,Applications (Open Text),10,10
+connect,Sharing (Open Text),5,10
+connect,Applications (Open Text),5,10
+ill,Sharing (Open Text),5,10
+implementation,Applications (Open Text),5,10
+implementation,Sharing (Open Text),5,10
+importance,Applications (Open Text),5,10
+importance,Sharing (Open Text),5,10
+dialogue,Sharing (Open Text),5,10
+regulatory,Applications (Open Text),10,10
+concept,Sharing (Open Text),10,10
+collegues,Applications (Open Text),10,10
+private,Applications (Open Text),5,10
+private,Sharing (Open Text),5,10
+product,Applications (Open Text),10,10
+collaborate,Applications (Open Text),10,10
+paper,Sharing (Open Text),5,10
+paper,Applications (Open Text),5,10
+contact,Applications (Open Text),5,10
+consultation,Sharing (Open Text),5,10
+consultation,Applications (Open Text),5,10
+cti,Applications (Open Text),10,10
+day,Sharing (Open Text),10,10
+consider,Applications (Open Text),10,10
+preferential,Applications (Open Text),5,10
+preferential,Sharing (Open Text),5,10
+preparation,Applications (Open Text),5,10
+preparation,Sharing (Open Text),5,10
+present,Sharing (Open Text),10,10
+perspective,Applications (Open Text),5,10
+perspective,Sharing (Open Text),5,10
+landscape,Applications (Open Text),10,10
+issue,Applications (Open Text),5,10
+matter,Applications (Open Text),5,10
+management,Sharing (Open Text),10,10
+organic,Applications (Open Text),10,10
+i’m,Applications (Open Text),5,10
+it,Sharing (Open Text),5,10
+issue,Sharing (Open Text),5,10
+it,Applications (Open Text),5,10
+others,Applications (Open Text),5,10
+i’m,Sharing (Open Text),5,10
+opinion,Applications (Open Text),5,10
+opinion,Sharing (Open Text),5,10
+country,Applications (Open Text),10,10
+create,Sharing (Open Text),10,10
+iso,Sharing (Open Text),5,10
+iso,Applications (Open Text),5,10
+model,Applications (Open Text),5,10
+negotiate,Sharing (Open Text),5,10
+most,Sharing (Open Text),5,10
+negotiate,Applications (Open Text),5,10
+most,Applications (Open Text),5,10
+others,Sharing (Open Text),5,10
+level,Sharing (Open Text),10,10
+model,Sharing (Open Text),5,10
+oecd,Applications (Open Text),5,10
+obstacle,Applications (Open Text),10,10
+linkedin,Sharing (Open Text),10,10
+oecd,Sharing (Open Text),5,10
+cooperate,Applications (Open Text),5,10
+conversation,Sharing (Open Text),10,10
+lesson,Sharing (Open Text),10,10
+contact,Sharing (Open Text),5,10
+cooperate,Sharing (Open Text),5,10
+office,Sharing (Open Text),10,10
+could,Applications (Open Text),5,10
+could,Sharing (Open Text),5,10
+may,Sharing (Open Text),5,10
+medium,Sharing (Open Text),10,10
+matter,Sharing (Open Text),5,10
+may,Applications (Open Text),5,10
+mention,Sharing (Open Text),5,10
+mention,Applications (Open Text),5,10
+about,Sharing (Open Text),5,10
+view,Sharing (Open Text),10,10
+all,Applications (Open Text),10,10
+already,Sharing (Open Text),10,10
+advise,Applications (Open Text),10,10
+across,Applications (Open Text),10,10
+advocate,Applications (Open Text),5,5
+accession,Applications (Open Text),5,5
+account,Applications (Open Text),5,5
+timely,Applications (Open Text),5,5
+together,Sharing (Open Text),5,5
+towards,Sharing (Open Text),5,5
+town,Sharing (Open Text),5,5
+ever,Applications (Open Text),5,5
+executive,Sharing (Open Text),5,5
+upcoming,Sharing (Open Text),5,5
+upon,Sharing (Open Text),5,5
+uptake,Applications (Open Text),5,5
+usen,Applications (Open Text),5,5
+usg,Sharing (Open Text),5,5
+after,Sharing (Open Text),5,5
+tpr,Sharing (Open Text),5,5
+transition,Applications (Open Text),5,5
+trip,Sharing (Open Text),5,5
+uncitral,Applications (Open Text),5,5
+context,Applications (Open Text),5,5
+continue,Applications (Open Text),5,5
+contreys,Sharing (Open Text),5,5
+contribute,Applications (Open Text),5,5
+convergence,Applications (Open Text),5,5
+coperation,Sharing (Open Text),5,5
+correlation,Applications (Open Text),5,5
+monitor,Applications (Open Text),5,5
+methodology,Applications (Open Text),5,5
+mgmt,Applications (Open Text),5,5
+education,Sharing (Open Text),5,5
+effort,Applications (Open Text),5,5
+elsewhere,Applications (Open Text),5,5
+enable,Applications (Open Text),5,5
+encourage,Applications (Open Text),5,5
+engage,Applications (Open Text),5,5
+own,Applications (Open Text),5,5
+monthly,Sharing (Open Text),5,5
+mouth,Sharing (Open Text),5,5
+navigate,Applications (Open Text),5,5
+need,Applications (Open Text),5,5
+negociate,Applications (Open Text),5,5
+mind,Sharing (Open Text),5,5
+minute,Sharing (Open Text),5,5
+learning,Applications (Open Text),5,5
+legal,Applications (Open Text),5,5
+leverage,Applications (Open Text),5,5
+lie,Applications (Open Text),5,5
+link,Sharing (Open Text),5,5
+november,Sharing (Open Text),5,5
+now,Applications (Open Text),5,5
+offer,Sharing (Open Text),5,5
+peersteam,Applications (Open Text),5,5
+philippine,Applications (Open Text),5,5
+once,Sharing (Open Text),5,5
+only,Applications (Open Text),5,5
+opportunity,Applications (Open Text),5,5
+option,Applications (Open Text),5,5
+look,Applications (Open Text),5,5
+lunch,Sharing (Open Text),5,5
+main,Sharing (Open Text),5,5
+malaysia,Sharing (Open Text),5,5
+manner,Applications (Open Text),5,5
+ive,Sharing (Open Text),5,5
+i’ve,Sharing (Open Text),5,5
+keep,Applications (Open Text),5,5
+ourganizing,Sharing (Open Text),5,5
+output,Applications (Open Text),5,5
+participation,Sharing (Open Text),5,5
+particularly,Applications (Open Text),5,5
+partner,Sharing (Open Text),5,5
+kind,Applications (Open Text),5,5
+knowledgeunderstanding,Applications (Open Text),5,5
+korea,Sharing (Open Text),5,5
+korean,Applications (Open Text),5,5
+laboratory,Sharing (Open Text),5,5
+lean,Applications (Open Text),5,5
+isoiec,Applications (Open Text),5,5
+course,Sharing (Open Text),5,5
+cover,Sharing (Open Text),5,5
+coworkers,Sharing (Open Text),5,5
+pas,Sharing (Open Text),5,5
+pecc,Applications (Open Text),5,5
+peccs,Applications (Open Text),5,5
+consideration,Applications (Open Text),5,5
+consistent,Applications (Open Text),5,5
+consortium,Sharing (Open Text),5,5
+cureent,Applications (Open Text),5,5
+current,Sharing (Open Text),5,5
+customer,Applications (Open Text),5,5
+informinh,Applications (Open Text),5,5
+inhouse,Sharing (Open Text),5,5
+innovative,Applications (Open Text),5,5
+instance,Sharing (Open Text),5,5
+consultancy,Sharing (Open Text),5,5
+platform,Sharing (Open Text),5,5
+panel,Sharing (Open Text),5,5
+papua,Applications (Open Text),5,5
+participant,Applications (Open Text),5,5
+participate,Sharing (Open Text),5,5
+post,Sharing (Open Text),5,5
+powerslides,Sharing (Open Text),5,5
+ppt,Sharing (Open Text),5,5
+practical,Sharing (Open Text),5,5
+intentional,Applications (Open Text),5,5
+interagency,Sharing (Open Text),5,5
+interest,Applications (Open Text),5,5
+invite,Sharing (Open Text),5,5
+indonesia,Sharing (Open Text),5,5
+debate,Applications (Open Text),5,5
+decision,Applications (Open Text),5,5
+practicality,Applications (Open Text),5,5
+practically,Sharing (Open Text),5,5
+picture,Applications (Open Text),5,5
+conclutions,Sharing (Open Text),5,5
+conscious,Applications (Open Text),5,5
+previous,Sharing (Open Text),5,5
+prioritize,Applications (Open Text),5,5
+problem,Sharing (Open Text),5,5
+produce,Applications (Open Text),5,5
+deck,Sharing (Open Text),5,5
+demonstrate,Sharing (Open Text),5,5
+design,Applications (Open Text),5,5
+developer,Sharing (Open Text),5,5
+informally,Sharing (Open Text),5,5
+importand,Applications (Open Text),5,5
+proposal,Applications (Open Text),5,5
+provision,Sharing (Open Text),5,5
+psrs,Applications (Open Text),5,5
+policiy,Applications (Open Text),5,5
+position,Applications (Open Text),5,5
+positive,Applications (Open Text),5,5
+reflect,Sharing (Open Text),5,5
+reflection,Applications (Open Text),5,5
+relate,Applications (Open Text),5,5
+relationship,Applications (Open Text),5,5
+publication,Applications (Open Text),5,5
+publicprivate,Applications (Open Text),5,5
+collective,Applications (Open Text),5,5
+college,Applications (Open Text),5,5
+collegee,Sharing (Open Text),5,5
+comment,Sharing (Open Text),5,5
+communication,Sharing (Open Text),5,5
+competency,Applications (Open Text),5,5
+comply,Applications (Open Text),5,5
+computeable,Applications (Open Text),5,5
+purchase,Applications (Open Text),5,5
+quality,Applications (Open Text),5,5
+raise,Sharing (Open Text),5,5
+readout,Sharing (Open Text),5,5
+real,Applications (Open Text),5,5
+really,Applications (Open Text),5,5
+reasonable,Sharing (Open Text),5,5
+receive,Applications (Open Text),5,5
+reco,Applications (Open Text),5,5
+incharged,Sharing (Open Text),5,5
+incorporateintegrate,Applications (Open Text),5,5
+incountry,Sharing (Open Text),5,5
+increase,Applications (Open Text),5,5
+guinea,Applications (Open Text),5,5
+gvc,Applications (Open Text),5,5
+hall,Sharing (Open Text),5,5
+harmonize,Applications (Open Text),5,5
+refine,Applications (Open Text),5,5
+sdr,Applications (Open Text),5,5
+secondly,Applications (Open Text),5,5
+rep,Applications (Open Text),5,5
+capture,Applications (Open Text),5,5
+case,Applications (Open Text),5,5
+challenge,Sharing (Open Text),5,5
+change,Applications (Open Text),5,5
+channel,Sharing (Open Text),5,5
+chapter,Applications (Open Text),5,5
+cite,Sharing (Open Text),5,5
+class,Sharing (Open Text),5,5
+classification,Applications (Open Text),5,5
+clear,Applications (Open Text),5,5
+close,Applications (Open Text),5,5
+cod,Applications (Open Text),5,5
+question,Applications (Open Text),5,5
+bring,Applications (Open Text),5,5
+broader,Sharing (Open Text),5,5
+bureau,Sharing (Open Text),5,5
+business,Sharing (Open Text),5,5
+canada,Sharing (Open Text),5,5
+request,Applications (Open Text),5,5
+require,Applications (Open Text),5,5
+return,Sharing (Open Text),5,5
+revenant,Applications (Open Text),5,5
+revisiing,Applications (Open Text),5,5
+revision,Applications (Open Text),5,5
+roadmap,Applications (Open Text),5,5
+role,Applications (Open Text),5,5
+rool,Applications (Open Text),5,5
+rule,Applications (Open Text),5,5
+sdo,Sharing (Open Text),5,5
+seek,Applications (Open Text),5,5
+between,Applications (Open Text),5,5
+bigger,Applications (Open Text),5,5
+boarder,Applications (Open Text),5,5
+bonus,Applications (Open Text),5,5
+brief,Sharing (Open Text),5,5
+briefers,Sharing (Open Text),5,5
+helpful,Applications (Open Text),5,5
+here,Applications (Open Text),5,5
+higher,Sharing (Open Text),5,5
+highlight,Sharing (Open Text),5,5
+great,Applications (Open Text),5,5
+groyps,Sharing (Open Text),5,5
+grp,Applications (Open Text),5,5
+different,Sharing (Open Text),5,5
+digilization,Applications (Open Text),5,5
+show,Applications (Open Text),5,5
+simulator,Sharing (Open Text),5,5
+site,Sharing (Open Text),5,5
+small,Sharing (Open Text),5,5
+direction,Applications (Open Text),5,5
+directly,Applications (Open Text),5,5
+directorate,Applications (Open Text),5,5
+discuasions,Sharing (Open Text),5,5
+dispute,Applications (Open Text),5,5
+forward,Sharing (Open Text),5,5
+further,Applications (Open Text),5,5
+solve,Sharing (Open Text),5,5
+som,Sharing (Open Text),5,5
+specific,Applications (Open Text),5,5
+stamdards,Applications (Open Text),5,5
+standardisation,Applications (Open Text),5,5
+strategize,Applications (Open Text),5,5
+strengthen,Applications (Open Text),5,5
+stretegic,Applications (Open Text),5,5
+general,Applications (Open Text),5,5
+get,Applications (Open Text),5,5
+go,Sharing (Open Text),5,5
+gov,Sharing (Open Text),5,5
+grap,Applications (Open Text),5,5
+followup,Sharing (Open Text),5,5
+diversity,Sharing (Open Text),5,5
+subject,Applications (Open Text),5,5
+submit,Sharing (Open Text),5,5
+summarize,Sharing (Open Text),5,5
+set,Applications (Open Text),5,5
+settlement,Applications (Open Text),5,5
+shall,Applications (Open Text),5,5
+superior,Sharing (Open Text),5,5
+suppprt,Applications (Open Text),5,5
+available,Applications (Open Text),5,5
+awarenesscapacity,Sharing (Open Text),5,5
+ease,Applications (Open Text),5,5
+economic,Applications (Open Text),5,5
+formulate,Applications (Open Text),5,5
+exist,Applications (Open Text),5,5
+expreriences,Applications (Open Text),5,5
+facilitate,Applications (Open Text),5,5
+feed,Sharing (Open Text),5,5
+baseline,Applications (Open Text),5,5
+benchmark,Applications (Open Text),5,5
+statistic,Applications (Open Text),5,5
+stc,Applications (Open Text),5,5
+strategic,Applications (Open Text),5,5
+even,Applications (Open Text),5,5
+anc,Sharing (Open Text),5,5
+annualy,Sharing (Open Text),5,5
+approval,Sharing (Open Text),5,5
+apsc,Sharing (Open Text),5,5
+area,Sharing (Open Text),5,5
+table,Applications (Open Text),5,5
+talk,Sharing (Open Text),5,5
+tangible,Applications (Open Text),5,5
+tbd,Applications (Open Text),5,5
+teammate,Applications (Open Text),5,5
+tecommendation,Applications (Open Text),5,5
+test,Sharing (Open Text),5,5
+textbook,Applications (Open Text),5,5
+thailand,Applications (Open Text),5,5
+their,Sharing (Open Text),5,5
+under,Applications (Open Text),5,5
+thematic,Sharing (Open Text),5,5
+theough,Sharing (Open Text),5,5
+there,Applications (Open Text),5,5
+think,Applications (Open Text),5,5
+thought,Applications (Open Text),5,5
+throgh,Sharing (Open Text),5,5
+analytical,Applications (Open Text),5,5
+file,Applications (Open Text),5,5
+find,Applications (Open Text),5,5
+finding,Sharing (Open Text),5,5
+firstly,Applications (Open Text),5,5
+focus,Sharing (Open Text),5,5
+equilibrium,Applications (Open Text),5,5
+evaluation,Applications (Open Text),5,5
+evangelization,Applications (Open Text),5,5
+acknowledge,Applications (Open Text),5,5
+where,Applications (Open Text),5,5
+yield,Applications (Open Text),5,5
+abac,Applications (Open Text),5,5
+while,Sharing (Open Text),5,5
+who,Applications (Open Text),5,5
+wider,Applications (Open Text),5,5
+word,Sharing (Open Text),5,5
+workflow,Applications (Open Text),5,5
+visit,Applications (Open Text),5,5
+wco,Sharing (Open Text),5,5
+asean,Applications (Open Text),5,5
+assess,Applications (Open Text),5,5
+assessment,Applications (Open Text),5,5
+assist,Applications (Open Text),5,5
+attend,Sharing (Open Text),5,5
+amendment,Applications (Open Text),5,5
+analyst,Applications (Open Text),5,5
+usual,Applications (Open Text),5,5
+usually,Sharing (Open Text),5,5
+value,Applications (Open Text),5,5
+various,Applications (Open Text),5,5
+version,Applications (Open Text),5,5
+agenda,Applications (Open Text),5,5
+align,Sharing (Open Text),5,5
+alignment,Applications (Open Text),5,5
+alive,Applications (Open Text),5,5
+allow,Applications (Open Text),5,5
+advice,Applications (Open Text),5,5
+adoption,Applications (Open Text),5,5
+addition,Applications (Open Text),5,5
+activity,Applications (Open Text),5,5

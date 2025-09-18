@@ -1,22 +1,22 @@
 Firm (Name),Indicator ID,Economy (Name),Workstream (Name),Amount,Fiscal Year,U.S. FAOs Addressed,Resource Type,Resource Origin,Export Timestamp
-,OT5,U.S.,Digital Standards,1885.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,Singapore,Digital Standards,1305.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,Digital Standards,2846.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,Digital Standards,1717.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,Thailand,Digital Standards,1219.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:13:02.036923
-,OT5,Mexico,TBT,2382.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,TBT,1671.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,TBT,2064.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,TBT,2064.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,Cloud Computing,990.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,Republic of Korea,Cloud Computing,613.5,FY25,Economic Growth (Other),In-kind,Host Country-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,Cloud Computing,2065.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,Cloud Computing,990.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,Singapore,Cloud Computing,990.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,Cloud Computing,1458.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,Cloud Computing,2065.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,FTAAP,2178.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,Mexico,FTAAP,1009.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,FTAAP,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,FTAAP,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
-,OT5,U.S.,FTAAP,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:13:02.036923
+,OT5,U.S.,Digital Standards,1885.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,Singapore,Digital Standards,1305.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,Digital Standards,2846.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,Digital Standards,1717.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,Thailand,Digital Standards,1219.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:20:15.236345
+,OT5,Mexico,TBT,2382.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,TBT,1671.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,TBT,2064.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,TBT,2064.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,Cloud Computing,990.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,Republic of Korea,Cloud Computing,613.5,FY25,Economic Growth (Other),In-kind,Host Country-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,Cloud Computing,2065.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,Cloud Computing,990.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,Singapore,Cloud Computing,990.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,Cloud Computing,1458.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,Cloud Computing,2065.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,FTAAP,2178.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,Mexico,FTAAP,1009.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,FTAAP,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,FTAAP,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
+,OT5,U.S.,FTAAP,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-09-18T18:20:15.236345
