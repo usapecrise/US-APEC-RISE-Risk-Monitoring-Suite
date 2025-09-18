@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Balanced + Normalized Columns)
-----------------------------------------------------------
+Feedback Analysis Pipeline (Balanced + Normalized Columns, fixed get_sentiment)
+-------------------------------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
@@ -63,14 +63,19 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str) -> str:
-    """Sentiment using CardiffNLP 3-class model (strongest label wins)"""
+    """Sentiment using CardiffNLP 3-class model (strongest label wins)."""
     if not text or text.strip() == "":
         return "Neutral"
 
-    results = sentiment_pipeline(text[:512], top_k=None)[0]
+    results = sentiment_pipeline(text[:512], top_k=None)
+
+    # Handle both possible return formats
+    if isinstance(results, list) and isinstance(results[0], list):
+        results = results[0]
+
     scores = {}
     for r in results:
-        label = r["label"].upper()
+        label = str(r["label"]).upper()
         if label in ["LABEL_0", "NEGATIVE"]:
             scores["Negative"] = r["score"]
         elif label in ["LABEL_1", "NEUTRAL"]:
@@ -120,7 +125,7 @@ def preprocess_feedback():
     # Normalize column names: lowercase, strip, remove '?'
     df.columns = df.columns.str.strip().str.lower().str.replace(r"[?]", "", regex=True)
 
-    # Define fields after normalization
+    # Define fields after normalization (must match your Airtable export headers)
     STRUCTURED_FIELDS = {
         "relevance to work": "Relevance",
         "knowledge gain": "Knowledge",
@@ -183,15 +188,11 @@ def preprocess_feedback():
         df_phrases_top = df_phrases_count.sort_values(by="Frequency", ascending=False).head(20)
         df_phrases_top.to_csv(OUTPUT_FILE_PHRASES, index=False)
 
-    # Sentiment summary (always overwrite)
-    df_sentiment = pd.DataFrame(sentiment_records, columns=["Sentiment"])
-    if not df_sentiment.empty:
-        summary = df_sentiment.value_counts().reset_index(name="Count")
-        summary.columns = ["Sentiment", "Count"]
-    else:
-        summary = pd.DataFrame([["Positive", 0], ["Neutral", 0], ["Negative", 0]],
-                               columns=["Sentiment", "Count"])
-    summary.to_csv(OUTPUT_FILE_SENTIMENT, index=False)
+    # Sentiment summary
+    if sentiment_records:
+        df_sentiment = pd.Series(sentiment_records).value_counts().reset_index()
+        df_sentiment.columns = ["Sentiment", "Count"]
+        df_sentiment.to_csv(OUTPUT_FILE_SENTIMENT, index=False)
 
     # Sentiment by question
     if by_question_records:
