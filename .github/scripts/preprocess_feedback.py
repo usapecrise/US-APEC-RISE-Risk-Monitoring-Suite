@@ -2,14 +2,12 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Optimistic 3-class version)
--------------------------------------------------------
+Feedback Analysis Pipeline (Optimistic 3-class version, fixed labels)
+--------------------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
-   - LABEL_0 = Negative
-   - LABEL_1 = Neutral
-   - LABEL_2 = Positive
+   - Handles both LABEL_0/1/2 and NEGATIVE/NEUTRAL/POSITIVE labels
    - Optimistic tilt: favors Positive unless Negative is clearly stronger
 4. Structured question mapping (balanced: Somewhat → Neutral)
 5. Exports:
@@ -82,23 +80,28 @@ def get_sentiment(text: str) -> str:
     if not text or text.strip() == "":
         return "Neutral"
 
-    # Get full probability scores
     results = sentiment_pipeline(text[:512], return_all_scores=True)[0]
-    scores = {r["label"]: r["score"] for r in results}
 
-    pos = scores.get("LABEL_2", 0.0)  # Positive
-    neu = scores.get("LABEL_1", 0.0)  # Neutral
-    neg = scores.get("LABEL_0", 0.0)  # Negative
+    # Handle both label formats
+    scores = {}
+    for r in results:
+        label = r["label"].upper()
+        if label in ["LABEL_0", "NEGATIVE"]:
+            scores["Negative"] = r["score"]
+        elif label in ["LABEL_1", "NEUTRAL"]:
+            scores["Neutral"] = r["score"]
+        elif label in ["LABEL_2", "POSITIVE"]:
+            scores["Positive"] = r["score"]
 
-    # Rule 1: Strong Negative → Negative
+    pos = scores.get("Positive", 0.0)
+    neu = scores.get("Neutral", 0.0)
+    neg = scores.get("Negative", 0.0)
+
+    # Optimistic tilt
     if neg >= 0.35 and neg > pos:
         return "Negative"
-
-    # Rule 2: Positive stronger than Neutral → Positive
     if pos >= 0.30 and pos >= neu:
         return "Positive"
-
-    # Rule 3: Otherwise, Neutral
     return "Neutral"
 
 def map_structured_sentiment(question, response):
