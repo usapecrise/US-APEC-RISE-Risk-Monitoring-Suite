@@ -20,12 +20,21 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-          
+
       - name: Install dependencies
         run: |
-           python -m pip install --upgrade pip
-           pip install -r requirements.txt
-           python -m nltk.downloader wordnet omw-1.4
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m nltk.downloader wordnet omw-1.4
+
+      # Cache Hugging Face models so we don’t re-download DistilBERT each run
+      - name: Cache Hugging Face
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: ${{ runner.os }}-huggingface-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-huggingface-
 
       # 👇 Run Workshop Master List BEFORE OT1
       - name: Run Workshop Master List export script
@@ -107,10 +116,10 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_attendance.py
-        
+
       - name: Generate Word Frequency & Sentiment CSVs
         env:
-           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/preprocess_feedback.py
 
       - name: Run Stakeholder Reference List export script (wide + long)
@@ -120,12 +129,12 @@ jobs:
 
       - name: Run Feedback Assumption export script
         env:
-           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_feedback_assumption.py
 
       - name: Run Risk Assumption export script
         env:
-           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_risk_assumption.py
 
       - name: Run Attendance Continuity export script
@@ -140,7 +149,7 @@ jobs:
 
       - name: Run Feedback Policy Assumption export
         env:
-         AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_feedback_policy_assumption.py
 
       - name: Run Cost Share Assumption export script
@@ -151,18 +160,16 @@ jobs:
       - name: Run Map Data export
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_map_data.py
+        run: python .github/scripts/export_map_data.py
 
       - name: Run Monitoring System export
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-        run: |
-          python .github/scripts/export_monitoring_system.py
-        
+        run: python .github/scripts/export_monitoring_system.py
+
       - name: Generate Unified Assumptions Status CSV
         env:
-         AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/generate_assumptions_status.py
 
       - name: Run Spotlight Quotes export script
@@ -193,9 +200,8 @@ jobs:
             risk_assumption.csv attendance_assumption.csv attendance_records.csv Map_Data.csv \
             Monitoring_System.csv person_hours.csv person_hours_by_workshop.csv person_hours_by_sex.csv \
             person_hours_by_sector.csv person_hours_by_economy.csv person_hours_totals_combined.csv \
-            spotlight_quotes.csv   # 👈 added here
+            spotlight_quotes.csv
 
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
-
           git push origin HEAD:${{ github.ref_name }} --force
