@@ -8,7 +8,7 @@ Feedback Analysis Pipeline (Balanced + Normalized Columns)
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
    - Always assigns the strongest label
-4. Structured question mapping (normalized column names so Relevance/Knowledge always appear)
+4. Structured question mapping (exact matches from your CSV)
 5. Exports:
    - word_frequency.csv
    - word_frequency_detailed.csv
@@ -121,17 +121,17 @@ def preprocess_feedback():
     # Normalize column names: lowercase, strip, remove '?'
     df.columns = df.columns.str.strip().str.lower().str.replace(r"[?]", "", regex=True)
 
-    # Define fields after normalization
+    # ✅ Exact matches from your uploaded CSV
     STRUCTURED_FIELDS = {
-        "Relevance to Work": "Relevance",
-        "Knowledge Gain": "Knowledge",
-        "Application Intent": "Application",
-        "Sharing Intent": "Sharing"
+        "relevance to work": "Relevance",
+        "knowledge gain": "Knowledge",
+        "application intent": "Application",
+        "sharing intent": "Sharing"
     }
 
     TEXT_FIELDS = {
-        "Sharing Examples": "Sharing (Open Text)",
-        "Application Examples": "Applications (Open Text)"
+        "application examples": "Applications (Open Text)",
+        "sharing examples": "Sharing (Open Text)"
     }
 
     records = []
