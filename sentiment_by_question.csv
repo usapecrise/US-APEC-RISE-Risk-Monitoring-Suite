@@ -2,8 +2,6 @@ Question,Sentiment,Count,Percent
 Applications,Positive,890,91.28205128205128
 Sharing,Positive,735,88.55421686746988
 Barriers,Negative,645,70.49180327868852
-Improvements,Positive,560,59.57446808510638
-Improvements,Negative,380,40.42553191489361
 Barriers,Positive,270,29.508196721311474
 Sharing,Negative,95,11.44578313253012
 Applications,Negative,85,8.717948717948717
