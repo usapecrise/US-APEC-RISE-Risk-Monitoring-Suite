@@ -26,15 +26,6 @@ jobs:
            python -m pip install --upgrade pip
            pip install -r requirements.txt
            python -m nltk.downloader wordnet omw-1.4
-           pip install flair  
-
-      - name: Pre-download Flair sentiment model
-        run: |
-          python - << 'EOF'
-          from flair.models import TextClassifier
-          # Load once so the model is downloaded & cached
-          TextClassifier.load("sentiment")
-          EOF
 
       # 👇 Run Workshop Master List BEFORE OT1
       - name: Run Workshop Master List export script
