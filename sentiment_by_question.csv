@@ -1,9 +1,9 @@
 Question,Sentiment,Count,Percent
-Applications (Open Text),Neutral,890,91.28205128205128
-Sharing (Open Text),Neutral,810,97.59036144578313
+Applications (Open Text),Neutral,885,90.76923076923077
+Sharing (Open Text),Neutral,805,96.98795180722891
 Relevance,Positive,177,88.05970149253731
-Knowledge,Positive,162,80.59701492537313
 Sharing,Positive,162,80.59701492537313
+Knowledge,Positive,162,80.59701492537313
 Challenges,Positive,117,58.2089552238806
 Application,Positive,102,50.74626865671642
 Application,Neutral,95,47.2636815920398
@@ -11,9 +11,10 @@ Applications (Open Text),Positive,85,8.717948717948717
 Challenges,Neutral,84,41.7910447761194
 Sharing,Neutral,37,18.407960199004975
 Knowledge,Neutral,33,16.417910447761194
+Sharing (Open Text),Positive,25,3.0120481927710845
 Relevance,Neutral,22,10.945273631840797
-Sharing (Open Text),Positive,20,2.4096385542168677
 Knowledge,Negative,6,2.9850746268656714
+Applications (Open Text),Negative,5,0.5128205128205128
 Application,Negative,4,1.9900497512437811
 Sharing,Negative,2,0.9950248756218906
 Relevance,Negative,2,0.9950248756218906
