@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Hugging Face version)
--------------------------------------------------
+Feedback Analysis Pipeline (Hugging Face version, refined)
+---------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face DistilBERT
@@ -11,7 +11,7 @@ Feedback Analysis Pipeline (Hugging Face version)
      * POSITIVE if score >= 0.50
      * NEGATIVE if score >= 0.25
      * else Neutral
-4. Structured question mapping
+4. Structured question mapping (normalized to Positive/Neutral/Negative)
 5. Exports:
    - word_frequency.csv
    - word_frequency_detailed.csv
@@ -58,8 +58,11 @@ STOPWORDS = set([
 
 lemmatizer = WordNetLemmatizer()
 
-# Load Hugging Face pipeline
-sentiment_pipeline = pipeline("sentiment-analysis")
+# Load Hugging Face pipeline with pinned model
+sentiment_pipeline = pipeline(
+    "sentiment-analysis",
+    model="distilbert/distilbert-base-uncased-finetuned-sst-2-english"
+)
 
 # ----------------------------
 # Helpers
@@ -95,17 +98,17 @@ def map_structured_sentiment(question, response):
     mappings = {
         "relevance": {
             "Not at all relevant": "Negative",
-            "Slightly relevant": "Mild Negative",
+            "Slightly relevant": "Negative",
             "Somewhat relevant": "Neutral",
             "Considerably relevant": "Positive",
-            "Greatly relevant": "Strong Positive"
+            "Greatly relevant": "Positive"
         },
         "knowledge": {
             "No increase at all": "Negative",
-            "Slightly increased": "Mild Negative",
+            "Slightly increased": "Negative",
             "Somewhat increased": "Neutral",
             "Considerably increased": "Positive",
-            "Greatly increased": "Strong Positive"
+            "Greatly increased": "Positive"
         },
         "application": {
             "Yes: I expect to incorporate them routinely in my day-to-day tasks": "Positive",
@@ -203,4 +206,3 @@ def preprocess_feedback():
 
 if __name__ == "__main__":
     preprocess_feedback()
-
