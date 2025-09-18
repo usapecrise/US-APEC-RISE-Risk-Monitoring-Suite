@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Optimistic 3-class version, fixed labels)
---------------------------------------------------------------------
+Feedback Analysis Pipeline (Optimistic 3-class version, softer Negatives)
+------------------------------------------------------------------------
 1. Cleans feedback text
 2. Word + phrase frequency analysis
 3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
    - Handles both LABEL_0/1/2 and NEGATIVE/NEUTRAL/POSITIVE labels
    - Optimistic tilt: favors Positive unless Negative is clearly stronger
+   - Softer Negative threshold: ≥ 25% and stronger than Positive
 4. Structured question mapping (balanced: Somewhat → Neutral)
 5. Exports:
    - word_frequency.csv
@@ -97,11 +98,15 @@ def get_sentiment(text: str) -> str:
     neu = scores.get("Neutral", 0.0)
     neg = scores.get("Negative", 0.0)
 
-    # Optimistic tilt
-    if neg >= 0.35 and neg > pos:
+    # Rule 1: Negative if at least 25% and stronger than Positive
+    if neg >= 0.25 and neg > pos:
         return "Negative"
+
+    # Rule 2: Positive if at least 30% and stronger than Neutral
     if pos >= 0.30 and pos >= neu:
         return "Positive"
+
+    # Rule 3: Otherwise Neutral
     return "Neutral"
 
 def map_structured_sentiment(question, response):
