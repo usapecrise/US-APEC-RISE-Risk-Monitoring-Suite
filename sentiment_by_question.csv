@@ -1,19 +1,5 @@
 Question,Sentiment,Count,Percent
-Relevance,Positive,0,0.0
-Relevance,Neutral,0,0.0
-Relevance,Negative,0,0.0
-Knowledge,Positive,162,80.59701492537313
-Knowledge,Neutral,33,16.417910447761194
-Knowledge,Negative,6,2.9850746268656714
-Application,Positive,0,0.0
-Application,Neutral,0,0.0
-Application,Negative,0,0.0
-Sharing,Positive,0,0.0
-Sharing,Neutral,0,0.0
-Sharing,Negative,0,0.0
-Applications (Open Text),Positive,0,0.0
-Applications (Open Text),Neutral,0,0.0
-Applications (Open Text),Negative,0,0.0
-Sharing (Open Text),Positive,0,0.0
-Sharing (Open Text),Neutral,0,0.0
-Sharing (Open Text),Negative,0,0.0
+Applications (Open Text),Neutral,890,91.28205128205128
+Sharing (Open Text),Neutral,810,97.59036144578313
+Applications (Open Text),Positive,85,8.717948717948717
+Sharing (Open Text),Positive,20,2.4096385542168677
