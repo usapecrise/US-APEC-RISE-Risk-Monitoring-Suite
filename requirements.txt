@@ -7,3 +7,6 @@ flair
 tableauhyperapi
 tableauserverclient
 language-tool-python
+transformers>=4.42.0
+torch>=2.0.0
+datasets>=2.20.0
