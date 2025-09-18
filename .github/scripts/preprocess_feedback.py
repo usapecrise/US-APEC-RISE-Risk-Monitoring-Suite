@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Wide File Only, Tuned Thresholds)
-------------------------------------------------------------
+Feedback Analysis Pipeline (Wide File Only, Flair + Context-Aware Rules)
+------------------------------------------------------------------------
 - Uses Feedback_Form_Data.csv (wide format: 1 row per participant)
-- Open-text fields: sentiment analysis + word/phrase frequency
+- Open-text fields: context-aware sentiment
+  * Application/Sharing → default Positive unless clearly Negative
+  * Improvements/Barriers → full Positive/Neutral/Negative
 - Structured fields: mapped into Positive/Neutral/Negative
-- Tuned thresholds: more Positive, fewer Neutral, stricter Negative
+- Flair model for sentiment + thresholds + keyword boosts
 - Exports:
   - word_frequency.csv
   - word_frequency_detailed.csv
@@ -21,7 +23,8 @@ import pandas as pd
 import re, string
 from nltk.stem import WordNetLemmatizer
 from nltk.util import ngrams
-from transformers import pipeline
+from flair.models import TextClassifier
+from flair.data import Sentence
 
 # ----------------------------
 # CONFIG
@@ -42,23 +45,23 @@ STOPWORDS = set([
 
 lemmatizer = WordNetLemmatizer()
 
-# Hugging Face sentiment model
-sentiment_pipeline = pipeline(
-    "sentiment-analysis",
-    model="cardiffnlp/twitter-roberta-base-sentiment-latest"
-)
+# Load Flair sentiment model
+flair_classifier = TextClassifier.load("sentiment")
 
 # ----------------------------
 # Thresholds + keyword boost
 # ----------------------------
-POS_THRESHOLD = 0.30   # lower → more texts Positive
-NEG_THRESHOLD = 0.35   # stricter → fewer Negatives
+POS_THRESHOLD = 0.30
+NEG_THRESHOLD = 0.35
 
 POSITIVE_HINTS = {
     "useful","helpful","valuable","good","clear","great","effective","relevant",
     "apply","applied","implement","implemented","use","using","utilize","practice",
     "adopt","adopted","incorporate","incorporated","plan","planned","will",
-    "benefit","beneficial","support","important","improve","improved","gain","learned"
+    "benefit","beneficial","support","important","improve","improved","gain","learned",
+    "continue","bring","share","sharing","spread","discuss","train","teaching",
+    "inform","knowledge","practice","follow","followup","build","strengthen","capacity",
+    "apply it"
 }
 NEGATIVE_HINTS = {
     "confusing","poor","bad","difficult","waste","irrelevant","unclear",
@@ -80,51 +83,42 @@ def normalize_word(word: str) -> str:
     word = lemmatizer.lemmatize(word, pos="n")
     return word
 
-def get_sentiment(text: str):
-    """Sentiment with tuned thresholds + expanded keyword boost."""
-    if not text or text.strip() == "":
-        return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
+def flair_sentiment(text: str):
+    """Base Flair model output with thresholds."""
+    sentence = Sentence(text[:512])
+    flair_classifier.predict(sentence)
+    label = sentence.labels[0]
+    raw_label = label.value.upper()   # POSITIVE / NEGATIVE
+    score = label.score
+    pos, neg = 0.0, 0.0
+    if raw_label == "POSITIVE":
+        pos = score
+    elif raw_label == "NEGATIVE":
+        neg = score
+    neu = 1 - max(pos, neg)
 
-    results = sentiment_pipeline(text[:512], top_k=None)
-
-    # Normalize results
-    if isinstance(results, dict):
-        results = [results]
-    elif isinstance(results, list) and isinstance(results[0], str):
-        results = [{"label": lab, "score": 1.0} for lab in results]
-    elif not (isinstance(results, list) and isinstance(results[0], dict)):
-        results = [{"label": "NEUTRAL", "score": 1.0}]
-
-    scores = {}
-    for r in results:
-        label = str(r["label"]).upper()
-        if label in ["LABEL_0", "NEGATIVE"]:
-            scores["Negative"] = r["score"]
-        elif label in ["LABEL_1", "NEUTRAL"]:
-            scores["Neutral"] = r["score"]
-        elif label in ["LABEL_2", "POSITIVE"]:
-            scores["Positive"] = r["score"]
-
-    pos = scores.get("Positive", 0)
-    neg = scores.get("Negative", 0)
-    neu = scores.get("Neutral", 0)
-
-    # Apply tuned thresholds
     if pos >= POS_THRESHOLD:
         sentiment = "Positive"
     elif neg >= NEG_THRESHOLD:
         sentiment = "Negative"
     else:
         sentiment = "Neutral"
+    return sentiment, {"Positive": pos, "Negative": neg, "Neutral": neu}
 
-    # Keyword boost if still Neutral
+def get_sentiment(text: str, source: str):
+    """Context-aware sentiment: bias Application/Sharing Positive."""
+    if not text or text.strip() == "":
+        return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
+
+    sentiment, scores = flair_sentiment(text)
+
+    # Keyword boost
     if sentiment == "Neutral":
         tokens = set(clean_text(text).split())
         if tokens & POSITIVE_HINTS:
             sentiment = "Positive"
         elif tokens & NEGATIVE_HINTS:
             sentiment = "Negative"
-        # phrase match
         for phrase in POSITIVE_HINTS:
             if phrase in text.lower():
                 sentiment = "Positive"
@@ -132,7 +126,13 @@ def get_sentiment(text: str):
             if phrase in text.lower():
                 sentiment = "Negative"
 
-    return sentiment, {"Positive": pos, "Negative": neg, "Neutral": neu}
+    # Context rules
+    if source in ["Applications (Open Text)", "Sharing (Open Text)"]:
+        # Default to Positive unless strongly Negative
+        if sentiment == "Neutral":
+            sentiment = "Positive"
+
+    return sentiment, scores
 
 def map_structured_sentiment(question, response):
     """Maps Likert-style responses into sentiment."""
@@ -201,7 +201,7 @@ def preprocess_feedback():
                 cleaned = clean_text(text)
                 words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
 
-                sentiment, scores = get_sentiment(text)
+                sentiment, scores = get_sentiment(text, source)
                 sentiment_records.append(sentiment)
                 by_question_records.append((source, sentiment))
                 score_records.append((source, text, sentiment, scores["Positive"], scores["Negative"], scores["Neutral"]))
