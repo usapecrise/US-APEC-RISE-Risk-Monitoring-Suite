@@ -123,15 +123,15 @@ def preprocess_feedback():
 
     # Define fields after normalization
     STRUCTURED_FIELDS = {
-        "to what extent was this training relevant to your field of work": "Relevance",
-        "to what extent did this training increase your knowledge in the topic area": "Knowledge",
-        "do you intend to directly apply workshop outcomes in your work": "Application",
-        "do you plan to share what you learned with others in your organization or professional network": "Sharing"
+        "Relevance to Work": "Relevance",
+        "Knowledge Gain": "Knowledge",
+        "Application Intent": "Application",
+        "Sharing Intent": "Sharing"
     }
 
     TEXT_FIELDS = {
-        "sharing examples": "Sharing (Open Text)",
-        "application examples": "Applications (Open Text)"
+        "Sharing Examples": "Sharing (Open Text)",
+        "Application Examples": "Applications (Open Text)"
     }
 
     records = []
