@@ -2,13 +2,20 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (with Debugging)
--------------------------------------------
-1. Cleans feedback text
-2. Word + phrase frequency analysis
-3. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
-4. Structured + open-text mapping
-5. Debug prints for troubleshooting file updates
+Feedback Analysis Pipeline (Row-based survey version)
+-----------------------------------------------------
+1. Handles Airtable-style exports where data is in "Question" + "Response" columns
+2. Cleans open-text
+3. Word + phrase frequency analysis
+4. Sentiment analysis using Hugging Face CardiffNLP RoBERTa (3 classes)
+   - Strongest label wins
+5. Structured question mapping (Relevance, Knowledge, Application, Sharing)
+6. Exports:
+   - word_frequency.csv
+   - word_frequency_detailed.csv
+   - sentiment_summary.csv
+   - sentiment_by_question.csv
+   - top_phrases.csv
 """
 
 import pandas as pd
@@ -25,7 +32,7 @@ OUTPUT_FILE_TOTAL = "word_frequency.csv"
 OUTPUT_FILE_DETAILED = "word_frequency_detailed.csv"
 OUTPUT_FILE_SENTIMENT = "sentiment_summary.csv"
 OUTPUT_FILE_SENTIMENT_BYQ = "sentiment_by_question.csv"
-OUTPUT_FILE_PHRASES = "top_phrases.csv" 
+OUTPUT_FILE_PHRASES = "top_phrases.csv"
 
 STOPWORDS = set([
     "the","was","very","and","me","to","i","a","but","more","new","them","my",
@@ -57,9 +64,10 @@ def normalize_word(word: str) -> str:
     return word
 
 def get_sentiment(text: str) -> str:
+    """Sentiment using CardiffNLP 3-class model"""
     if not text or text.strip() == "":
         return "Neutral"
-    results = sentiment_pipeline(text[:512], top_k=None)[0]
+    results = sentiment_pipeline(text[:512], top_k=None)[0]  # list of dicts
     scores = {}
     for r in results:
         label = r["label"].upper()
@@ -69,11 +77,9 @@ def get_sentiment(text: str) -> str:
             scores["Neutral"] = r["score"]
         elif label in ["LABEL_2", "POSITIVE"]:
             scores["Positive"] = r["score"]
-    if scores:
-        return max(scores, key=scores.get)
-    return "Neutral"
+    return max(scores, key=scores.get) if scores else "Neutral"
 
-def map_structured_sentiment(question, response):
+def map_structured_sentiment(qtype, response):
     mappings = {
         "Relevance": {
             "Not at all relevant": "Negative",
@@ -100,83 +106,84 @@ def map_structured_sentiment(question, response):
             "Not at this time: I do not currently have plans to share": "Negative"
         }
     }
-    return mappings.get(question, {}).get(response, "Neutral")
+    return mappings.get(qtype, {}).get(response, "Neutral")
 
 # ----------------------------
 # Main Preprocess
 # ----------------------------
 def preprocess_feedback():
-    print("DEBUG - Current working directory:", os.getcwd())
-    print("DEBUG - Attempting to read:", INPUT_FILE)
-
+    print("DEBUG - Working directory:", os.getcwd())
     df = pd.read_csv(INPUT_FILE)
-    print("DEBUG - Rows loaded:", len(df))
-    print("DEBUG - Raw columns:", df.columns.tolist())
-
-    df.columns = df.columns.str.strip().str.lower().str.replace(r"[?]", "", regex=True)
-    print("DEBUG - Normalized columns:", df.columns.tolist())
-
-    STRUCTURED_FIELDS = {
-        "relevance to work": "Relevance",
-        "knowledge gain": "Knowledge",
-        "application intent": "Application",
-        "sharing intent": "Sharing"
-    }
-
-    TEXT_FIELDS = {
-        "application examples": "Applications (Open Text)",
-        "sharing examples": "Sharing (Open Text)"
-    }
+    print("DEBUG - Loaded rows:", len(df))
+    print("DEBUG - Columns:", df.columns.tolist())
 
     records, phrase_records, sentiment_records, by_question_records = [], [], [], []
 
-    # Structured
-    for col, qtype in STRUCTURED_FIELDS.items():
-        if col in df.columns:
-            print(f"DEBUG - Processing structured field: {col} → {qtype}")
-            for resp in df[col].dropna():
-                sent = map_structured_sentiment(qtype, resp)
-                sentiment_records.append(sent)
-                by_question_records.append((qtype, sent))
-        else:
-            print(f"DEBUG - MISSING structured field: {col}")
+    for _, row in df.iterrows():
+        qtext = str(row.get("Question", "")).strip().lower()
+        resp = str(row.get("Response", "")).strip()
 
-    # Open-text
-    for col, source in TEXT_FIELDS.items():
-        if col in df.columns:
-            print(f"DEBUG - Processing open-text field: {col} → {source}")
-            for text in df[col].dropna():
-                cleaned = clean_text(text)
-                words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
-                sentiment = get_sentiment(text)
-                sentiment_records.append(sentiment)
-                by_question_records.append((source, sentiment))
-                for word in words:
-                    records.append((word, source))
-                for n in [2, 3]:
-                    for gram in ngrams(words, n):
-                        phrase_records.append((" ".join(gram), source))
-        else:
-            print(f"DEBUG - MISSING open-text field: {col}")
+        if not resp:
+            continue
 
-    # Write outputs with debug
+        # Structured Likert questions
+        if "relevant" in qtext:
+            sent = map_structured_sentiment("Relevance", resp)
+            sentiment_records.append(sent)
+            by_question_records.append(("Relevance", sent))
+        elif "knowledge" in qtext:
+            sent = map_structured_sentiment("Knowledge", resp)
+            sentiment_records.append(sent)
+            by_question_records.append(("Knowledge", sent))
+        elif "apply" in qtext:
+            sent = map_structured_sentiment("Application", resp)
+            sentiment_records.append(sent)
+            by_question_records.append(("Application", sent))
+        elif "share" in qtext and "examples" not in qtext:
+            sent = map_structured_sentiment("Sharing", resp)
+            sentiment_records.append(sent)
+            by_question_records.append(("Sharing", sent))
+
+        # Open-text questions
+        elif "examples" in qtext or "improvements" in qtext or "barriers" in qtext:
+            cleaned = clean_text(resp)
+            words = [normalize_word(w) for w in cleaned.split() if w not in STOPWORDS and len(w) > 2]
+
+            sentiment = get_sentiment(resp)
+            sentiment_records.append(sentiment)
+            by_question_records.append((qtext.title(), sentiment))
+
+            for word in words:
+                records.append((word, qtext.title()))
+            for n in [2, 3]:
+                for gram in ngrams(words, n):
+                    phrase_records.append((" ".join(gram), qtext.title()))
+
+    # Word frequency
     if records:
-        pd.DataFrame(records, columns=["Word", "Source"]).to_csv(OUTPUT_FILE_TOTAL, index=False)
-        print(f"DEBUG - Wrote {OUTPUT_FILE_TOTAL}")
+        df_words = pd.DataFrame(records, columns=["Word", "Source"])
+        df_counts = df_words.groupby(["Word", "Source"]).size().reset_index(name="Frequency")
+        df_total = df_words.groupby("Word").size().reset_index(name="TotalFrequency")
+        df_detailed = pd.merge(df_counts, df_total, on="Word").sort_values(by="TotalFrequency", ascending=False)
+        df_total.sort_values(by="TotalFrequency", ascending=False).to_csv(OUTPUT_FILE_TOTAL, index=False)
+        df_detailed.to_csv(OUTPUT_FILE_DETAILED, index=False)
+        print("DEBUG - Wrote word frequencies")
 
+    # Phrase frequency
     if phrase_records:
-        pd.DataFrame(phrase_records, columns=["Phrase", "Source"])\
-            .groupby("Phrase").size().reset_index(name="Frequency")\
-            .sort_values(by="Frequency", ascending=False).head(20)\
-            .to_csv(OUTPUT_FILE_PHRASES, index=False)
-        print(f"DEBUG - Wrote {OUTPUT_FILE_PHRASES}")
+        df_phrases = pd.DataFrame(phrase_records, columns=["Phrase", "Source"])
+        df_phrases_count = df_phrases.groupby("Phrase").size().reset_index(name="Frequency")
+        df_phrases_count.sort_values(by="Frequency", ascending=False).head(20).to_csv(OUTPUT_FILE_PHRASES, index=False)
+        print("DEBUG - Wrote top phrases")
 
+    # Sentiment summary
     if sentiment_records:
         df_sentiment = pd.Series(sentiment_records).value_counts().reset_index()
         df_sentiment.columns = ["Sentiment", "Count"]
         df_sentiment.to_csv(OUTPUT_FILE_SENTIMENT, index=False)
-        print(f"DEBUG - Wrote {OUTPUT_FILE_SENTIMENT} with rows:", len(df_sentiment))
+        print("DEBUG - Wrote sentiment summary with rows:", len(df_sentiment))
 
+    # Sentiment by question
     if by_question_records:
         df_byq = pd.DataFrame(by_question_records, columns=["Question", "Sentiment"])
         df_byq_summary = df_byq.value_counts().reset_index(name="Count")
@@ -188,7 +195,7 @@ def preprocess_feedback():
         )
         df_final = pd.merge(df_byq_summary, df_byq_pct, on=["Question", "Sentiment"])
         df_final.to_csv(OUTPUT_FILE_SENTIMENT_BYQ, index=False)
-        print(f"DEBUG - Wrote {OUTPUT_FILE_SENTIMENT_BYQ} with rows:", len(df_final))
+        print("DEBUG - Wrote sentiment by question with rows:", len(df_final))
 
     print("✅ Preprocessing complete")
 
