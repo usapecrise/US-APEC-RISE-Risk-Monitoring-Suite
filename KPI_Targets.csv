@@ -1,13 +1,13 @@
-Baseline,E2A Questions Reference,Type,Indicator ID,Theme,Target,Name,Unit,Actual,Last Exported
-0,['recGtsEJnolMagsrH'],Outcome,OC1,Effectiveness,20,OC1: Number of policy or regulatory reforms adopted by APEC economies as a result of U.S. support,Number,0,2025-09-19T17:44:46Z
-0,['recfV1M9SC44JZDhF'],Outcome,OC2,Effectiveness,15,OC2: Percentage of APEC economies adopting U.S.-aligned governance frameworks or best practices,Number,0,2025-09-19T17:44:46Z
-0,['recGtsEJnolMagsrH'],Output,OT1,Effectiveness,"50,000",OT1: Person hours of USG-supported training completed in trade and investment (EG.2-1),Number,01556.0000002,2025-09-19T17:44:46Z
-0,['recfV1M9SC44JZDhF'],Output,OT2,Effectiveness,75,OT2: Number of USG engagements jointly undertaken with private sector enterprises (PSE-1),Number,7,2025-09-19T17:44:46Z
-0,['recemgWr1OtaQ98BT'],Outcome,OC3,Alignment,60%,OC3: Percentage of APEC initiatives under US APEC-RISE that resulted in participating APEC economies aligning policies or practices with U.S.-backed reforms.,Percent,0%,2025-09-19T17:44:46Z
-0,['recemgWr1OtaQ98BT'],Output,OT3,Alignment,30,"OT3: Number of US APEC-RISE initiatives referenced or reflected in official APEC policy documents, statements, or communiqués",Number,0,2025-09-19T17:44:46Z
-0,['recTwucvb7MEyEfvN'],Outcome,OC4,Engagement,80%,OC4: Percentage of U.S. private sector partners reporting U.S.-supported technical assistance expanded opportunities for business growth and market engagement in APEC economies,Percent,0%,2025-09-19T17:44:46Z
-0,['recTwucvb7MEyEfvN'],Outcome,OC5,Engagement,50,OC5: Number of new connections or networks facilitated for the public or private sector through US APEC-RISE activities,Number,0,2025-09-19T17:44:46Z
-0,['recTwucvb7MEyEfvN'],Output,OT4,Engagement,120,OT4: Number of private sector enterprises that engaged with the USG to support U.S. Foreign Assistance objectives (PSE-2),Number,14,2025-09-19T17:44:46Z
-0,['recNBayeVK0EqLEhc'],Outcome,OC6,Responsibility,20,"OC6: Number of local institutions demonstrating continued use of U.S.-supported tools, technical knowledge, or practices",Number,0,2025-09-19T17:44:46Z
-0,['recNBayeVK0EqLEhc'],Outcome,OC7,Responsibility,70%,OC7: Percentage of identified barriers to reform adoption successfully resolved through adaptive actions,Percent,0%,2025-09-19T17:44:46Z
-0,['recNBayeVK0EqLEhc'],Output,OT5,Responsibility,"US$1,500,000",OT5: Value of private sector resource commitments to support U.S. Foreign Assistance Objectives (PSE-4),USD,32549,2025-09-19T17:44:46Z
+Name,Indicator ID,Target,Baseline,Actual,E2A Questions Reference,Unit,Type,Theme,Last Exported
+OC1: Number of policy or regulatory reforms adopted by APEC economies as a result of U.S. support,OC1,20,0,0,['recGtsEJnolMagsrH'],Number,Outcome,Effectiveness,2025-09-19T17:50:42Z
+OC2: Percentage of APEC economies adopting U.S.-aligned governance frameworks or best practices,OC2,15,0,0,['recfV1M9SC44JZDhF'],Number,Outcome,Effectiveness,2025-09-19T17:50:42Z
+OT1: Person hours of USG-supported training completed in trade and investment (EG.2-1),OT1,"50,000",0,01556.0000002,['recGtsEJnolMagsrH'],Number,Output,Effectiveness,2025-09-19T17:50:42Z
+OT2: Number of USG engagements jointly undertaken with private sector enterprises (PSE-1),OT2,75,0,7,['recfV1M9SC44JZDhF'],Number,Output,Effectiveness,2025-09-19T17:50:42Z
+OC3: Percentage of APEC initiatives under US APEC-RISE that resulted in participating APEC economies aligning policies or practices with U.S.-backed reforms.,OC3,60%,0,0%,['recemgWr1OtaQ98BT'],Percent,Outcome,Alignment,2025-09-19T17:50:42Z
+"OT3: Number of US APEC-RISE initiatives referenced or reflected in official APEC policy documents, statements, or communiqués",OT3,30,0,0,['recemgWr1OtaQ98BT'],Number,Output,Alignment,2025-09-19T17:50:42Z
+OC4: Percentage of U.S. private sector partners reporting U.S.-supported technical assistance expanded opportunities for business growth and market engagement in APEC economies,OC4,80%,0,0%,['recTwucvb7MEyEfvN'],Percent,Outcome,Engagement,2025-09-19T17:50:42Z
+OC5: Number of new connections or networks facilitated for the public or private sector through US APEC-RISE activities,OC5,50,0,0,['recTwucvb7MEyEfvN'],Number,Outcome,Engagement,2025-09-19T17:50:42Z
+OT4: Number of private sector enterprises that engaged with the USG to support U.S. Foreign Assistance objectives (PSE-2),OT4,120,0,14,['recTwucvb7MEyEfvN'],Number,Output,Engagement,2025-09-19T17:50:42Z
+"OC6: Number of local institutions demonstrating continued use of U.S.-supported tools, technical knowledge, or practices",OC6,20,0,0,['recNBayeVK0EqLEhc'],Number,Outcome,Responsibility,2025-09-19T17:50:42Z
+OC7: Percentage of identified barriers to reform adoption successfully resolved through adaptive actions,OC7,70%,0,0%,['recNBayeVK0EqLEhc'],Percent,Outcome,Responsibility,2025-09-19T17:50:42Z
+OT5: Value of private sector resource commitments to support U.S. Foreign Assistance Objectives (PSE-4),OT5,"US$1,500,000",0,32549,['recNBayeVK0EqLEhc'],USD,Output,Responsibility,2025-09-19T17:50:42Z
