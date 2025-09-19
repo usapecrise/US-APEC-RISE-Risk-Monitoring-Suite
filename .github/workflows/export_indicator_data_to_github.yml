@@ -172,6 +172,16 @@ jobs:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/generate_assumptions_status.py
 
+      - name: Export Data Security CSV
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_data_security.py
+
+      - name: Export Data Quality CSV
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: python .github/scripts/export_data_quality.py
+
       - name: Run Spotlight Quotes export script
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -200,7 +210,7 @@ jobs:
             risk_assumption.csv attendance_assumption.csv attendance_records.csv Map_Data.csv \
             Monitoring_System.csv person_hours.csv person_hours_by_workshop.csv person_hours_by_sex.csv \
             person_hours_by_sector.csv person_hours_by_economy.csv person_hours_totals_combined.csv \
-            spotlight_quotes.csv
+            spotlight_quotes.csv Data_Security.csv Data_Quality.csv
 
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
