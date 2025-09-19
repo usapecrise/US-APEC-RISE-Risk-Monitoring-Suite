@@ -51,7 +51,7 @@ flair_classifier = TextClassifier.load("sentiment")
 # ----------------------------
 # Thresholds + keyword boost
 # ----------------------------
-POS_THRESHOLD = 0.5
+POS_THRESHOLD = 0.6
 NEG_THRESHOLD = 0.3
 
 POSITIVE_HINTS = {
