@@ -83,13 +83,16 @@ def main():
     # === Helper function ===
     def process_scores(subset, econ_label, level):
         scores = []
+        total_responses = 0  # track all valid responses
 
         def add_record(col, label, mapping):
+            nonlocal total_responses
             if col in subset.columns:
                 vals = subset[col].map(mapping).dropna()
                 if not vals.empty:
                     avg = vals.mean()
                     n = vals.count()
+                    total_responses += n
                     scores.append(avg)
                     records.append({
                         "Assumption": "Stakeholder alignment with U.S. focus areas",
@@ -124,7 +127,7 @@ def main():
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
                 "Confidence Index 1 (Percent)": round(comp, 1),
-                "Confidence Index 2 (Responses)": int(len(scores)),
+                "Confidence Index 2 (Responses)": int(total_responses),  # ✅ total number of responses
                 "Notes": "Composite of relevance, knowledge, application, and sharing scores."
             })
 
@@ -144,4 +147,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
