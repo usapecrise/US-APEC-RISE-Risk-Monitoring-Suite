@@ -53,6 +53,12 @@ def main():
 
     merged = merged[required_cols + ["source_file"]]
 
+    # ✅ normalize assumption labels (prevent duplicates)
+    assumption_map = {
+        "Stakeholder alignment with U.S. priorities": "Stakeholder alignment with U.S. focus areas"
+    }
+    merged["assumption"] = merged["assumption"].replace(assumption_map)
+
     # ✅ validation check
     missing = [f for f in INPUT_FILES if f not in row_counts or row_counts[f] in (0, None)]
     if missing:
@@ -101,7 +107,7 @@ def main():
         )
         summary["Most_Recent_Status"] = most_recent
 
-        # Monitoring tools used per assumption (safe version)
+        # Monitoring tools used per assumption
         tools = (
             merged.groupby("assumption")["monitoring_tool"]
             .unique()
