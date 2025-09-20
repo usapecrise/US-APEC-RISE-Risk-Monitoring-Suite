@@ -1,6 +1,8 @@
 import pandas as pd
+import os
 
 OUTPUT_FILE = "assumptions_status.csv"
+SUMMARY_FILE = "assumptions_summary.csv"
 
 # List of assumption input files to merge
 INPUT_FILES = [
@@ -58,7 +60,7 @@ def main():
     else:
         print("✅ All assumption files present in merged output")
 
-    # === Export ===
+    # === Export detailed file ===
     merged.to_csv(OUTPUT_FILE, index=False)
     print(f"✅ Unified assumptions file saved → {OUTPUT_FILE} ({len(merged)} rows)")
 
@@ -76,6 +78,44 @@ def main():
         summary = merged.groupby(["assumption", "status"]).size().reset_index(name="count")
         for _, row in summary.iterrows():
             print(f"  {row['assumption']} | {row['status']}: {row['count']} rows")
+
+    # === NEW: Assumption-level summary ===
+    if "assumption" in merged.columns and "status" in merged.columns:
+        summary = (
+            merged.groupby(["assumption", "status"])
+            .size()
+            .unstack(fill_value=0)
+        )
+
+        # Add totals and percentages
+        summary["Total"] = summary.sum(axis=1)
+        for col in ["optimistic", "baseline", "pessimistic"]:
+            if col in summary.columns:
+                summary[f"{col}_pct"] = (summary[col] / summary["Total"]) * 100
+
+        # Most recent status by assumption (latest date row)
+        most_recent = (
+            merged.sort_values("date", ascending=False)
+            .groupby("assumption")
+            .first()["status"]
+        )
+        summary["Most_Recent_Status"] = most_recent
+
+        # Monitoring tools used per assumption
+        tools = (
+            merged.groupby("assumption")["monitoring_tool"]
+            .unique()
+            .apply(lambda x: ", ".join(sorted(set(x))))
+        )
+        summary["Monitoring_Tools"] = tools
+
+        # Reset for export
+        summary = summary.reset_index()
+
+        # Save summary
+        summary.to_csv(SUMMARY_FILE, index=False)
+        print(f"✅ Assumptions summary file saved → {SUMMARY_FILE} ({len(summary)} rows)")
+
 
 if __name__ == "__main__":
     main()
