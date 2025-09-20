@@ -93,7 +93,7 @@ pct = (economies_present / APEC_TOTAL) * 100
 status = "optimistic" if pct >= 60 else "baseline" if pct >= 30 else "pessimistic"
 
 rows.append({
-    "Assumption": "Stakeholder alignment with U.S. priorities",
+    "Assumption": "Stakeholder alignment with U.S. focus areas",
     "Monitoring Tool": "Attendance",
     "Economy": "APEC (aggregate)",
     "Workstream": "All",
@@ -122,7 +122,7 @@ for ws, g in df.groupby("Workstream"):
     status_ws = "optimistic" if pct_ws >= 60 else "baseline" if pct_ws >= 30 else "pessimistic"
 
     rows.append({
-        "Assumption": "Stakeholder alignment with U.S. priorities",
+        "Assumption": "Stakeholder alignment with U.S. focus areas",
         "Monitoring Tool": "Attendance",
         "Economy": "APEC (aggregate)",
         "Workstream": ws if ws else "Unspecified",
@@ -158,7 +158,7 @@ for ws, g in df.groupby("Workstream"):
             status_econ = "pessimistic"
 
         rows.append({
-            "Assumption": "Stakeholder alignment with U.S. priorities",
+            "Assumption": "Stakeholder alignment with U.S. focus areas",
             "Monitoring Tool": "Attendance",
             "Economy": econ,
             "Workstream": ws if ws else "Unspecified",
