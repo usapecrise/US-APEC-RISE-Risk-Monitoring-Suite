@@ -10,7 +10,7 @@ Generates assumption data for:
 - Economy-level participation
 
 Logic:
-- Looks at the last 3 dialogues/workshops
+- Looks at the last 5 dialogues/workshops
 - Measures how many economies participated
 - Classifies optimism based on thresholds
 """
@@ -87,8 +87,8 @@ workshop_stats = (
     .reset_index()
     .sort_values("Workshop Date", ascending=False)
 )
-last3 = workshop_stats.head(3)
-economies_present = last3["Economy"].mean()
+last5 = workshop_stats.head(5)
+economies_present = last5["Economy"].mean()
 pct = (economies_present / APEC_TOTAL) * 100
 status = "optimistic" if pct >= 60 else "baseline" if pct >= 30 else "pessimistic"
 
@@ -98,8 +98,8 @@ rows.append({
     "Economy": "APEC (aggregate)",
     "Workstream": "All",
     "Level": "Aggregate",
-    "Date": safe_format_date(last3["Workshop Date"]),
-    "Signal": f"Average {economies_present:.1f} economies represented (last 3 dialogues)",
+    "Date": safe_format_date(last5["Workshop Date"]),
+    "Signal": f"Average {economies_present:.1f} economies represented (last 5 dialogues)",
     "Status": status,
     "Confidence Index 1 (Percent)": round(pct, 1),
     "Confidence Index 2 (Breadth)": int(round(economies_present, 0)),
@@ -114,10 +114,10 @@ for ws, g in df.groupby("Workstream"):
         .reset_index()
         .sort_values("Workshop Date", ascending=False)
     )
-    last3_ws = ws_stats.head(3)
-    if last3_ws.empty:
+    last5_ws = ws_stats.head(5)
+    if last5_ws.empty:
         continue
-    economies_present_ws = last3_ws["Economy"].mean()
+    economies_present_ws = last5_ws["Economy"].mean()
     pct_ws = (economies_present_ws / APEC_TOTAL) * 100
     status_ws = "optimistic" if pct_ws >= 60 else "baseline" if pct_ws >= 30 else "pessimistic"
 
@@ -127,8 +127,8 @@ for ws, g in df.groupby("Workstream"):
         "Economy": "APEC (aggregate)",
         "Workstream": ws if ws else "Unspecified",
         "Level": "Workstream",
-        "Date": safe_format_date(last3_ws["Workshop Date"]),
-        "Signal": f"Average {economies_present_ws:.1f} economies represented (last 3 {ws} dialogues)",
+        "Date": safe_format_date(last5_ws["Workshop Date"]),
+        "Signal": f"Average {economies_present_ws:.1f} economies represented (last 5 {ws} dialogues)",
         "Status": status_ws,
         "Confidence Index 1 (Percent)": round(pct_ws, 1),
         "Confidence Index 2 (Breadth)": int(round(economies_present_ws, 0)),
@@ -143,12 +143,19 @@ for ws, g in df.groupby("Workstream"):
             .reset_index()
             .sort_values("Workshop Date", ascending=False)
         )
-        last3_econ_ws = econ_ws_stats.head(3)
-        if last3_econ_ws.empty:
+        last5_econ_ws = econ_ws_stats.head(5)
+        if last5_econ_ws.empty:
             continue
-        attended_count = (last3_econ_ws["Economy"] > 0).sum()
-        pct_attended = (attended_count / 3) * 100
-        status_econ = "optimistic" if pct_attended >= 67 else "baseline" if pct_attended == 33 else "pessimistic"
+        attended_count = (last5_econ_ws["Economy"] > 0).sum()
+        pct_attended = (attended_count / 5) * 100
+
+        # thresholds: 3–5 = optimistic, 2 = baseline, 0–1 = pessimistic
+        if attended_count >= 3:
+            status_econ = "optimistic"
+        elif attended_count == 2:
+            status_econ = "baseline"
+        else:
+            status_econ = "pessimistic"
 
         rows.append({
             "Assumption": "Stakeholder alignment with U.S. priorities",
@@ -156,12 +163,12 @@ for ws, g in df.groupby("Workstream"):
             "Economy": econ,
             "Workstream": ws if ws else "Unspecified",
             "Level": "Economy",
-            "Date": safe_format_date(last3_econ_ws["Workshop Date"]),
-            "Signal": f"{econ} attended {attended_count}/3 {ws} dialogues",
+            "Date": safe_format_date(last5_econ_ws["Workshop Date"]),
+            "Signal": f"{econ} attended {attended_count}/5 {ws} dialogues",
             "Status": status_econ,
             "Confidence Index 1 (Percent)": round(pct_attended, 1),
             "Confidence Index 2 (Breadth)": attended_count,
-            "Notes": "Thresholds: Optimistic ≥67% (2–3/3), Baseline 33% (1/3), Pessimistic 0%."
+            "Notes": "Thresholds: Optimistic ≥3/5, Baseline 2/5, Pessimistic ≤1/5."
         })
 
 attendance_status = pd.DataFrame(rows)
