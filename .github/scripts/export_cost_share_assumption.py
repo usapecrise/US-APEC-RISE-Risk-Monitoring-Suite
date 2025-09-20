@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Cost-share (OT5) → Responsible Local Ownership
+----------------------------------------------
+Generates assumption data for:
+- Aggregate APEC cost-share
+- Economy-level cost-share
+- Workstream-level cost-share
+
+Logic:
+- Uses Host Country-based contributions
+- Tracks latest Fiscal Year
+- CI1 = total $ contributed
+- CI2 = # of contributing firms
+"""
+
 import os
 import requests
 import pandas as pd
@@ -6,7 +24,7 @@ import datetime
 # Airtable Config
 AIRTABLE_TOKEN = os.environ["AIRTABLE_TOKEN"]
 BASE_ID = "app0Ljjhrp3lTTpTO"
-TABLE_ID = "tblpb71OXvUUyJTVF"   # Cost-share (OT5) table ID
+TABLE_ID = "tblpb71OXvUUyJTVF"   # Cost-share (OT5) table
 VIEW_ID = "Grid view"
 
 def fetch_ot5():
@@ -30,8 +48,8 @@ def fetch_ot5():
 
             def flatten(val):
                 if isinstance(val, list):
-                    return ", ".join(val)
-                return val
+                    return [v.strip() for v in val]
+                return [val] if val else []
 
             records.append({
                 "Economy": flatten(f.get("Economy", [])),
@@ -60,38 +78,25 @@ def fetch_ot5():
 
     return df
 
-# === Helpers for unique counting ===
+# === Helpers ===
+def explode_lists(df, col):
+    """Explode list-type columns into multiple rows."""
+    return df.explode(col).reset_index(drop=True)
+
 def split_ids(series):
-    """Return unique linked record IDs across rows."""
+    """Return unique IDs/names across rows."""
     values = set()
     for val in series.dropna():
         if isinstance(val, str):
             for v in val.split(","):
                 values.add(v.strip())
+        elif isinstance(val, list):
+            for v in val:
+                values.add(str(v).strip())
     return values
 
-# === Load data ===
-df = fetch_ot5()
-
-print("🔍 Raw Airtable preview (first 5 rows):")
-print(df.head(5).to_dict(orient="records"))
-print("🔍 Row count before Host Country filter:", len(df))
-
-# ✅ Filter only Host Country-based
-valid_origins = ["Host Country-based"]
-df = df[df["ResourceOrigin"].isin(valid_origins)]
-print("🔍 Row count after Host Country filter:", len(df))
-
-# Pick latest FY
-if "Fiscal Year" in df.columns and not df["Fiscal Year"].dropna().empty:
-    latest_fy = df["Fiscal Year"].dropna().max()
-    df_latest = df[df["Fiscal Year"] == latest_fy]
-else:
-    latest_fy = "Unknown"
-    df_latest = df
-
-# === Classification rules ===
 def classify_with_time(total, econ_count, firm_count, latest_fy):
+    """Classify scenario status based on $ amount, economies, firms, and fiscal progress."""
     today = datetime.date.today()
     try:
         fy_year = int(latest_fy)
@@ -115,6 +120,27 @@ def classify_with_time(total, econ_count, firm_count, latest_fy):
     else:
         return "pessimistic"
 
+# === Load data ===
+df = fetch_ot5()
+if df.empty:
+    print("⚠️ No cost-share data found, writing empty file")
+    pd.DataFrame(columns=[
+        "Assumption","Monitoring Tool","Economy","Workstream","Level","Date",
+        "Signal","Status","Confidence Index 1 (Amount)","Confidence Index 2 (Breadth)","Notes"
+    ]).to_csv("cost_share_assumption.csv", index=False)
+    exit()
+
+# Filter only Host Country-based
+df = df[df["ResourceOrigin"].isin(["Host Country-based"])]
+
+# Pick latest FY
+if "Fiscal Year" in df.columns and not df["Fiscal Year"].dropna().empty:
+    latest_fy = df["Fiscal Year"].dropna().max()
+    df_latest = df[df["Fiscal Year"] == latest_fy]
+else:
+    latest_fy = "Unknown"
+    df_latest = df
+
 # === Build outputs ===
 rows = []
 
@@ -133,16 +159,17 @@ rows.append({
     "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
     "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Host Country-based only)",
     "Status": agg_status,
-    "Confidence Index 1 (Amount)": total_amount,
-    "Confidence Index 2 (Breadth)": firms_count,   # ✅ now just # firms
-    "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Economies tracked separately in Signal."
+    "Confidence Index 1 (Amount)": round(total_amount, 2),
+    "Confidence Index 2 (Breadth)": firms_count,
+    "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing."
 })
 
 # Economy level
-for econ, g in df_latest.groupby("Economy"):
+df_econ = explode_lists(df_latest, "Economy")
+for econ, g in df_econ.groupby("Economy"):
     econ_total = g["Amount_clean"].sum()
     econ_firms = len(split_ids(g["Firm"]))
-    scenario_econ = classify_with_time(econ_total, 1 if econ else 0, econ_firms, latest_fy)
+    econ_status = classify_with_time(econ_total, 1 if econ else 0, econ_firms, latest_fy)
 
     rows.append({
         "Assumption": "Responsible local ownership",
@@ -152,33 +179,33 @@ for econ, g in df_latest.groupby("Economy"):
         "Level": "Economy",
         "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
         "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Host Country-based only)",
-        "Status": scenario_econ,
-        "Confidence Index 1 (Amount)": econ_total,
+        "Status": econ_status,
+        "Confidence Index 1 (Amount)": round(econ_total, 2),
         "Confidence Index 2 (Breadth)": econ_firms,
         "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing."
     })
 
 # Workstream level
-if "Workstream" in df_latest.columns:
-    for ws, g in df_latest.groupby("Workstream"):
-        ws_total = g["Amount_clean"].sum()
-        ws_firms = len(split_ids(g["Firm"]))
-        ws_econs = len(split_ids(g["Economy"]))
-        scenario_ws = classify_with_time(ws_total, ws_econs, ws_firms, latest_fy)
+df_ws = explode_lists(df_latest, "Workstream")
+for ws, g in df_ws.groupby("Workstream"):
+    ws_total = g["Amount_clean"].sum()
+    ws_firms = len(split_ids(g["Firm"]))
+    ws_econs = len(split_ids(g["Economy"]))
+    ws_status = classify_with_time(ws_total, ws_econs, ws_firms, latest_fy)
 
-        rows.append({
-            "Assumption": "Responsible local ownership",
-            "Monitoring Tool": "Cost-share",
-            "Economy": "APEC (aggregate)",
-            "Workstream": ws,
-            "Level": "Workstream",
-            "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
-            "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Host Country-based only)",
-            "Status": scenario_ws,
-            "Confidence Index 1 (Amount)": ws_total,
-            "Confidence Index 2 (Breadth)": ws_firms,
-            "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Economies tracked separately in Signal."
-        })
+    rows.append({
+        "Assumption": "Responsible local ownership",
+        "Monitoring Tool": "Cost-share",
+        "Economy": "APEC (aggregate)",
+        "Workstream": ws,
+        "Level": "Workstream",
+        "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
+        "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Host Country-based only)",
+        "Status": ws_status,
+        "Confidence Index 1 (Amount)": round(ws_total, 2),
+        "Confidence Index 2 (Breadth)": ws_firms,
+        "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing."
+    })
 
 # Export
 assumption_df = pd.DataFrame(rows)
