@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Feedback (Surveys) → Stakeholder Alignment with U.S. Focus Areas
+----------------------------------------------------------------
+Generates assumption data for:
+- Aggregate APEC feedback
+- Economy-level feedback
+- Workstream-level feedback (if available)
+
+Logic:
+- Maps Likert-style survey responses into 0–100 scores
+- Produces signals for relevance, knowledge, application, and sharing
+- Composite = average of all four dimensions
+- CI1 = % score, CI2 = number of responses
+"""
+
 import os
 import requests
 import pandas as pd
@@ -49,7 +67,7 @@ def main():
         if "Date" in df.columns else pd.Timestamp.today().strftime("%Y-%m-%d")
     )
 
-    # Normalize responses
+    # Normalize responses (lowercase/strip for consistency)
     df = df.applymap(lambda x: str(x).strip().lower() if pd.notnull(x) else x)
 
     # Mapping dictionaries
@@ -81,14 +99,14 @@ def main():
     records = []
 
     # === Helper function ===
-    def process_scores(subset, econ_label, level):
+    def process_scores(subset, econ_label, level, ws_label="All"):
         scores = []
         total_responses = 0  # track all valid responses
 
         def add_record(col, label, mapping):
             nonlocal total_responses
             if col in subset.columns:
-                vals = subset[col].map(mapping).dropna()
+                vals = subset[col].map(lambda v: mapping.get(v, None)).dropna()
                 if not vals.empty:
                     avg = vals.mean()
                     n = vals.count()
@@ -98,14 +116,15 @@ def main():
                         "Assumption": "Stakeholder alignment with U.S. focus areas",
                         "Monitoring Tool": "Feedback",
                         "Economy": econ_label,
-                        "Workstream": "All",
+                        "Workstream": ws_label,
                         "Level": level,
                         "Date": last_date,
                         "Signal": f"{avg:.0f}% average {label}",
                         "Status": classify_status(avg),
                         "Confidence Index 1 (Percent)": round(avg, 1),
                         "Confidence Index 2 (Responses)": int(n),
-                        "Notes": f"Scores mapped 0–100. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
+                        "Notes": f"Scores mapped 0–100. Thresholds: Optimistic ≥60%, "
+                                 f"Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
                     })
 
         # Individual signals
@@ -121,14 +140,15 @@ def main():
                 "Assumption": "Stakeholder alignment with U.S. focus areas",
                 "Monitoring Tool": "Feedback",
                 "Economy": econ_label,
-                "Workstream": "All",
+                "Workstream": ws_label,
                 "Level": level,
                 "Date": last_date,
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
                 "Confidence Index 1 (Percent)": round(comp, 1),
-                "Confidence Index 2 (Responses)": int(total_responses),  # ✅ total number of responses
-                "Notes": "Composite of relevance, knowledge, application, and sharing scores."
+                "Confidence Index 2 (Responses)": int(total_responses),
+                "Notes": "Composite of relevance, knowledge, application, and sharing scores. "
+                         "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
             })
 
     # === 1. APEC aggregate ===
@@ -138,6 +158,13 @@ def main():
     if "Economy" in df.columns:
         for econ, subset in df.groupby("Economy"):
             process_scores(subset, econ, "Economy")
+
+    # === 3. Workstream-level breakdown ===
+    if "Workstream" in df.columns:
+        df_ws = df.explode("Workstream")
+        for ws, subset in df_ws.groupby("Workstream"):
+            if pd.notna(ws) and ws.strip():
+                process_scores(subset, "APEC (aggregate)", "Workstream", ws_label=ws)
 
     # Save output
     out_df = pd.DataFrame(records)
