@@ -1,3 +1,18 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Political & Institutional Continuity Assumption (Media Monitor)
+---------------------------------------------------------------
+- Reads risk_signals.csv
+- Classifies signals by optimistic / pessimistic keyword patterns
+- Outputs:
+  * Signal-level classification
+  * Economy summaries (% optimistic + total signals)
+  * Workstream summaries (% optimistic + total signals)
+  * Aggregate summary (% optimistic + total signals)
+"""
+
 import pandas as pd
 import os
 import re
@@ -7,7 +22,7 @@ OUTPUT_FILE = "risk_assumption.csv"
 
 # ── CLASSIFICATION ─────────────────────────────────────
 def classify_scenario(text: str):
-    """Keyword/phrase-based classification of media/risk signals with confidence score."""
+    """Keyword/phrase-based classification of media/risk signals."""
     text = str(text).lower()
 
     pessimistic_patterns = [
@@ -16,7 +31,8 @@ def classify_scenario(text: str):
         r"\binstability\b", r"\bunstable\b", r"\bturbulence\b", r"\bturmoil\b",
         r"\bchaos\b", r"\bunrest\b", r"\bcrisis\b", r"\bcollapse\b", r"\bcoup\b",
         r"\bdisruption\b", r"\bconflict\b", r"\bviolence\b", r"\bprotest(s)?\b", r"\bboycott(s)?\b",
-        r"\bdeadlock\b", r"\bgridlock\b", r"\bblocked reform\b", r"\bstalled reform\b"
+        r"\bdeadlock\b", r"\bgridlock\b", r"\bblocked reform\b", r"\bstalled reform\b",
+        r"\bpower struggle\b", r"\bpolitical vacuum\b", r"\bstalemate\b"
     ]
 
     optimistic_patterns = [
@@ -24,20 +40,21 @@ def classify_scenario(text: str):
         r"\bcooperation\b", r"\bcollaboration\b", r"\bpartnership\b", r"\balignment\b",
         r"\bagreement\b", r"\bconsensus\b", r"\bstrengthen(ed|ing)?\b", r"\breinforce(d|ment)?\b",
         r"\bsupport(ed|ing)?\b", r"\bendorse(d|ment)?\b", r"\binstitutionaliz(e|ed|ing)\b",
-        r"\bimplementation\b", r"\badoption\b", r"\bratification\b", r"\bcommitment maintained\b"
+        r"\bimplementation\b", r"\badoption\b", r"\bratification\b", r"\bcommitment maintained\b",
+        r"\bpolicy continuity\b", r"\binstitutional resilience\b"
     ]
 
     pessimistic_hits = sum(bool(re.search(pat, text)) for pat in pessimistic_patterns)
     optimistic_hits = sum(bool(re.search(pat, text)) for pat in optimistic_patterns)
 
     if pessimistic_hits > optimistic_hits:
-        return "pessimistic", -pessimistic_hits
+        return "pessimistic", pessimistic_hits
     elif optimistic_hits > pessimistic_hits:
         return "optimistic", optimistic_hits
     elif pessimistic_hits == optimistic_hits == 0:
         return "baseline", 0
     else:
-        return "baseline", optimistic_hits - pessimistic_hits
+        return "baseline", max(optimistic_hits, pessimistic_hits)
 
 
 def classify_percentage(pct: float) -> str:
@@ -61,15 +78,14 @@ def main():
         print("⚠️ risk_signals.csv is empty")
         return
 
-    # Detect the text column dynamically
+    # Detect text column dynamically
     text_col = None
     for candidate in ["signal", "text", "content", "description"]:
         if candidate in df.columns:
             text_col = candidate
             break
-
     if not text_col:
-        print(f"⚠️ No suitable text column found in {INPUT_FILE}. Available columns: {list(df.columns)}")
+        print(f"⚠️ No suitable text column found. Available: {list(df.columns)}")
         return
 
     records = []
@@ -82,7 +98,7 @@ def main():
         date_str = date.strftime("%Y-%m-%d") if not pd.isna(date) else ""
         signal_text = row.get(text_col, "")
 
-        status, score = classify_scenario(signal_text)
+        status, hits = classify_scenario(signal_text)
 
         records.append({
             "Assumption": "Political and institutional continuity",
@@ -93,12 +109,12 @@ def main():
             "Date": date_str,
             "Signal": str(signal_text),
             "Status": status,
-            "Confidence Index 1 (Percent)": score,   # positive = optimistic hits, negative = pessimistic hits
-            "Confidence Index 2 (Breadth)": 1,      # each row = 1 signal
-            "Notes": "Signal-level classification. CI1 = keyword hits (positive=optimistic, negative=pessimistic). CI2 = 1 (single signal)."
+            "Confidence Index 1 (Keyword Hits)": hits,  # absolute keyword count
+            "Confidence Index 2 (Signals)": 1,
+            "Notes": "Signal-level classification. CI1 = keyword matches; CI2 = 1 signal."
         })
 
-    # === 2. Economy-level summaries ===
+    # === 2. Economy summaries ===
     if "economy" in df.columns:
         for econ, subset in df.groupby("economy"):
             total = len(subset)
@@ -114,15 +130,16 @@ def main():
                 "Economy": econ,
                 "Workstream": "All",
                 "Level": "Economy",
-                "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d") if "date" in df.columns else "",
-                "Signal": f"{pct_opt:.0f}% of signals optimistic",
+                "Date": pd.to_datetime(subset["date"], errors="coerce").max().strftime("%Y-%m-%d")
+                        if "date" in subset.columns else "",
+                "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals)",
                 "Status": econ_status,
-                "Confidence Index 1 (Percent)": round(pct_opt, 1),
-                "Confidence Index 2 (Breadth)": total,
-                "Notes": "Economy-level summary. CI1 = % optimistic signals. CI2 = number of signals reviewed."
+                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
+                "Confidence Index 2 (Signals Reviewed)": total,
+                "Notes": "Economy summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
             })
 
-    # === 3. Workstream-level summaries ===
+    # === 3. Workstream summaries ===
     if "workstream" in df.columns:
         for ws, subset in df.groupby("workstream"):
             total = len(subset)
@@ -138,15 +155,16 @@ def main():
                 "Economy": "APEC (aggregate)",
                 "Workstream": ws if ws else "Unspecified",
                 "Level": "Workstream",
-                "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d") if "date" in df.columns else "",
-                "Signal": f"{pct_opt:.0f}% of signals optimistic",
+                "Date": pd.to_datetime(subset["date"], errors="coerce").max().strftime("%Y-%m-%d")
+                        if "date" in subset.columns else "",
+                "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals)",
                 "Status": ws_status,
-                "Confidence Index 1 (Percent)": round(pct_opt, 1),
-                "Confidence Index 2 (Breadth)": total,
-                "Notes": "Workstream-level summary. CI1 = % optimistic signals. CI2 = number of signals reviewed."
+                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
+                "Confidence Index 2 (Signals Reviewed)": total,
+                "Notes": "Workstream summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
             })
 
-    # === 4. APEC aggregate summary ===
+    # === 4. Aggregate summary ===
     total_signals = len(df)
     optimistic_count = df[text_col].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
     pct_opt = (optimistic_count / total_signals) * 100 if total_signals > 0 else 0
@@ -158,12 +176,13 @@ def main():
         "Economy": "APEC (aggregate)",
         "Workstream": "All",
         "Level": "Aggregate",
-        "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d") if "date" in df.columns else "",
-        "Signal": f"{pct_opt:.0f}% of signals optimistic",
+        "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d")
+                if "date" in df.columns else "",
+        "Signal": f"{pct_opt:.0f}% optimistic (out of {total_signals} signals)",
         "Status": agg_status,
-        "Confidence Index 1 (Percent)": round(pct_opt, 1),
-        "Confidence Index 2 (Breadth)": total_signals,
-        "Notes": "Aggregate summary. CI1 = % optimistic signals. CI2 = number of signals reviewed."
+        "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
+        "Confidence Index 2 (Signals Reviewed)": total_signals,
+        "Notes": "Aggregate summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
     })
 
     # === Export ===
