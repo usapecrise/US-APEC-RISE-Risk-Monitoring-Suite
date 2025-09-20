@@ -79,6 +79,7 @@ def main():
 
     def process_scores(subset, econ_label, level):
         scores = []
+        total_responses = 0  # track total responses across components
 
         # Application
         if "Application Intent" in subset.columns:
@@ -86,6 +87,7 @@ def main():
             if not vals.empty:
                 avg = vals.mean()
                 n = vals.count()
+                total_responses += n
                 scores.append(avg)
                 records.append({
                     "Assumption": "Policy and regulatory openness",
@@ -107,6 +109,7 @@ def main():
             if not vals.empty:
                 avg = vals.mean()
                 n = vals.count()
+                total_responses += n
                 scores.append(avg)
                 records.append({
                     "Assumption": "Policy and regulatory openness",
@@ -135,8 +138,8 @@ def main():
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
                 "Confidence Index 1 (Percent)": round(comp, 1),
-                "Confidence Index 2 (Responses)": int(len(scores)),
-                "Notes": "Composite of application and sharing scores."
+                "Confidence Index 2 (Responses)": int(total_responses),  # ✅ now reflects total responses
+                "Notes": "Composite of application and sharing scores from dialogues/meetings."
             })
 
     # Aggregate
