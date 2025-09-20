@@ -14,6 +14,9 @@ Logic:
 - Tracks latest Fiscal Year
 - CI1 = total $ contributed
 - CI2 = # of contributing firms
+- Thresholds:
+    * If ≥2 years of history → dynamic: Optimistic = ≥ historical avg, Baseline = ≥ 25th percentile
+    * Else → fallback: static $ thresholds ($5k / $1k), scaled by fiscal year progress
 """
 
 import os
@@ -95,30 +98,43 @@ def split_ids(series):
                 values.add(str(v).strip())
     return values
 
-def classify_with_time(total, econ_count, firm_count, latest_fy):
-    """Classify scenario status based on $ amount, economies, firms, and fiscal progress."""
+def classify_with_history(total, econ_count, firm_count, latest_fy, df_all):
+    """Classify scenario status based on $ amount, economies, firms, and historical OT5 data."""
     today = datetime.date.today()
-    try:
-        fy_year = int(latest_fy)
-    except:
-        fy_year = today.year
 
-    fy_start = datetime.date(fy_year, 1, 1)
-    months_into_fy = (today.year - fy_start.year) * 12 + (today.month - fy_start.month)
-    progress = max(1, months_into_fy) / 12
+    # --- Historical benchmarks ---
+    hist_df = df_all[df_all["Fiscal Year"].notna() & (df_all["ResourceOrigin"] == "Host Country-based")]
+    yearly_totals = (
+        hist_df.groupby("Fiscal Year")["Amount_clean"].sum()
+        .reset_index(name="Total")
+    )
 
-    if months_into_fy < 3 and total == 0:
-        return "baseline"
-
-    threshold_opt = 5000 * progress
-    threshold_base = 1000 * progress
-
-    if total >= threshold_opt and econ_count >= 2 and firm_count >= 2:
-        return "optimistic"
-    elif total >= threshold_base and econ_count >= 1 and firm_count >= 1:
-        return "baseline"
+    if len(yearly_totals) >= 2:
+        hist_avg = yearly_totals["Total"].mean()
+        hist_p25 = yearly_totals["Total"].quantile(0.25)
+        threshold_opt = hist_avg
+        threshold_base = hist_p25
+        threshold_type = "historical"
     else:
-        return "pessimistic"
+        # Fallback: static thresholds, scaled by fiscal year progress
+        try:
+            fy_year = int(latest_fy)
+        except:
+            fy_year = today.year
+        fy_start = datetime.date(fy_year, 1, 1)
+        months_into_fy = (today.year - fy_start.year) * 12 + (today.month - fy_start.month)
+        progress = max(1, months_into_fy) / 12
+        threshold_opt = 5000 * progress
+        threshold_base = 1000 * progress
+        threshold_type = "static"
+
+    # --- Classification ---
+    if total >= threshold_opt and econ_count >= 2 and firm_count >= 2:
+        return "optimistic", threshold_type
+    elif total >= threshold_base and econ_count >= 1 and firm_count >= 1:
+        return "baseline", threshold_type
+    else:
+        return "pessimistic", threshold_type
 
 # === Load data ===
 df = fetch_ot5()
@@ -148,7 +164,7 @@ rows = []
 total_amount = df_latest["Amount_clean"].sum()
 economies_count = len(split_ids(df_latest["Economy"]))
 firms_count = len(split_ids(df_latest["Firm"]))
-agg_status = classify_with_time(total_amount, economies_count, firms_count, latest_fy)
+agg_status, thresh_type = classify_with_history(total_amount, economies_count, firms_count, latest_fy, df)
 
 rows.append({
     "Assumption": "Responsible local ownership",
@@ -161,7 +177,7 @@ rows.append({
     "Status": agg_status,
     "Confidence Index 1 (Amount)": round(total_amount, 2),
     "Confidence Index 2 (Breadth)": firms_count,
-    "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing."
+    "Notes": f"Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Thresholds based on {thresh_type} values."
 })
 
 # Economy level
@@ -169,7 +185,7 @@ df_econ = explode_lists(df_latest, "Economy")
 for econ, g in df_econ.groupby("Economy"):
     econ_total = g["Amount_clean"].sum()
     econ_firms = len(split_ids(g["Firm"]))
-    econ_status = classify_with_time(econ_total, 1 if econ else 0, econ_firms, latest_fy)
+    econ_status, thresh_type = classify_with_history(econ_total, 1 if econ else 0, econ_firms, latest_fy, df)
 
     rows.append({
         "Assumption": "Responsible local ownership",
@@ -182,7 +198,7 @@ for econ, g in df_econ.groupby("Economy"):
         "Status": econ_status,
         "Confidence Index 1 (Amount)": round(econ_total, 2),
         "Confidence Index 2 (Breadth)": econ_firms,
-        "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing."
+        "Notes": f"Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Thresholds based on {thresh_type} values."
     })
 
 # Workstream level
@@ -191,7 +207,7 @@ for ws, g in df_ws.groupby("Workstream"):
     ws_total = g["Amount_clean"].sum()
     ws_firms = len(split_ids(g["Firm"]))
     ws_econs = len(split_ids(g["Economy"]))
-    ws_status = classify_with_time(ws_total, ws_econs, ws_firms, latest_fy)
+    ws_status, thresh_type = classify_with_history(ws_total, ws_econs, ws_firms, latest_fy, df)
 
     rows.append({
         "Assumption": "Responsible local ownership",
@@ -204,7 +220,7 @@ for ws, g in df_ws.groupby("Workstream"):
         "Status": ws_status,
         "Confidence Index 1 (Amount)": round(ws_total, 2),
         "Confidence Index 2 (Breadth)": ws_firms,
-        "Notes": "Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing."
+        "Notes": f"Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Thresholds based on {thresh_type} values."
     })
 
 # Export
