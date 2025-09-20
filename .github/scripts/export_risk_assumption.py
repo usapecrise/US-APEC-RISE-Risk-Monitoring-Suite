@@ -5,34 +5,39 @@
 Political & Institutional Continuity Assumption (Media Monitor)
 ---------------------------------------------------------------
 - Reads risk_signals.csv
-- Classifies signals by optimistic / pessimistic keyword patterns
+- Classifies signals by keyword patterns + NLP fallback
 - Outputs:
   * Signal-level classification
   * Economy summaries (% optimistic + total signals)
   * Workstream summaries (% optimistic + total signals)
-  * Aggregate summary (% optimistic + total signals)
+  * Aggregate snapshot
+  * Time-series summary (monthly trends)
 """
 
 import pandas as pd
 import os
 import re
+from flair.models import TextClassifier
+from flair.data import Sentence
 
 INPUT_FILE = "risk_signals.csv"
 OUTPUT_FILE = "risk_assumption.csv"
 
+# Load Flair sentiment model (used as fallback when signals are ambiguous)
+sentiment_model = TextClassifier.load("sentiment-fast")
+
 # ── CLASSIFICATION ─────────────────────────────────────
 def classify_scenario(text: str):
-    """Keyword/phrase-based classification of media/risk signals."""
+    """Keyword/phrase-based classification of media/risk signals with NLP fallback."""
     text = str(text).lower()
 
     pessimistic_patterns = [
         r"\bresignation\b", r"\bresigned\b", r"\bstep(ped)? down\b",
-        r"\boustered?\b", r"\bdismissed\b", r"\bsacked\b", r"\bremoved from office\b",
-        r"\binstability\b", r"\bunstable\b", r"\bturbulence\b", r"\bturmoil\b",
-        r"\bchaos\b", r"\bunrest\b", r"\bcrisis\b", r"\bcollapse\b", r"\bcoup\b",
-        r"\bdisruption\b", r"\bconflict\b", r"\bviolence\b", r"\bprotest(s)?\b", r"\bboycott(s)?\b",
-        r"\bdeadlock\b", r"\bgridlock\b", r"\bblocked reform\b", r"\bstalled reform\b",
-        r"\bpower struggle\b", r"\bpolitical vacuum\b", r"\bstalemate\b"
+        r"\bdismissed\b", r"\bsacked\b", r"\bremoved from office\b",
+        r"\binstability\b", r"\bunstable\b", r"\bturmoil\b",
+        r"\bchaos\b", r"\bunrest\b", r"\bcrisis\b", r"\bcoup\b",
+        r"\bdisruption\b", r"\bconflict\b", r"\bviolence\b", r"\bprotest(s)?\b",
+        r"\bdeadlock\b", r"\bstalemate\b"
     ]
 
     optimistic_patterns = [
@@ -41,7 +46,10 @@ def classify_scenario(text: str):
         r"\bagreement\b", r"\bconsensus\b", r"\bstrengthen(ed|ing)?\b", r"\breinforce(d|ment)?\b",
         r"\bsupport(ed|ing)?\b", r"\bendorse(d|ment)?\b", r"\binstitutionaliz(e|ed|ing)\b",
         r"\bimplementation\b", r"\badoption\b", r"\bratification\b", r"\bcommitment maintained\b",
-        r"\bpolicy continuity\b", r"\binstitutional resilience\b"
+        r"\bpolicy continuity\b", r"\binstitutional resilience\b",
+        # U.S.-alignment patterns
+        r"\bu\.s\. support(ed|ing)?\b", r"\baligned with u\.s\. priorities\b",
+        r"\bendorsed by the united states\b", r"\bu\.s\. partnership\b"
     ]
 
     pessimistic_hits = sum(bool(re.search(pat, text)) for pat in pessimistic_patterns)
@@ -54,7 +62,16 @@ def classify_scenario(text: str):
     elif pessimistic_hits == optimistic_hits == 0:
         return "baseline", 0
     else:
-        return "baseline", max(optimistic_hits, pessimistic_hits)
+        # Ambiguous → use NLP fallback
+        sentence = Sentence(text)
+        sentiment_model.predict(sentence)
+        label = sentence.labels[0]
+        if label.value == "POSITIVE":
+            return "optimistic", optimistic_hits
+        elif label.value == "NEGATIVE":
+            return "pessimistic", pessimistic_hits
+        else:
+            return "baseline", max(optimistic_hits, pessimistic_hits)
 
 
 def classify_percentage(pct: float) -> str:
@@ -109,9 +126,9 @@ def main():
             "Date": date_str,
             "Signal": str(signal_text),
             "Status": status,
-            "Confidence Index 1 (Keyword Hits)": hits,  # absolute keyword count
+            "Confidence Index 1 (Keyword/NLP Hits)": hits,
             "Confidence Index 2 (Signals)": 1,
-            "Notes": "Signal-level classification. CI1 = keyword matches; CI2 = 1 signal."
+            "Notes": "Signal-level classification. CI1 = keyword/NLP match strength; CI2 = 1 signal."
         })
 
     # === 2. Economy summaries ===
@@ -164,7 +181,7 @@ def main():
                 "Notes": "Workstream summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
             })
 
-    # === 4. Aggregate summary ===
+    # === 4. Aggregate snapshot ===
     total_signals = len(df)
     optimistic_count = df[text_col].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
     pct_opt = (optimistic_count / total_signals) * 100 if total_signals > 0 else 0
@@ -182,13 +199,38 @@ def main():
         "Status": agg_status,
         "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
         "Confidence Index 2 (Signals Reviewed)": total_signals,
-        "Notes": "Aggregate summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
+        "Notes": "Aggregate snapshot. CI1 = % optimistic signals; CI2 = total signals reviewed."
     })
+
+    # === 5. Time-series summary (monthly) ===
+    if "date" in df.columns:
+        df["date"] = pd.to_datetime(df["date"], errors="coerce")
+        df["month"] = df["date"].dt.to_period("M")
+
+        for month, subset in df.groupby("month"):
+            total = len(subset)
+            optimistic_count = subset[text_col].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+            pct_opt = (optimistic_count / total) * 100 if total > 0 else 0
+            month_status = classify_percentage(pct_opt)
+
+            records.append({
+                "Assumption": "Political and institutional continuity",
+                "Monitoring Tool": "Media Monitor",
+                "Economy": "APEC (aggregate)",
+                "Workstream": "All",
+                "Level": "Time-Series (Monthly)",
+                "Date": str(month),
+                "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals in {month})",
+                "Status": month_status,
+                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
+                "Confidence Index 2 (Signals Reviewed)": total,
+                "Notes": "Monthly trend summary. CI1 = % optimistic signals; CI2 = signals reviewed in month."
+            })
 
     # === Export ===
     out_df = pd.DataFrame(records)
     out_df.to_csv(OUTPUT_FILE, index=False)
-    print(f"✅ Risk assumption saved → {OUTPUT_FILE} ({len(out_df)} rows)")
+    print(f"✅ Risk assumption saved → {OUTPUT_FILE} ({len(out_df)} rows))")
 
 
 if __name__ == "__main__":
