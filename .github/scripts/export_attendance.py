@@ -1,3 +1,20 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Attendance → Stakeholder Alignment Assumption
+---------------------------------------------
+Generates assumption data for:
+- Aggregate APEC participation
+- Workstream-level participation
+- Economy-level participation
+
+Logic:
+- Looks at the last 3 dialogues/workshops
+- Measures how many economies participated
+- Classifies optimism based on thresholds
+"""
+
 import os
 import requests
 import pandas as pd
@@ -11,7 +28,7 @@ TABLES = {
     "Other Sign-Ins (Meetings/Dialogues)": "tbl6qMYkcIzkl8q7D"
 }
 VIEW_ID = None
-
+APEC_TOTAL = 21   # denominator for % calculations
 
 def fetch_table(table_label, table_id):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{table_id}"
@@ -31,8 +48,8 @@ def fetch_table(table_label, table_id):
             records.append({
                 "Workshop": f.get("Workshop", ""),
                 "Workshop Date": f.get("Workshop Date", ""),
-                "Workstream": f.get("Workstream", ""),
-                "Economy": f.get("Economy", f.get("Economy or Guest", "")),
+                "Workstream": f.get("Workstream", []),
+                "Economy": f.get("Economy", f.get("Economy or Guest", [])),
                 "Organization": f.get("Organization", ""),
                 "Source Table": table_label
             })
@@ -41,19 +58,23 @@ def fetch_table(table_label, table_id):
             break
     return pd.DataFrame(records)
 
-
 def safe_format_date(series):
     """Return YYYY-MM-DD if series has valid dates, else empty string."""
     max_date = pd.to_datetime(series, errors="coerce").max()
     return max_date.strftime("%Y-%m-%d") if pd.notna(max_date) else ""
 
-
 # === Main ===
 dfs = [fetch_table(label, tid) for label, tid in TABLES.items()]
 df = pd.concat(dfs, ignore_index=True)
 
-df["Economy"] = df["Economy"].apply(lambda x: "; ".join(x) if isinstance(x, list) else str(x))
-df["Workstream"] = df["Workstream"].apply(lambda x: "; ".join(x) if isinstance(x, list) else str(x))
+# Ensure lists are exploded into separate rows
+df["Economy"] = df["Economy"].apply(lambda x: x if isinstance(x, list) else [x] if x else [])
+df["Workstream"] = df["Workstream"].apply(lambda x: x if isinstance(x, list) else [x] if x else [])
+df = df.explode("Economy").explode("Workstream")
+df["Economy"] = df["Economy"].str.strip()
+df["Workstream"] = df["Workstream"].str.strip()
+
+# Add workshop key
 df["Workshop Key"] = df["Workshop"].astype(str) + " | " + df["Workshop Date"].astype(str)
 df["Workshop Date"] = pd.to_datetime(df["Workshop Date"], errors="coerce")
 
@@ -68,11 +89,11 @@ workshop_stats = (
 )
 last3 = workshop_stats.head(3)
 economies_present = last3["Economy"].mean()
-pct = (economies_present / 21) * 100
+pct = (economies_present / APEC_TOTAL) * 100
 status = "optimistic" if pct >= 60 else "baseline" if pct >= 30 else "pessimistic"
 
 rows.append({
-    "Assumption": "Stakeholder alignment with U.S. focus areas",
+    "Assumption": "Stakeholder alignment with U.S. priorities",
     "Monitoring Tool": "Attendance",
     "Economy": "APEC (aggregate)",
     "Workstream": "All",
@@ -97,21 +118,21 @@ for ws, g in df.groupby("Workstream"):
     if last3_ws.empty:
         continue
     economies_present_ws = last3_ws["Economy"].mean()
-    pct_ws = (economies_present_ws / 21) * 100
+    pct_ws = (economies_present_ws / APEC_TOTAL) * 100
     status_ws = "optimistic" if pct_ws >= 60 else "baseline" if pct_ws >= 30 else "pessimistic"
 
     rows.append({
-        "Assumption": "Stakeholder alignment with U.S. focus areas",
+        "Assumption": "Stakeholder alignment with U.S. priorities",
         "Monitoring Tool": "Attendance",
         "Economy": "APEC (aggregate)",
-        "Workstream": ws,
+        "Workstream": ws if ws else "Unspecified",
         "Level": "Workstream",
         "Date": safe_format_date(last3_ws["Workshop Date"]),
         "Signal": f"Average {economies_present_ws:.1f} economies represented (last 3 {ws} dialogues)",
         "Status": status_ws,
         "Confidence Index 1 (Percent)": round(pct_ws, 1),
         "Confidence Index 2 (Breadth)": int(round(economies_present_ws, 0)),
-        "Notes": "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies."
+        "Notes": "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
     })
 
     # --- Economy level ---
@@ -130,10 +151,10 @@ for ws, g in df.groupby("Workstream"):
         status_econ = "optimistic" if pct_attended >= 67 else "baseline" if pct_attended == 33 else "pessimistic"
 
         rows.append({
-            "Assumption": "Stakeholder alignment with U.S. focus areas",
+            "Assumption": "Stakeholder alignment with U.S. priorities",
             "Monitoring Tool": "Attendance",
             "Economy": econ,
-            "Workstream": ws,
+            "Workstream": ws if ws else "Unspecified",
             "Level": "Economy",
             "Date": safe_format_date(last3_econ_ws["Workshop Date"]),
             "Signal": f"{econ} attended {attended_count}/3 {ws} dialogues",
@@ -146,4 +167,3 @@ for ws, g in df.groupby("Workstream"):
 attendance_status = pd.DataFrame(rows)
 attendance_status.to_csv("attendance_assumption.csv", index=False)
 print(f"✅ Attendance assumption saved → attendance_assumption.csv ({len(rows)} rows))")
-
