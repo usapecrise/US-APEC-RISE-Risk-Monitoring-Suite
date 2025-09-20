@@ -101,11 +101,11 @@ def main():
         )
         summary["Most_Recent_Status"] = most_recent
 
-        # Monitoring tools used per assumption
+        # Monitoring tools used per assumption (safe version)
         tools = (
             merged.groupby("assumption")["monitoring_tool"]
             .unique()
-            .apply(lambda x: ", ".join(sorted(set(x))))
+            .apply(lambda x: ", ".join(sorted({str(i) for i in x if pd.notna(i) and str(i).lower() != "nan"})))
         )
         summary["Monitoring_Tools"] = tools
 
