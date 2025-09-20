@@ -25,9 +25,9 @@ def fetch_table(table_name):
             f = r.get("fields", {})
             records.append({
                 "Date": f.get("Date", ""),
-                "Economy": f.get("Economy", ""),
-                "Workstream": f.get("Workstream", ""),
-                "Reform Status": f.get("Reform Adopted/Advanced", ""),
+                "Economy": f.get("Economy", "Unspecified"),
+                "Workstream": f.get("Workstream", "Unspecified"),
+                "Reform Status": f.get("Reform Adopted/Advanced", "Unspecified"),
                 "Reform Type": f.get("Reform Type", ""),
                 "Other Reform": f.get("Other Reform", ""),
                 "Notes": f.get("Notes", "")
@@ -39,18 +39,28 @@ def fetch_table(table_name):
 
 
 def classify_status(reform_status: str) -> str:
+    """Classify reform progress based on standardized Airtable response options."""
     status = str(reform_status).strip().lower()
-    optimistic_keywords = ["yes", "adopted", "in progress", "under development", "ongoing", "advanced"]
-    unsure_keywords = ["unsure", "don't know", "unsure/don't know"]
 
-    if status in optimistic_keywords:
+    optimistic_responses = [
+        "yes, in progress or under development",
+        "yes, fully adopted or implemented"
+    ]
+    pessimistic_responses = [
+        "no, not yet initiated"
+    ]
+    baseline_responses = [
+        "unsure", "don't know", "unsure/don't know"
+    ]
+
+    if status in [s.lower() for s in optimistic_responses]:
         return "optimistic"
-    elif status == "not yet initiated":
+    elif status in [s.lower() for s in pessimistic_responses]:
         return "pessimistic"
-    elif status in unsure_keywords:
+    elif status in [s.lower() for s in baseline_responses]:
         return "baseline"
     else:
-        return "baseline"
+        return "baseline"  # default if unknown
 
 
 def classify_percentage(pct: float) -> str:
@@ -70,17 +80,21 @@ def main():
         return
 
     df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-    latest_date = df["Date"].max().strftime("%Y-%m-%d") if df["Date"].notna().any() else pd.Timestamp.today().strftime("%Y-%m-%d")
+    latest_date = (
+        df["Date"].max().strftime("%Y-%m-%d")
+        if df["Date"].notna().any()
+        else pd.Timestamp.today().strftime("%Y-%m-%d")
+    )
 
     records = []
 
     # === 1. Reform-level rows ===
     for _, row in df.iterrows():
         reform_area = row.get("Reform Type") or row.get("Other Reform") or "Unspecified Reform"
-        reform_status = row.get("Reform Status", "")
+        reform_status = row.get("Reform Status", "Unspecified")
         status = classify_status(reform_status)
 
-        # Map to CI1 percent
+        # CI1 mapping: optimistic=100, baseline=50, pessimistic=0
         if status == "optimistic":
             ci1 = 100
         elif status == "baseline":
