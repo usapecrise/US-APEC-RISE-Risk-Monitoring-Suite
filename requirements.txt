@@ -10,3 +10,4 @@ transformers>=4.42.0
 torch>=2.0.0
 datasets>=2.20.0
 flair>=0.13.1
+gensim>=4.3.2
