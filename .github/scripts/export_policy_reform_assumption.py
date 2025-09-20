@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Policy Reform (OC1) → Policy and Regulatory Openness
+----------------------------------------------------
+Generates assumption data for:
+- Reform-level signals
+- Economy-level summaries
+- Workstream-level summaries
+- APEC aggregate
+
+Logic:
+- Tracks adoption of policy reforms (fully adopted, in progress, not started, unsure)
+- CI1 = numeric score (100 = fully adopted, 75 = in progress, 50 = unsure, 0 = not yet initiated)
+- CI2 = count of reforms
+"""
+
 import os
 import requests
 import pandas as pd
@@ -38,32 +56,23 @@ def fetch_table(table_name):
     return pd.DataFrame(records)
 
 
-def classify_status(reform_status: str) -> str:
-    """Classify reform progress based on standardized Airtable response options."""
+def classify_status(reform_status: str):
+    """Classify reform status into category + CI1 score."""
     status = str(reform_status).strip().lower()
-
-    optimistic_responses = [
-        "yes, in progress or under development",
-        "yes, fully adopted or implemented"
-    ]
-    pessimistic_responses = [
-        "no, not yet initiated"
-    ]
-    baseline_responses = [
-        "unsure", "don't know", "unsure/don't know"
-    ]
-
-    if status in [s.lower() for s in optimistic_responses]:
-        return "optimistic"
-    elif status in [s.lower() for s in pessimistic_responses]:
-        return "pessimistic"
-    elif status in [s.lower() for s in baseline_responses]:
-        return "baseline"
+    if status == "yes- fully adopted or implemented":
+        return "optimistic", 100
+    elif status == "yes- in progress or under development":
+        return "optimistic", 75
+    elif status in ["unsure", "don’t know", "unsure / don’t know"]:
+        return "baseline", 50
+    elif status == "no- not yet initiated":
+        return "pessimistic", 0
     else:
-        return "baseline"  # default if unknown
+        return "baseline", 50  # default fallback
 
 
 def classify_percentage(pct: float) -> str:
+    """Classify average CI1 percentage into scenario status."""
     if pct >= 60:
         return "optimistic"
     elif pct >= 30:
@@ -92,15 +101,7 @@ def main():
     for _, row in df.iterrows():
         reform_area = row.get("Reform Type") or row.get("Other Reform") or "Unspecified Reform"
         reform_status = row.get("Reform Status", "Unspecified")
-        status = classify_status(reform_status)
-
-        # CI1 mapping: optimistic=100, baseline=50, pessimistic=0
-        if status == "optimistic":
-            ci1 = 100
-        elif status == "baseline":
-            ci1 = 50
-        else:
-            ci1 = 0
+        status, ci1 = classify_status(reform_status)
 
         records.append({
             "Assumption": "Policy and regulatory openness",
@@ -113,7 +114,7 @@ def main():
             "Status": status,
             "Confidence Index 1 (Percent)": ci1,
             "Confidence Index 2 (Count)": 1,
-            "Notes": "Individual reform status. Thresholds: Optimistic = Adopted/In progress; Baseline = Unsure; Pessimistic = Not initiated."
+            "Notes": "Individual reform status. CI1 graded: Adopted=100, In progress=75, Unsure=50, Not initiated=0."
         })
 
     # === 2. Economy-level summary ===
@@ -122,9 +123,8 @@ def main():
             total = len(subset)
             if total == 0:
                 continue
-            optimistic_count = subset["Reform Status"].apply(lambda x: classify_status(x) == "optimistic").sum()
-            pct_optimistic = (optimistic_count / total) * 100
-            econ_status = classify_percentage(pct_optimistic)
+            avg_score = subset["Reform Status"].apply(lambda x: classify_status(x)[1]).mean()
+            econ_status = classify_percentage(avg_score)
 
             records.append({
                 "Assumption": "Policy and regulatory openness",
@@ -133,11 +133,12 @@ def main():
                 "Workstream": "All",
                 "Level": "Economy",
                 "Date": latest_date,
-                "Signal": f"{pct_optimistic:.0f}% of reforms adopted or in progress",
+                "Signal": f"Average reform progress = {avg_score:.0f}%",
                 "Status": econ_status,
-                "Confidence Index 1 (Percent)": round(pct_optimistic, 1),
+                "Confidence Index 1 (Percent)": round(avg_score, 1),
                 "Confidence Index 2 (Count)": total,
-                "Notes": f"Economy-level summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {total} reforms."
+                "Notes": f"Economy-level summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, "
+                         f"Pessimistic <30%. Based on {total} reforms."
             })
 
     # === 3. Workstream-level summary ===
@@ -146,9 +147,8 @@ def main():
             total = len(subset)
             if total == 0:
                 continue
-            optimistic_count = subset["Reform Status"].apply(lambda x: classify_status(x) == "optimistic").sum()
-            pct_optimistic = (optimistic_count / total) * 100
-            ws_status = classify_percentage(pct_optimistic)
+            avg_score = subset["Reform Status"].apply(lambda x: classify_status(x)[1]).mean()
+            ws_status = classify_percentage(avg_score)
 
             records.append({
                 "Assumption": "Policy and regulatory openness",
@@ -157,18 +157,18 @@ def main():
                 "Workstream": ws if ws else "Unspecified",
                 "Level": "Workstream",
                 "Date": latest_date,
-                "Signal": f"{pct_optimistic:.0f}% of reforms adopted or in progress",
+                "Signal": f"Average reform progress = {avg_score:.0f}%",
                 "Status": ws_status,
-                "Confidence Index 1 (Percent)": round(pct_optimistic, 1),
+                "Confidence Index 1 (Percent)": round(avg_score, 1),
                 "Confidence Index 2 (Count)": total,
-                "Notes": f"Workstream-level summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {total} reforms."
+                "Notes": f"Workstream-level summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, "
+                         f"Pessimistic <30%. Based on {total} reforms."
             })
 
     # === 4. APEC aggregate summary ===
     total_reforms = len(df)
-    optimistic_count = df["Reform Status"].apply(lambda x: classify_status(x) == "optimistic").sum()
-    pct_optimistic = (optimistic_count / total_reforms) * 100 if total_reforms > 0 else 0
-    agg_status = classify_percentage(pct_optimistic)
+    avg_score = df["Reform Status"].apply(lambda x: classify_status(x)[1]).mean()
+    agg_status = classify_percentage(avg_score)
 
     records.append({
         "Assumption": "Policy and regulatory openness",
@@ -177,17 +177,18 @@ def main():
         "Workstream": "All",
         "Level": "Aggregate",
         "Date": latest_date,
-        "Signal": f"{pct_optimistic:.0f}% of reforms adopted or in progress",
+        "Signal": f"Average reform progress = {avg_score:.0f}%",
         "Status": agg_status,
-        "Confidence Index 1 (Percent)": round(pct_optimistic, 1),
+        "Confidence Index 1 (Percent)": round(avg_score, 1),
         "Confidence Index 2 (Count)": total_reforms,
-        "Notes": f"Aggregate summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {total_reforms} reforms."
+        "Notes": f"Aggregate summary. Thresholds: Optimistic ≥60%, Baseline 30–59%, "
+                 f"Pessimistic <30%. Based on {total_reforms} reforms."
     })
 
     # === Export ===
     out_df = pd.DataFrame(records)
     out_df.to_csv(OUTPUT_FILE, index=False)
-    print(f"✅ Policy reform assumption saved → {OUTPUT_FILE} ({len(out_df)} rows)")
+    print(f"✅ Policy reform assumption saved → {OUTPUT_FILE} ({len(out_df)} rows))")
 
 
 if __name__ == "__main__":
