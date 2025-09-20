@@ -5,11 +5,11 @@
 Attendance (Meetings/Dialogues) → Political and Institutional Continuity
 ------------------------------------------------------------------------
 Generates assumption data for:
-- Economy-level continuity (attendance across last 3 dialogues)
+- Economy-level continuity (attendance across last 5 dialogues)
 - Aggregate APEC continuity
 
 Logic:
-- Looks at the last 3 dialogue/meeting events
+- Looks at the last 5 dialogue/meeting events
 - Classifies optimism based on % attendance
 """
 
@@ -83,22 +83,22 @@ def main():
     df["Economy"] = df["Economy"].str.strip()
     df["Workshop Key"] = df["Workshop"].astype(str) + " | " + df["Workshop Date"].astype(str)
 
-    # === 2. Identify last 3 events ===
+    # === 2. Identify last 5 events ===
     event_order = (
         df.groupby("Workshop Key")["Workshop Date"].min()
         .sort_values(ascending=False)
         .index
     )
-    last3_events = list(event_order[:3])
-    last3_df = df[df["Workshop Key"].isin(last3_events)]
+    last5_events = list(event_order[:5])
+    last5_df = df[df["Workshop Key"].isin(last5_events)]
 
-    if last3_df.empty:
+    if last5_df.empty:
         print("⚠️ No recent events found, skipping continuity analysis")
         return
 
     # === 3. Economy-level responsiveness ===
     economy_stats = (
-        last3_df.groupby("Economy")["Workshop Key"].nunique()
+        last5_df.groupby("Economy")["Workshop Key"].nunique()
         .reset_index(name="Events_Attended")
     )
 
@@ -106,11 +106,11 @@ def main():
     for _, row in economy_stats.iterrows():
         economy = row["Economy"]
         attended = row["Events_Attended"]
-        pct_attended = (attended / 3) * 100
+        pct_attended = (attended / 5) * 100
 
-        if attended >= 2:
+        if pct_attended >= 60:
             status = "optimistic"
-        elif attended == 1:
+        elif pct_attended >= 30:
             status = "baseline"
         else:
             status = "pessimistic"
@@ -121,17 +121,17 @@ def main():
             "Economy": economy,
             "Workstream": "All",
             "Level": "Economy",
-            "Date": safe_format_date(last3_df["Workshop Date"]),
-            "Signal": f"{economy} attended {attended}/3 most recent dialogues",
+            "Date": safe_format_date(last5_df["Workshop Date"]),
+            "Signal": f"{economy} attended {attended}/5 most recent dialogues",
             "Status": status,
             "Confidence Index 1 (Percent)": round(pct_attended, 1),
             "Confidence Index 2 (Breadth)": attended,
-            "Notes": "Economy-level continuity. Thresholds: Optimistic ≥67% (2–3/3), Baseline =33% (1/3), Pessimistic =0%."
+            "Notes": "Economy-level continuity. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
         })
 
     # === 4. APEC aggregate continuity ===
     avg_attended = economy_stats["Events_Attended"].mean() if not economy_stats.empty else 0
-    pct_agg = (avg_attended / 3) * 100
+    pct_agg = (avg_attended / 5) * 100
 
     if pct_agg >= 60:
         agg_status = "optimistic"
@@ -146,8 +146,8 @@ def main():
         "Economy": "APEC (aggregate)",
         "Workstream": "All",
         "Level": "Aggregate",
-        "Date": safe_format_date(last3_df["Workshop Date"]),
-        "Signal": f"On average, economies attended {avg_attended:.1f}/3 recent dialogues",
+        "Date": safe_format_date(last5_df["Workshop Date"]),
+        "Signal": f"On average, economies attended {avg_attended:.1f}/5 recent dialogues",
         "Status": agg_status,
         "Confidence Index 1 (Percent)": round(pct_agg, 1),
         "Confidence Index 2 (Breadth)": int(round(avg_attended, 0)),
