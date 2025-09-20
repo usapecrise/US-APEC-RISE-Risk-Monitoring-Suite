@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Feedback (Policy Dialogues/Meetings) → Policy and Regulatory Openness
+--------------------------------------------------------------------
+Generates assumption data for:
+- Aggregate APEC feedback on dialogues/meetings
+- Economy-level feedback
+- Workstream-level feedback (if available)
+
+Logic:
+- Filters only dialogue/meeting feedback
+- Uses Application Intent + Sharing Intent from surveys
+- Produces composite score
+- CI1 = % score, CI2 = number of responses
+"""
+
 import os
 import requests
 import pandas as pd
@@ -77,13 +95,13 @@ def main():
 
     records = []
 
-    def process_scores(subset, econ_label, level):
+    def process_scores(subset, econ_label, level, ws_label="All"):
         scores = []
         total_responses = 0  # track total responses across components
 
         # Application
         if "Application Intent" in subset.columns:
-            vals = subset["Application Intent"].map(apply_map).dropna()
+            vals = subset["Application Intent"].map(lambda v: apply_map.get(v, None)).dropna()
             if not vals.empty:
                 avg = vals.mean()
                 n = vals.count()
@@ -93,19 +111,20 @@ def main():
                     "Assumption": "Policy and regulatory openness",
                     "Monitoring Tool": "Feedback",
                     "Economy": econ_label,
-                    "Workstream": "All",
+                    "Workstream": ws_label,
                     "Level": level,
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average application intent",
                     "Status": classify_status(avg),
                     "Confidence Index 1 (Percent)": round(avg, 1),
                     "Confidence Index 2 (Responses)": int(n),
-                    "Notes": f"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
+                    "Notes": f"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, "
+                             f"Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
                 })
 
         # Sharing
         if "Sharing Intent" in subset.columns:
-            vals = subset["Sharing Intent"].map(share_map).dropna()
+            vals = subset["Sharing Intent"].map(lambda v: share_map.get(v, None)).dropna()
             if not vals.empty:
                 avg = vals.mean()
                 n = vals.count()
@@ -115,14 +134,15 @@ def main():
                     "Assumption": "Policy and regulatory openness",
                     "Monitoring Tool": "Feedback",
                     "Economy": econ_label,
-                    "Workstream": "All",
+                    "Workstream": ws_label,
                     "Level": level,
                     "Date": last_date,
                     "Signal": f"{avg:.0f}% average sharing intent",
                     "Status": classify_status(avg),
                     "Confidence Index 1 (Percent)": round(avg, 1),
                     "Confidence Index 2 (Responses)": int(n),
-                    "Notes": f"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
+                    "Notes": f"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, "
+                             f"Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
                 })
 
         # Composite
@@ -132,23 +152,31 @@ def main():
                 "Assumption": "Policy and regulatory openness",
                 "Monitoring Tool": "Feedback",
                 "Economy": econ_label,
-                "Workstream": "All",
+                "Workstream": ws_label,
                 "Level": level,
                 "Date": last_date,
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
                 "Confidence Index 1 (Percent)": round(comp, 1),
-                "Confidence Index 2 (Responses)": int(total_responses),  # ✅ now reflects total responses
-                "Notes": "Composite of application and sharing scores from dialogues/meetings."
+                "Confidence Index 2 (Responses)": int(total_responses),
+                "Notes": "Composite of application and sharing scores from dialogues/meetings. "
+                         "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
             })
 
-    # Aggregate
+    # === 1. Aggregate ===
     process_scores(policy_df, "APEC (aggregate)", "Aggregate")
 
-    # Economy breakdown
+    # === 2. Economy-level breakdown ===
     if "Economy" in policy_df.columns:
         for econ, subset in policy_df.groupby("Economy"):
             process_scores(subset, econ, "Economy")
+
+    # === 3. Workstream-level breakdown ===
+    if "Workstream" in policy_df.columns:
+        df_ws = policy_df.explode("Workstream")
+        for ws, subset in df_ws.groupby("Workstream"):
+            if pd.notna(ws) and ws.strip():
+                process_scores(subset, "APEC (aggregate)", "Workstream", ws_label=ws)
 
     # Save
     out_df = pd.DataFrame(records)
