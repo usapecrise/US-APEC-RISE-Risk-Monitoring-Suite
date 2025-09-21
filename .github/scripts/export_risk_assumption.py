@@ -2,16 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Political & Institutional Continuity Assumption (Media Monitor)
----------------------------------------------------------------
+Political & Institutional Continuity Assumption (Media Monitor, Standardized)
+-----------------------------------------------------------------------------
 - Reads risk_signals.csv
 - Classifies signals by keyword patterns + NLP fallback
-- Outputs:
-  * Signal-level classification
-  * Economy summaries (% optimistic + total signals)
-  * Workstream summaries (% optimistic + total signals)
-  * Aggregate snapshot
-  * Time-series summary (monthly trends)
+- Outputs standardized fields:
+  * Confidence Index 1 (strength of evidence)
+  * Confidence Index 2 (breadth of evidence)
+  * Notes clarify interpretation
 """
 
 import pandas as pd
@@ -126,8 +124,8 @@ def main():
             "Date": date_str,
             "Signal": str(signal_text),
             "Status": status,
-            "Confidence Index 1 (Keyword/NLP Hits)": hits,
-            "Confidence Index 2 (Signals)": 1,
+            "Confidence Index 1": hits,
+            "Confidence Index 2": 1,
             "Notes": "Signal-level classification. CI1 = keyword/NLP match strength; CI2 = 1 signal."
         })
 
@@ -151,8 +149,8 @@ def main():
                         if "date" in subset.columns else "",
                 "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals)",
                 "Status": econ_status,
-                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
-                "Confidence Index 2 (Signals Reviewed)": total,
+                "Confidence Index 1": round(pct_opt, 1),
+                "Confidence Index 2": total,
                 "Notes": "Economy summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
             })
 
@@ -176,8 +174,8 @@ def main():
                         if "date" in subset.columns else "",
                 "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals)",
                 "Status": ws_status,
-                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
-                "Confidence Index 2 (Signals Reviewed)": total,
+                "Confidence Index 1": round(pct_opt, 1),
+                "Confidence Index 2": total,
                 "Notes": "Workstream summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
             })
 
@@ -197,8 +195,8 @@ def main():
                 if "date" in df.columns else "",
         "Signal": f"{pct_opt:.0f}% optimistic (out of {total_signals} signals)",
         "Status": agg_status,
-        "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
-        "Confidence Index 2 (Signals Reviewed)": total_signals,
+        "Confidence Index 1": round(pct_opt, 1),
+        "Confidence Index 2": total_signals,
         "Notes": "Aggregate snapshot. CI1 = % optimistic signals; CI2 = total signals reviewed."
     })
 
@@ -222,8 +220,8 @@ def main():
                 "Date": str(month),
                 "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals in {month})",
                 "Status": month_status,
-                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
-                "Confidence Index 2 (Signals Reviewed)": total,
+                "Confidence Index 1": round(pct_opt, 1),
+                "Confidence Index 2": total,
                 "Notes": "Monthly trend summary. CI1 = % optimistic signals; CI2 = signals reviewed in month."
             })
 
