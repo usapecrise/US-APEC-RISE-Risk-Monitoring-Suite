@@ -107,8 +107,9 @@ rows.append({
     "Signal": f"Average {economies_present:.1f} economies represented (last 5 dialogues)",
     "Status": status,
     "Confidence Index 1 (Percent)": round(pct, 1),
-    "Confidence Index 2 (Breadth)": int(round(economies_present, 0)),
-    "Notes": "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of APEC economies."
+    "Confidence Index 2 (Count)": int(round(economies_present, 0)),
+    "Notes": "CI1 = % economies represented. CI2 = average number of economies. "
+             "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30."
 })
 
 # --- Workstream level ---
@@ -136,8 +137,9 @@ for ws, g in df.groupby("Workstream"):
         "Signal": f"Average {economies_present_ws:.1f} economies represented (last 5 {ws} dialogues)",
         "Status": status_ws,
         "Confidence Index 1 (Percent)": round(pct_ws, 1),
-        "Confidence Index 2 (Breadth)": int(round(economies_present_ws, 0)),
-        "Notes": "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
+        "Confidence Index 2 (Count)": int(round(economies_present_ws, 0)),
+        "Notes": "CI1 = % economies represented. CI2 = average number of economies. "
+                 "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30."
     })
 
     # --- Economy level ---
@@ -154,7 +156,6 @@ for ws, g in df.groupby("Workstream"):
         attended_count = (last5_econ_ws["Economy"] > 0).sum()
         pct_attended = (attended_count / 5) * 100
 
-        # thresholds standardized to % (same as risk script)
         if pct_attended >= 60:
             status_econ = "optimistic"
         elif pct_attended >= 30:
@@ -172,8 +173,9 @@ for ws, g in df.groupby("Workstream"):
             "Signal": f"{econ} attended {attended_count}/5 {ws} dialogues",
             "Status": status_econ,
             "Confidence Index 1 (Percent)": round(pct_attended, 1),
-            "Confidence Index 2 (Breadth)": attended_count,
-            "Notes": "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of last 5 dialogues."
+            "Confidence Index 2 (Count)": attended_count,
+            "Notes": "CI1 = % of last 5 dialogues attended. CI2 = number of dialogues attended (0–5). "
+                     "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30."
         })
 
 attendance_status = pd.DataFrame(rows)
