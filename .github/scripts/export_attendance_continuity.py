@@ -11,6 +11,11 @@ Generates assumption data for:
 Logic:
 - Looks at the last 5 dialogue/meeting events
 - Classifies optimism based on % attendance
+
+Standardization:
+- CI1 = Percent (% of last 5 dialogues attended)
+- CI2 = Count (# of dialogues attended, 0–5)
+- Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%
 """
 
 import os
@@ -72,7 +77,7 @@ def main():
         print("⚠️ No attendance data found, writing empty continuity file")
         pd.DataFrame(columns=[
             "Assumption","Monitoring Tool","Economy","Workstream","Level","Date",
-            "Signal","Status","Confidence Index 1 (Percent)","Confidence Index 2 (Breadth)","Notes"
+            "Signal","Status","Confidence Index 1 (Percent)","Confidence Index 2 (Count)","Notes"
         ]).to_csv("attendance_continuity_assumption.csv", index=False)
         return
 
@@ -125,8 +130,9 @@ def main():
             "Signal": f"{economy} attended {attended}/5 most recent dialogues",
             "Status": status,
             "Confidence Index 1 (Percent)": round(pct_attended, 1),
-            "Confidence Index 2 (Breadth)": attended,
-            "Notes": "Economy-level continuity. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
+            "Confidence Index 2 (Count)": attended,
+            "Notes": "CI1 = % of last 5 dialogues attended. CI2 = number of dialogues attended (0–5). "
+                     "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30."
         })
 
     # === 4. APEC aggregate continuity ===
@@ -150,8 +156,9 @@ def main():
         "Signal": f"On average, economies attended {avg_attended:.1f}/5 recent dialogues",
         "Status": agg_status,
         "Confidence Index 1 (Percent)": round(pct_agg, 1),
-        "Confidence Index 2 (Breadth)": int(round(avg_attended, 0)),
-        "Notes": "Aggregate continuity. Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
+        "Confidence Index 2 (Count)": int(round(avg_attended, 0)),
+        "Notes": "CI1 = % of last 5 dialogues attended (aggregate). CI2 = average number attended. "
+                 "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30."
     })
 
     # === 5. Export ===
