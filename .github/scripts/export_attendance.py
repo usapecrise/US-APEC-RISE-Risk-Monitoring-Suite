@@ -13,6 +13,11 @@ Logic:
 - Looks at the last 5 dialogues/workshops
 - Measures how many economies participated
 - Classifies optimism based on thresholds
+
+Standardization:
+- CI1 = Percent (participation %)
+- CI2 = Count (breadth measure: # economies or # dialogues attended)
+- Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%
 """
 
 import os
@@ -149,10 +154,10 @@ for ws, g in df.groupby("Workstream"):
         attended_count = (last5_econ_ws["Economy"] > 0).sum()
         pct_attended = (attended_count / 5) * 100
 
-        # thresholds: 3–5 = optimistic, 2 = baseline, 0–1 = pessimistic
-        if attended_count >= 3:
+        # thresholds standardized to % (same as risk script)
+        if pct_attended >= 60:
             status_econ = "optimistic"
-        elif attended_count == 2:
+        elif pct_attended >= 30:
             status_econ = "baseline"
         else:
             status_econ = "pessimistic"
@@ -168,7 +173,7 @@ for ws, g in df.groupby("Workstream"):
             "Status": status_econ,
             "Confidence Index 1 (Percent)": round(pct_attended, 1),
             "Confidence Index 2 (Breadth)": attended_count,
-            "Notes": "Thresholds: Optimistic ≥3/5, Baseline 2/5, Pessimistic ≤1/5."
+            "Notes": "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30% of last 5 dialogues."
         })
 
 attendance_status = pd.DataFrame(rows)
