@@ -12,8 +12,8 @@ Generates assumption data for:
 Logic:
 - Uses Host Country-based contributions
 - Tracks latest Fiscal Year
-- CI1 = total $ contributed
-- CI2 = # of contributing firms
+- CI1 = Amount ($ contributed)
+- CI2 = Count (# of contributing firms)
 - Thresholds:
     * If ≥2 years of history → dynamic: Optimistic = ≥ historical avg, Baseline = ≥ 25th percentile
     * Else → fallback: static $ thresholds ($5k / $1k), scaled by fiscal year progress
@@ -142,7 +142,7 @@ if df.empty:
     print("⚠️ No cost-share data found, writing empty file")
     pd.DataFrame(columns=[
         "Assumption","Monitoring Tool","Economy","Workstream","Level","Date",
-        "Signal","Status","Confidence Index 1 (Amount)","Confidence Index 2 (Breadth)","Notes"
+        "Signal","Status","Confidence Index 1 (Amount $)","Confidence Index 2 (Count)","Notes"
     ]).to_csv("cost_share_assumption.csv", index=False)
     exit()
 
@@ -175,8 +175,8 @@ rows.append({
     "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
     "Signal": f"${total_amount:,.0f} from {firms_count} firms across {economies_count} economies (FY {latest_fy}, Host Country-based only)",
     "Status": agg_status,
-    "Confidence Index 1 (Amount)": round(total_amount, 2),
-    "Confidence Index 2 (Breadth)": firms_count,
+    "Confidence Index 1 (Amount $)": round(total_amount, 2),
+    "Confidence Index 2 (Count)": firms_count,
     "Notes": f"Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Thresholds based on {thresh_type} values."
 })
 
@@ -196,8 +196,8 @@ for econ, g in df_econ.groupby("Economy"):
         "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
         "Signal": f"${econ_total:,.0f} from {econ_firms} firms (FY {latest_fy}, Host Country-based only)",
         "Status": econ_status,
-        "Confidence Index 1 (Amount)": round(econ_total, 2),
-        "Confidence Index 2 (Breadth)": econ_firms,
+        "Confidence Index 1 (Amount $)": round(econ_total, 2),
+        "Confidence Index 2 (Count)": econ_firms,
         "Notes": f"Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Thresholds based on {thresh_type} values."
     })
 
@@ -218,8 +218,8 @@ for ws, g in df_ws.groupby("Workstream"):
         "Date": f"{latest_fy}-12-31" if latest_fy != "Unknown" else pd.Timestamp.today().strftime("%Y-%m-%d"),
         "Signal": f"${ws_total:,.0f} from {ws_firms} firms across {ws_econs} economies (FY {latest_fy}, Host Country-based only)",
         "Status": ws_status,
-        "Confidence Index 1 (Amount)": round(ws_total, 2),
-        "Confidence Index 2 (Breadth)": ws_firms,
+        "Confidence Index 1 (Amount $)": round(ws_total, 2),
+        "Confidence Index 2 (Count)": ws_firms,
         "Notes": f"Host Country-based cost-share only. CI1 = $ amount; CI2 = # firms contributing. Thresholds based on {thresh_type} values."
     })
 
