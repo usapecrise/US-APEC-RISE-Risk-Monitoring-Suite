@@ -13,7 +13,8 @@ Logic:
 - Filters only dialogue/meeting feedback
 - Uses Application Intent + Sharing Intent from surveys
 - Produces composite score
-- CI1 = % score, CI2 = number of responses
+- CI1 = % score, CI2 = number of participants
+- Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%
 """
 
 import os
@@ -96,8 +97,8 @@ def main():
     records = []
 
     def process_scores(subset, econ_label, level, ws_label="All"):
-        scores = []
-        total_responses = 0  # track total responses across components
+        scores = {}
+        participant_count = len(subset)
 
         # Application
         if "Application Intent" in subset.columns:
@@ -105,8 +106,7 @@ def main():
             if not vals.empty:
                 avg = vals.mean()
                 n = vals.count()
-                total_responses += n
-                scores.append(avg)
+                scores["application"] = avg
                 records.append({
                     "Assumption": "Policy and regulatory openness",
                     "Monitoring Tool": "Feedback",
@@ -118,8 +118,7 @@ def main():
                     "Status": classify_status(avg),
                     "Confidence Index 1 (Percent)": round(avg, 1),
                     "Confidence Index 2 (Responses)": int(n),
-                    "Notes": f"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, "
-                             f"Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
+                    "Notes": "CI1 = average score (0–100). CI2 = # responses. Thresholds: ≥60 optimistic, 30–59 baseline, <30 pessimistic."
                 })
 
         # Sharing
@@ -128,8 +127,7 @@ def main():
             if not vals.empty:
                 avg = vals.mean()
                 n = vals.count()
-                total_responses += n
-                scores.append(avg)
+                scores["sharing"] = avg
                 records.append({
                     "Assumption": "Policy and regulatory openness",
                     "Monitoring Tool": "Feedback",
@@ -141,13 +139,12 @@ def main():
                     "Status": classify_status(avg),
                     "Confidence Index 1 (Percent)": round(avg, 1),
                     "Confidence Index 2 (Responses)": int(n),
-                    "Notes": f"Policy dialogue/meeting feedback. Thresholds: Optimistic ≥60%, "
-                             f"Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
+                    "Notes": "CI1 = average score (0–100). CI2 = # responses. Thresholds: ≥60 optimistic, 30–59 baseline, <30 pessimistic."
                 })
 
         # Composite
         if scores:
-            comp = sum(scores) / len(scores)
+            comp = sum(scores.values()) / len(scores)
             records.append({
                 "Assumption": "Policy and regulatory openness",
                 "Monitoring Tool": "Feedback",
@@ -158,9 +155,8 @@ def main():
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
                 "Confidence Index 1 (Percent)": round(comp, 1),
-                "Confidence Index 2 (Responses)": int(total_responses),
-                "Notes": "Composite of application and sharing scores from dialogues/meetings. "
-                         "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
+                "Confidence Index 2 (Responses)": participant_count,
+                "Notes": "CI1 = composite score (0–100). CI2 = total participants. Thresholds: ≥60 optimistic, 30–59 baseline, <30 pessimistic."
             })
 
     # === 1. Aggregate ===
