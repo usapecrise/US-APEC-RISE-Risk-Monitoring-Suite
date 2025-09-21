@@ -17,8 +17,8 @@ Logic:
 - Thresholds:
     * Year 1 (low bar):
         Optimistic ≥ $2k or ≥ 2 firms
-        Baseline ≥ $500 or ≥ 1 firm
-        Pessimistic < $500
+        Baseline > $0
+        Pessimistic = $0
     * Year 2+ (original):
         Optimistic ≥ historical avg (or $5k fallback)
         Baseline ≥ 25th percentile (or $1k fallback)
@@ -93,11 +93,12 @@ def classify_dynamic(total, econ_count, firm_count, latest_fy, df_all):
         fy_int = today.year
 
     project_year = fy_int - today.year + 1  # crude: assumes FY start = project start
-    # --- Year 1 thresholds ---
+
+    # --- Year 1 thresholds (baseline default if any contribution >0) ---
     if project_year <= 1:
         if total >= 2000 or firm_count >= 2:
             return "optimistic", "year1-lowbar"
-        elif total >= 500 or firm_count >= 1:
+        elif total > 0:
             return "baseline", "year1-lowbar"
         else:
             return "pessimistic", "year1-lowbar"
