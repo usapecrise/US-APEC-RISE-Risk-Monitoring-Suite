@@ -1,5 +1,6 @@
 import os
 import glob
+import time
 import pandas as pd
 from tableauhyperapi import (
     HyperProcess, Telemetry, Connection, TableDefinition,
@@ -51,7 +52,7 @@ EXTRACT_NAME_MAP = {
     "feedback_policy_assumption.csv": "Feedback Policy Assumption",
     "feedback_assumption.csv": "Feedback Assumptions",
     "cost_share_assumption.csv": "Cost Share Assumption",
-    "attendance_records.csv:": "Attendance Records",    
+    "attendance_records.csv:": "Attendance Records",
     "attendance_continuity_assumption.csv": "Attendance Continuity Assumption",
     "attendance_assumption.csv": "Attendance Assumption",
     "assumptions_status.csv": "Assumptions Status",
@@ -93,23 +94,37 @@ def convert_csv_to_hyper(csv_path: str, hyper_path: str):
 
     print(f"📦 Created {hyper_path} ({os.path.getsize(hyper_path)} bytes)")
 
-# ── TRIGGER WORKBOOK REFRESH ───────────────────────────
-def trigger_workbook_refresh(server, workbook_name):
+# ── TRIGGER WORKBOOK REFRESH WITH RETRY ────────────────
+def trigger_workbook_refresh(server, workbook_name, auth, retries=3, delay=5):
     print(f"🔁 Searching for workbook '{workbook_name}'...")
-    all_workbooks, _ = server.workbooks.get()
-    matched = [wb for wb in all_workbooks if wb.name == workbook_name]
 
-    if not matched:
-        print(f"❌ Workbook '{workbook_name}' not found.")
-        return
+    for attempt in range(retries):
+        try:
+            with server.auth.sign_in(auth):
+                all_workbooks, _ = server.workbooks.get()
+                matched = [wb for wb in all_workbooks if wb.name == workbook_name]
 
-    workbook = matched[0]
-    print(f"🔄 Triggering refresh for workbook '{workbook.name}' (ID: {workbook.id})")
-    try:
-        job = server.workbooks.refresh(workbook)
-        print(f"⏳ Refresh job submitted (Job ID: {job.id})")
-    except Exception as e:
-        print(f"❌ Failed to refresh workbook '{workbook.name}': {e}")
+                if not matched:
+                    print(f"❌ Workbook '{workbook_name}' not found.")
+                    return
+
+                workbook = matched[0]
+                print(f"🔄 Triggering refresh for workbook '{workbook.name}' (ID: {workbook.id})")
+                job = server.workbooks.refresh(workbook)
+                print(f"⏳ Refresh job submitted (Job ID: {job.id})")
+                return  # success
+        except TSC.server.endpoint.exceptions.FailedSignInError:
+            if attempt < retries - 1:
+                print(f"⚠️ Auth failed on refresh attempt {attempt+1} for '{workbook_name}', retrying in {delay}s...")
+                time.sleep(delay)
+            else:
+                raise
+        except Exception as e:
+            if attempt < retries - 1:
+                print(f"⚠️ Refresh failed for '{workbook_name}' on attempt {attempt+1}, retrying in {delay}s... Error: {e}")
+                time.sleep(delay)
+            else:
+                raise
 
 # ── MAIN EXECUTION ─────────────────────────────────────
 def main():
@@ -119,33 +134,48 @@ def main():
     auth = TSC.PersonalAccessTokenAuth(PAT_NAME, PAT_SECRET, SITE_NAME)
     server = TSC.Server(TABLEAU_SERVER, use_server_version=True)
 
-    with server.auth.sign_in(auth):
-        for csv_file in csv_files:
-            if csv_file not in EXTRACT_NAME_MAP:
-                print(f"⚠️ Skipping unrecognized file: {csv_file}")
-                continue
+    for csv_file in csv_files:
+        if csv_file not in EXTRACT_NAME_MAP:
+            print(f"⚠️ Skipping unrecognized file: {csv_file}")
+            continue
 
-            extract_name = EXTRACT_NAME_MAP[csv_file]
-            hyper_path = f"{os.path.splitext(csv_file)[0]}.hyper"
+        extract_name = EXTRACT_NAME_MAP[csv_file]
+        hyper_path = f"{os.path.splitext(csv_file)[0]}.hyper"
 
-            print(f"🔄 Converting {csv_file} → {hyper_path}")
-            convert_csv_to_hyper(csv_file, hyper_path)
+        print(f"🔄 Converting {csv_file} → {hyper_path}")
+        convert_csv_to_hyper(csv_file, hyper_path)
 
-            print(f"📤 Publishing '{hyper_path}' as '{extract_name}' into project ID {PROJECT_ID}")
-            ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=extract_name)
-            ds_item.connection_credentials = None
+        ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=extract_name)
+        ds_item.connection_credentials = None
 
-            published_ds = server.datasources.publish(
-                ds_item,
-                hyper_path,
-                mode=TSC.Server.PublishMode.Overwrite
-            )
+        # ✅ Attempt publish with retry + delay (3 tries)
+        for attempt in range(3):
+            try:
+                with server.auth.sign_in(auth):
+                    print(f"📤 Publishing '{hyper_path}' as '{extract_name}' (Attempt {attempt+1})")
+                    published_ds = server.datasources.publish(
+                        ds_item,
+                        hyper_path,
+                        mode=TSC.Server.PublishMode.Overwrite
+                    )
+                    print(f"✅ Overwrote extract: '{extract_name}' (Datasource ID: {published_ds.id})")
+                    break
+            except TSC.server.endpoint.exceptions.FailedSignInError:
+                if attempt < 2:
+                    print(f"⚠️ Auth failed on attempt {attempt+1} for {extract_name}, retrying in 5s...")
+                    time.sleep(5)
+                else:
+                    raise
+            except Exception as e:
+                if attempt < 2:
+                    print(f"⚠️ Publish failed for {extract_name} on attempt {attempt+1}, retrying in 5s... Error: {e}")
+                    time.sleep(5)
+                else:
+                    raise
 
-            print(f"✅ Overwrote extract: '{extract_name}' (Datasource ID: {published_ds.id})")
-
-        # Refresh workbooks if configured
-        for wb_name in WORKBOOKS_TO_REFRESH:
-            trigger_workbook_refresh(server, wb_name)
+    # ✅ Refresh workbooks with retry (3 tries)
+    for wb_name in WORKBOOKS_TO_REFRESH:
+        trigger_workbook_refresh(server, wb_name, auth)
 
     print("✅ Finished uploading extracts and refreshing workbooks.")
 
