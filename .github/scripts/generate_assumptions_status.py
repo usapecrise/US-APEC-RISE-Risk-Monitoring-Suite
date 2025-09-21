@@ -30,6 +30,9 @@ INPUT_FILES = [
 ]
 
 def main():
+    run_date = pd.Timestamp.today().strftime("%Y-%m-%d")
+    print(f"🚀 Starting assumptions merge run on {run_date}")
+
     dfs = []
     row_counts = {}
 
@@ -72,6 +75,9 @@ def main():
     }
     merged["assumption"] = merged["assumption"].replace(assumption_map)
 
+    # ✅ normalize status to Title Case
+    merged["status"] = merged["status"].str.capitalize()
+
     # ✅ validation check
     missing = [f for f in INPUT_FILES if f not in row_counts or row_counts[f] in (0, None)]
     if missing:
@@ -94,8 +100,13 @@ def main():
     # === Row-count summary by assumption + status ===
     if "assumption" in merged.columns and "status" in merged.columns:
         print("\n📊 Row count by assumption and status:")
-        summary = merged.groupby(["assumption", "status"]).size().reset_index(name="count")
-        for _, row in summary.iterrows():
+        summary_counts = (
+            merged.groupby(["assumption", "status"])
+            .size()
+            .reset_index(name="count")
+        )
+        summary_counts["status"] = summary_counts["status"].str.capitalize()  # ✅ normalize for logs
+        for _, row in summary_counts.iterrows():
             print(f"  {row['assumption']} | {row['status']}: {row['count']} rows")
 
     # === Assumption-level summary ===
@@ -106,17 +117,27 @@ def main():
             .unstack(fill_value=0)
         )
 
+        # ✅ normalize column names (make status columns Title Case)
+        summary = summary.rename(
+            columns={
+                "optimistic": "Optimistic",
+                "baseline": "Baseline",
+                "pessimistic": "Pessimistic"
+            }
+        )
+
         # Add totals and percentages
         summary["Total"] = summary.sum(axis=1)
-        for col in ["optimistic", "baseline", "pessimistic"]:
+        for col in ["Optimistic", "Baseline", "Pessimistic"]:
             if col in summary.columns:
                 summary[f"{col}_pct"] = (summary[col] / summary["Total"]) * 100
 
-        # Most recent status by assumption (latest date row)
+        # Most recent status by assumption (latest date row, normalized)
         most_recent = (
             merged.sort_values("date", ascending=False)
             .groupby("assumption")
             .first()["status"]
+            .str.capitalize()
         )
         summary["Most_Recent_Status"] = most_recent
 
@@ -131,11 +152,14 @@ def main():
         # Reset for export
         summary = summary.reset_index()
 
+        # ✅ Add Last_Updated column
+        summary["Last_Updated"] = run_date
+
         # Save summary
         summary.to_csv(SUMMARY_FILE, index=False)
         print(f"✅ Assumptions summary file saved → {SUMMARY_FILE} ({len(summary)} rows)")
 
-    # === NEW: Aggregate-only latest status for Tableau cards ===
+    # === Aggregate-only latest status for Tableau cards ===
     if "economy" in merged.columns and "date" in merged.columns:
         latest_agg = (
             merged[merged["economy"] == "APEC (aggregate)"]
@@ -144,8 +168,12 @@ def main():
             .first()
             .reset_index()
         )
+        latest_agg["status"] = latest_agg["status"].str.capitalize()  # normalize case
+        latest_agg["Last_Updated"] = run_date  # add run date
         latest_agg.to_csv(CARDS_FILE, index=False)
         print(f"✅ Aggregate-level status file saved → {CARDS_FILE} ({len(latest_agg)} rows)")
+
+    print(f"🎉 Run completed successfully on {run_date}")
 
 
 if __name__ == "__main__":
