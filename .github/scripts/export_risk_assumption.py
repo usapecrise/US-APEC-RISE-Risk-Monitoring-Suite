@@ -126,8 +126,8 @@ def main():
             "Date": date_str,
             "Signal": str(signal_text),
             "Status": status,
-            "Confidence Index 1": hits,
-            "Confidence Index 2": 1,
+            "Confidence Index 1 (Keyword/NLP Hits)": hits,
+            "Confidence Index 2 (Signals)": 1,
             "Notes": "Signal-level classification. CI1 = keyword/NLP match strength; CI2 = 1 signal."
         })
 
@@ -151,8 +151,8 @@ def main():
                         if "date" in subset.columns else "",
                 "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals)",
                 "Status": econ_status,
-                "Confidence Index 1": round(pct_opt, 1),
-                "Confidence Index 2": total,
+                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
+                "Confidence Index 2 (Signals Reviewed)": total,
                 "Notes": "Economy summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
             })
 
@@ -176,4 +176,62 @@ def main():
                         if "date" in subset.columns else "",
                 "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals)",
                 "Status": ws_status,
-                "Confidence Index 1
+                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
+                "Confidence Index 2 (Signals Reviewed)": total,
+                "Notes": "Workstream summary. CI1 = % optimistic signals; CI2 = total signals reviewed."
+            })
+
+    # === 4. Aggregate snapshot ===
+    total_signals = len(df)
+    optimistic_count = df[text_col].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+    pct_opt = (optimistic_count / total_signals) * 100 if total_signals > 0 else 0
+    agg_status = classify_percentage(pct_opt)
+
+    records.append({
+        "Assumption": "Political and institutional continuity",
+        "Monitoring Tool": "Media Monitor",
+        "Economy": "APEC (aggregate)",
+        "Workstream": "All",
+        "Level": "Aggregate",
+        "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d")
+                if "date" in df.columns else "",
+        "Signal": f"{pct_opt:.0f}% optimistic (out of {total_signals} signals)",
+        "Status": agg_status,
+        "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
+        "Confidence Index 2 (Signals Reviewed)": total_signals,
+        "Notes": "Aggregate snapshot. CI1 = % optimistic signals; CI2 = total signals reviewed."
+    })
+
+    # === 5. Time-series summary (monthly) ===
+    if "date" in df.columns:
+        df["date"] = pd.to_datetime(df["date"], errors="coerce")
+        df["month"] = df["date"].dt.to_period("M")
+
+        for month, subset in df.groupby("month"):
+            total = len(subset)
+            optimistic_count = subset[text_col].apply(lambda x: classify_scenario(x)[0] == "optimistic").sum()
+            pct_opt = (optimistic_count / total) * 100 if total > 0 else 0
+            month_status = classify_percentage(pct_opt)
+
+            records.append({
+                "Assumption": "Political and institutional continuity",
+                "Monitoring Tool": "Media Monitor",
+                "Economy": "APEC (aggregate)",
+                "Workstream": "All",
+                "Level": "Time-Series (Monthly)",
+                "Date": str(month),
+                "Signal": f"{pct_opt:.0f}% optimistic (out of {total} signals in {month})",
+                "Status": month_status,
+                "Confidence Index 1 (Percent Optimistic)": round(pct_opt, 1),
+                "Confidence Index 2 (Signals Reviewed)": total,
+                "Notes": "Monthly trend summary. CI1 = % optimistic signals; CI2 = signals reviewed in month."
+            })
+
+    # === Export ===
+    out_df = pd.DataFrame(records)
+    out_df.to_csv(OUTPUT_FILE, index=False)
+    print(f"✅ Risk assumption saved → {OUTPUT_FILE} ({len(out_df)} rows))")
+
+
+if __name__ == "__main__":
+    main()
