@@ -14,6 +14,7 @@ Logic:
 - Produces signals for relevance, knowledge, application, and sharing
 - Composite = average of all four dimensions
 - CI1 = % score, CI2 = number of responses
+- Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%
 """
 
 import os
@@ -100,18 +101,16 @@ def main():
 
     # === Helper function ===
     def process_scores(subset, econ_label, level, ws_label="All"):
-        scores = []
-        total_responses = 0  # track all valid responses
+        scores = {}
+        participant_count = len(subset)
 
         def add_record(col, label, mapping):
-            nonlocal total_responses
             if col in subset.columns:
                 vals = subset[col].map(lambda v: mapping.get(v, None)).dropna()
                 if not vals.empty:
                     avg = vals.mean()
                     n = vals.count()
-                    total_responses += n
-                    scores.append(avg)
+                    scores[label] = avg
                     records.append({
                         "Assumption": "Stakeholder alignment with U.S. focus areas",
                         "Monitoring Tool": "Feedback",
@@ -123,8 +122,7 @@ def main():
                         "Status": classify_status(avg),
                         "Confidence Index 1 (Percent)": round(avg, 1),
                         "Confidence Index 2 (Responses)": int(n),
-                        "Notes": f"Scores mapped 0–100. Thresholds: Optimistic ≥60%, "
-                                 f"Baseline 30–59%, Pessimistic <30%. Based on {n} responses."
+                        "Notes": "CI1 = average score (0–100). CI2 = # responses. Thresholds: ≥60 optimistic, 30–59 baseline, <30 pessimistic."
                     })
 
         # Individual signals
@@ -135,7 +133,7 @@ def main():
 
         # Composite
         if scores:
-            comp = sum(scores) / len(scores)
+            comp = sum(scores.values()) / len(scores)
             records.append({
                 "Assumption": "Stakeholder alignment with U.S. focus areas",
                 "Monitoring Tool": "Feedback",
@@ -146,9 +144,8 @@ def main():
                 "Signal": f"Composite feedback score = {comp:.0f}%",
                 "Status": classify_status(comp),
                 "Confidence Index 1 (Percent)": round(comp, 1),
-                "Confidence Index 2 (Responses)": int(total_responses),
-                "Notes": "Composite of relevance, knowledge, application, and sharing scores. "
-                         "Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%."
+                "Confidence Index 2 (Responses)": participant_count,
+                "Notes": "CI1 = composite score (0–100). CI2 = total participants. Thresholds: ≥60 optimistic, 30–59 baseline, <30 pessimistic."
             })
 
     # === 1. APEC aggregate ===
