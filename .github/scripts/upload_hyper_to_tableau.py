@@ -60,7 +60,9 @@ EXTRACT_NAME_MAP = {
     "person_hours.csv": "Person Hours",
     "spotlight_quotes.csv": "Spotlight Quotes",
     "Data_Quality.csv": "Data Quality",
-    "Data_Security.csv": "Data Security"
+    "Data_Security.csv": "Data Security",
+    "assumptions_summary.csv": "Assumptions Summary",
+    "assumptions_status_cards.csv": "Assumptions Status Cards"
 }
 
 # ── CONVERT CSV TO HYPER ───────────────────────────────
