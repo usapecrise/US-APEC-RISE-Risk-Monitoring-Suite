@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Wide File Only, Hugging Face + Context-Aware Rules)
-------------------------------------------------------------------------------
+Feedback Analysis Pipeline (Wide File Only, DistilBERT + Context-Aware Rules)
+-----------------------------------------------------------------------------
 - Uses Feedback_Form_Data.csv (wide format: 1 row per participant)
 - Open-text fields: context-aware sentiment
   * Application/Sharing → default Positive unless clearly Negative
   * Improvements/Barriers → full Positive/Neutral/Negative
 - Structured fields: mapped into Positive/Neutral/Negative
-- Hugging Face sentiment model + thresholds + keyword boosts
+- DistilBERT (Hugging Face) sentiment model + thresholds + keyword boosts
 - Exports:
   - word_frequency.csv
   - word_frequency_detailed.csv
@@ -44,12 +44,14 @@ STOPWORDS = set([
 
 lemmatizer = WordNetLemmatizer()
 
-# Load Hugging Face sentiment model
-hf_sentiment = pipeline("sentiment-analysis", 
-                        model="nlptown/bert-base-multilingual-uncased-sentiment")
+# Load Hugging Face DistilBERT sentiment model
+hf_sentiment = pipeline(
+    "sentiment-analysis",
+    model="distilbert-base-uncased-finetuned-sst-2-english"
+)
 
 # ----------------------------
-# Thresholds + keyword boost
+# Keyword hints
 # ----------------------------
 POSITIVE_HINTS = {
     "useful","helpful","valuable","good","clear","great","effective","relevant",
@@ -84,24 +86,25 @@ def normalize_word(word: str) -> str:
     return word
 
 def hf_sentiment_analysis(text: str):
-    """Hugging Face model output mapped to Positive/Neutral/Negative."""
+    """DistilBERT output mapped to Positive/Neutral/Negative."""
     if not text or text.strip() == "":
         return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
 
-    result = hf_sentiment(text[:512])[0]  # limit length for efficiency
-    label = result["label"]   # e.g. "4 stars"
-    stars = int(label.split()[0])
+    result = hf_sentiment(text[:512])[0]  # limit length
+    label = result["label"]  # POSITIVE / NEGATIVE
     score = result["score"]
 
-    if stars >= 4:
-        return "Positive", {"Positive": score, "Negative": 0.0, "Neutral": 1 - score}
-    elif stars == 3:
+    # Confidence thresholds for Neutral
+    if score < 0.6:
         return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
+
+    if label.upper() == "POSITIVE":
+        return "Positive", {"Positive": score, "Negative": 0.0, "Neutral": 1 - score}
     else:
         return "Negative", {"Positive": 0.0, "Negative": score, "Neutral": 1 - score}
 
 def get_sentiment(text: str, source: str):
-    """Context-aware sentiment: bias Application/Sharing Positive."""
+    """Context-aware sentiment: boost Application/Sharing Positive."""
     if not text or text.strip() == "":
         return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
 
