@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Feedback Analysis Pipeline (Wide File Only, Flair + Context-Aware Rules)
-------------------------------------------------------------------------
+Feedback Analysis Pipeline (Wide File Only, Hugging Face + Context-Aware Rules)
+------------------------------------------------------------------------------
 - Uses Feedback_Form_Data.csv (wide format: 1 row per participant)
 - Open-text fields: context-aware sentiment
   * Application/Sharing → default Positive unless clearly Negative
   * Improvements/Barriers → full Positive/Neutral/Negative
 - Structured fields: mapped into Positive/Neutral/Negative
-- Flair model for sentiment + thresholds + keyword boosts
+- Hugging Face sentiment model + thresholds + keyword boosts
 - Exports:
   - word_frequency.csv
   - word_frequency_detailed.csv
@@ -23,8 +23,7 @@ import pandas as pd
 import re, string
 from nltk.stem import WordNetLemmatizer
 from nltk.util import ngrams
-from flair.models import TextClassifier
-from flair.data import Sentence
+from transformers import pipeline
 
 # ----------------------------
 # CONFIG
@@ -45,15 +44,13 @@ STOPWORDS = set([
 
 lemmatizer = WordNetLemmatizer()
 
-# Load Flair sentiment model
-flair_classifier = TextClassifier.load("sentiment")
+# Load Hugging Face sentiment model
+hf_sentiment = pipeline("sentiment-analysis", 
+                        model="nlptown/bert-base-multilingual-uncased-sentiment")
 
 # ----------------------------
 # Thresholds + keyword boost
 # ----------------------------
-POS_THRESHOLD = 0.6
-NEG_THRESHOLD = 0.3
-
 POSITIVE_HINTS = {
     "useful","helpful","valuable","good","clear","great","effective","relevant",
     "apply","applied","implement","implemented","use","using","utilize","practice",
@@ -86,34 +83,29 @@ def normalize_word(word: str) -> str:
     word = lemmatizer.lemmatize(word, pos="n")
     return word
 
-def flair_sentiment(text: str):
-    """Base Flair model output with thresholds."""
-    sentence = Sentence(text[:512])
-    flair_classifier.predict(sentence)
-    label = sentence.labels[0]
-    raw_label = label.value.upper()   # POSITIVE / NEGATIVE
-    score = label.score
-    pos, neg = 0.0, 0.0
-    if raw_label == "POSITIVE":
-        pos = score
-    elif raw_label == "NEGATIVE":
-        neg = score
-    neu = 1 - max(pos, neg)
+def hf_sentiment_analysis(text: str):
+    """Hugging Face model output mapped to Positive/Neutral/Negative."""
+    if not text or text.strip() == "":
+        return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
 
-    if pos >= POS_THRESHOLD:
-        sentiment = "Positive"
-    elif neg >= NEG_THRESHOLD:
-        sentiment = "Negative"
+    result = hf_sentiment(text[:512])[0]  # limit length for efficiency
+    label = result["label"]   # e.g. "4 stars"
+    stars = int(label.split()[0])
+    score = result["score"]
+
+    if stars >= 4:
+        return "Positive", {"Positive": score, "Negative": 0.0, "Neutral": 1 - score}
+    elif stars == 3:
+        return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
     else:
-        sentiment = "Neutral"
-    return sentiment, {"Positive": pos, "Negative": neg, "Neutral": neu}
+        return "Negative", {"Positive": 0.0, "Negative": score, "Neutral": 1 - score}
 
 def get_sentiment(text: str, source: str):
     """Context-aware sentiment: bias Application/Sharing Positive."""
     if not text or text.strip() == "":
         return "Neutral", {"Positive": 0.0, "Negative": 0.0, "Neutral": 1.0}
 
-    sentiment, scores = flair_sentiment(text)
+    sentiment, scores = hf_sentiment_analysis(text)
 
     # Keyword boost
     if sentiment == "Neutral":
