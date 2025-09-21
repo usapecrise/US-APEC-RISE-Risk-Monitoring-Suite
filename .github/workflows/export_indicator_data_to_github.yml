@@ -210,7 +210,8 @@ jobs:
             risk_assumption.csv attendance_assumption.csv attendance_records.csv Map_Data.csv \
             Monitoring_System.csv person_hours.csv person_hours_by_workshop.csv person_hours_by_sex.csv \
             person_hours_by_sector.csv person_hours_by_economy.csv person_hours_totals_combined.csv \
-            spotlight_quotes.csv Data_Security.csv Data_Quality.csv
+            spotlight_quotes.csv Data_Security.csv Data_Quality.csv assumptions_summary.csv \
+            assumptions_status_cards.csv
 
           timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           git commit -m "🔄 Auto-update KPI exports on $timestamp" || echo "No changes to commit"
