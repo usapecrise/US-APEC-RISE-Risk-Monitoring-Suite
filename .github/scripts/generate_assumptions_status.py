@@ -1,8 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Merge assumption files into a unified dataset
+---------------------------------------------
+Outputs:
+- assumptions_status.csv   → detailed rows (all economies, all dates)
+- assumptions_summary.csv  → grouped summary by assumption
+- assumptions_status_cards.csv → latest aggregate row per assumption (for Tableau KPI cards)
+"""
+
 import pandas as pd
 import os
 
 OUTPUT_FILE = "assumptions_status.csv"
 SUMMARY_FILE = "assumptions_summary.csv"
+CARDS_FILE = "assumptions_status_cards.csv"
 
 # List of assumption input files to merge
 INPUT_FILES = [
@@ -85,7 +98,7 @@ def main():
         for _, row in summary.iterrows():
             print(f"  {row['assumption']} | {row['status']}: {row['count']} rows")
 
-    # === NEW: Assumption-level summary ===
+    # === Assumption-level summary ===
     if "assumption" in merged.columns and "status" in merged.columns:
         summary = (
             merged.groupby(["assumption", "status"])
@@ -121,6 +134,18 @@ def main():
         # Save summary
         summary.to_csv(SUMMARY_FILE, index=False)
         print(f"✅ Assumptions summary file saved → {SUMMARY_FILE} ({len(summary)} rows)")
+
+    # === NEW: Aggregate-only latest status for Tableau cards ===
+    if "economy" in merged.columns and "date" in merged.columns:
+        latest_agg = (
+            merged[merged["economy"] == "APEC (aggregate)"]
+            .sort_values("date", ascending=False)
+            .groupby("assumption")
+            .first()
+            .reset_index()
+        )
+        latest_agg.to_csv(CARDS_FILE, index=False)
+        print(f"✅ Aggregate-level status file saved → {CARDS_FILE} ({len(latest_agg)} rows)")
 
 
 if __name__ == "__main__":
