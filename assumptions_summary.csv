@@ -1,5 +1,5 @@
-assumption,Baseline,Optimistic,Pessimistic,Total,Optimistic_pct,Baseline_pct,Pessimistic_pct,Most_Recent_Status,Monitoring_Tools,Signal_Count,Last_Updated
-Policy and regulatory openness,16,39,0,55,70.9090909090909,29.09090909090909,0.0,Optimistic,"Feedback Tracker (Openness), Policy Reform Tracker (Openness)",55,2025-09-22
-Political and institutional continuity,20,0,11,31,0.0,64.51612903225806,35.483870967741936,Baseline,"Attendance Tracker (Continuity), Media Monitor (Continuity)",31,2025-09-22
-Responsible local ownership,3,0,0,3,0.0,100.0,0.0,Baseline,Cost-Share Tracker (Ownership),3,2025-09-22
-Stakeholder alignment with U.S. focus areas,54,143,63,260,55.00000000000001,20.76923076923077,24.23076923076923,Optimistic,"Attendance Tracker (Alignment), Feedback Tracker (Alignment)",260,2025-09-22
+assumption,Baseline,Optimistic,Pessimistic,Total,Optimistic_pct,Baseline_pct,Pessimistic_pct,Overall_Status,Last_Status_Event,Monitoring_Tools,Signal_Count,Last_Updated
+Policy and regulatory openness,16,39,0,55,70.9090909090909,29.09090909090909,0.0,Optimistic,Optimistic,"Feedback Tracker (Openness), Policy Reform Tracker (Openness)",55,2025-09-22
+Political and institutional continuity,20,0,11,31,0.0,64.51612903225806,35.483870967741936,Baseline,Baseline,"Attendance Tracker (Continuity), Media Monitor (Continuity)",31,2025-09-22
+Responsible local ownership,3,0,0,3,0.0,100.0,0.0,Baseline,Baseline,Cost-Share Tracker (Ownership),3,2025-09-22
+Stakeholder alignment with U.S. focus areas,54,143,63,260,55.00000000000001,20.76923076923077,24.23076923076923,Optimistic,Optimistic,"Attendance Tracker (Alignment), Feedback Tracker (Alignment)",260,2025-09-22
