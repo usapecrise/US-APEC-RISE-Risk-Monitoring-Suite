@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Political & Institutional Continuity Assumption (Media Monitor, DistilBERT + Balanced Rules)
+Political & Institutional Continuity Assumption (Media Monitor, DistilBERT + Keyword Boosts)
 ------------------------------------------------------------------------------------------
 - Reads risk_signals.csv
-- Classifies signals with keyword rules + Hugging Face DistilBERT fallback
+- Classifies signals using:
+  * Keyword rules (optimistic / pessimistic)
+  * Hugging Face DistilBERT fallback
+  * Keyword boosts for context
 - Outputs standardized fields:
   * Confidence Index 1 = % optimistic or pessimistic (depending on level)
   * Confidence Index 2 = number of signals
@@ -48,6 +51,16 @@ OPTIMISTIC_PATTERNS = [
     r"\bendorsed by the united states\b", r"\bu\.s\. partnership\b"
 ]
 
+# Keyword boosts (from your feedback script)
+POSITIVE_HINTS = {
+    "strengthen","reinforce","support","stability","aligned","consensus",
+    "endorse","commitment","continuity","resilience","cooperation","agreement"
+}
+NEGATIVE_HINTS = {
+    "instability","crisis","unrest","turmoil","violence","stalemate","deadlock",
+    "resignation","coup","dismissed","sacked","conflict","chaos","removed"
+}
+
 # ── Classification helpers ───────────────────────────────
 def hf_sentiment_analysis(text: str):
     """DistilBERT sentiment mapped to optimistic/pessimistic/baseline."""
@@ -60,6 +73,7 @@ def hf_sentiment_analysis(text: str):
 
     if score < 0.6:
         return "baseline", score
+
     if label == "POSITIVE":
         return "optimistic", score
     elif label == "NEGATIVE":
@@ -69,20 +83,30 @@ def hf_sentiment_analysis(text: str):
 
 
 def classify_scenario(text: str):
-    """Keyword + DistilBERT fallback classification."""
-    text = str(text).lower()
+    """Keyword + DistilBERT fallback + keyword boosts."""
+    txt = str(text).lower()
 
-    pess_hits = sum(bool(re.search(pat, text)) for pat in PESSIMISTIC_PATTERNS)
-    opt_hits = sum(bool(re.search(pat, text)) for pat in OPTIMISTIC_PATTERNS)
+    pess_hits = sum(bool(re.search(pat, txt)) for pat in PESSIMISTIC_PATTERNS)
+    opt_hits  = sum(bool(re.search(pat, txt)) for pat in OPTIMISTIC_PATTERNS)
 
-    # Keyword priority if strong signals
-    if pess_hits > opt_hits and pess_hits >= 2:
+    # Strong keyword evidence wins immediately
+    if pess_hits >= 2 and pess_hits > opt_hits:
         return "pessimistic", pess_hits
-    elif opt_hits > pess_hits and opt_hits >= 2:
+    elif opt_hits >= 2 and opt_hits > pess_hits:
         return "optimistic", opt_hits
 
-    # Otherwise fallback to DistilBERT
-    return hf_sentiment_analysis(text)
+    # Fallback → DistilBERT
+    sentiment, strength = hf_sentiment_analysis(txt)
+
+    # Keyword boosts for weak/neutral cases
+    tokens = set(txt.split())
+    if sentiment == "baseline":
+        if tokens & POSITIVE_HINTS:
+            return "optimistic", strength
+        elif tokens & NEGATIVE_HINTS:
+            return "pessimistic", strength
+
+    return sentiment, strength
 
 
 def classify_summary(opt_count, pess_count, total):
@@ -121,9 +145,9 @@ def main():
         return
 
     records = []
+    all_classes = []
 
     # === 1. Signal-level rows ===
-    classifications = []
     for _, row in df.iterrows():
         economy = row.get("economy", "Unknown")
         workstream = row.get("workstream", "Unspecified") if "workstream" in df.columns else "Unspecified"
@@ -132,7 +156,7 @@ def main():
         signal_text = row.get(text_col, "")
 
         status, strength = classify_scenario(signal_text)
-        classifications.append(status)
+        all_classes.append(status)
 
         records.append({
             "Assumption": "Political and institutional continuity",
@@ -145,7 +169,7 @@ def main():
             "Status": status,
             "Confidence Index 1": strength,
             "Confidence Index 2": 1,
-            "Notes": "Signal-level classification. CI1 = keyword/NLP match strength; CI2 = 1 signal."
+            "Notes": "Signal-level classification. CI1 = keyword/NLP/boost match; CI2 = 1 signal."
         })
 
     # === 2. Economy summaries ===
@@ -254,6 +278,10 @@ def main():
     out_df = pd.DataFrame(records)
     out_df.to_csv(OUTPUT_FILE, index=False)
     print(f"✅ Risk assumption saved → {OUTPUT_FILE} ({len(out_df)} rows))")
+
+    # === Console summary ===
+    print("\n--- Classification Summary ---")
+    print(all_classes.value_counts())
 
 if __name__ == "__main__":
     main()
