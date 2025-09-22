@@ -75,8 +75,12 @@ def main():
     }
     merged["assumption"] = merged["assumption"].replace(assumption_map)
 
-    # ✅ remap risk assumptions into Political & Institutional Continuity
-    merged.loc[merged["source_file"] == "risk_assumption.csv", "assumption"] = "Political and institutional continuity"
+    # ✅ Force all risk_assumption.csv rows into Continuity
+    is_risk = merged["source_file"] == "risk_assumption.csv"
+    merged.loc[is_risk, "assumption"] = "Political and institutional continuity"
+
+    # ✅ If status is missing/null in these rows, default to Baseline
+    merged.loc[is_risk & merged["status"].isna(), "status"] = "Baseline"
 
     # ✅ normalize status to Title Case
     merged["status"] = merged["status"].str.capitalize()
