@@ -6,8 +6,8 @@ Merge assumption files into a unified dataset
 ---------------------------------------------
 Outputs:
 - assumptions_status.csv        → detailed rows (all economies, all dates)
-- assumptions_summary.csv       → grouped summary by assumption (with friendly tool names + Signal_Count)
-- assumptions_status_cards.csv  → latest aggregate row per assumption (for Tableau KPI cards: Most_Recent_Status + counts + %s)
+- assumptions_summary.csv       → grouped summary by assumption (with friendly tool names + Signal_Count, Overall_Status, Last_Status_Event)
+- assumptions_status_cards.csv  → aggregate rows for Tableau KPI cards (Overall_Status + Last_Status_Event + counts + %s)
 - assumptions_breakdown.csv     → assumption × source tool breakdown (counts + % contribution)
 """
 
@@ -122,21 +122,25 @@ def main():
         .size()
         .unstack(fill_value=0)
     )
-    summary = summary.rename(columns={
-        "Optimistic": "Optimistic",
-        "Baseline": "Baseline",
-        "Pessimistic": "Pessimistic"
-    })
     summary["Total"] = summary.sum(axis=1)
     for col in ["Optimistic", "Baseline", "Pessimistic"]:
         if col in summary.columns:
             summary[f"{col}_pct"] = (summary[col] / summary["Total"]) * 100
 
-    # === NEW: Majority vote for Most_Recent_Status ===
+    # ✅ Majority vote for Overall_Status
     majority = merged.groupby("assumption")["status"].agg(
         lambda x: x.value_counts().idxmax() if not x.empty else "Baseline"
     )
-    summary["Most_Recent_Status"] = majority
+    summary["Overall_Status"] = majority
+
+    # ✅ Last status event by date
+    last_status = (
+        merged.sort_values("date")
+        .groupby("assumption")["status"]
+        .last()
+        .str.capitalize()
+    )
+    summary["Last_Status_Event"] = last_status
 
     # ✅ Monitoring tools (friendly names)
     tools = (
@@ -152,22 +156,28 @@ def main():
     summary.to_csv(SUMMARY_FILE, index=False)
     print(f"✅ Assumptions summary file saved → {SUMMARY_FILE} ({len(summary)} rows)")
 
-    # === Aggregate for Tableau cards (combine ALL tools per assumption) ===
+    # === Aggregate for Tableau cards ===
     cards = (
         merged[merged["economy"] == "APEC (aggregate)"]
         .groupby("assumption")
         .agg({
             "date": "max",
             "signal": lambda x: "; ".join(x.dropna().astype(str).unique()),
-            "status": lambda x: x.value_counts().idxmax() if not x.empty else "Baseline",  # majority here too
             "notes": "last",
             "source_file": lambda x: "; ".join(sorted(set(x.dropna())))
         })
         .reset_index()
     )
 
-    cards = cards.rename(columns={"status": "Most_Recent_Status"})
-    cards["Most_Recent_Status"] = cards["Most_Recent_Status"].str.capitalize()
+    # Majority across ALL rows
+    overall_status = merged.groupby("assumption")["status"].agg(
+        lambda x: x.value_counts().idxmax() if not x.empty else "Baseline"
+    )
+    cards = cards.merge(overall_status.rename("Overall_Status"), on="assumption", how="left")
+
+    # Last event by date
+    cards = cards.merge(last_status.rename("Last_Status_Event"), on="assumption", how="left")
+
     cards["Last_Updated"] = run_date
 
     # ✅ Add Signal_Count + percentages into cards
@@ -175,11 +185,6 @@ def main():
         merged.groupby(["assumption", "status"])
         .size()
         .unstack(fill_value=0)
-        .rename(columns={
-            "Optimistic": "Optimistic",
-            "Baseline": "Baseline",
-            "Pessimistic": "Pessimistic"
-        })
     )
     totals["Signal_Count"] = totals.sum(axis=1)
     for col in ["Optimistic", "Baseline", "Pessimistic"]:
@@ -189,7 +194,7 @@ def main():
 
     cards = cards.merge(totals, on="assumption", how="left")
 
-    # ✅ Format percentages as readable strings
+    # ✅ Format percentages
     for col in ["Optimistic_pct", "Baseline_pct", "Pessimistic_pct"]:
         if col in cards.columns:
             cards[col] = cards[col].apply(format_pct)
