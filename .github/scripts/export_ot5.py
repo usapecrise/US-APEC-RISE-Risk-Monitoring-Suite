@@ -85,7 +85,8 @@ fieldnames = [
     'U.S. FAOs Addressed',
     'Resource Type',
     'Resource Origin',
-    'Export Timestamp'  # New column to ensure uniqueness
+    'Contribution Date',
+    'Export Timestamp'
 ]
 
 timestamp = datetime.utcnow().isoformat()
