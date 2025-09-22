@@ -41,6 +41,13 @@ SOURCE_LABELS = {
     "cost_share_assumption.csv": "Cost-Share Tracker (Ownership)"
 }
 
+def format_pct(value):
+    """Convert decimal to percentage string with no decimals"""
+    try:
+        return f"{round(value)}%"
+    except:
+        return ""
+
 def main():
     run_date = pd.Timestamp.today().strftime("%Y-%m-%d")
     print(f"🚀 Starting assumptions merge run on {run_date}")
@@ -51,12 +58,10 @@ def main():
     for file in INPUT_FILES:
         try:
             df = pd.read_csv(file)
-
-            # ✅ normalize column names
-            df.columns = [c.strip().lower() for c in df.columns]
+            df.columns = [c.strip().lower() for c in df.columns]  # normalize col names
 
             if not df.empty:
-                df["source_file"] = SOURCE_LABELS.get(file, file)  # map to friendly name
+                df["source_file"] = SOURCE_LABELS.get(file, file)  # map to friendly tool name
                 dfs.append(df)
                 row_counts[file] = len(df)
                 print(f"✅ Loaded {file} ({len(df)} rows)")
@@ -143,24 +148,29 @@ def main():
     )
     summary["Monitoring_Tools"] = tools
 
-    # ✅ Add Signal_Count column (same as Total)
     summary = summary.reset_index()
     summary["Signal_Count"] = summary["Total"]
     summary["Last_Updated"] = run_date
     summary.to_csv(SUMMARY_FILE, index=False)
     print(f"✅ Assumptions summary file saved → {SUMMARY_FILE} ({len(summary)} rows)")
 
-    # === Aggregate-only latest status for Tableau cards ===
-    latest_agg = (
+    # === Aggregate for Tableau cards (combine ALL tools per assumption) ===
+    cards = (
         merged[merged["economy"] == "APEC (aggregate)"]
-        .sort_values("date", ascending=False)
         .groupby("assumption")
-        .first()
+        .agg({
+            "date": "max",
+            "signal": lambda x: "; ".join(x.dropna().astype(str).unique()),
+            "status": lambda x: x.dropna().iloc[-1] if len(x.dropna()) else "",
+            "notes": "last",
+            "source_file": lambda x: "; ".join(sorted(set(x.dropna())))
+        })
         .reset_index()
     )
-    latest_agg = latest_agg.rename(columns={"status": "Most_Recent_Status"})
-    latest_agg["Most_Recent_Status"] = latest_agg["Most_Recent_Status"].str.capitalize()
-    latest_agg["Last_Updated"] = run_date
+
+    cards = cards.rename(columns={"status": "Most_Recent_Status"})
+    cards["Most_Recent_Status"] = cards["Most_Recent_Status"].str.capitalize()
+    cards["Last_Updated"] = run_date
 
     # ✅ Add Signal_Count + percentages into cards
     totals = (
@@ -177,13 +187,33 @@ def main():
     for col in ["Optimistic", "Baseline", "Pessimistic"]:
         if col in totals.columns:
             totals[f"{col}_pct"] = (totals[col] / totals["Signal_Count"]) * 100
-
     totals = totals.reset_index()
 
-    latest_agg = latest_agg.merge(totals, on="assumption", how="left")
+    cards = cards.merge(totals, on="assumption", how="left")
 
-    latest_agg.to_csv(CARDS_FILE, index=False)
-    print(f"✅ Aggregate-level status file saved → {CARDS_FILE} ({len(latest_agg)} rows)")
+    # ✅ Format percentages as readable strings
+    for col in ["Optimistic_pct", "Baseline_pct", "Pessimistic_pct"]:
+        if col in cards.columns:
+            cards[col] = cards[col].apply(format_pct)
+
+    # ✅ Build breakdown string per assumption
+    breakdown_dict = (
+        merged.groupby(["assumption", "source_file"])
+        .size()
+        .reset_index(name="count")
+        .groupby("assumption")
+        .apply(lambda g: "; ".join([f"{row['source_file']}={row['count']}" for _, row in g.iterrows()]))
+    )
+    breakdown_dict = breakdown_dict.reset_index().rename(columns={0: "Inputs_By_Tool"})
+
+    cards = cards.merge(breakdown_dict, on="assumption", how="left")
+
+    # ✅ Ensure Signal_Count is included
+    if "Signal_Count" not in cards.columns:
+        cards["Signal_Count"] = cards[["Optimistic","Baseline","Pessimistic"]].sum(axis=1)
+
+    cards.to_csv(CARDS_FILE, index=False)
+    print(f"✅ Aggregate-level status file saved → {CARDS_FILE} ({len(cards)} rows)")
 
     print(f"🎉 Run completed successfully on {run_date}")
 
