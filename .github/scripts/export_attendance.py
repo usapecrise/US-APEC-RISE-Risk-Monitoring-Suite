@@ -10,13 +10,13 @@ Generates assumption data for:
 - Economy-level participation
 
 Logic:
-- Looks at the last 5 dialogues/workshops
+- Looks at the last 5 workshops and dialogues
 - Measures how many economies participated
 - Classifies optimism based on thresholds
 
 Standardization:
 - CI1 = Percent (participation %)
-- CI2 = Count (breadth measure: # economies or # dialogues attended)
+- CI2 = Count (breadth measure: # economies or # events attended)
 - Thresholds: Optimistic ≥60%, Baseline 30–59%, Pessimistic <30%
 """
 
@@ -104,12 +104,13 @@ rows.append({
     "Workstream": "All",
     "Level": "Aggregate",
     "Date": safe_format_date(last5["Workshop Date"]),
-    "Signal": f"Average {economies_present:.1f} economies represented (last 5 dialogues)",
+    "Signal": f"Average {economies_present:.1f} economies represented (last 5 workshops/dialogues)",
     "Status": status,
     "Confidence Index 1 (Percent)": round(pct, 1),
     "Confidence Index 2 (Count)": int(round(economies_present, 0)),
     "Notes": "CI1 = % economies represented. CI2 = average number of economies. "
-             "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30."
+             "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30. "
+             "Covers both workshops and dialogues."
 })
 
 # --- Workstream level ---
@@ -134,12 +135,13 @@ for ws, g in df.groupby("Workstream"):
         "Workstream": ws if ws else "Unspecified",
         "Level": "Workstream",
         "Date": safe_format_date(last5_ws["Workshop Date"]),
-        "Signal": f"Average {economies_present_ws:.1f} economies represented (last 5 {ws} dialogues)",
+        "Signal": f"Average {economies_present_ws:.1f} economies represented (last 5 {ws} workshops/dialogues)",
         "Status": status_ws,
         "Confidence Index 1 (Percent)": round(pct_ws, 1),
         "Confidence Index 2 (Count)": int(round(economies_present_ws, 0)),
         "Notes": "CI1 = % economies represented. CI2 = average number of economies. "
-                 "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30."
+                 "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30. "
+                 "Covers both workshops and dialogues."
     })
 
     # --- Economy level ---
@@ -170,11 +172,12 @@ for ws, g in df.groupby("Workstream"):
             "Workstream": ws if ws else "Unspecified",
             "Level": "Economy",
             "Date": safe_format_date(last5_econ_ws["Workshop Date"]),
-            "Signal": f"{econ} attended {attended_count}/5 {ws} dialogues",
+            "Signal": f"{econ} attended {attended_count}/5 {ws} workshops/dialogues",
             "Status": status_econ,
             "Confidence Index 1 (Percent)": round(pct_attended, 1),
             "Confidence Index 2 (Count)": attended_count,
-            "Notes": "CI1 = % of last 5 dialogues attended. CI2 = number of dialogues attended (0–5). "
+            "Notes": "CI1 = % of last 5 workshops/dialogues attended. "
+                     "CI2 = number of workshops/dialogues attended (0–5). "
                      "Thresholds: Optimistic ≥60, Baseline 30–59, Pessimistic <30."
         })
 
