@@ -75,15 +75,14 @@ def main():
     }
     merged["assumption"] = merged["assumption"].replace(assumption_map)
 
-    # ✅ Force all risk_assumption.csv rows into Continuity
+    # ✅ force all risk assumptions into Political & Institutional Continuity
     is_risk = merged["source_file"] == "risk_assumption.csv"
     merged.loc[is_risk, "assumption"] = "Political and institutional continuity"
-
-    # ✅ If status is missing/null in these rows, default to Baseline
+    # Default blank statuses to Baseline (so signals are not dropped)
     merged.loc[is_risk & merged["status"].isna(), "status"] = "Baseline"
 
     # ✅ normalize status to Title Case
-    merged["status"] = merged["status"].str.capitalize()
+    merged["status"] = merged["status"].astype(str).str.capitalize()
 
     # ✅ validation check
     missing = [f for f in INPUT_FILES if f not in row_counts or row_counts[f] in (0, None)]
@@ -175,8 +174,13 @@ def main():
             .first()
             .reset_index()
         )
-        latest_agg["status"] = latest_agg["status"].str.capitalize()  # normalize case
-        latest_agg["Last_Updated"] = run_date  # add run date
+        latest_agg["status"] = latest_agg["status"].str.capitalize()
+        latest_agg["Last_Updated"] = run_date
+
+        # ✅ Add Total_Signals column (count of all rows for that assumption)
+        totals = merged.groupby("assumption").size().reset_index(name="Total_Signals")
+        latest_agg = latest_agg.merge(totals, on="assumption", how="left")
+
         latest_agg.to_csv(CARDS_FILE, index=False)
         print(f"✅ Aggregate-level status file saved → {CARDS_FILE} ({len(latest_agg)} rows)")
 
