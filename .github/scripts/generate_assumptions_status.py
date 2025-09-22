@@ -98,7 +98,12 @@ def main():
     merged.loc[is_risk & merged["status"].isna(), "status"] = "Baseline"
 
     # ✅ normalize status case
-    merged["status"] = merged["status"].astype(str).str.capitalize()
+    merged["status"] = merged["status"].astype(str).str.lower().str.strip()
+    merged["status"] = merged["status"].replace({
+        "optimistic":"Optimistic",
+        "baseline":"Baseline",
+        "pessimistic":"Pessimistic"
+    })
 
     # === Export detailed file ===
     merged.to_csv(OUTPUT_FILE, index=False)
@@ -122,11 +127,6 @@ def main():
         .size()
         .unstack(fill_value=0)
     )
-    summary = summary.rename(columns={
-        "optimistic": "Optimistic",
-        "baseline": "Baseline",
-        "pessimistic": "Pessimistic"
-    })
     summary["Total"] = summary.sum(axis=1)
     for col in ["Optimistic", "Baseline", "Pessimistic"]:
         if col in summary.columns:
@@ -136,7 +136,6 @@ def main():
         merged.sort_values("date", ascending=False)
         .groupby("assumption")
         .first()["status"]
-        .str.capitalize()
     )
     summary["Most_Recent_Status"] = most_recent
 
@@ -154,49 +153,33 @@ def main():
     summary.to_csv(SUMMARY_FILE, index=False)
     print(f"✅ Assumptions summary file saved → {SUMMARY_FILE} ({len(summary)} rows)")
 
-    # === Aggregate for Tableau cards (combine ALL tools per assumption) ===
-    cards = (
+    # === Aggregate for Tableau cards ===
+    # --- 1. Get most recent status from APEC aggregate rows ---
+    most_recent = (
         merged[merged["economy"] == "APEC (aggregate)"]
+        .sort_values("date", ascending=False)
         .groupby("assumption")
-        .agg({
-            "date": "max",
-            "signal": lambda x: "; ".join(x.dropna().astype(str).unique()),
-            "status": lambda x: x.dropna().iloc[-1] if len(x.dropna()) else "",
-            "notes": "last",
-            "source_file": lambda x: "; ".join(sorted(set(x.dropna())))
-        })
-        .reset_index()
+        .first()[["status","date","notes"]]
+        .rename(columns={"status":"Most_Recent_Status","date":"Latest_Date","notes":"Latest_Notes"})
     )
 
-    cards = cards.rename(columns={"status": "Most_Recent_Status"})
-    cards["Most_Recent_Status"] = cards["Most_Recent_Status"].str.capitalize()
-    cards["Last_Updated"] = run_date
-
-    # ✅ Add Signal_Count + percentages into cards
+    # --- 2. Totals from ALL inputs ---
     totals = (
-        merged.groupby(["assumption", "status"])
+        merged.groupby(["assumption","status"])
         .size()
         .unstack(fill_value=0)
         .rename(columns={
-            "optimistic": "Optimistic",
-            "baseline": "Baseline",
-            "pessimistic": "Pessimistic"
+            "Optimistic":"Optimistic",
+            "Baseline":"Baseline",
+            "Pessimistic":"Pessimistic"
         })
     )
     totals["Signal_Count"] = totals.sum(axis=1)
-    for col in ["Optimistic", "Baseline", "Pessimistic"]:
+    for col in ["Optimistic","Baseline","Pessimistic"]:
         if col in totals.columns:
             totals[f"{col}_pct"] = (totals[col] / totals["Signal_Count"]) * 100
-    totals = totals.reset_index()
 
-    cards = cards.merge(totals, on="assumption", how="left")
-
-    # ✅ Format percentages as readable strings
-    for col in ["Optimistic_pct", "Baseline_pct", "Pessimistic_pct"]:
-        if col in cards.columns:
-            cards[col] = cards[col].apply(format_pct)
-
-    # ✅ Build breakdown string per assumption
+    # --- 3. Breakdown string per assumption ---
     breakdown_dict = (
         merged.groupby(["assumption", "source_file"])
         .size()
@@ -204,14 +187,19 @@ def main():
         .groupby("assumption")
         .apply(lambda g: "; ".join([f"{row['source_file']}={row['count']}" for _, row in g.iterrows()]))
     )
-    breakdown_dict = breakdown_dict.reset_index().rename(columns={0: "Inputs_By_Tool"})
+    breakdown_dict = breakdown_dict.reset_index().rename(columns={0:"Inputs_By_Tool"})
 
+    # --- 4. Merge all parts into cards ---
+    cards = totals.merge(most_recent, on="assumption", how="left")
     cards = cards.merge(breakdown_dict, on="assumption", how="left")
+    cards = cards.reset_index()
 
-    # ✅ Ensure Signal_Count is included
-    if "Signal_Count" not in cards.columns:
-        cards["Signal_Count"] = cards[["Optimistic","Baseline","Pessimistic"]].sum(axis=1)
+    # ✅ Format percentages
+    for col in ["Optimistic_pct","Baseline_pct","Pessimistic_pct"]:
+        if col in cards.columns:
+            cards[col] = cards[col].apply(format_pct)
 
+    cards["Last_Updated"] = run_date
     cards.to_csv(CARDS_FILE, index=False)
     print(f"✅ Aggregate-level status file saved → {CARDS_FILE} ({len(cards)} rows)")
 
