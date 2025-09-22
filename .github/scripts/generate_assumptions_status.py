@@ -75,6 +75,9 @@ def main():
     }
     merged["assumption"] = merged["assumption"].replace(assumption_map)
 
+    # ✅ remap risk assumptions into Political & Institutional Continuity
+    merged.loc[merged["source_file"] == "risk_assumption.csv", "assumption"] = "Political and institutional continuity"
+
     # ✅ normalize status to Title Case
     merged["status"] = merged["status"].str.capitalize()
 
