@@ -3,9 +3,10 @@ import pandas as pd
 from pyairtable import Api
 
 # === CONFIG ===
-AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")   # store in GitHub Secrets
+AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = "app0Ljjhrp3lTTpTO"
-TABLE_NAME = "Spotlight Quotes"   # or use "tblnUz7kmYvxk9m9a"
+MAIN_TABLE =  "Spotlight Quotes"
+VIEW_NAME = 'Grid view'
 OUTPUT_FILE = "spotlight_quotes.csv"
 
 # === 1. Connect to Airtable ===
