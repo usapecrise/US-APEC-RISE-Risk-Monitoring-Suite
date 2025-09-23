@@ -10,10 +10,10 @@ VIEW_NAME = 'Grid view'
 OUTPUT_FILE = "spotlight_quotes.csv"
 
 # === 1. Connect to Airtable ===
-api = Api(AIRTABLE_API_KEY)
+api = Api(AIRTABLE_TOKEN)
 table = api.table(BASE_ID, TABLE_NAME)
 
-# === 2. Fetch all records ===
+# === 2. Fetch all records (optional: table.all(view="Grid view"))
 records = table.all()
 
 # === 3. Flatten into a DataFrame ===
@@ -21,7 +21,7 @@ rows = []
 for r in records:
     f = r["fields"]
     rows.append({
-        "Quote ID": r["id"],   # Airtable record ID (unique)
+        "Quote ID": r["id"],  # Airtable record ID (unique key)
         "Quote": f.get("Quote Text", ""),
         "Organization": f.get("Organization", ""),
         "Economy": f.get("Economy", ""),
