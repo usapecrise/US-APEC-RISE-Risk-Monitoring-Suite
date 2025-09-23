@@ -184,7 +184,7 @@ jobs:
 
       - name: Run Spotlight Quotes export script
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: python .github/scripts/export_spotlight_quotes.py
 
       - name: Commit and push KPI CSVs
