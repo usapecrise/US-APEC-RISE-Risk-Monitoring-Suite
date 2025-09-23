@@ -1,35 +1,68 @@
+import requests
+import csv
 import os
-import pandas as pd
-from pyairtable import Api
+from urllib.parse import quote
+from datetime import datetime, timezone
 
-# === CONFIG ===
-AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']  # GitHub Secret
-BASE_ID = "app0Ljjhrp3lTTpTO"
-TABLE_ID = "tblnUz7kmYvxk9m9a"  # use table ID instead of table name
-OUTPUT_FILE = "spotlight_quotes.csv"
+# Airtable credentials and config
+AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
+BASE_ID = 'app0Ljjhrp3lTTpTO'
+MAIN_TABLE = 'Spotlight Quotes'   # table name (not table ID is fine here)
+VIEW_NAME = 'Grid view'
 
-# === 1. Connect to Airtable ===
-api = Api(AIRTABLE_TOKEN)
-table = api.table(BASE_ID, TABLE_ID)
+headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 
-# === 2. Fetch all records
-records = table.all()  # you can add view="Grid view" if needed
+# Helper: fetch all records from a table
+def fetch_all_records(table, view=None):
+    url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
+    if view:
+        url += f"?view={quote(view)}"
+    all_records = []
+    offset = None
 
-# === 3. Flatten into a DataFrame
+    while True:
+        params = {}
+        if offset:
+            params['offset'] = offset
+        response = requests.get(url, headers=headers, params=params).json()
+
+        if 'records' not in response:
+            print(f"❌ Error fetching {table}:", response)
+            break
+
+        all_records.extend(response['records'])
+        offset = response.get('offset')
+        if not offset:
+            break
+
+    print(f"✅ Fetched {len(all_records)} records from '{table}'")
+    return all_records
+
+# Step 1: Fetch Spotlight Quotes records
+main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
+print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
+
+# Step 2: Build rows for CSV
 rows = []
-for r in records:
-    f = r["fields"]
+for i, rec in enumerate(main_records, start=1):
+    f = rec.get("fields", {})
     rows.append({
-        "Quote ID": r["id"],  # Airtable record ID (unique key)
-        "Quote": f.get("Quote Text", ""),
+        "Quote ID": i,  # generate sequential ID (1,2,3…)
+        "Quote Text": f.get("Quote Text", ""),
         "Organization": f.get("Organization", ""),
         "Economy": f.get("Economy", ""),
-        "Workshop Title": f.get("Workshop Title", "")
+        "Workshop Title": f.get("Workshop Title", ""),
+        "Last Exported": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     })
 
-df = pd.DataFrame(rows)
+# Step 3: Export to CSV
+output_file = "spotlight_quotes.csv"
+with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=rows[0].keys())
+    writer.writeheader()
+    writer.writerows(rows)
 
-# === 4. Export to CSV
-df.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
-
-print(f"✅ Exported {len(df)} spotlight quotes to {OUTPUT_FILE}")
+print(f"✅ Export complete: {output_file}")
+print("🔎 Preview of first 3 rows:")
+for r in rows[:3]:
+    print(r)
