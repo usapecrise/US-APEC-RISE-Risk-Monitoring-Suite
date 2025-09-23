@@ -1,93 +1,64 @@
-import requests
-import csv
 import os
-from urllib.parse import quote
-from datetime import datetime
+import pandas as pd
+from pyairtable import Api
 
-# Airtable credentials and config
+# === CONFIG ===
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
-BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'Workshop Reference List'
-VIEW_NAME = 'Grid view'
+BASE_ID = "app0Ljjhrp3lTTpTO"
+TABLE_ID = "tblnUz7kmYvxk9m9a"  # Spotlight Quotes
+OUTPUT_FILE = "spotlight_quotes.csv"
 
 # Linked table names
 LINKED_TABLES = {
-    'Economy': 'Economy Reference List',
-    'Workstream': 'Workstream Reference List'
+    "Economy": "Economy Reference List",
 }
 
-# Fields to display from the linked tables
 DISPLAY_FIELDS = {
-    'Economy': 'Economy',
-    'Workstream': 'Workstream'
+    "Economy": "Economy",
 }
 
-headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
+# === 1. Connect to Airtable ===
+api = Api(AIRTABLE_TOKEN)
+table = api.table(BASE_ID, TABLE_ID)
 
-# Helper: fetch all records from a table
-def fetch_all_records(table, view=None):
-    url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
-    if view:
-        url += f"?view={quote(view)}"
-    all_records = []
-    offset = None
+# === 2. Fetch all records ===
+records = table.all(view="Grid view")
 
-    while True:
-        params = {}
-        if offset:
-            params['offset'] = offset
-        response = requests.get(url, headers=headers, params=params).json()
-
-        if 'records' not in response:
-            print(f"❌ Error fetching {table}:", response)
-            break
-
-        all_records.extend(response['records'])
-        offset = response.get('offset')
-        if not offset:
-            break
-
-    print(f"✅ Fetched {len(all_records)} records from '{table}'")
-    return all_records
-
-# Step 1: Fetch linked records and build lookup dictionaries
-linked_id_maps = {}
-for field, table_name in LINKED_TABLES.items():
-    records = fetch_all_records(table_name)
-    display_field = DISPLAY_FIELDS[field]
-    id_to_display = {
-        rec['id']: rec['fields'].get(display_field, 'Unknown')
-        for rec in records
+# === 3. Preload lookup values for linked tables ===
+lookup_maps = {}
+for field, linked_table in LINKED_TABLES.items():
+    linked_tbl = api.table(BASE_ID, linked_table)
+    linked_records = linked_tbl.all()
+    lookup_maps[field] = {
+        rec["id"]: rec["fields"].get(DISPLAY_FIELDS[field], "")
+        for rec in linked_records
     }
-    linked_id_maps[field] = id_to_display
 
-# Step 2: Fetch main table records
-main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
-print(f"🔍 Retrieved {len(main_records)} records from {MAIN_TABLE}")
+# === 4. Flatten Spotlight Quotes ===
+rows = []
+for r in records:
+    f = r["fields"]
 
-# Step 3: Replace linked record IDs with display names and add timestamp
-timestamp = datetime.utcnow().isoformat()
-for record in main_records:
-    fields = record['fields']
-    for field_name in LINKED_TABLES.keys():
-        linked_ids = fields.get(field_name, [])
+    resolved = {}
+    for field, mapping in lookup_maps.items():
+        linked_ids = f.get(field, [])
         if isinstance(linked_ids, list):
-            readable_names = [linked_id_maps[field_name].get(id, 'Unknown') for id in linked_ids]
-            fields[f"{field_name} (Name)"] = ", ".join(readable_names)
-    fields['Last Updated'] = timestamp  # Force file change
+            resolved[field] = ", ".join(mapping.get(lid, lid) for lid in linked_ids)
+        else:
+            resolved[field] = mapping.get(linked_ids, linked_ids)
 
-# Step 4: Export to CSV
-output_file = 'Workshop_Master_List.csv'
-with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
-    if main_records:
-        all_fieldnames = set()
-        for rec in main_records:
-            all_fieldnames.update(rec['fields'].keys())
-        fieldnames = list(all_fieldnames)
+    rows.append({
+        "Quote Text": f.get("Quote Text", ""),
+        "Organization": f.get("Organization", ""),
+        "Economy": resolved.get("Economy", ""),
+        "Workshop Title": f.get("Workshop Title", ""),
+    })
 
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for rec in main_records:
-            writer.writerow(rec['fields'])
+df = pd.DataFrame(rows)
 
-print(f"✅ Export complete: {output_file}")
+# === 5. Add numeric Quote ID (1,2,3...)
+df.insert(0, "Quote ID", range(1, len(df) + 1))
+
+# === 6. Export ===
+df.to_csv(OUTPUT_FILE, index=False, encoding="utf-8")
+print(f"✅ Exported {len(df)} spotlight quotes to {OUTPUT_FILE}")
