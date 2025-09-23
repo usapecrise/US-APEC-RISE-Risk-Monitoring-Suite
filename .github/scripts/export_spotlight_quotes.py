@@ -5,7 +5,7 @@ from pyairtable import Api
 # === CONFIG ===
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = "app0Ljjhrp3lTTpTO"
-MAIN_TABLE =  "Spotlight Quotes"
+MAIN_TABLE =  "tblnUz7kmYvxk9m9a"
 VIEW_NAME = 'Grid view'
 OUTPUT_FILE = "spotlight_quotes.csv"
 
