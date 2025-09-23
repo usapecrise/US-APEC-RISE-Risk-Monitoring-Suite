@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 # Airtable credentials and config
 AIRTABLE_TOKEN = os.environ['AIRTABLE_TOKEN']
 BASE_ID = 'app0Ljjhrp3lTTpTO'
-MAIN_TABLE = 'Spotlight Quotes'   # table name (not table ID is fine here)
+MAIN_TABLE = 'Spotlight Quotes'
 VIEW_NAME = 'Grid view'
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -51,7 +51,6 @@ for i, rec in enumerate(main_records, start=1):
         "Quote Text": f.get("Quote Text", ""),
         "Organization": f.get("Organization", ""),
         "Economy": f.get("Economy", ""),
-        "Workshop Title": f.get("Workshop Title", ""),
         "Last Exported": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     })
 
