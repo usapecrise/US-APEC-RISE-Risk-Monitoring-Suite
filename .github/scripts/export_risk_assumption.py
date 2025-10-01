@@ -160,7 +160,7 @@ def main():
 
         records.append({
             "Assumption": "Political and institutional continuity",
-            "Monitoring Tool": "Media Monitor",
+            "Monitoring Tool": "Media Tracker",
             "Economy": economy,
             "Workstream": workstream,
             "Level": "Signal",
