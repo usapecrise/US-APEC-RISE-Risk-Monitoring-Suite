@@ -32,13 +32,13 @@ INPUT_FILES = [
 
 # ✅ Friendly monitoring tool names
 SOURCE_LABELS = {
-    "attendance_assumption.csv": "Attendance Tracker (Alignment)",
-    "attendance_continuity_assumption.csv": "Attendance Tracker (Continuity)",
-    "feedback_assumption.csv": "Feedback Tracker (Alignment)",
-    "feedback_policy_assumption.csv": "Feedback Tracker (Openness)",
-    "risk_assumption.csv": "Media Monitor (Continuity)",
-    "policy_reform_assumption.csv": "Policy Reform Tracker (Openness)",
-    "cost_share_assumption.csv": "Cost-Share Tracker (Ownership)"
+    "attendance_assumption.csv": "Participation Tracker",
+    "attendance_continuity_assumption.csv": "Responsiveness Tracker",
+    "feedback_assumption.csv": "Value-Added Feedback Tracker",
+    "feedback_policy_assumption.csv": "Uptake Tracker",
+    "risk_assumption.csv": "Media Tracker",
+    "policy_reform_assumption.csv": "Reform Progress Tracker",
+    "cost_share_assumption.csv": "Cost-Share Tracker"
 }
 
 def format_pct(value):
