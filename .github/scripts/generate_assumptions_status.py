@@ -7,7 +7,7 @@ Merge assumption files into a unified dataset
 Outputs:
 - assumptions_status.csv        → detailed rows (all economies, all dates)
 - assumptions_summary.csv       → grouped summary by assumption (with friendly tool names + Signal_Count, Overall_Status, Last_Status_Event)
-- assumptions_status_cards.csv  → aggregate rows for Tableau KPI cards (Overall_Status + Last_Status_Event + counts + %s)
+- assumptions_status_cards.csv  → aggregate rows for Tableau KPI cards (Overall_Status + Last_Status_Event + counts + %s + per-tool breakdown)
 - assumptions_breakdown.csv     → assumption × source tool breakdown (counts + % contribution)
 """
 
@@ -199,24 +199,25 @@ def main():
         if col in cards.columns:
             cards[col] = cards[col].apply(format_pct)
 
-    # ✅ Build breakdown string per assumption
-    breakdown_dict = (
+    # === Tool-level breakdown for cards ===
+    tool_breakdown = (
         merged.groupby(["assumption", "source_file"])
         .size()
-        .reset_index(name="count")
-        .groupby("assumption")
-        .apply(lambda g: "; ".join([f"{row['source_file']}={row['count']}" for _, row in g.iterrows()]))
+        .reset_index(name="Tool_Count")
     )
-    breakdown_dict = breakdown_dict.reset_index().rename(columns={0: "Inputs_By_Tool"})
+    tool_totals = tool_breakdown.groupby("assumption")["Tool_Count"].transform("sum")
+    tool_breakdown["Tool_Percent"] = (tool_breakdown["Tool_Count"] / tool_totals * 100).round(1)
+    tool_breakdown = tool_breakdown.rename(columns={"source_file": "Monitoring_Tool"})
 
-    cards = cards.merge(breakdown_dict, on="assumption", how="left")
+    # ✅ Merge normalized tool rows into cards
+    cards_expanded = cards.merge(tool_breakdown, on="assumption", how="left")
 
     # ✅ Ensure Signal_Count is included
-    if "Signal_Count" not in cards.columns:
-        cards["Signal_Count"] = cards[["Optimistic","Baseline","Pessimistic"]].sum(axis=1)
+    if "Signal_Count" not in cards_expanded.columns:
+        cards_expanded["Signal_Count"] = cards_expanded[["Optimistic","Baseline","Pessimistic"]].sum(axis=1)
 
-    cards.to_csv(CARDS_FILE, index=False)
-    print(f"✅ Aggregate-level status file saved → {CARDS_FILE} ({len(cards)} rows)")
+    cards_expanded.to_csv(CARDS_FILE, index=False)
+    print(f"✅ Expanded cards file saved → {CARDS_FILE} ({len(cards_expanded)} rows)")
 
     print(f"🎉 Run completed successfully on {run_date}")
 
