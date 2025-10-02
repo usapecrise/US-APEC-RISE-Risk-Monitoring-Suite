@@ -93,7 +93,7 @@ def main():
     merged["assumption"] = merged["assumption"].replace(assumption_map)
 
     # ✅ remap risk assumptions → Continuity
-    is_risk = merged["source_file"] == "Media Monitor (Continuity)"
+    is_risk = merged["source_file"] == "Media Tracker"
     merged.loc[is_risk, "assumption"] = "Political and institutional continuity"
     merged.loc[is_risk & merged["status"].isna(), "status"] = "Baseline"
 
