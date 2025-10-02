@@ -34,7 +34,7 @@ INPUT_FILES = [
 SOURCE_LABELS = {
     "attendance_assumption.csv": "Participation Tracker",
     "attendance_continuity_assumption.csv": "Responsiveness Tracker",
-    "feedback_assumption.csv": "Value-Added Feedback Tracker",
+    "feedback_assumption.csv": "Value-Added Tracker",
     "feedback_policy_assumption.csv": "Uptake Tracker",
     "risk_assumption.csv": "Media Tracker",
     "policy_reform_assumption.csv": "Reform Progress Tracker",
