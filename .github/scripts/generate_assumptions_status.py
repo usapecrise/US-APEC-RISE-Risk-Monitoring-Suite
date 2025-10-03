@@ -274,7 +274,7 @@ def main():
     if "Signal_Count" not in cards_expanded.columns:
         cards_expanded["Signal_Count"] = cards_expanded[["Optimistic","Baseline","Pessimistic"]].sum(axis=1)
 
-    # ✅ Add scenario & adaptation text
+    # ✅ Add scenario & adaptation text for all statuses
     for status in ["Baseline", "Optimistic", "Pessimistic"]:
         cards_expanded[f"Scenario_{status}"] = cards_expanded["assumption"].apply(
             lambda x: SCENARIO_TEXT.get(x, {}).get(status, "")
@@ -282,6 +282,14 @@ def main():
         cards_expanded[f"Adaptation_{status}"] = cards_expanded["assumption"].apply(
             lambda x: ADAPTATION_TEXT.get(x, {}).get(status, "")
         )
+
+    # ✅ Dynamic text based on Overall_Status
+    cards_expanded["Scenario_Text"] = cards_expanded.apply(
+        lambda row: SCENARIO_TEXT.get(row["assumption"], {}).get(row["Overall_Status"], ""), axis=1
+    )
+    cards_expanded["Adaptation_Text"] = cards_expanded.apply(
+        lambda row: ADAPTATION_TEXT.get(row["assumption"], {}).get(row["Overall_Status"], ""), axis=1
+    )
 
     cards_expanded.to_csv(CARDS_FILE, index=False)
     print(f"✅ Expanded cards file saved → {CARDS_FILE} ({len(cards_expanded)} rows)")
