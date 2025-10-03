@@ -270,10 +270,6 @@ def main():
     # ✅ Merge normalized tool rows into cards
     cards_expanded = cards.merge(tool_breakdown, on="assumption", how="left")
 
-    # ✅ Ensure Signal_Count is included
-    if "Signal_Count" not in cards_expanded.columns:
-        cards_expanded["Signal_Count"] = cards_expanded[["Optimistic","Baseline","Pessimistic"]].sum(axis=1)
-
     # ✅ Add scenario & adaptation text for all statuses
     for status in ["Baseline", "Optimistic", "Pessimistic"]:
         cards_expanded[f"Scenario_{status}"] = cards_expanded["assumption"].apply(
@@ -290,6 +286,10 @@ def main():
     cards_expanded["Adaptation_Text"] = cards_expanded.apply(
         lambda row: ADAPTATION_TEXT.get(row["assumption"], {}).get(row["Overall_Status"], ""), axis=1
     )
+
+    # ✅ Ensure Signal_Count exists
+    if "Signal_Count" not in cards_expanded.columns:
+        cards_expanded["Signal_Count"] = cards_expanded[["Optimistic","Baseline","Pessimistic"]].sum(axis=1)
 
     cards_expanded.to_csv(CARDS_FILE, index=False)
     print(f"✅ Expanded cards file saved → {CARDS_FILE} ({len(cards_expanded)} rows)")
