@@ -46,12 +46,12 @@ SOURCE_LABELS = {
 # ✅ Tool measure labels
 MEASURE_LABELS = {
     "Participation Tracker": "Economy representation (last 5 events)",
-    "Responsiveness Tracker": "APEC attendance consistency (last 5 dialogues)",
-    "Feedback Value Tracker": "Participant feedback (value, knowledge, application, sharing)",
-    "Uptake Tracker": "Intended application & sharing of dialogue lessons",
-    "Media Tracker": "Balance of optimistic vs pessimistic signals",
-    "Reform Progress Tracker": "Reform adoption and implementation progress",
-    "Cost-Share Tracker": "Host contributions and firm participation"
+    "Responsiveness Tracker": "Dialogue attendance consistency",
+    "Feedback Value Tracker": "Feedback composite (value, knowledge, application, sharing)",
+    "Uptake Tracker": "Application & sharing intent",
+    "Media Tracker": "Optimistic vs pessimistic signals",
+    "Reform Progress Tracker": "Reform adoption progress",
+    "Cost-Share Tracker": "Host contributions & firm participation"
 }
 
 # ✅ Scenario definitions (what the status means)
@@ -110,6 +110,17 @@ ADAPTATION_TEXT = {
         "Optimistic": "Increase handover planning",
         "Pessimistic": "Document gaps; adapt support model; focus on institutional champions"
     }
+}
+
+# ✅ Tool-specific phrasing for Evidence
+EVIDENCE_LABELS = {
+    "Feedback Value Tracker": "positive responses",
+    "Participation Tracker": "of economies represented",
+    "Media Tracker": "optimistic signals",
+    "Responsiveness Tracker": "dialogues attended",
+    "Reform Progress Tracker": "reforms adopted/in progress",
+    "Uptake Tracker": "indicating uptake intent",
+    "Cost-Share Tracker": "host contributions"
 }
 
 def format_pct(value):
@@ -208,10 +219,10 @@ def main():
     # Attach measure descriptions
     evidence["Measure"] = evidence["Tool"].map(MEASURE_LABELS)
 
-    # Pre-format compact Evidence string
-    evidence["Evidence"] = (
-        evidence["CI1_Percent"].astype(str) 
-        + "% (N=" + evidence["CI2_Count"].astype(str) + ")"
+    # Pre-format Evidence string with descriptive phrasing
+    evidence["Evidence"] = evidence.apply(
+        lambda row: f"{row['CI1_Percent']}% {EVIDENCE_LABELS.get(row['Tool'], '')} (N={row['CI2_Count']})",
+        axis=1
     )
 
     # Final clean columns
@@ -292,7 +303,7 @@ def main():
     totals["Signal_Count"] = totals.sum(axis=1)
     for col in ["Optimistic", "Baseline", "Pessimistic"]:
         if col in totals.columns:
-            totals[f"{col}_pct"] = (totals[col] / totals["Signal_Count"]) * 100
+            totals[f"{col}_pct"] = (totals[col] / totals["Signal_Count"] * 100)
     totals = totals.reset_index()
 
     cards = cards.merge(totals, on="assumption", how="left")
