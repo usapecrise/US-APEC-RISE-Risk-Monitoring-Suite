@@ -9,6 +9,7 @@ Outputs:
 - assumptions_summary.csv       → grouped summary by assumption (with friendly tool names + Signal_Count, Overall_Status, Last_Status_Event)
 - assumptions_status_cards.csv  → aggregate rows for Tableau KPI cards (Overall_Status + Last_Status_Event + counts + %s + per-tool breakdown + scenario/adaptation text)
 - assumptions_breakdown.csv     → assumption × source tool breakdown (counts + % contribution)
+- assumptions_evidence.csv      → simplified evidence file (Assumption | Tool | Evidence) for dashboard Row 2
 """
 
 import pandas as pd
@@ -18,6 +19,7 @@ OUTPUT_FILE    = "assumptions_status.csv"
 SUMMARY_FILE   = "assumptions_summary.csv"
 CARDS_FILE     = "assumptions_status_cards.csv"
 BREAKDOWN_FILE = "assumptions_breakdown.csv"
+EVIDENCE_FILE  = "assumptions_evidence.csv"
 
 # List of assumption input files to merge
 INPUT_FILES = [
@@ -173,6 +175,34 @@ def main():
     breakdown["percent"] = (breakdown["count"] / totals * 100).round(1)
     breakdown.to_csv(BREAKDOWN_FILE, index=False)
     print(f"✅ Assumptions breakdown file saved → {BREAKDOWN_FILE} ({len(breakdown)} rows)")
+
+    # === Simplified Evidence Export for Dashboard Row 2 ===
+    evidence = (
+        merged.groupby(["assumption", "source_file"])
+        .size()
+        .reset_index(name="count")
+        .sort_values(["assumption", "count"], ascending=[True, False])
+    )
+
+    totals = evidence.groupby("assumption")["count"].transform("sum")
+    evidence["percent"] = (evidence["count"] / totals * 100).round(1)
+
+    evidence = evidence.rename(columns={
+        "assumption": "Assumption",
+        "source_file": "Tool",
+        "count": "Evidence_Count",
+        "percent": "Evidence_Percent"
+    })
+
+    # Pre-format evidence nicely
+    evidence["Evidence"] = (
+        evidence["Evidence_Percent"].astype(str) 
+        + "% (N=" + evidence["Evidence_Count"].astype(str) + ")"
+    )
+
+    evidence = evidence[["Assumption", "Tool", "Evidence"]]
+    evidence.to_csv(EVIDENCE_FILE, index=False)
+    print(f"✅ Evidence table saved → {EVIDENCE_FILE} ({len(evidence)} rows)")
 
     # === Assumption-level summary ===
     summary = (
