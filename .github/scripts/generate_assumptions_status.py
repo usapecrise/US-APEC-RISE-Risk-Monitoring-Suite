@@ -45,13 +45,13 @@ SOURCE_LABELS = {
 
 # ✅ Tool measure labels
 MEASURE_LABELS = {
-    "Participation Tracker": "% economies represented (last 5 workshops/dialogues)",
-    "Responsiveness Tracker": "% of last 5 dialogues attended",
-    "Feedback Value Tracker": "Feedback survey composite (relevance, knowledge, application, sharing)",
-    "Uptake Tracker": "Feedback on dialogues: application + sharing intent",
-    "Media Tracker": "% optimistic/pessimistic signals",
-    "Reform Progress Tracker": "% reforms adopted / in progress / not initiated",
-    "Cost-Share Tracker": "$ contributions and # firms engaged"
+    "Participation Tracker": "Economy representation (last 5 events)",
+    "Responsiveness Tracker": "APEC attendance consistency (last 5 dialogues)",
+    "Feedback Value Tracker": "Participant feedback (value, knowledge, application, sharing)",
+    "Uptake Tracker": "Intended application & sharing of dialogue lessons",
+    "Media Tracker": "Balance of optimistic vs pessimistic signals",
+    "Reform Progress Tracker": "Reform adoption and implementation progress",
+    "Cost-Share Tracker": "Host contributions and firm participation"
 }
 
 # ✅ Scenario definitions (what the status means)
