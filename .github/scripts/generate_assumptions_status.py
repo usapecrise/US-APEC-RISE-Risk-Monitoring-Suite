@@ -126,7 +126,7 @@ EVIDENCE_LABELS = {
 def format_pct(value):
     """Convert decimal to percentage string with no decimals"""
     try:
-        return f"{round(value)}%"
+        return str(int(round(value)))
     except:
         return ""
 
@@ -207,19 +207,21 @@ def main():
     )
 
     totals = evidence.groupby("assumption")["count"].transform("sum")
-    evidence["percent"] = (evidence["count"] / totals * 100).round(1)
+    evidence["percent"] = (evidence["count"] / totals * 100)
+
+    # format CI1_Percent with no decimals
+    evidence["CI1_Percent"] = evidence["percent"].apply(format_pct)
 
     evidence = evidence.rename(columns={
         "assumption": "Assumption",
         "source_file": "Tool",
-        "count": "CI2_Count",
-        "percent": "CI1_Percent"
+        "count": "CI2_Count"
     })
 
     # Attach measure descriptions
     evidence["Measure"] = evidence["Tool"].map(MEASURE_LABELS)
 
-    # Pre-format Evidence string with descriptive phrasing
+    # Pre-format Evidence string using formatted percent
     evidence["Evidence"] = evidence.apply(
         lambda row: f"{row['CI1_Percent']}% {EVIDENCE_LABELS.get(row['Tool'], '')} (N={row['CI2_Count']})",
         axis=1
@@ -303,12 +305,12 @@ def main():
     totals["Signal_Count"] = totals.sum(axis=1)
     for col in ["Optimistic", "Baseline", "Pessimistic"]:
         if col in totals.columns:
-            totals[f"{col}_pct"] = (totals[col] / totals["Signal_Count"] * 100)
+            totals[f"{col}_pct"] = totals[col] / totals["Signal_Count"] * 100
     totals = totals.reset_index()
 
     cards = cards.merge(totals, on="assumption", how="left")
 
-    # ✅ Format percentages
+    # ✅ Format percentages in cards
     for col in ["Optimistic_pct", "Baseline_pct", "Pessimistic_pct"]:
         if col in cards.columns:
             cards[col] = cards[col].apply(format_pct)
