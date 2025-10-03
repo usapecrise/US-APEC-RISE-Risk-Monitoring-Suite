@@ -9,7 +9,7 @@ Outputs:
 - assumptions_summary.csv       → grouped summary by assumption (with friendly tool names + Signal_Count, Overall_Status, Last_Status_Event)
 - assumptions_status_cards.csv  → aggregate rows for Tableau KPI cards (Overall_Status + Last_Status_Event + counts + %s + per-tool breakdown + scenario/adaptation text)
 - assumptions_breakdown.csv     → assumption × source tool breakdown (counts + % contribution)
-- assumptions_evidence.csv      → simplified evidence file (Assumption | Tool | Evidence) for dashboard Row 2
+- assumptions_evidence.csv      → simplified evidence file (Assumption | Tool | Measure | CI1_Percent | CI2_Count | Evidence) for dashboard Row 2
 """
 
 import pandas as pd
@@ -41,6 +41,17 @@ SOURCE_LABELS = {
     "risk_assumption.csv": "Media Tracker",
     "policy_reform_assumption.csv": "Reform Progress Tracker",
     "cost_share_assumption.csv": "Cost-Share Tracker"
+}
+
+# ✅ Tool measure labels
+MEASURE_LABELS = {
+    "Participation Tracker": "% economies represented (last 5 workshops/dialogues)",
+    "Responsiveness Tracker": "% of last 5 dialogues attended",
+    "Feedback Value Tracker": "Feedback survey composite (relevance, knowledge, application, sharing)",
+    "Uptake Tracker": "Feedback on dialogues: application + sharing intent",
+    "Media Tracker": "% optimistic/pessimistic signals",
+    "Reform Progress Tracker": "% reforms adopted / in progress / not initiated",
+    "Cost-Share Tracker": "$ contributions and # firms engaged"
 }
 
 # ✅ Scenario definitions (what the status means)
@@ -190,17 +201,21 @@ def main():
     evidence = evidence.rename(columns={
         "assumption": "Assumption",
         "source_file": "Tool",
-        "count": "Evidence_Count",
-        "percent": "Evidence_Percent"
+        "count": "CI2_Count",
+        "percent": "CI1_Percent"
     })
 
-    # Pre-format evidence nicely
+    # Attach measure descriptions
+    evidence["Measure"] = evidence["Tool"].map(MEASURE_LABELS)
+
+    # Pre-format compact Evidence string
     evidence["Evidence"] = (
-        evidence["Evidence_Percent"].astype(str) 
-        + "% (N=" + evidence["Evidence_Count"].astype(str) + ")"
+        evidence["CI1_Percent"].astype(str) 
+        + "% (N=" + evidence["CI2_Count"].astype(str) + ")"
     )
 
-    evidence = evidence[["Assumption", "Tool", "Evidence"]]
+    # Final clean columns
+    evidence = evidence[["Assumption", "Tool", "Measure", "CI1_Percent", "CI2_Count", "Evidence"]]
     evidence.to_csv(EVIDENCE_FILE, index=False)
     print(f"✅ Evidence table saved → {EVIDENCE_FILE} ({len(evidence)} rows)")
 
