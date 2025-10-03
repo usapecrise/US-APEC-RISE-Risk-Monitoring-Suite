@@ -1,8 +1,8 @@
-Assumption,Tool,Evidence
-Policy and regulatory openness,Uptake Tracker,92.7% (N=51)
-Policy and regulatory openness,Reform Progress Tracker,7.3% (N=4)
-Political and institutional continuity,Responsiveness Tracker,63.3% (N=19)
-Political and institutional continuity,Media Tracker,36.7% (N=11)
-Responsible local ownership,Cost-Share Tracker,100.0% (N=3)
-Stakeholder alignment with U.S. focus areas,Feedback Value Tracker,57.7% (N=150)
-Stakeholder alignment with U.S. focus areas,Participation Tracker,42.3% (N=110)
+Assumption,Tool,Measure,CI1_Percent,CI2_Count,Evidence
+Policy and regulatory openness,Uptake Tracker,Feedback on dialogues: application + sharing intent,92.7,51,92.7% (N=51)
+Policy and regulatory openness,Reform Progress Tracker,% reforms adopted / in progress / not initiated,7.3,4,7.3% (N=4)
+Political and institutional continuity,Responsiveness Tracker,% of last 5 dialogues attended,63.3,19,63.3% (N=19)
+Political and institutional continuity,Media Tracker,% optimistic/pessimistic signals,36.7,11,36.7% (N=11)
+Responsible local ownership,Cost-Share Tracker,$ contributions and # firms engaged,100.0,3,100.0% (N=3)
+Stakeholder alignment with U.S. focus areas,Feedback Value Tracker,"Feedback survey composite (relevance, knowledge, application, sharing)",57.7,150,57.7% (N=150)
+Stakeholder alignment with U.S. focus areas,Participation Tracker,% economies represented (last 5 workshops/dialogues),42.3,110,42.3% (N=110)
