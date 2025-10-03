@@ -7,7 +7,7 @@ Merge assumption files into a unified dataset
 Outputs:
 - assumptions_status.csv        → detailed rows (all economies, all dates)
 - assumptions_summary.csv       → grouped summary by assumption (with friendly tool names + Signal_Count, Overall_Status, Last_Status_Event)
-- assumptions_status_cards.csv  → aggregate rows for Tableau KPI cards (Overall_Status + Last_Status_Event + counts + %s + per-tool breakdown)
+- assumptions_status_cards.csv  → aggregate rows for Tableau KPI cards (Overall_Status + Last_Status_Event + counts + %s + per-tool breakdown + scenario/adaptation text)
 - assumptions_breakdown.csv     → assumption × source tool breakdown (counts + % contribution)
 """
 
@@ -39,6 +39,64 @@ SOURCE_LABELS = {
     "risk_assumption.csv": "Media Tracker",
     "policy_reform_assumption.csv": "Reform Progress Tracker",
     "cost_share_assumption.csv": "Cost-Share Tracker"
+}
+
+# ✅ Scenario definitions (what the status means)
+SCENARIO_TEXT = {
+    "Stakeholder alignment with U.S. focus areas": {
+        "Baseline": "Alignment with U.S. goals as anticipated",
+        "Optimistic": "High alignment with U.S. goals",
+        "Pessimistic": "Difficulties gaining stakeholder buy-in or moving U.S. goals forward"
+    },
+    "Political and institutional continuity": {
+        "Baseline": "Stable environment",
+        "Optimistic": "Increased institutional cooperation",
+        "Pessimistic": "Instability or disrupted coordination"
+    },
+    "Policy and regulatory openness": {
+        "Baseline": "Expected receptivity",
+        "Optimistic": "High receptivity to U.S. policy recommendations",
+        "Pessimistic": "Declining openness or regulatory pushback"
+    },
+    "Digital and infrastructure readiness": {
+        "Baseline": "Sufficient readiness",
+        "Optimistic": "Expanded digital readiness",
+        "Pessimistic": "Limited access or resistance"
+    },
+    "Responsible local ownership": {
+        "Baseline": "Cost-sharing and local uptake sustained",
+        "Optimistic": "High commitment and ownership",
+        "Pessimistic": "Low contribution or interest in uptake"
+    }
+}
+
+# ✅ Adaptation guidance (what to do)
+ADAPTATION_TEXT = {
+    "Stakeholder alignment with U.S. focus areas": {
+        "Baseline": "Proceed with technical dialogues and co-creation efforts as planned",
+        "Optimistic": "Expand collaboration with aligned economies; increase visibility of U.S.-led initiatives",
+        "Pessimistic": "Intensify diplomatic engagement; tailor technical assistance; focus on institutional champions; document resistance for follow-up"
+    },
+    "Political and institutional continuity": {
+        "Baseline": "Maintain current schedule and engagement levels",
+        "Optimistic": "Strengthen long-term partnerships and deepen policy coordination",
+        "Pessimistic": "Shift resources to stable economies; support resilience and contingency planning"
+    },
+    "Policy and regulatory openness": {
+        "Baseline": "Maintain steady reform support and technical assistance",
+        "Optimistic": "Accelerate pilot reforms and highlight results",
+        "Pessimistic": "Refocus engagement; seek alternate entry points or incremental reforms; monitor policy resistance"
+    },
+    "Digital and infrastructure readiness": {
+        "Baseline": "Proceed with digital activities as planned",
+        "Optimistic": "Scale virtual engagements; introduce more advanced tools",
+        "Pessimistic": "Use hybrid or offline delivery; increase support and training"
+    },
+    "Responsible local ownership": {
+        "Baseline": "Continue monitoring and co-planning",
+        "Optimistic": "Increase handover planning",
+        "Pessimistic": "Document gaps; adapt support model; focus on institutional champions"
+    }
 }
 
 def format_pct(value):
@@ -215,6 +273,15 @@ def main():
     # ✅ Ensure Signal_Count is included
     if "Signal_Count" not in cards_expanded.columns:
         cards_expanded["Signal_Count"] = cards_expanded[["Optimistic","Baseline","Pessimistic"]].sum(axis=1)
+
+    # ✅ Add scenario & adaptation text
+    for status in ["Baseline", "Optimistic", "Pessimistic"]:
+        cards_expanded[f"Scenario_{status}"] = cards_expanded["assumption"].apply(
+            lambda x: SCENARIO_TEXT.get(x, {}).get(status, "")
+        )
+        cards_expanded[f"Adaptation_{status}"] = cards_expanded["assumption"].apply(
+            lambda x: ADAPTATION_TEXT.get(x, {}).get(status, "")
+        )
 
     cards_expanded.to_csv(CARDS_FILE, index=False)
     print(f"✅ Expanded cards file saved → {CARDS_FILE} ({len(cards_expanded)} rows)")
