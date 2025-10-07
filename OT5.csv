@@ -1,23 +1,23 @@
 Firm (Name),Indicator ID,Economy (Name),Workstream (Name),Engagement (Name),Amount,Fiscal Year,U.S. FAOs Addressed,Resource Type,Resource Origin,Contribution Date,Export Timestamp
-,OT5,U.S.,Digital Standards,Unknown,1885.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-27,2025-10-07T15:39:15.662450
-,OT5,Singapore,Digital Standards,Unknown,1305.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-27,2025-10-07T15:39:15.662450
-,OT5,U.S.,Digital Standards,Unknown,2846.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-27,2025-10-07T15:39:15.662450
-,OT5,U.S.,Digital Standards,Unknown,1717.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-27,2025-10-07T15:39:15.662450
-,OT5,Thailand,Digital Standards,Unknown,1219.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-27,2025-10-07T15:39:15.662450
-,OT5,Mexico,TBT,Unknown,2382.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-28,2025-10-07T15:39:15.662450
-,OT5,U.S.,TBT,Unknown,1671.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-28,2025-10-07T15:39:15.662450
-,OT5,U.S.,TBT,Unknown,2064.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-28,2025-10-07T15:39:15.662450
-,OT5,U.S.,TBT,Unknown,2064.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-28,2025-10-07T15:39:15.662450
-,OT5,U.S.,Cloud Computing,Unknown,990.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:39:15.662450
-,OT5,Republic of Korea,Cloud Computing,Unknown,613.5,FY25,Economic Growth (Other),In-kind,Host Country-based,2025-07-31,2025-10-07T15:39:15.662450
-,OT5,U.S.,Cloud Computing,Unknown,2065.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:39:15.662450
-,OT5,U.S.,Cloud Computing,Unknown,990.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:39:15.662450
-,OT5,Singapore,Cloud Computing,Unknown,990.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-31,2025-10-07T15:39:15.662450
-,OT5,U.S.,Cloud Computing,Unknown,1458.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:39:15.662450
-,OT5,U.S.,Cloud Computing,Unknown,2065.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:39:15.662450
-,OT5,U.S.,FTAAP,Unknown,2178.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2025-10-07T15:39:15.662450
-,OT5,Mexico,FTAAP,Unknown,1009.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-01,2025-10-07T15:39:15.662450
-,OT5,U.S.,FTAAP,Unknown,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2025-10-07T15:39:15.662450
-,OT5,U.S.,FTAAP,Unknown,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2025-10-07T15:39:15.662450
-,OT5,U.S.,FTAAP,Unknown,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2025-10-07T15:39:15.662450
-,OT5,,,,0,FY25,,,,2025-06-01,2025-10-07T15:39:15.662450
+,OT5,U.S.,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,1885.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-27,2025-10-07T15:51:49.879718
+,OT5,Singapore,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,1305.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-27,2025-10-07T15:51:49.879718
+,OT5,U.S.,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,2846.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-27,2025-10-07T15:51:49.879718
+,OT5,U.S.,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,1717.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-27,2025-10-07T15:51:49.879718
+,OT5,Thailand,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,1219.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-27,2025-10-07T15:51:49.879718
+,OT5,Mexico,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,2382.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-28,2025-10-07T15:51:49.879718
+,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,1671.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-28,2025-10-07T15:51:49.879718
+,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,2064.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-28,2025-10-07T15:51:49.879718
+,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,2064.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-28,2025-10-07T15:51:49.879718
+,OT5,U.S.,Cloud Computing,Workshop on Advancing Cloud Transformation,990.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:51:49.879718
+,OT5,Republic of Korea,Cloud Computing,Workshop on Advancing Cloud Transformation,613.5,FY25,Economic Growth (Other),In-kind,Host Country-based,2025-07-31,2025-10-07T15:51:49.879718
+,OT5,U.S.,Cloud Computing,Workshop on Advancing Cloud Transformation,2065.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:51:49.879718
+,OT5,U.S.,Cloud Computing,Workshop on Advancing Cloud Transformation,990.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:51:49.879718
+,OT5,Singapore,Cloud Computing,Workshop on Advancing Cloud Transformation,990.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-31,2025-10-07T15:51:49.879718
+,OT5,U.S.,Cloud Computing,Workshop on Advancing Cloud Transformation,1458.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:51:49.879718
+,OT5,U.S.,Cloud Computing,Workshop on Advancing Cloud Transformation,2065.5,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2025-10-07T15:51:49.879718
+,OT5,U.S.,FTAAP,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,2178.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2025-10-07T15:51:49.879718
+,OT5,Mexico,FTAAP,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,1009.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-01,2025-10-07T15:51:49.879718
+,OT5,U.S.,FTAAP,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2025-10-07T15:51:49.879718
+,OT5,U.S.,FTAAP,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2025-10-07T15:51:49.879718
+,OT5,U.S.,FTAAP,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,1009.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2025-10-07T15:51:49.879718
+,OT5,,,,0,FY25,,,,2025-06-01,2025-10-07T15:51:49.879718
