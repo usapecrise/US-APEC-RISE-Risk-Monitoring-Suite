@@ -14,11 +14,13 @@ VIEW_NAME = 'Grid view'
 LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List',
+    'Engagement': 'OT2 Private Sector Engagments',
 }
 
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream',
+    'Engagement': 'Engagement',
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
@@ -80,6 +82,7 @@ fieldnames = [
     'Indicator ID',
     'Economy (Name)',
     'Workstream (Name)',
+    'Engagement (Name)',
     'Amount',
     'Fiscal Year',
     'U.S. FAOs Addressed',
