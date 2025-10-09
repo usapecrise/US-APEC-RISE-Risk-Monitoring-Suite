@@ -51,7 +51,6 @@ OPTIMISTIC_PATTERNS = [
     r"\bendorsed by the united states\b", r"\bu\.s\. partnership\b"
 ]
 
-# Keyword boosts (from your feedback script)
 POSITIVE_HINTS = {
     "strengthen","reinforce","support","stability","aligned","consensus",
     "endorse","commitment","continuity","resilience","cooperation","agreement"
@@ -123,6 +122,7 @@ def classify_summary(opt_count, pess_count, total):
     else:
         return "baseline", max(round(opt_pct, 1), round(pess_pct, 1))
 
+
 # ── MAIN ───────────────────────────────────────────────
 def main():
     if not os.path.exists(INPUT_FILE):
@@ -134,15 +134,28 @@ def main():
         print("⚠️ risk_signals.csv is empty")
         return
 
+    print(f"✅ Loaded {len(df)} signals from {INPUT_FILE}")
+    print(f"Columns detected: {list(df.columns)}")
+
+    # Normalize column names for flexible detection
+    df.columns = [c.strip().lower() for c in df.columns]
+
     # Detect text column dynamically
-    text_col = None
-    for candidate in ["signal", "text", "content", "description"]:
+    for candidate in ["signal", "text", "content", "description", "justification"]:
         if candidate in df.columns:
             text_col = candidate
             break
-    if not text_col:
+    else:
         print(f"⚠️ No suitable text column found. Available: {list(df.columns)}")
         return
+
+    # Normalize key columns if present
+    if "date" not in df.columns and "date" in df.columns:
+        df.rename(columns={"date": "date"}, inplace=True)
+
+    df["date"] = pd.to_datetime(df.get("date") or df.get("Date"), errors="coerce")
+    df["economy"] = df.get("economy", "Unknown")
+    df["workstream"] = df.get("workstream", "Unspecified")
 
     records = []
     all_classes = []
@@ -150,9 +163,9 @@ def main():
     # === 1. Signal-level rows ===
     for _, row in df.iterrows():
         economy = row.get("economy", "Unknown")
-        workstream = row.get("workstream", "Unspecified") if "workstream" in df.columns else "Unspecified"
-        date = pd.to_datetime(row.get("date", ""), errors="coerce")
-        date_str = date.strftime("%Y-%m-%d") if not pd.isna(date) else ""
+        workstream = row.get("workstream", "Unspecified")
+        date = row.get("date")
+        date_str = date.strftime("%Y-%m-%d") if pd.notna(date) else ""
         signal_text = row.get(text_col, "")
 
         status, strength = classify_scenario(signal_text)
@@ -248,9 +261,7 @@ def main():
 
     # === 5. Time-series summary (monthly) ===
     if "date" in df.columns:
-        df["date"] = pd.to_datetime(df["date"], errors="coerce")
         df["month"] = df["date"].dt.to_period("M")
-
         for month, subset in df.groupby("month"):
             total = len(subset)
             if total == 0:
@@ -277,11 +288,12 @@ def main():
     # === Export ===
     out_df = pd.DataFrame(records)
     out_df.to_csv(OUTPUT_FILE, index=False)
-    print(f"✅ Risk assumption saved → {OUTPUT_FILE} ({len(out_df)} rows))")
+    print(f"✅ Risk assumption saved → {OUTPUT_FILE} ({len(out_df)} rows)")
 
     # === Console summary ===
     print("\n--- Classification Summary ---")
     print(all_classes.value_counts())
+
 
 if __name__ == "__main__":
     main()
