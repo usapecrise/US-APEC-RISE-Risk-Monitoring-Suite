@@ -60,6 +60,15 @@ NEGATIVE_HINTS = {
     "resignation", "coup", "dismissed", "sacked", "conflict", "chaos", "removed"
 }
 
+# ── Utility ────────────────────────────────────────────────────────────────────
+def safe_latest_date(series):
+    """Return latest date as string or empty if invalid."""
+    if series is None or series.empty:
+        return ""
+    last_date = pd.to_datetime(series, errors="coerce").max()
+    return last_date.strftime("%Y-%m-%d") if pd.notna(last_date) else ""
+
+
 # ── Classification helpers ─────────────────────────────────────────────────────
 def hf_sentiment_analysis(text: str):
     """DistilBERT sentiment mapped to optimistic/pessimistic/baseline."""
@@ -150,7 +159,6 @@ def main():
         return
 
     # --- Safe column normalization ---
-    # Handle date column flexibly
     if "date" in df.columns:
         date_col = "date"
     elif "Date" in df.columns:
@@ -215,8 +223,7 @@ def main():
                 "Economy": econ,
                 "Workstream": "All",
                 "Level": "Economy",
-                "Date": pd.to_datetime(subset["date"], errors="coerce").max().strftime("%Y-%m-%d")
-                        if "date" in subset.columns else "",
+                "Date": safe_latest_date(subset.get("date")),
                 "Signal": f"{ci1:.0f}% {status} (out of {total} signals)",
                 "Status": status,
                 "Confidence Index 1": ci1,
@@ -241,8 +248,7 @@ def main():
                 "Economy": "APEC (aggregate)",
                 "Workstream": ws if ws else "Unspecified",
                 "Level": "Workstream",
-                "Date": pd.to_datetime(subset["date"], errors="coerce").max().strftime("%Y-%m-%d")
-                        if "date" in subset.columns else "",
+                "Date": safe_latest_date(subset.get("date")),
                 "Signal": f"{ci1:.0f}% {status} (out of {total} signals)",
                 "Status": status,
                 "Confidence Index 1": ci1,
@@ -263,8 +269,7 @@ def main():
         "Economy": "APEC (aggregate)",
         "Workstream": "All",
         "Level": "Aggregate",
-        "Date": pd.to_datetime(df["date"], errors="coerce").max().strftime("%Y-%m-%d")
-                if "date" in df.columns else "",
+        "Date": safe_latest_date(df.get("date")),
         "Signal": f"{ci1:.0f}% {status} (out of {total_signals} signals)",
         "Status": status,
         "Confidence Index 1": ci1,
