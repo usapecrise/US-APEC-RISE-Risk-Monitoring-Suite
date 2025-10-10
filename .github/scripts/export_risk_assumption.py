@@ -23,13 +23,13 @@ from transformers import pipeline
 INPUT_FILE = "risk_signals.csv"
 OUTPUT_FILE = "risk_assumption.csv"
 
-# Load Hugging Face DistilBERT sentiment model
+# ── Load Hugging Face DistilBERT sentiment model ───────────────────────────────
 hf_sentiment = pipeline(
     "sentiment-analysis",
     model="distilbert-base-uncased-finetuned-sst-2-english"
 )
 
-# ── Keyword patterns ─────────────────────────────────────
+# ── Keyword patterns ───────────────────────────────────────────────────────────
 PESSIMISTIC_PATTERNS = [
     r"\bresignation\b", r"\bresigned\b", r"\bstep(ped)? down\b",
     r"\bdismissed\b", r"\bsacked\b", r"\bremoved from office\b",
@@ -52,15 +52,15 @@ OPTIMISTIC_PATTERNS = [
 ]
 
 POSITIVE_HINTS = {
-    "strengthen","reinforce","support","stability","aligned","consensus",
-    "endorse","commitment","continuity","resilience","cooperation","agreement"
+    "strengthen", "reinforce", "support", "stability", "aligned", "consensus",
+    "endorse", "commitment", "continuity", "resilience", "cooperation", "agreement"
 }
 NEGATIVE_HINTS = {
-    "instability","crisis","unrest","turmoil","violence","stalemate","deadlock",
-    "resignation","coup","dismissed","sacked","conflict","chaos","removed"
+    "instability", "crisis", "unrest", "turmoil", "violence", "stalemate", "deadlock",
+    "resignation", "coup", "dismissed", "sacked", "conflict", "chaos", "removed"
 }
 
-# ── Classification helpers ───────────────────────────────
+# ── Classification helpers ─────────────────────────────────────────────────────
 def hf_sentiment_analysis(text: str):
     """DistilBERT sentiment mapped to optimistic/pessimistic/baseline."""
     if not text or text.strip() == "":
@@ -86,7 +86,7 @@ def classify_scenario(text: str):
     txt = str(text).lower()
 
     pess_hits = sum(bool(re.search(pat, txt)) for pat in PESSIMISTIC_PATTERNS)
-    opt_hits  = sum(bool(re.search(pat, txt)) for pat in OPTIMISTIC_PATTERNS)
+    opt_hits = sum(bool(re.search(pat, txt)) for pat in OPTIMISTIC_PATTERNS)
 
     # Strong keyword evidence wins immediately
     if pess_hits >= 2 and pess_hits > opt_hits:
@@ -123,7 +123,7 @@ def classify_summary(opt_count, pess_count, total):
         return "baseline", max(round(opt_pct, 1), round(pess_pct, 1))
 
 
-# ── MAIN ───────────────────────────────────────────────
+# ── MAIN ───────────────────────────────────────────────────────────────────────
 def main():
     if not os.path.exists(INPUT_FILE):
         print(f"⚠️ No input file found at {INPUT_FILE}")
@@ -149,13 +149,26 @@ def main():
         print(f"⚠️ No suitable text column found. Available: {list(df.columns)}")
         return
 
-    # Normalize key columns if present
-    if "date" not in df.columns and "date" in df.columns:
-        df.rename(columns={"date": "date"}, inplace=True)
+    # --- Safe column normalization ---
+    # Handle date column flexibly
+    if "date" in df.columns:
+        date_col = "date"
+    elif "Date" in df.columns:
+        date_col = "Date"
+    else:
+        date_col = None
 
-    df["date"] = pd.to_datetime(df.get("date") or df.get("Date"), errors="coerce")
-    df["economy"] = df.get("economy", "Unknown")
-    df["workstream"] = df.get("workstream", "Unspecified")
+    if date_col:
+        df["date"] = pd.to_datetime(df[date_col], errors="coerce")
+    else:
+        print("⚠️ No date column found; defaulting to NaT")
+        df["date"] = pd.NaT
+
+    # Ensure economy/workstream columns exist
+    if "economy" not in df.columns:
+        df["economy"] = "Unknown"
+    if "workstream" not in df.columns:
+        df["workstream"] = "Unspecified"
 
     records = []
     all_classes = []
