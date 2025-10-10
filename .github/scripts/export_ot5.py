@@ -15,12 +15,14 @@ LINKED_TABLES = {
     'Economy': 'Economy Reference List',
     'Workstream': 'Workstream Reference List',
     'Engagement': 'OT2 Private Sector Engagements',
+    'Firm': 'OT4 Private Sector Firms,
 }
 
 DISPLAY_FIELDS = {
     'Economy': 'Economy',
     'Workstream': 'Workstream',
     'Engagement': 'Engagement',
+    'Firm': 'Firm',
 }
 
 headers = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
