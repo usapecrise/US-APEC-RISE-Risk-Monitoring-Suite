@@ -1,6 +1,6 @@
-Procedures,Component,Tools,Last Updated
-"Role-based permissions, least-privilege access",Access Control,"Airtable permissions, password protection",2025-10-27T07:15:05.360639
-"Encrypted cloud storage, regular backups",Secure Storage,"Airtable, lockable room",2025-10-27T07:15:05.360639
-"Encrypted connections, SFTP for sensitive files",Secure Transfer,SFTP,2025-10-27T07:15:05.360639
-"Mask identifiers, limit collection, anonymize reports",PII Privacy,Data masking tool,2025-10-27T07:15:05.360639
-"Time-bound storage, disposal protocols",Data Disposal,"Deletion software, shredders",2025-10-27T07:15:05.360639
+Last Updated,Tools,Component,Procedures
+2025-10-28T07:13:43.647132,"Airtable permissions, password protection",Access Control,"Role-based permissions, least-privilege access"
+2025-10-28T07:13:43.647132,"Airtable, lockable room",Secure Storage,"Encrypted cloud storage, regular backups"
+2025-10-28T07:13:43.647132,SFTP,Secure Transfer,"Encrypted connections, SFTP for sensitive files"
+2025-10-28T07:13:43.647132,Data masking tool,PII Privacy,"Mask identifiers, limit collection, anonymize reports"
+2025-10-28T07:13:43.647132,"Deletion software, shredders",Data Disposal,"Time-bound storage, disposal protocols"
