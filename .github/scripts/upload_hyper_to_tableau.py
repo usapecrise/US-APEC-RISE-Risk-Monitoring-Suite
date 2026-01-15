@@ -15,11 +15,6 @@ SITE_NAME      = os.environ["TABLEAU_SITE_NAME"]
 PROJECT_ID     = os.environ["TABLEAU_PROJECT_ID"]
 TABLEAU_SERVER = os.environ["TABLEAU_REST_URL"]
 
-# Optional: Workbooks to refresh after publish
-WORKBOOKS_TO_REFRESH = [
-    "US APEC-RISE Dashboard"
-]
-
 # ── FIXED MAPPINGS: CSV → EXTRACT NAME ──────────────────
 EXTRACT_NAME_MAP = {
     "OT1.csv": "OT1 Extract",
@@ -52,7 +47,7 @@ EXTRACT_NAME_MAP = {
     "feedback_policy_assumption.csv": "Feedback Policy Assumption",
     "feedback_assumption.csv": "Feedback Assumptions",
     "cost_share_assumption.csv": "Cost Share Assumption",
-    "attendance_records.csv:": "Attendance Records",
+    "attendance_records.csv": "Attendance Records",
     "attendance_continuity_assumption.csv": "Attendance Continuity Assumption",
     "attendance_assumption.csv": "Attendance Assumption",
     "assumptions_status.csv": "Assumptions Status",
@@ -88,45 +83,17 @@ def convert_csv_to_hyper(csv_path: str, hyper_path: str):
             df[col] = df[col].astype(str).fillna("")
 
     with HyperProcess(telemetry=Telemetry.SEND_USAGE_DATA_TO_TABLEAU) as hyper:
-        with Connection(endpoint=hyper.endpoint, database=hyper_path, create_mode=CreateMode.CREATE_AND_REPLACE) as conn:
+        with Connection(
+            endpoint=hyper.endpoint,
+            database=hyper_path,
+            create_mode=CreateMode.CREATE_AND_REPLACE
+        ) as conn:
             conn.catalog.create_table(table_def)
             with Inserter(conn, table_def) as inserter:
-                inserter.add_rows(rows=df.itertuples(index=False, name=None))
+                inserter.add_rows(df.itertuples(index=False, name=None))
                 inserter.execute()
 
     print(f"📦 Created {hyper_path} ({os.path.getsize(hyper_path)} bytes)")
-
-# ── TRIGGER WORKBOOK REFRESH WITH RETRY ────────────────
-def trigger_workbook_refresh(server, workbook_name, auth, retries=3, delay=5):
-    print(f"🔁 Searching for workbook '{workbook_name}'...")
-
-    for attempt in range(retries):
-        try:
-            with server.auth.sign_in(auth):
-                all_workbooks, _ = server.workbooks.get()
-                matched = [wb for wb in all_workbooks if wb.name == workbook_name]
-
-                if not matched:
-                    print(f"❌ Workbook '{workbook_name}' not found.")
-                    return
-
-                workbook = matched[0]
-                print(f"🔄 Triggering refresh for workbook '{workbook.name}' (ID: {workbook.id})")
-                job = server.workbooks.refresh(workbook)
-                print(f"⏳ Refresh job submitted (Job ID: {job.id})")
-                return  # success
-        except TSC.server.endpoint.exceptions.FailedSignInError:
-            if attempt < retries - 1:
-                print(f"⚠️ Auth failed on refresh attempt {attempt+1} for '{workbook_name}', retrying in {delay}s...")
-                time.sleep(delay)
-            else:
-                raise
-        except Exception as e:
-            if attempt < retries - 1:
-                print(f"⚠️ Refresh failed for '{workbook_name}' on attempt {attempt+1}, retrying in {delay}s... Error: {e}")
-                time.sleep(delay)
-            else:
-                raise
 
 # ── MAIN EXECUTION ─────────────────────────────────────
 def main():
@@ -148,9 +115,7 @@ def main():
         convert_csv_to_hyper(csv_file, hyper_path)
 
         ds_item = TSC.DatasourceItem(project_id=PROJECT_ID, name=extract_name)
-        ds_item.connection_credentials = None
 
-        # ✅ Attempt publish with retry + delay (3 tries)
         for attempt in range(3):
             try:
                 with server.auth.sign_in(auth):
@@ -162,24 +127,14 @@ def main():
                     )
                     print(f"✅ Overwrote extract: '{extract_name}' (Datasource ID: {published_ds.id})")
                     break
-            except TSC.server.endpoint.exceptions.FailedSignInError:
-                if attempt < 2:
-                    print(f"⚠️ Auth failed on attempt {attempt+1} for {extract_name}, retrying in 5s...")
-                    time.sleep(5)
-                else:
-                    raise
             except Exception as e:
                 if attempt < 2:
-                    print(f"⚠️ Publish failed for {extract_name} on attempt {attempt+1}, retrying in 5s... Error: {e}")
+                    print(f"⚠️ Publish failed for {extract_name}, retrying in 5s... Error: {e}")
                     time.sleep(5)
                 else:
                     raise
 
-    # ✅ Refresh workbooks with retry (3 tries)
-    for wb_name in WORKBOOKS_TO_REFRESH:
-        trigger_workbook_refresh(server, wb_name, auth)
-
-    print("✅ Finished uploading extracts and refreshing workbooks.")
+    print("✅ Finished uploading extracts. Dashboards will auto-refresh.")
 
 if __name__ == "__main__":
     main()
