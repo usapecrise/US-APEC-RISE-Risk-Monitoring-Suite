@@ -15,7 +15,11 @@ Export Stakeholder Reference List (wide + long) for Tableau.
     Stakeholder_Reference_List_long.csv     (normalized: Workstream × Economy × Workshop × Engagement ID)
 """
 
-import os, sys, csv, time, requests
+import os
+import sys
+import csv
+import time
+import requests
 from urllib.parse import quote
 from datetime import datetime
 from itertools import product
@@ -28,15 +32,14 @@ if not AIRTABLE_TOKEN:
     print("❌ AIRTABLE_TOKEN is not set.")
     sys.exit(1)
 
-BASE_ID     = "app0Ljjhrp3lTTpTO"
-MAIN_TABLE  = "Stakeholder Reference List"
-VIEW_NAME   = "Grid view"
+BASE_ID    = "app0Ljjhrp3lTTpTO"
+MAIN_TABLE = "Stakeholder Reference List"
+VIEW_NAME  = "Grid view"
 
-# Linked fields: Stakeholder field name -> {linked table + display field}
 LINKED_CONFIG = {
     "Economy Reference List": {"table": "Economy Reference List", "display": "Economy"},
     "Workstream":             {"table": "Workstream Reference List", "display": "Workstream"},
-    "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop"},       # primary field
+    "Engagement":             {"table": "Workshop Reference List",  "display": "Workshop"},
     "Engagement ID":          {"table": "Workshop Reference List",  "display": "Engagement ID"},
 }
 
@@ -50,48 +53,44 @@ HEADERS = {"Authorization": f"Bearer {AIRTABLE_TOKEN}"}
 # ==============================
 def fetch_all_records(table, view=None):
     url = f"https://api.airtable.com/v0/{BASE_ID}/{quote(table)}"
-    params, out = ({"view": view} if view else {}), []
+    params = {"view": view} if view else {}
+    out = []
+
     while True:
         resp = requests.get(url, headers=HEADERS, params=params, timeout=30)
         data = resp.json()
         out.extend(data.get("records", []))
+
         if "offset" not in data:
             break
+
         params["offset"] = data["offset"]
         time.sleep(0.1)
+
     print(f"✅ Fetched {len(out)} from '{table}'")
     return out
 
 def ensure_list(v):
-    if not v: return []
+    if not v:
+        return []
     return v if isinstance(v, list) else [v]
 
 def join_pipe(vals):
-    return "|".join(str(x).strip() for x in vals if str(x).strip())
+    return "|".join(str(v).strip() for v in vals if str(v).strip())
 
 # ==============================
-# Build lookup maps for linked tables
+# Build lookup maps
 # ==============================
 linked_id_maps = {}
+
 for field, cfg in LINKED_CONFIG.items():
     recs = fetch_all_records(cfg["table"])
     linked_id_maps[field] = {}
 
     for r in recs:
         fields = r.get("fields", {})
+        val = fields.get(cfg["display"]) or fields.get("Name") or r.get("id", "Unknown")
 
-        # Try the configured display field (e.g., "Workshop" or "Engagement ID")
-        val = fields.get(cfg["display"])
-
-        # Fallback: Airtable often uses "Name" for primary field
-        if not val:
-            val = fields.get("Name")
-
-        # Last fallback: record ID
-        if not val:
-            val = r.get("id", "Unknown")
-
-        # Handle multi-select
         if isinstance(val, list):
             val = "|".join(val)
 
@@ -102,7 +101,9 @@ for field, cfg in LINKED_CONFIG.items():
 # ==============================
 main_records = fetch_all_records(MAIN_TABLE, view=VIEW_NAME)
 timestamp = datetime.utcnow().isoformat()
-wide_rows, long_rows = [], []
+
+wide_rows = []
+long_rows = []
 
 # ==============================
 # Transform
@@ -111,7 +112,7 @@ for rec in main_records:
     fields = dict(rec.get("fields", {}))
     fields["Last Updated"] = timestamp
 
-    # Resolve linked tables into pipe-joined name lists
+    # Resolve linked fields
     for main_field, cfg in LINKED_CONFIG.items():
         ids = ensure_list(fields.get(main_field))
         names = [linked_id_maps[main_field].get(i, "Unknown") for i in ids]
@@ -119,33 +120,13 @@ for rec in main_records:
 
     wide_rows.append(fields)
 
-    # Split lists for normalization (long format)
-    ws_list  = [s.strip() for s in fields.get("Workstream_List", "").split("|") if s.strip()] or [""]
-    ec_list  = [s.strip() for s in fields.get("Economy_List", "").split("|") if s.strip()] or [""]
-    wk_list  = [s.strip() for s in fields.get("Workshop_List", "").split("|") if s.strip()] or [""]
-    eid_list = [s.strip() for s in fields.get("Engagement ID_List", "").split("|") if s.strip()] or [""]
+    ws_list  = [s for s in fields.get("Workstream_List", "").split("|") if s] or [""]
+    ec_list  = [s for s in fields.get("Economy_List", "").split("|") if s] or [""]
+    wk_list  = [s for s in fields.get("Workshop_List", "").split("|") if s] or [""]
+    eid_list = [s for s in fields.get("Engagement ID_List", "").split("|") if s] or [""]
 
     for ws, ec, wk, eid in product(ws_list, ec_list, wk_list, eid_list):
         row = dict(fields)
-        row["Workstream_Single"]      = ws
-        row["Economy_Single"]         = ec
-        row["Workshop_Single"]        = wk
-        row["Engagement_ID_Single"]   = eid
-        long_rows.append(row)
-
-# ==============================
-# Write outputs
-# ==============================
-if wide_rows:
-    with open(WIDE_OUT, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=wide_rows[0].keys())
-        writer.writeheader()
-        writer.writerows(wide_rows)
-    print(f"✅ Export complete: {WIDE_OUT}")
-
-if long_rows:
-    with open(LONG_OUT, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=long_rows[0].keys())
-        writer.writeheader()
-        writer.writerows(long_rows)
-    print(f"✅ Export complete: {LONG_OUT}")
+        row["Workstream_Single"]    = ws
+        row["Economy_Single"]       = ec
+        row["Workshop_Single"]_]()
