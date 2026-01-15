@@ -3,16 +3,6 @@
 
 """
 Export Stakeholder Reference List (wide + long) for Tableau.
-
-- Resolves linked fields in the main table:
-    * "Economy Reference List" -> names from "Economy Reference List" (display: "Economy")
-    * "Workstream"             -> names from "Workstream Reference List" (display: "Workstream")
-    * "Engagement"             -> linked to "Workshop Reference List" (display: "Workshop" primary field)
-    * "Engagement ID"          -> linked to "Workshop Reference List" (display: "Engagement ID")
-
-- Outputs:
-    Stakeholder_Reference_List.csv          (wide, human-friendly)
-    Stakeholder_Reference_List_long.csv     (normalized: Workstream × Economy × Workshop × Engagement ID)
 """
 
 import os
@@ -129,4 +119,25 @@ for rec in main_records:
         row = dict(fields)
         row["Workstream_Single"]    = ws
         row["Economy_Single"]       = ec
-        row["Workshop_Single"]_]()
+        row["Workshop_Single"]      = wk
+        row["Engagement_ID_Single"] = eid
+        long_rows.append(row)
+
+# ==============================
+# Write outputs (schema-safe)
+# ==============================
+if wide_rows:
+    fieldnames = sorted({k for row in wide_rows for k in row.keys()})
+    with open(WIDE_OUT, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(wide_rows)
+    print(f"✅ Export complete: {WIDE_OUT}")
+
+if long_rows:
+    fieldnames = sorted({k for row in long_rows for k in row.keys()})
+    with open(LONG_OUT, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(long_rows)
+    print(f"✅ Export complete: {LONG_OUT}")
