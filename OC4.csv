@@ -1,3 +1,3 @@
-Indicator ID,Workstream (Name),Economy,Workstream,Economy (Name),Workshop,Workshop (Name),Last Updated
-OC4,Cloud Computing,['recDqTNOBKhjhCrKi'],['rec8X4hhBa5cOnk18'],Australia,['recjbjufeRVc2tKAJ'],APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,2026-02-17T07:44:25.028190
-OC4,None,,,None,,None,2026-02-17T07:44:25.028190
+Workstream (Name),Workstream,Workshop (Name),Workshop,Last Updated,Economy (Name),Indicator ID,Economy
+Cloud Computing,['rec8X4hhBa5cOnk18'],APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,['recjbjufeRVc2tKAJ'],2026-02-18T07:44:38.865223,Australia,OC4,['recDqTNOBKhjhCrKi']
+None,,None,,2026-02-18T07:44:38.865223,None,OC4,
