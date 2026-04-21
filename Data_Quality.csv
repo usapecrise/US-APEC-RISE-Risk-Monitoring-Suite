@@ -1,6 +1,6 @@
-Tools,Procedures,Last Updated,Standard
-"PIRSs, Airtable","Clear definitions, validated sources",2026-04-20T09:05:34.255200,Validity
-"Airtable (logs, access)","DQA protocols, audit trails, restricted edits",2026-04-20T09:05:34.255200,Integrity
-Airtable,"Standardized formats, spot checks",2026-04-20T09:05:34.255200,Precision
-"SOPs, JotForm, Airtable","Documented procedures, training",2026-04-20T09:05:34.255200,Reliability
-"Airtable automations, Tableau","Reporting schedules, deadline checks",2026-04-20T09:05:34.255200,Timeliness
+Procedures,Last Updated,Standard,Tools
+"Clear definitions, validated sources",2026-04-21T08:27:21.593230,Validity,"PIRSs, Airtable"
+"DQA protocols, audit trails, restricted edits",2026-04-21T08:27:21.593230,Integrity,"Airtable (logs, access)"
+"Standardized formats, spot checks",2026-04-21T08:27:21.593230,Precision,Airtable
+"Documented procedures, training",2026-04-21T08:27:21.593230,Reliability,"SOPs, JotForm, Airtable"
+"Reporting schedules, deadline checks",2026-04-21T08:27:21.593230,Timeliness,"Airtable automations, Tableau"
