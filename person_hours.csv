@@ -1,10 +1,10 @@
 Fiscal Year,Fiscal Quarter,Economy,City,Workshop,Sex,Sector,Workstream,Person-Hours
-FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Female,Government,FTAAP,198.0
-FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Female,Multilateral,FTAAP,22.0
-FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Female,Private Sector,FTAAP,0.0
-FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Male,Government,FTAAP,132.0
-FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Male,Intergovernmental,FTAAP,66.0
-FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Male,Private Sector,FTAAP,66.0
+FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Female,Government,ROO,198.0
+FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Female,Multilateral,ROO,22.0
+FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Female,Private Sector,ROO,0.0
+FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Male,Government,ROO,132.0
+FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Male,Intergovernmental,ROO,66.0
+FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,Male,Private Sector,ROO,66.0
 FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Implementing Trade Policy to Foster Quality Growth: Data and Analytical Tools,Female,Government,Trade Data,40.664
 FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Implementing Trade Policy to Foster Quality Growth: Data and Analytical Tools,Female,Intergovernmental,Trade Data,5.083
 FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Implementing Trade Policy to Foster Quality Growth: Data and Analytical Tools,Male,Government,Trade Data,30.498
@@ -29,15 +29,15 @@ FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Technical Barriers to Trade: Rec
 FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,Male,Non-Profit,TBT,22.83333334
 FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,Male,Private Sector,TBT,68.50000002
 FY25,FY2025-Q4,Unknown,Incheon,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,Prefer not to answer,Government,TBT,0.0
-FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Female,Government,Cloud Computing,12.0
+FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Female,Government,Cloud & AI Adoption,12.0
 FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Female,Government,Digital Standards,3.0
-FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Female,Private Sector,Cloud Computing,6.0
-FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Female,Think Tank,Cloud Computing,3.0
-FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Academia,Cloud Computing,3.0
-FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Government,Cloud Computing,27.0
+FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Female,Private Sector,Cloud & AI Adoption,6.0
+FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Female,Think Tank,Cloud & AI Adoption,3.0
+FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Academia,Cloud & AI Adoption,3.0
+FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Government,Cloud & AI Adoption,27.0
 FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Government,Digital Standards,3.0
-FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Non-Profit,Cloud Computing,9.0
-FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Private Sector,Cloud Computing,12.0
+FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Non-Profit,Cloud & AI Adoption,9.0
+FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Private Sector,Cloud & AI Adoption,12.0
 FY25,FY2025-Q4,Unknown,Incheon,Workshop on Advancing Cloud Transformation,Male,Private Sector,Digital Standards,3.0
 FY25,FY2025-Q4,Unknown,Incheon,Workshop on Applying the APEC Services Index in Regionally Relevant Use Cases,Female,Academia,Services,3.0
 FY25,FY2025-Q4,Unknown,Incheon,Workshop on Applying the APEC Services Index in Regionally Relevant Use Cases,Female,Government,Services,33.0
