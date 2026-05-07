@@ -1,53 +1,60 @@
 Firm (Name),Indicator ID,Economy (Name),Workstream (Name),Fiscal Year,PSE Origin,PSE Size,PSE Type,Timestamp
-A2Z,OT4,Malaysia,GRP,FY25,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556654Z
-Access Partnership,OT4,Chinese Taipei,Cloud & AI Adoption,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556675Z
-Akin Gump,OT4,U.S.,TBT,FY25,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556680Z
-Altana,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556684Z
-Amazon,OT4,U.S.,Cloud & AI Adoption,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556687Z
-American Chamber of Commerce,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556691Z
-American Chemistry Council,OT4,U.S.,ROO,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556695Z
-American Chemistry Council,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556697Z
-Applied Materials,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556700Z
-Asia Pacific Services Coalition,OT4,Australia,Services,FY25,Third Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556713Z
-Boeing,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556716Z
-Canadian International Freight Forwarders Association,OT4,Canada,Supply Chains,FY26,Third Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556720Z
-Codit,OT4,U.S.,Cloud & AI Adoption,FY25,Host Country-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556723Z
-Codomo,OT4,U.S.,Digital Trade,FY25,Third Country-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556727Z
-Conference of Latin American and Caribbean Express Companies,OT4,Other,Supply Chains,FY26,Third Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556730Z
-Consultores Internacionales Ansley    ,OT4,New Zealand,TBT,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556733Z
-Coupang,OT4,U.S.,Digital Trade,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556737Z
-Crowell & Moring LLP,OT4,U.S.,Cloud & AI Adoption,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556740Z
-Davidson Technologies,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556744Z
-Descartes,OT4,Canada,Supply Chains,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556747Z
-Descartes,OT4,Canada,Supply Chains,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556749Z
-Digital Container Shipping Association,OT4,Other,Supply Chains,FY26,Third Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556752Z
-Dow,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556757Z
-Dow,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556759Z
-Expeditors International,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556762Z
-Federation of Thai Industries,OT4,Thailand,Digital Standards,FY25,Third Country-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556766Z
-FedEx,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556769Z
-IBC Bank,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),Private financial institutions (excluding social enterprises),2026-05-06T09:15:40.556773Z
-IBM,OT4,U.S.,Digital Trade,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556776Z
-Impact Policy Strategies,OT4,U.S.,Supply Chains,FY26,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556779Z
-Information Technology Industry Council,OT4,U.S.,Services,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556782Z
-Intel,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556786Z
-Kim & Chang,OT4,Malaysia,GRP,FY25,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556789Z
-Kinobi,OT4,Chinese Taipei,Digital Trade,FY25,Third Country-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556793Z
-Monarch Global Strategies,OT4,U.S.,Supply Chains,FY26,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556796Z
-National Council of the Maquiladora and Export Manufacturing Industry,OT4,Mexico,Supply Chains,FY26,Host Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556801Z
-National Customs Brokers & Forwarders Association of America,OT4,U.S.,Supply Chains,FY26,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556804Z
-Nextrade Group,OT4,U.S.,Cloud & AI Adoption,FY25,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556808Z
-Parapet Advisors,OT4,U.S.,Supply Chains,FY26,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556811Z
-Reform,OT4,U.S.,Supply Chains,FY26,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556814Z
-SAE Industry Technologies Consortia,OT4,U.S.,Digital Standards,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556818Z
-Samsung,OT4,Malaysia,GRP,FY25,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556821Z
-Specialized Bicycle,OT4,U.S.,TBT,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556825Z
-Stendard ,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556828Z
-Trade Force Multiplier,OT4,U.S.,Supply Chains,FY26,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556831Z
-United States Council for International Business ,OT4,U.S.,ROO,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-06T09:15:40.556835Z
-Visa,OT4,U.S.,Digital Trade,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556838Z
-Walmart,OT4,U.S.,TBT,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556842Z
-Walmart,OT4,U.S.,TBT,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556845Z
-Walmart,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556846Z
-Walmart,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556848Z
-Wilmer Cutler Pickering Hale and Dorr LLP,OT4,U.S.,ROO,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-06T09:15:40.556851Z
+A2Z,OT4,Malaysia,GRP,FY25,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334863Z
+Access Partnership,OT4,Other,Cloud & AI Adoption,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334890Z
+Access Partnership,OT4,Other,Cloud & AI Adoption,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334893Z
+Akin Gump,OT4,U.S.,TBT,FY25,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334908Z
+Altana,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334915Z
+Amazon,OT4,U.S.,Cloud & AI Adoption,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334921Z
+American Chamber of Commerce,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.334926Z
+American Chemistry Council,OT4,U.S.,ROO,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.334933Z
+American Chemistry Council,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.334936Z
+Applied Materials,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334942Z
+Asia Pacific Services Coalition,OT4,Australia,Services,FY25,Third Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.334948Z
+Boeing,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334953Z
+Canadian International Freight Forwarders Association,OT4,Canada,Supply Chains,FY26,Third Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.334959Z
+Codit,OT4,U.S.,Cloud & AI Adoption,FY25,Host Country-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334965Z
+Codomo,OT4,U.S.,Digital Trade,FY25,Third Country-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334971Z
+Conference of Latin American and Caribbean Express Companies,OT4,Other,Supply Chains,FY26,Third Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.334977Z
+Consultores Internacionales Ansley    ,OT4,New Zealand,TBT,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334987Z
+Coupang,OT4,U.S.,Digital Trade,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334993Z
+Crowell & Moring LLP,OT4,U.S.,Cloud & AI Adoption,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.334999Z
+Davidson Technologies,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335005Z
+Descartes,OT4,Canada,Supply Chains,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335011Z
+Descartes,OT4,Canada,Supply Chains,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335015Z
+Digital Container Shipping Association,OT4,Other,Supply Chains,FY26,Third Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.335021Z
+Dow,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335027Z
+Dow,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335030Z
+Expeditors International,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335036Z
+Federation of Thai Industries,OT4,Thailand,Digital Standards,FY25,Third Country-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.335041Z
+FedEx,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335047Z
+IBC Bank,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),Private financial institutions (excluding social enterprises),2026-05-07T09:26:09.335053Z
+IBM,OT4,U.S.,Digital Trade,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335062Z
+Impact Policy Strategies,OT4,U.S.,Supply Chains,FY26,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335067Z
+Information Technology Industry Council,OT4,U.S.,Services,FY25,US-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.335073Z
+Intel,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335079Z
+Kim & Chang,OT4,Malaysia,GRP,FY25,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335085Z
+Kinobi,OT4,Chinese Taipei,Digital Trade,FY25,Third Country-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335090Z
+Monarch Global Strategies,OT4,U.S.,Supply Chains,FY26,US-Based,Small (10-49 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335096Z
+National Council of the Maquiladora and Export Manufacturing Industry,OT4,Mexico,Supply Chains,FY26,Host Country-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.335102Z
+National Customs Brokers & Forwarders Association of America,OT4,U.S.,Supply Chains,FY26,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.335107Z
+Nextrade Group,OT4,U.S.,Cloud & AI Adoption,FY25,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335113Z
+Parapet Advisors,OT4,U.S.,Supply Chains,FY26,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335119Z
+Reform,OT4,U.S.,Supply Chains,FY26,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335124Z
+SAE Industry Technologies Consortia,OT4,U.S.,Digital Standards,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.335130Z
+Samsung,OT4,Malaysia,GRP,FY25,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335144Z
+Specialized Bicycle,OT4,U.S.,TBT,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335150Z
+Stendard ,OT4,U.S.,Digital Standards,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335155Z
+Trade Force Multiplier,OT4,U.S.,Supply Chains,FY26,US-Based,Micro (<10 employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335161Z
+United States Council for International Business ,OT4,U.S.,ROO,FY25,US-Based,Small (10-49 employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.335167Z
+Visa,OT4,U.S.,Digital Trade,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335173Z
+Walmart,OT4,U.S.,TBT,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335179Z
+Walmart,OT4,U.S.,TBT,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335181Z
+Walmart,OT4,U.S.,Supply Chains,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335184Z
+Walmart,OT4,U.S.,Supply Chains,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335187Z
+Wilmer Cutler Pickering Hale and Dorr LLP,OT4,U.S.,ROO,FY25,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335194Z
+NVIDIA,OT4,U.S.,Digital Trade,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335200Z
+PayPal,OT4,U.S.,Digital Trade,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335206Z
+Fujitsu Limited,OT4,Japan,Digital Trade,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335212Z
+Dapper,OT4,Other,Digital Trade,FY26,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335220Z
+Quanta Computer ,OT4,Chinese Taipei,Digital Trade,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-05-07T09:26:09.335226Z
+Singapore Business Federation,OT4,Singapore,Digital Trade,FY26,Third Country-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-05-07T09:26:09.335232Z
