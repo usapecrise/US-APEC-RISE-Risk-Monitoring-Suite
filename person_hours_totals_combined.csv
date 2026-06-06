@@ -1,10 +1,15 @@
 Dimension,Category,Person-Hours
-Fiscal Year,FY25,484
-Fiscal Quarter,FY25 - FY2025-Q4,484
-Sex,Female,220
-Sex,Male,264
-Sector,Government,330
-Sector,Intergovernmental,66
-Sector,Multilateral,22
-Sector,Private Sector,66
-Economy,Unknown,484
+Fiscal Year,FY25,1744.6610002
+Fiscal Quarter,FY25 - FY2025-Q4,1744.6610002
+Sex,Female,873.6636668
+Sex,Male,870.9973334
+Sex,Prefer not to answer,0.0
+Sector,Academia,54.66666668
+Sector,Government,1281.99533349
+Sector,Intergovernmental,126.08233334
+Sector,Multilateral,22.0
+Sector,NGO,12.5
+Sector,Non-Profit,59.00000001
+Sector,Private Sector,182.16666668
+Sector,Think Tank,6.25
+Economy,Unknown,1744.6610002
