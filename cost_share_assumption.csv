@@ -1,4 +1,2 @@
 Assumption,Monitoring Tool,Economy,Workstream,Level,Date,Signal,Status,Confidence Index 1 (Amount),Confidence Index 2 (Breadth),Notes
-Responsible local ownership,Cost-share,APEC (aggregate),All,Aggregate,FY25-12-31,"$1,165 from 1 firms across 1 economies (FY FY25)",baseline,1165.35,1,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
-Responsible local ownership,Cost-share,recoRkWHSHlENX2lz,All,Economy,FY25-12-31,"$1,165 from 1 firms (FY FY25)",baseline,1165.35,1,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
-Responsible local ownership,Cost-share,APEC (aggregate),rec8X4hhBa5cOnk18,Workstream,FY25-12-31,"$1,165 from 1 firms across 1 economies (FY FY25)",baseline,1165.35,1,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
+Responsible local ownership,Cost-share,APEC (aggregate),All,Aggregate,nan-12-31,$0 from 0 firms across 0 economies (FY nan),pessimistic,0.0,0,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
