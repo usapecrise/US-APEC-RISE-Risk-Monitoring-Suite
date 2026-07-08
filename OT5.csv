@@ -1,4 +1,55 @@
 Firm (Name),Indicator ID,Economy (Name),Workstream (Name),Engagement (Name),Amount,Fiscal Year,U.S. FAOs Addressed,Resource Type,Resource Origin,Contribution Date,Export Timestamp
-Walmart,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,2278.44,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-07T10:17:52.848007
-Specialized Bicycle,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,2118.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-07T10:17:52.848007
-Akin Gump,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,1857.75,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-07T10:17:52.848007
+Codomo,OT5,Singapore,Digital Trade,2025 Digital Trade Policy Dialogue,2008.38,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-06,2026-07-08T09:20:16.531397
+Davidson Technologies,OT5,U.S.,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,2797,FY25,Economic Growth (Other),In-kind,US-based,2025-07-27,2026-07-08T09:20:16.531397
+Boeing,OT5,U.S.,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,343.88,FY25,Economic Growth (Other),In-kind,US-based,2025-07-27,2026-07-08T09:20:16.531397
+Kinobi,OT5,Singapore,Digital Trade,2025 Digital Trade Policy Dialogue,1889.38,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-06,2026-07-08T09:20:16.531397
+Expeditors International,OT5,U.S.,Supply Chains,APEC 17th A2C2 Meeting,3497.63,FY25,Economic Growth (Other),In-kind,US-based,2025-08-02,2026-07-08T09:20:16.531397
+IBM,OT5,U.S.,Digital Trade,2025 Digital Trade Policy Dialogue,2729.63,FY25,Economic Growth (Other),In-kind,US-based,2025-08-06,2026-07-08T09:20:16.531397
+FedEx,OT5,U.S.,Supply Chains,APEC 17th A2C2 Meeting,2389.63,FY25,Economic Growth (Other),In-kind,US-based,2025-08-02,2026-07-08T09:20:16.531397
+Amazon,OT5,U.S.,Cloud & AI Adoption,Workshop on Advancing Cloud Transformation,2470.35,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2026-07-08T09:20:16.531397
+Walmart,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,2278.44,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-08T09:20:16.531397
+Walmart,OT5,U.S.,Supply Chains,APEC 17th A2C2 Meeting,2278.44,FY25,Economic Growth (Other),In-kind,US-based,2025-08-02,2026-07-08T09:20:16.531397
+Descartes,OT5,Canada,Supply Chains,APEC 17th A2C2 Meeting,3431.63,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-02,2026-07-08T09:20:16.531397
+Asia Pacific Services Coalition,OT5,Australia,Services,APEC Workshop on Services Technical Standards Development: The Process and Impact,1752.79,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-05,2026-07-08T09:20:16.531397
+American Chemistry Council,OT5,U.S.,ROO,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,2050.38,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-08T09:20:16.531397
+American Chemistry Council,OT5,U.S.,Services,APEC 17th A2C2 Meeting,2050.38,FY25,Economic Growth (Other),In-kind,US-based,2025-08-02,2026-07-08T09:20:16.531397
+Stendard ,OT5,Singapore,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,1043,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-27,2026-07-08T09:20:16.531397
+Codit,OT5,Republic of Korea,Cloud & AI Adoption,Workshop on Advancing Cloud Transformation,1165.35,FY25,Economic Growth (Other),In-kind,Host Country-based,2025-07-31,2026-07-08T09:20:16.531397
+Dow,OT5,U.S.,ROO,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,1659.25,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-08T09:20:16.531397
+Dow,OT5,U.S.,Supply Chains,APEC 17th A2C2 Meeting,1659.25,FY25,Economic Growth (Other),In-kind,US-based,2025-08-02,2026-07-08T09:20:16.531397
+Visa,OT5,U.S.,Digital Trade,2025 Digital Trade Policy Dialogue,2650.38,FY25,Economic Growth (Other),In-kind,US-based,2025-08-06,2026-07-08T09:20:16.531397
+United States Council for International Business ,OT5,U.S.,ROO,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,3432.63,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-08T09:20:16.531397
+Consultores Internacionales Ansley    ,OT5,Mexico,ROO,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,3780.25,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-01,2026-07-08T09:20:16.531397
+Crowell & Moring LLP,OT5,U.S.,Cloud & AI Adoption,Workshop on Advancing Cloud Transformation,2431.35,FY25,Economic Growth (Other),In-kind,US-based,2025-07-31,2026-07-08T09:20:16.531397
+Federation of Thai Industries,OT5,Thailand,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,1733,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-27,2026-07-08T09:20:16.531397
+Coupang,OT5,U.S.,Digital Trade,2025 Digital Trade Policy Dialogue,2650.38,FY25,Economic Growth (Other),In-kind,US-based,2025-08-06,2026-07-08T09:20:16.531397
+Specialized Bicycle,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,2118.5,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-08T09:20:16.531397
+Consultores Internacionales Ansley    ,OT5,Mexico,Supply Chains,APEC 17th A2C2 Meeting,1466.63,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-02,2026-07-08T09:20:16.531397
+,OT5,Chile,ROO,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,521.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-08-01,2026-07-08T09:20:16.531397
+Akin Gump,OT5,U.S.,TBT,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,1857.75,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-08T09:20:16.531397
+SAE Industry Technologies Consortia,OT5,Other,Digital Standards,Workshop on Digital Standards: Shaping the Future of Standardization,458.5,FY25,Economic Growth (Other),In-kind,Third Country-based,2025-07-27,2026-07-08T09:20:16.531397
+Wilmer Cutler Pickering Hale and Dorr LLP,OT5,U.S.,ROO,APEC Workshop on Advancing the FTAAP: Issues Related to Rules of Origin,1303.75,FY25,Economic Growth (Other),In-kind,US-based,2025-08-01,2026-07-08T09:20:16.531397
+Impact Policy Strategies,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2728.1,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Trade Force Multiplier,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Reform,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Descartes,OT5,Canada,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,Third Country-based,2026-01-13,2026-07-08T09:20:16.531397
+Altana,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Digital Container Shipping Association,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Expeditors International,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Canadian International Freight Forwarders Association,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Intel,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Conference of Latin American and Caribbean Express Companies,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+American Chamber of Commerce,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+IBC Bank,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+FedEx,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2775.78,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+National Customs Brokers & Forwarders Association of America,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2817.5,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+National Council of the Maquiladora and Export Manufacturing Industry,OT5,Mexico,Supply Chains,APEC A2C2 Regional Roundtable,1967.5,FY26,Economic Growth (Other),In-kind,Host Country-based,2026-01-13,2026-07-08T09:20:16.531397
+Monarch Global Strategies,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2686.38,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Applied Materials,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2686.38,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Dow,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2686.38,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+Walmart,OT5,U.S.,Supply Chains,APEC A2C2 Regional Roundtable,2686.38,FY26,Economic Growth (Other),In-kind,US-based,2026-01-13,2026-07-08T09:20:16.531397
+NVIDIA,OT5,U.S.,Digital Trade,2026 Digital Trade Policy Dialogue,2619.17,FY26,Economic Growth (Other),In-kind,US-based,2026-04-22,2026-07-08T09:20:16.531397
+PayPal,OT5,U.S.,Digital Trade,2026 Digital Trade Policy Dialogue,2793.5,FY26,Economic Growth (Other),In-kind,US-based,2026-06-30,2026-07-08T09:20:16.531397
+Fujitsu Limited,OT5,Japan,Digital Trade,2026 Digital Trade Policy Dialogue,3170.5,FY26,Economic Growth (Other),In-kind,Third Country-based,2026-04-22,2026-07-08T09:20:16.531397
+Dapper,OT5,Other,Digital Trade,2026 Digital Trade Policy Dialogue,2662.38,FY26,Economic Growth (Other),In-kind,Third Country-based,2026-04-22,2026-07-08T09:20:16.531397
+,OT5,,,,,,,,,,2026-07-08T09:20:16.531397
