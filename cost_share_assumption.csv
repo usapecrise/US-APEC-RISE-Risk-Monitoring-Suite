@@ -1,4 +1,5 @@
 Assumption,Monitoring Tool,Economy,Workstream,Level,Date,Signal,Status,Confidence Index 1 (Amount),Confidence Index 2 (Breadth),Notes
-Responsible local ownership,Cost-share,APEC (aggregate),All,Aggregate,FY26-12-31,"$1,968 from 1 firms across 1 economies (FY FY26)",baseline,1967.5,1,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
-Responsible local ownership,Cost-share,recAWVQLF8Zspmy2t,All,Economy,FY26-12-31,"$1,968 from 1 firms (FY FY26)",baseline,1967.5,1,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
+Responsible local ownership,Cost-share,APEC (aggregate),All,Aggregate,FY26-12-31,"$3,776 from 2 firms across 1 economies (FY FY26)",optimistic,3775.65,2,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
+Responsible local ownership,Cost-share,recAWVQLF8Zspmy2t,All,Economy,FY26-12-31,"$3,776 from 2 firms (FY FY26)",optimistic,3775.65,2,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
+Responsible local ownership,Cost-share,APEC (aggregate),rece5twihWGNiY0bI,Workstream,FY26-12-31,"$1,808 from 1 firms across 1 economies (FY FY26)",baseline,1808.15,1,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
 Responsible local ownership,Cost-share,APEC (aggregate),recj4G8RWTsTnomP6,Workstream,FY26-12-31,"$1,968 from 1 firms across 1 economies (FY FY26)",baseline,1967.5,1,"Thresholds applied: year1-lowbar. CI1=$ amount, CI2=# firms."
