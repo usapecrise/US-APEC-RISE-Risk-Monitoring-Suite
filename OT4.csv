@@ -1,14 +1,14 @@
 Firm (Name),Indicator ID,Economy (Name),Workstream (Name),Fiscal Year,PSE Origin,PSE Size,PSE Type,Timestamp
-NVIDIA,OT4,U.S.,Digital Trade,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.325981Z
-PayPal,OT4,U.S.,Digital Trade,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326001Z
-Fujitsu Limited,OT4,Japan,Digital Trade,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326006Z
-Dapper,OT4,Mexico,Digital Trade,FY26,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326010Z
-Quanta Computer ,OT4,Chinese Taipei,Digital Trade,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326014Z
-Singapore Business Federation,OT4,Singapore,Digital Trade,FY26,Third Country-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-07-20T09:49:55.326018Z
-Skyline Technology Solutions,OT4,U.S.,Cyber‑Resilient ITS,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326021Z
-Microsoft,OT4,U.S.,Cyber‑Resilient ITS,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326025Z
-Cisco ,OT4,U.S.,Cyber‑Resilient ITS,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326028Z
-Darktrace,OT4,Singapore,Cyber‑Resilient ITS,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326032Z
-Google,OT4,U.S.,Cyber‑Resilient ITS,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326035Z
-Access Partnership,OT4,Other,Cloud & AI Adoption,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326039Z
-Access Partnership,OT4,Other,Cloud & AI Adoption,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-20T09:49:55.326045Z
+NVIDIA,OT4,U.S.,Digital Trade,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660216Z
+PayPal,OT4,U.S.,Digital Trade,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660239Z
+Fujitsu Limited,OT4,Japan,Digital Trade,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660244Z
+Dapper,OT4,Mexico,Digital Trade,FY26,Host Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660248Z
+Quanta Computer ,OT4,Chinese Taipei,Digital Trade,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660252Z
+Singapore Business Federation,OT4,Singapore,Digital Trade,FY26,Third Country-Based,Large (100+ employees),"Business, trade and industry associations (including Chambers of Commerce)",2026-07-21T09:22:42.660256Z
+Skyline Technology Solutions,OT4,U.S.,Cyber‑Resilient ITS,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660260Z
+Microsoft,OT4,U.S.,Cyber‑Resilient ITS,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660264Z
+Cisco ,OT4,U.S.,Cyber‑Resilient ITS,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660268Z
+Darktrace,OT4,Singapore,Cyber‑Resilient ITS,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660271Z
+Google,OT4,U.S.,Cyber‑Resilient ITS,FY26,US-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660275Z
+Access Partnership,OT4,Other,Cloud & AI Adoption,FY25,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660279Z
+Access Partnership,OT4,Other,Cloud & AI Adoption,FY26,Third Country-Based,Large (100+ employees),For-profit commercial entities (excluding financial institutions and social enterprises),2026-07-21T09:22:42.660286Z
