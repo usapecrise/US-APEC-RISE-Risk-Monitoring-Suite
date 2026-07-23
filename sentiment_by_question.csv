@@ -1,14 +1,17 @@
 Question,Sentiment,Count,Percent
-Sharing Intent,Positive,15,100.0
-Knowledge Gain,Positive,14,93.33333333333333
-Relevance to Work,Positive,14,93.33333333333333
-Applications (Open Text),Positive,13,86.66666666666667
-Sharing (Open Text),Positive,11,73.33333333333333
-Challenges Addressed,Positive,8,53.333333333333336
-Application Intent,Positive,8,53.333333333333336
-Application Intent,Neutral,7,46.666666666666664
-Challenges Addressed,Neutral,7,46.666666666666664
-Sharing (Open Text),Negative,4,26.666666666666668
-Applications (Open Text),Negative,2,13.333333333333334
-Relevance to Work,Neutral,1,6.666666666666667
-Knowledge Gain,Neutral,1,6.666666666666667
+Relevance to Work,Positive,251,89.00709219858156
+Applications (Open Text),Positive,249,92.56505576208178
+Knowledge Gain,Positive,234,82.97872340425532
+Sharing Intent,Positive,234,82.97872340425532
+Sharing (Open Text),Positive,201,84.81012658227847
+Challenges Addressed,Positive,172,60.99290780141844
+Application Intent,Positive,148,52.4822695035461
+Application Intent,Neutral,129,45.744680851063826
+Challenges Addressed,Neutral,110,39.00709219858156
+Knowledge Gain,Neutral,48,17.02127659574468
+Sharing Intent,Neutral,46,16.312056737588655
+Sharing (Open Text),Negative,36,15.18987341772152
+Relevance to Work,Neutral,31,10.99290780141844
+Applications (Open Text),Negative,20,7.434944237918216
+Application Intent,Negative,5,1.773049645390071
+Sharing Intent,Negative,2,0.7092198581560284
