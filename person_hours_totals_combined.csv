@@ -1,22 +1,14 @@
 Dimension,Category,Person-Hours
-Fiscal Year,FY25,1747.9110002
 Fiscal Year,FY26,320.1
 Fiscal Year,Unknown,0.0
-Fiscal Quarter,FY25 - FY2025-Q4,1747.9110002
 Fiscal Quarter,FY26 - FY2026-Q3,320.1
 Fiscal Quarter,Unknown - FY2026-Q3,0.0
 Fiscal Quarter,Unknown - FY2206-Q3,0.0
-Fiscal Quarter,Unknown - Unknown,0.0
-Sex,Female,940.9336668
-Sex,Male,1127.0773334
-Sex,Prefer not to answer,0.0
-Sector,Academia,54.66666668
-Sector,Government,1562.66533349
-Sector,Intergovernmental,126.08233334
-Sector,Multilateral,22.0
-Sector,NGO,12.5
-Sector,Non-Profit,59.00000001
-Sector,Private Sector,224.84666668
-Sector,Think Tank,6.25
+Sex,Female,64.02
+Sex,Male,256.08
+Sector,Government,277.42
+Sector,Intergovernmental,0.0
+Sector,Private Sector,42.68
+Sector,Think Tank,0.0
 Sector,Unknown,0.0
-Economy,Unknown,2068.0110002
+Economy,Unknown,320.1
