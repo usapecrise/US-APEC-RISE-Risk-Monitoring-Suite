@@ -1,5 +1,5 @@
 assumption,Baseline,Optimistic,Pessimistic,Total,Optimistic_pct,Baseline_pct,Pessimistic_pct,Overall_Status,Last_Status_Event,Monitoring_Tools,Signal_Count,Last_Updated
-Policy and regulatory openness,13,57,0,70,81.42857142857143,18.571428571428573,0.0,Optimistic,Baseline,"Reform Progress Tracker, Uptake Tracker",70,2026-07-29
-Political and institutional continuity,10,7,105,122,5.737704918032787,8.19672131147541,86.0655737704918,Pessimistic,Pessimistic,"Media Tracker, Responsiveness Tracker",122,2026-07-29
-Responsible local ownership,2,4,0,6,66.66666666666666,33.33333333333333,0.0,Optimistic,Baseline,Cost-Share Tracker,6,2026-07-29
-Stakeholder alignment with U.S. focus areas,79,160,65,304,52.63157894736842,25.986842105263158,21.38157894736842,Optimistic,Pessimistic,"Feedback Value Tracker, Participation Tracker",304,2026-07-29
+Policy and regulatory openness,8,32,0,40,80.0,20.0,0.0,Optimistic,Baseline,"Reform Progress Tracker, Uptake Tracker",40,2026-07-30
+Political and institutional continuity,10,7,105,122,5.737704918032787,8.19672131147541,86.0655737704918,Pessimistic,Pessimistic,"Media Tracker, Responsiveness Tracker",122,2026-07-30
+Responsible local ownership,2,4,0,6,66.66666666666666,33.33333333333333,0.0,Optimistic,Baseline,Cost-Share Tracker,6,2026-07-30
+Stakeholder alignment with U.S. focus areas,76,59,64,199,29.64824120603015,38.19095477386934,32.1608040201005,Baseline,Pessimistic,"Feedback Value Tracker, Participation Tracker",199,2026-07-30
