@@ -1,3 +1,3 @@
-Economy (Name),Indicator ID,Economy,Workstream,Workshop,Last Updated,Workshop (Name),Workstream (Name)
-Australia,OC4,['recDqTNOBKhjhCrKi'],['rec8X4hhBa5cOnk18'],['recjbjufeRVc2tKAJ'],2026-08-08T07:41:06.748546,APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,Cloud & AI Adoption
-None,OC4,,,,2026-08-08T07:41:06.748546,None,None
+Workshop (Name),Economy (Name),Workshop,Last Updated,Indicator ID,Economy,Workstream (Name),Workstream
+APEC Workshop on Technical Barriers to Trade: Recent Trends in FTAs,Australia,['recjbjufeRVc2tKAJ'],2026-08-09T07:44:54.907302,OC4,['recDqTNOBKhjhCrKi'],Cloud & AI Adoption,['rec8X4hhBa5cOnk18']
+None,None,,2026-08-09T07:44:54.907302,OC4,,None,
