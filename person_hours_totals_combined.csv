@@ -6,7 +6,6 @@ Fiscal Quarter,FY25 - FY2025-Q4,1747.9110002
 Fiscal Quarter,FY26 - FY2026-Q3,938.61
 Fiscal Quarter,FY26 - FY2026-Q4,516.22
 Fiscal Quarter,Unknown - FY2026-Q3,0.0
-Fiscal Quarter,Unknown - Unknown,0.0
 Sex,Female,1446.3636668
 Sex,Male,1753.1273334
 Sex,Prefer not to answer,0.0
@@ -17,6 +16,7 @@ Sector,Intergovernmental,168.58233334
 Sector,Multilateral,22.0
 Sector,NGO,35.84
 Sector,Non-Profit,135.67000001
+Sector,Nonprofit,0.0
 Sector,Private Sector,432.54666668
 Sector,Think Tank,50.06
 Sector,Unknown,16.42
